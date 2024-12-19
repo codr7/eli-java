@@ -1,4 +1,8 @@
 * add id reader
 ** add to vm.readers
+* add int reader
+* add call reader
+* add pair reader
+* add list reader
 * start repl in main
 * fibtail
