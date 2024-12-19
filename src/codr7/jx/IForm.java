@@ -7,11 +7,11 @@ public interface IForm {
     void emit(VM vm, int rResult);
 
     default void emitCall(VM vm, Deque<IForm> body, int rResult) {
-        final var rTarget = vm.getRegisters(1);
+        final var rTarget = vm.alloc(1);
         emit(vm, rTarget);
 
         final var arity = body.size();
-        final var rParams = vm.getRegisters(arity);
+        final var rParams = vm.alloc(arity);
 
         for (int i = 0; !body.isEmpty(); i++) {
             body.removeFirst().emit(vm, rParams+i);

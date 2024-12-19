@@ -28,6 +28,14 @@ public final class VM {
         userLib.bind(coreLib);
     }
 
+    public int alloc(final int n) {
+        final var result = registers.size();
+        for (var i = 0; i < n; i++) {
+            registers.add(Core.NIL);
+        }
+        return result;
+    }
+
     public int emit(final Op op) {
         final var pc = emitPc();
         code.add(op);
@@ -86,17 +94,9 @@ public final class VM {
     }
 
     public IValue eval(final String in) {
-        final var rResult = getRegisters(1);
+        final var rResult = alloc(1);
         eval(emit(read(in), rResult));
         return registers.get(rResult);
-    }
-
-    public int getRegisters(final int n) {
-        final var result = registers.size();
-        for (var i = 0; i < n; i++) {
-            registers.add(Core.NIL);
-        }
-        return result;
     }
 
     public Deque<IForm> read(final String in) {
