@@ -14,6 +14,7 @@ import java.util.List;
 
 public final class VM {
     public final ArrayList<Op> code = new ArrayList<>();
+    public final List<Reader> infixReaders = new ArrayList<>();
     public int pc = 0;
     public final List<Reader> readers = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
@@ -101,7 +102,12 @@ public final class VM {
     public Deque<IForm> read(final String in) {
         final var out = new ArrayDeque<IForm>();
         final var location = new Location("read");
-        while (readers.stream().anyMatch(r -> r.read(new Input(in), out, location))) ;
+        final var input = new Input(in);
+
+        while (readers.stream().anyMatch(r -> r.read(input, out, location))) {
+            var _ = infixReaders.stream().anyMatch(r -> r.read(input, out, location));
+        }
+
         return out;
     }
 }
