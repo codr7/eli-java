@@ -1,0 +1,4 @@
+* add id reader
+** add to vm.readers
+* start repl in main
+* fibtail
