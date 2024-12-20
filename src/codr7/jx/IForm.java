@@ -22,5 +22,6 @@ public interface IForm {
     }
 
     Location location();
-    String toString();
+    String toString(VM vm);
+    IValue value(VM vm);
 }

@@ -22,12 +22,11 @@ public final class VM {
 
     public final Core coreLib = new Core();
     public final Lib userLib = new Lib("user");
-
     public Lib currentLib = userLib;
 
     public VM() {
-        userLib.bind(coreLib);
         readers.add(IdReader.instance);
+        userLib.bind(coreLib);
     }
 
     public int alloc(final int n) {
