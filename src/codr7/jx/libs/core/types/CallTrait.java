@@ -5,5 +5,5 @@ import codr7.jx.Location;
 import codr7.jx.VM;
 
 public interface CallTrait {
-    void call(VM vm, IValue target, IValue[] args, int rResult, Location location);
+    void call(VM vm, IValue target, int rArguments, int rResult, Location location);
 }

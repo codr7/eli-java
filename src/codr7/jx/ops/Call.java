@@ -4,12 +4,12 @@ import codr7.jx.Location;
 import codr7.jx.Op;
 import codr7.jx.OpCode;
 
-public record Call(int rTarget, int rParams, int arity, int rResult) {
+public record Call(int rTarget, int rArguments, int arity, int rResult) {
     public static Op make(final int rTarget,
-                          final int rParams,
+                          final int rArguments,
                           final int arity,
                           final int rResult,
                           final Location location) {
-        return new Op(OpCode.CALL, new Call(rTarget, arity, rParams, rResult), location);
+        return new Op(OpCode.CALL, new Call(rTarget, arity, rArguments, rResult), location);
     }
 }

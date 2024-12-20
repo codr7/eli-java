@@ -70,9 +70,8 @@ public final class VM {
                     final var t = registers.get(callOp.rTarget());
 
                     if (t.type() instanceof CallTrait) {
-                        final var args = new IValue[callOp.arity()];
                         pc += 1;
-                        ((CallTrait)t.type()).call(this, t, args, callOp.rResult(), op.location());
+                        ((CallTrait)t.type()).call(this, t, callOp.rArguments(), callOp.rResult(), op.location());
                     } else {
                         throw new EvalError("Call not supported: " + t.dump(this), op.location());
                     }
