@@ -3,7 +3,7 @@ package codr7.jx;
 import codr7.jx.ops.Put;
 
 public interface IType {
-    default IValue copy(VM vm, IValue source) { return source; }
+    default IValue dup(VM vm, IValue source) { return source; }
     String dump(VM vm, IValue value);
 
     default void emit(VM vm, IValue value, int rResult, Location location) {

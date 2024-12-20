@@ -91,7 +91,7 @@ public final class VM {
                     break;
                 case PUT:
                     final var putOp = (Put) op.data();
-                    registers.set(putOp.rTarget(), putOp.value().copy(this));
+                    registers.set(putOp.rTarget(), putOp.value().dup(this));
                     pc++;
                     break;
                 case STOP:
