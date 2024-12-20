@@ -1,9 +1,8 @@
-* add Swap op
-* add binding/type
-** rValue/type
+* add call reader
+** add call form
 * add macros
 ** override emitCall
-* add call reader
 * add pair reader
 * add list reader
+* add Swap op
 * fibtail

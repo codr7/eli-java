@@ -6,6 +6,7 @@ import codr7.jx.Value;
 import codr7.jx.libs.core.types.*;
 
 public class Core extends Lib {
+    public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
     public static final IntType intType = new IntType("Int");
     public static final LibType libType = new LibType("Lib");
@@ -17,6 +18,8 @@ public class Core extends Lib {
     public Core() {
         super("core");
 
+        bind(bindingType);
+        bind(bitType);
         bind(intType);
         bind(libType);
         bind(metaType);
