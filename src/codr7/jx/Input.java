@@ -17,7 +17,7 @@ public class Input {
     public Input(final String in) {
         this(new StringReader(in));
     }
-    public char peek() throws IOException {
+    public char peek() {
         if (buffer.isEmpty()) {
             fillBuffer();
 
@@ -29,7 +29,7 @@ public class Input {
         return buffer.getFirst();
     }
 
-    public char pop() throws IOException {
+    public char pop() {
         if (buffer.isEmpty()) {
             fillBuffer();
 
@@ -41,17 +41,19 @@ public class Input {
         return buffer.removeFirst();
     }
 
-    public void push(char c) {
-        buffer.addFirst(c);
-    }
+    public void push(char c) { buffer.addFirst(c); }
 
-    private void fillBuffer() throws IOException {
-        final var cp = in.read();
+    private void fillBuffer() {
+        try {
+            final var cp = in.read();
 
-        if (cp != -1) {
-            for (final var c : Character.toChars(cp)) {
-                buffer.addLast(c);
+            if (cp != -1) {
+                for (final var c : Character.toChars(cp)) {
+                    buffer.addLast(c);
+                }
             }
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
