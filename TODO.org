@@ -1,22 +1,14 @@
-* add macros
-** override emitCall
+* add import macro
+** add Lib.import
+** import core into user in main
 
-        final var arity = body.length-1;
+(core/do 1 2 3)
 
-        if (t.type() == Core.macroType) {
-            final var macro = t.cast(Core.macroType);
+* add load macro
 
-            if (macro.arity() != -1 && arity < macro.arity()) {
-                throw new EmitError("Not enough arguments: " + t.dump(vm), location());
-            }
+* add pair reader
 
-            final IForm[] arguments = new IForm[arity];
-            System.arraycopy(body, 1, arguments, 0, arity);
-            macro.emit(vm, arguments, rResult, location());
-        } else {
-            final var rArgs = vm.alloc(arity);
-            for (int i = 0; i < body.length; i++) { body[i+1].emit(vm, rArgs+i); }
-        }
+* add list reader
 
 * add methods
 ** inline body in emitCall
@@ -30,25 +22,27 @@ https://www.javatpoint.com/java-swing
 ** JFrame/setVisible
 ** add Widget type
 ** add show method
+** declarative api
 
-* add pair reader
-* add list reader
+* add gui/chart module
+** https://www.jfree.org/jfreechart/
 
 * add db module
 ** jdbc / h2
 
 * read examples/bitcoin.csv
 https://www.investing.com/crypto/bitcoin/historical-data
-** opencsv
+https://opencsv.sourceforge.net/
 ** calculate open/high/low as percentage of price
 ** log id, delta time, percentages & change
 
 * add bitcoin gui
 ** top panel for selection
-*** id, end date and knobs for percentages/change
-*** find last log for id
+*** id, start/end date and knobs for percentages/change
+*** find first log for id > start
 *** find all other logs matching knobs != id
-*** draw a projection for each found id
+*** match back in time if as far as possible
+*** draw a projection for each found id & one for actual data if any
 ** table with records/chart
 
 * add swap op

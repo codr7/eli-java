@@ -21,13 +21,19 @@ public class Lib {
 
     public void bind(final String id, final IValue value) { bindings.put(id, value); }
 
-    public void bind(final IType value) {
-        bind(value.id(), new Value<>(Core.metaType, value));
+    public <T> void bind(final String id, final IDataType<T> type, final T data) {
+        bind(id, new Value<>(type, data));
     }
 
-    public void bind(final Lib value) {
-        bind(value.id, new Value<>(Core.libType, value));
+    public void bindMacro(final String id, final Arg[] arguments, final IType result, final JMacro.Body body) {
+        bind(new JMacro(id, arguments, result, body));
     }
+
+    public void bind(final IType value) { bind(value.id(), Core.metaType, value); }
+
+    public void bind(final JMacro value) { bind(value.id(), Core.jMacroType, value); }
+
+    public void bind(final Lib value) { bind(value.id, Core.libType, value); }
 
     public IValue find(final String id) {
         final var v = bindings.get(id);

@@ -6,6 +6,6 @@ import codr7.jx.Location;
 import codr7.jx.VM;
 
 public interface CallTrait {
-    void emitCall(VM vm, IForm[] body, int rResult, Location location);
-    void call(VM vm, IValue target, int rArguments, int rResult, Location location);
+    void call(VM vm, IValue target, int rArguments, int arity, int rResult, Location location);
+    void emitCall(VM vm, IValue target, IForm[] body, int rResult, Location location);
 }

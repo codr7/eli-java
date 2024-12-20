@@ -45,6 +45,15 @@ public final class VM {
         return result;
     }
 
+    public interface DoLibBody { void call(); }
+
+    public void doLib(final DoLibBody body) {
+        final var prevLib = currentLib;
+        currentLib = new Lib(prevLib);
+        try { body.call(); }
+        finally { currentLib = prevLib; }
+    }
+
     public int emit(final Op op) {
         final var pc = emitPc();
         ops.add(op);
@@ -78,9 +87,9 @@ public final class VM {
                     final var callOp = (Call) op.data();
                     final var t = registers.get(callOp.rTarget());
 
-                    if (t.type() instanceof CallTrait) {
+                    if (t.type() instanceof CallTrait ct) {
                         pc += 1;
-                        ((CallTrait)t.type()).call(this, t, callOp.rArguments(), callOp.rResult(), op.location());
+                        ct.call(this, t, callOp.rArguments(), callOp.arity(), callOp.rResult(), op.location());
                     } else {
                         throw new EvalError("Call not supported: " + t.dump(this), op.location());
                     }

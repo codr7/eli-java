@@ -36,7 +36,7 @@ public class CallForm extends BaseForm {
 
         var t = tf.value(vm);
         if (t == null) { throw new EmitError("Unknown target: " + tf, location()); }
-        if (t.type() instanceof CallTrait ct) { ct.emitCall(vm, body, rResult, location()); }
+        if (t.type() instanceof CallTrait ct) { ct.emitCall(vm, t, body, rResult, location()); }
         if (getLeft) { vm.emit(Left.make(rResult, rResult, tf.location())); }
         else for (; rightCount > 0; rightCount--) { vm.emit(Right.make(rResult, rResult, tf.location())); }
     }
