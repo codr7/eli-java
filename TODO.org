@@ -18,6 +18,19 @@
             for (int i = 0; i < body.length; i++) { body[i+1].emit(vm, rArgs+i); }
         }
 
+* add methods
+** inline body in emitCall
+** add method macro
+** bind after body
+** set rResult in emit
+** add method type
+
+* add gui module
+https://www.javatpoint.com/java-swing
+** JFrame/setVisible
+** add Widget type
+** add show method
+
 * add pair reader
 * add list reader
 
@@ -30,8 +43,7 @@ https://www.investing.com/crypto/bitcoin/historical-data
 ** calculate open/high/low as percentage of price
 ** log id, delta time, percentages & change
 
-* add gui module
-** swing
+* add bitcoin gui
 ** top panel for selection
 *** id, end date and knobs for percentages/change
 *** find last log for id
