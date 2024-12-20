@@ -4,6 +4,9 @@ public enum OpCode {
     BRANCH,
     CALL,
     COPY,
+    LEFT,
     PUT,
-    STOP
+    RIGHT,
+    STOP,
+    ZIP
 }

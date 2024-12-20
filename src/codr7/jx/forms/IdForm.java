@@ -30,6 +30,7 @@ public class IdForm extends BaseForm {
         get(vm.currentLib, id, location()).emit(vm, rResult, location());
     }
 
+    public boolean isNil() { return true; }
     public String toString(final VM vm) { return id; }
     public IValue value(final VM vm) { return get(vm.currentLib, id, location()); }
 }

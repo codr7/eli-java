@@ -12,6 +12,7 @@ public class Core extends Lib {
     public static final LibType libType = new LibType("Lib");
     public static final MetaType metaType = new MetaType("Meta");
     public static final NilType nilType = new NilType("Nil");
+    public static final PairType pairType = new PairType("Pair");
 
     public static final IValue NIL = new Value<>(nilType, null);
 
@@ -24,6 +25,7 @@ public class Core extends Lib {
         bind(libType);
         bind(metaType);
         bind(nilType);
+        bind(pairType);
 
         bind("_", NIL);
 

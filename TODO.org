@@ -1,8 +1,43 @@
-* add call reader
-** add call form
 * add macros
 ** override emitCall
+
+        final var arity = body.length-1;
+
+        if (t.type() == Core.macroType) {
+            final var macro = t.cast(Core.macroType);
+
+            if (macro.arity() != -1 && arity < macro.arity()) {
+                throw new EmitError("Not enough arguments: " + t.dump(vm), location());
+            }
+
+            final IForm[] arguments = new IForm[arity];
+            System.arraycopy(body, 1, arguments, 0, arity);
+            macro.emit(vm, arguments, rResult, location());
+        } else {
+            final var rArgs = vm.alloc(arity);
+            for (int i = 0; i < body.length; i++) { body[i+1].emit(vm, rArgs+i); }
+        }
+
 * add pair reader
 * add list reader
-* add Swap op
+
+* add db module
+** jdbc / h2
+
+* read examples/bitcoin.csv
+https://www.investing.com/crypto/bitcoin/historical-data
+** opencsv
+** calculate open/high/low as percentage of price
+** log id, delta time, percentages & change
+
+* add gui module
+** swing
+** top panel for selection
+*** id, end date and knobs for percentages/change
+*** find last log for id
+*** find all other logs matching knobs != id
+*** draw a projection for each found id
+** table with records/chart
+
+* add swap op
 * fibtail

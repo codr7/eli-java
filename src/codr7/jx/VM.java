@@ -3,6 +3,7 @@ package codr7.jx;
 import codr7.jx.libs.Core;
 import codr7.jx.libs.core.types.CallTrait;
 import codr7.jx.ops.*;
+import codr7.jx.readers.CallReader;
 import codr7.jx.readers.IdReader;
 import codr7.jx.readers.IntReader;
 import codr7.jx.readers.WhitespaceReader;
@@ -29,6 +30,7 @@ public final class VM {
 
     public VM() {
         readers.add(WhitespaceReader.instance);
+        readers.add(CallReader.instance);
         readers.add(IntReader.instance);
         readers.add(IdReader.instance);
 
@@ -89,11 +91,19 @@ public final class VM {
                     registers.set(copyOp.rTo(), registers.get(copyOp.rFrom()));
                     pc++;
                     break;
+                case LEFT:
+                    final var leftOp = (Left)op.data();
+                    registers.set(leftOp.rResult(), registers.get(leftOp.rPair()).cast(Core.pairType).left());
+                    pc++;
                 case PUT:
                     final var putOp = (Put) op.data();
                     registers.set(putOp.rTarget(), putOp.value().dup(this));
                     pc++;
                     break;
+                case RIGHT:
+                    final var rightOp = (Right)op.data();
+                    registers.set(rightOp.rResult(), registers.get(rightOp.rPair()).cast(Core.pairType).left());
+                    pc++;
                 case STOP:
                     pc++;
                     return;
@@ -107,14 +117,16 @@ public final class VM {
         return registers.get(rResult);
     }
 
+    public boolean read(final Input in, final Deque<IForm> out, final Location location) {
+        final var result = readers.stream().anyMatch(r -> r.read(this, in, out, location));
+        var _ = infixReaders.stream().anyMatch(r -> r.read(this, in, out, location));
+        return result;
+    }
+
     public Deque<IForm> read(final String in, final Location location) {
         final var out = new ArrayDeque<IForm>();
-        final var input = new Input(in);
-
-        while (readers.stream().anyMatch(r -> r.read(input, out, location))) {
-            var _ = infixReaders.stream().anyMatch(r -> r.read(input, out, location));
-        }
-
+        final var _in = new Input(in);
+        while (read(_in, out, location));
         return out;
     }
 }
