@@ -1,13 +1,9 @@
-* add import macro
-** add Lib.import
-** import core into user in main
-
-(core/do 1 2 3)
-
-* add load macro
+* add tests
+** add VM.load
+*** call from main if args
+** add check macro
 
 * add pair reader
-
 * add list reader
 
 * add methods
@@ -34,7 +30,7 @@ https://www.javatpoint.com/java-swing
 https://www.investing.com/crypto/bitcoin/historical-data
 https://opencsv.sourceforge.net/
 ** calculate open/high/low as percentage of price
-** log id, delta time, percentages & change
+** log seq, series name, delta time, percentages & change
 
 * add bitcoin gui
 ** top panel for selection
@@ -46,4 +42,5 @@ https://opencsv.sourceforge.net/
 ** table with records/chart
 
 * add swap op
+* add load macro
 * fibtail

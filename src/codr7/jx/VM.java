@@ -26,7 +26,7 @@ public final class VM {
 
     public final Core coreLib = new Core();
     public final Lib userLib = new Lib("user");
-    public Lib currentLib = userLib;
+    public Lib currentLib = null;
 
     public VM() {
         readers.add(WhitespaceReader.instance);
@@ -35,6 +35,7 @@ public final class VM {
         readers.add(IdReader.instance);
 
         userLib.bind(coreLib);
+        currentLib = userLib;
     }
 
     public int alloc(final int n) {

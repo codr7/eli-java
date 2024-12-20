@@ -2,6 +2,8 @@ package codr7.jx;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
 import codr7.jx.libs.Core;
 
 public class Lib {
@@ -40,6 +42,13 @@ public class Lib {
         return (v == null && parentLib != null) ? parentLib.find(id) : v;
     }
 
+    public void importFrom(final Lib source, final Set<String> ids) {
+        for (final var id: ids) { bindings.put(id, source.bindings.get(id)); }
+    }
+
+    public void importFrom(final Lib source) {
+        importFrom(source, source.bindings.keySet());
+    }
 }
 
 
