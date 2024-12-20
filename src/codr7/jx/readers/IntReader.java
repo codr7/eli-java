@@ -12,7 +12,7 @@ public class IntReader implements Reader {
     public boolean read(final Input in, final Deque<IForm> out, final Location location) {
         var c = in.peek();
         if (!Character.isDigit(c)) { return false; }
-        final var loc = location.copy();
+        final var loc = location.dup();
         var v = 0L;
 
         for (; ; ) {

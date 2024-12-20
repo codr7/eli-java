@@ -12,7 +12,7 @@ public class IdReader implements Reader {
     public static final IdReader instance = new IdReader();
 
     public boolean read(final Input in, final Deque<IForm> out, final Location location) {
-        final var loc = location.copy();
+        final var loc = location.dup();
         final var buffer = new StringBuilder();
 
         for (; ; ) {

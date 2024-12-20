@@ -1,4 +1,6 @@
-* start repl in main
+* add Swap op
+* add binding/type
+** rValue/type
 * add macros
 ** override emitCall
 * add call reader

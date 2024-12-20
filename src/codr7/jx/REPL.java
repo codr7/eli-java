@@ -14,25 +14,32 @@ public class REPL {
         this.out = out;
     }
 
-    public void run() throws IOException {
+    public void run() {
         final var inputBuffer = new StringBuilder();
+        final var location = new Location("REPL");
+        var lineIndex = 0;
 
         for (;;) {
-            out.print("  ");
-            final var line = in.readLine();
+            out.printf("% 2d ", location.line() + lineIndex);
+
+            String line;
+            try { line = in.readLine(); }
+            catch (final IOException e) { throw new RuntimeException(e); }
 
             if (line.isEmpty()) {
                 try {
-                    final IValue result = vm.eval(inputBuffer.toString());
+                    final IValue result = vm.eval(inputBuffer.toString(), location);
                     out.println(result.dump(vm));
                 } catch (final Exception e) {
                     out.println(e.getMessage());
                 } finally {
                     inputBuffer.setLength(0);
+                    lineIndex = 0;
                 }
             } else {
                 inputBuffer.append(line);
                 inputBuffer.append('\n');
+                lineIndex++;
             }
         }
     }

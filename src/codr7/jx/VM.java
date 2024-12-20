@@ -2,21 +2,23 @@ package codr7.jx;
 
 import codr7.jx.libs.Core;
 import codr7.jx.libs.core.types.CallTrait;
-import codr7.jx.ops.Branch;
-import codr7.jx.ops.Call;
-import codr7.jx.ops.Copy;
-import codr7.jx.ops.Put;
+import codr7.jx.ops.*;
 import codr7.jx.readers.IdReader;
 import codr7.jx.readers.IntReader;
+import codr7.jx.readers.WhitespaceReader;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import static codr7.jx.OpCode.STOP;
+
 public final class VM {
-    public final ArrayList<Op> code = new ArrayList<>();
+    public static final int VERSION = 1;
+
     public final List<Reader> infixReaders = new ArrayList<>();
+    public final ArrayList<Op> ops = new ArrayList<>();
     public int pc = 0;
     public final List<Reader> readers = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
@@ -26,8 +28,10 @@ public final class VM {
     public Lib currentLib = userLib;
 
     public VM() {
+        readers.add(WhitespaceReader.instance);
         readers.add(IntReader.instance);
         readers.add(IdReader.instance);
+
         userLib.bind(coreLib);
     }
 
@@ -41,27 +45,27 @@ public final class VM {
 
     public int emit(final Op op) {
         final var pc = emitPc();
-        code.add(op);
+        ops.add(op);
         return pc;
     }
 
     public int emit(final Deque<IForm> in, final int rResult) {
         final var startPc = emitPc();
-        for (final var f : in) {
-            f.emit(this, rResult);
-        }
+        for (final var f : in) { f.emit(this, rResult); }
         return startPc;
     }
 
     public int emitPc() {
-        return code.size();
+        return ops.size();
     }
 
     public void eval(final int fromPc) {
+        if (ops.getLast().code() != STOP) { emit(Stop.make(null)); }
         pc = fromPc;
 
         for (; ; ) {
-            final Op op = code.get(pc);
+            final Op op = ops.get(pc);
+            System.out.printf("% 4d %s\n", pc, op.toString(this));
 
             switch (op.code()) {
                 case BRANCH:
@@ -83,10 +87,12 @@ public final class VM {
                 case COPY:
                     final var copyOp = (Copy) op.data();
                     registers.set(copyOp.rTo(), registers.get(copyOp.rFrom()));
+                    pc++;
                     break;
                 case PUT:
                     final var putOp = (Put) op.data();
                     registers.set(putOp.rTarget(), putOp.value().copy(this));
+                    pc++;
                     break;
                 case STOP:
                     pc++;
@@ -95,15 +101,14 @@ public final class VM {
         }
     }
 
-    public IValue eval(final String in) {
+    public IValue eval(final String in, final Location location) {
         final var rResult = alloc(1);
-        eval(emit(read(in), rResult));
+        eval(emit(read(in, location), rResult));
         return registers.get(rResult);
     }
 
-    public Deque<IForm> read(final String in) {
+    public Deque<IForm> read(final String in, final Location location) {
         final var out = new ArrayDeque<IForm>();
-        final var location = new Location("read");
         final var input = new Input(in);
 
         while (readers.stream().anyMatch(r -> r.read(input, out, location))) {
