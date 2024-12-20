@@ -1,10 +1,7 @@
-* add literal form
 * start repl in main
-* --
 * add macros
 ** override emitCall
 * add call reader
-* add int reader
 * add pair reader
 * add list reader
 * fibtail

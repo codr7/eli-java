@@ -29,6 +29,7 @@ public class IdReader implements Reader {
             location.update(c);
         }
 
+        if (buffer.isEmpty()) { return false; }
         out.addLast(new IdForm(buffer.toString(), loc));
         return true;
     }

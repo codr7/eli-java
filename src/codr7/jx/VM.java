@@ -7,6 +7,7 @@ import codr7.jx.ops.Call;
 import codr7.jx.ops.Copy;
 import codr7.jx.ops.Put;
 import codr7.jx.readers.IdReader;
+import codr7.jx.readers.IntReader;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public final class VM {
     public Lib currentLib = userLib;
 
     public VM() {
+        readers.add(IntReader.instance);
         readers.add(IdReader.instance);
         userLib.bind(coreLib);
     }
