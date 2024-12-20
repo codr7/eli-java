@@ -1,5 +1,7 @@
 package codr7.jx;
 
+import codr7.jx.errors.EmitError;
+
 public record JMacro(String id, Arg[] args, IType result, Body body) {
     public interface Body {
         void call(VM vm, IForm[] args, int rResult, Location location);

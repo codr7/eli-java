@@ -1,6 +1,7 @@
 package codr7.jx.forms;
 
 import codr7.jx.*;
+import codr7.jx.errors.EmitError;
 import codr7.jx.libs.core.types.CallTrait;
 import codr7.jx.ops.Left;
 import codr7.jx.ops.Right;

@@ -1,5 +1,6 @@
 package codr7.jx;
 
+import codr7.jx.errors.EvalError;
 import codr7.jx.libs.Core;
 import codr7.jx.libs.core.types.CallTrait;
 import codr7.jx.ops.*;
