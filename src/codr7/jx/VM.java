@@ -4,10 +4,7 @@ import codr7.jx.errors.EvalError;
 import codr7.jx.libs.Core;
 import codr7.jx.libs.core.types.CallTrait;
 import codr7.jx.ops.*;
-import codr7.jx.readers.CallReader;
-import codr7.jx.readers.IdReader;
-import codr7.jx.readers.IntReader;
-import codr7.jx.readers.WhitespaceReader;
+import codr7.jx.readers.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,6 +36,7 @@ public final class VM {
         readers.add(CallReader.instance);
         readers.add(IntReader.instance);
         readers.add(IdReader.instance);
+        infixReaders.add(PairReader.instance);
 
         userLib.bind(coreLib);
         currentLib = userLib;
@@ -150,6 +148,12 @@ public final class VM {
                 case STOP:
                     pc++;
                     return;
+                case ZIP:
+                    final var zipOp = (Zip)op.data();
+                    final var left = registers.get(zipOp.rLeft());
+                    final var right = registers.get(zipOp.rRight());
+                    registers.set(zipOp.rResult(), new Value<>(Core.pairType, new Pair(left, right)));
+                    pc++;
             }
         }
     }

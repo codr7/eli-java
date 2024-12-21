@@ -27,7 +27,6 @@ public class IdForm extends BaseForm {
         this.id = id;
     }
 
-
     public void emit(final VM vm, final int rResult) {
         get(vm.currentLib, id, location()).emit(vm, rResult, location());
     }

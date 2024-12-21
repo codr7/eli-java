@@ -1,4 +1,3 @@
-* add pair reader
 * add list reader
 
 * add methods
