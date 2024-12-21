@@ -78,7 +78,8 @@ public final class VM {
     }
 
     public void eval(final int fromPc) {
-        if (ops.getLast().code() != STOP) { emit(Stop.make(null)); }
+        final var lop = ops.getLast();
+        if (lop.code() != STOP) { emit(Stop.make(lop.location())); }
         pc = fromPc;
 
         for (; ; ) {
@@ -102,15 +103,32 @@ public final class VM {
                     }
 
                     break;
+                case CHECK:
+                    final var checkOp = (Check) op.data();
+                    final var expected = registers.get(checkOp.rValues());
+                    final var actual = registers.get(checkOp.rValues()+1);
+
+                    if (!expected.equals(actual)) {
+                        throw new EvalError("Check failed; expected " +
+                                expected.dump(this) + ", actual: " + actual.dump(this),
+                                op.location());
+                    }
+
+                    pc++;
+                    break;
                 case COPY:
                     final var copyOp = (Copy) op.data();
                     registers.set(copyOp.rTo(), registers.get(copyOp.rFrom()));
                     pc++;
                     break;
+                case GOTO:
+                    pc = ((Goto)op.data()).pc();
+                    break;
                 case LEFT:
                     final var leftOp = (Left)op.data();
                     registers.set(leftOp.rResult(), registers.get(leftOp.rPair()).cast(Core.pairType).left());
                     pc++;
+                    break;
                 case PUT:
                     final var putOp = (Put) op.data();
                     registers.set(putOp.rTarget(), putOp.value().dup(this));
@@ -120,10 +138,12 @@ public final class VM {
                     final var rightOp = (Right)op.data();
                     registers.set(rightOp.rResult(), registers.get(rightOp.rPair()).cast(Core.pairType).left());
                     pc++;
+                    break;
                 case SET_PATH:
                     final var setOp = (SetPath)op.data();
                     path = setOp.path();
                     pc++;
+                    break;
                 case STOP:
                     pc++;
                     return;

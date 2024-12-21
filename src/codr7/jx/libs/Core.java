@@ -2,6 +2,7 @@ package codr7.jx.libs;
 
 import codr7.jx.*;
 import codr7.jx.libs.core.types.*;
+import codr7.jx.ops.Check;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -37,9 +38,23 @@ public class Core extends Lib {
         bind("F", new Value<>(bitType, false));
 
         bindMacro("do", new Arg[]{new Arg("body*")}, null,
-                (vm, arguments, rResult, location) -> {
+                (vm, args, rResult, location) -> {
                     vm.doLib(() -> {
-                        vm.emit(new ArrayDeque<IForm>(Arrays.asList(arguments)), rResult);
+                        vm.emit(new ArrayDeque<IForm>(Arrays.asList(args)), rResult);
+                    });
+                });
+
+        bindMacro("check", new Arg[]{new Arg("expected"), new Arg("body*")}, null,
+                (vm, _args, rResult, location) -> {
+                    final var args = new ArrayDeque<IForm>(Arrays.asList(_args));
+                    final var rValues = vm.alloc(2);
+
+                    vm.doLib(() -> {
+                        final var expected = args.removeFirst();
+                        expected.emit(vm, rValues);
+                        final var actual = args.isEmpty() ? expected : args.removeFirst();
+                        actual.emit(vm, rValues+1);
+                        vm.emit(Check.make(rValues, location));
                     });
                 });
     }
