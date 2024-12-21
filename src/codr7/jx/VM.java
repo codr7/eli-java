@@ -129,6 +129,9 @@ public final class VM {
                     registers.set(leftOp.rResult(), registers.get(leftOp.rPair()).cast(Core.pairType).left());
                     pc++;
                     break;
+                case NOP:
+                    pc++;
+                    break;
                 case PUT:
                     final var putOp = (Put) op.data();
                     registers.set(putOp.rTarget(), putOp.value().dup(this));
@@ -153,7 +156,10 @@ public final class VM {
 
     public IValue eval(final String in, final Location location) {
         final var rResult = alloc(1);
-        eval(emit(read(in, location), rResult));
+        final var skipPc = emit(Nop.make(location));
+        final var startPc = emit(read(in, location), rResult);
+        ops.set(skipPc, Goto.make(emitPc(), location));
+        eval(startPc);
         return registers.get(rResult);
     }
 

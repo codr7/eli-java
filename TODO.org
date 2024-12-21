@@ -1,6 +1,3 @@
-* add define macro
-** add test
-
 * add pair reader
 * add list reader
 

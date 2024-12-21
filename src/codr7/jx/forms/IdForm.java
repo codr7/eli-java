@@ -20,12 +20,13 @@ public class IdForm extends BaseForm {
         return v;
     }
 
-    private final String id;
+    public final String id;
 
     public IdForm(final String id, final Location location) {
         super(location);
         this.id = id;
     }
+
 
     public void emit(final VM vm, final int rResult) {
         get(vm.currentLib, id, location()).emit(vm, rResult, location());

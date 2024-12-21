@@ -7,6 +7,7 @@ public enum OpCode {
     COPY,
     GOTO,
     LEFT,
+    NOP,
     PUT,
     RIGHT,
     SET_PATH,

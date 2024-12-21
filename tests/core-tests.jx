@@ -1,2 +1,6 @@
 (check 3
   (do 1 2 3))
+
+(check 42
+  (define foo 42)
+  foo)
