@@ -5,6 +5,11 @@ public record Value<T>(IDataType<T> type, T data) implements IValue {
     public IValue dup(final VM vm) { return type.dup(vm, this); }
     public String dump(final VM vm) { return type.dump(vm, this); }
 
+    @Override
+    public boolean equals(final Object other) {
+        return other instanceof Value && type.equals(this, (Value<T>)other);
+    }
+
     public void emit(final VM vm, final int rResult, final Location location) {
         type.emit(vm, this, rResult, location);
     }

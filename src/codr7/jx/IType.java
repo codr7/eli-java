@@ -10,6 +10,7 @@ public interface IType {
         vm.emit(Put.make(rResult, value, location));
     }
 
+    boolean equals(IValue left, IValue right);
     String id();
     default boolean toBit(VM vm, IValue value) { return true; }
     default String toString(VM vm, IValue value) { return dump(vm, value); }
