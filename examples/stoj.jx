@@ -1,0 +1,3 @@
+(define frame (gui/Frame "stoj"))
+(gui/maximize frame)
+(gui/show frame)
