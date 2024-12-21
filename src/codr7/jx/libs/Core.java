@@ -1,12 +1,12 @@
 package codr7.jx.libs;
 
 import codr7.jx.*;
+import codr7.jx.forms.LiteralForm;
 import codr7.jx.libs.core.types.*;
 import codr7.jx.ops.Check;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Deque;
 
 public class Core extends Lib {
     public static final BindingType bindingType = new BindingType("Binding");
@@ -19,6 +19,9 @@ public class Core extends Lib {
     public static final PairType pairType = new PairType("Pair");
 
     public static final IValue NIL = new Value<>(nilType, null);
+
+    public static final IValue T = new Value<>(bitType, true);
+    public static final IValue F = new Value<>(bitType, false);
 
     public Core() {
         super("core");
@@ -34,8 +37,8 @@ public class Core extends Lib {
 
         bind("_", NIL);
 
-        bind("T", new Value<>(bitType, true));
-        bind("F", new Value<>(bitType, false));
+        bind("T", T);
+        bind("F", F);
 
         bindMacro("do", new Arg[]{new Arg("body*")}, null,
                 (vm, args, rResult, location) -> {
@@ -50,9 +53,17 @@ public class Core extends Lib {
                     final var rValues = vm.alloc(2);
 
                     vm.doLib(() -> {
-                        final var expected = args.removeFirst();
+                        var expected = args.removeFirst();
+                        IForm actual;
+
+                        if (args.isEmpty()) {
+                            actual = expected;
+                            expected = new LiteralForm(Core.T, expected.location());
+                        } else {
+                            actual = args.removeFirst();
+                        }
+
                         expected.emit(vm, rValues);
-                        final var actual = args.isEmpty() ? expected : args.removeFirst();
                         actual.emit(vm, rValues+1);
                         vm.emit(Check.make(rValues, location));
                     });
