@@ -1,7 +1,5 @@
-* add tests
-** add VM.load
-*** call from main if args
-** add check macro
+* add check macro
+** run tests
 
 * add pair reader
 * add list reader

@@ -9,6 +9,10 @@ import codr7.jx.readers.IdReader;
 import codr7.jx.readers.IntReader;
 import codr7.jx.readers.WhitespaceReader;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -21,6 +25,7 @@ public final class VM {
 
     public final List<Reader> infixReaders = new ArrayList<>();
     public final ArrayList<Op> ops = new ArrayList<>();
+    public Path path = Paths.get("");
     public int pc = 0;
     public final List<Reader> readers = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
@@ -90,7 +95,7 @@ public final class VM {
                     final var t = registers.get(callOp.rTarget());
 
                     if (t.type() instanceof CallTrait ct) {
-                        pc += 1;
+                        pc++;
                         ct.call(this, t, callOp.rArguments(), callOp.arity(), callOp.rResult(), op.location());
                     } else {
                         throw new EvalError("Call not supported: " + t.dump(this), op.location());
@@ -115,6 +120,10 @@ public final class VM {
                     final var rightOp = (Right)op.data();
                     registers.set(rightOp.rResult(), registers.get(rightOp.rPair()).cast(Core.pairType).left());
                     pc++;
+                case SET_PATH:
+                    final var setOp = (SetPath)op.data();
+                    path = setOp.path();
+                    pc++;
                 case STOP:
                     pc++;
                     return;
@@ -127,6 +136,19 @@ public final class VM {
         eval(emit(read(in, location), rResult));
         return registers.get(rResult);
     }
+
+    public final void load(final Path path, int rResult) {
+        final var prevPath = this.path;
+        final var p = prevPath.resolve(path);
+        final var location = new Location(p.toString());
+        Deque<IForm> out;
+        try { out = read(Files.readString(p), location); }
+        catch (final IOException e) { throw new RuntimeException(e); }
+        emit(SetPath.make(p.getParent(), location));
+        emit(out, rResult);
+        emit(SetPath.make(prevPath, location));
+    }
+
 
     public boolean read(final Input in, final Deque<IForm> out, final Location location) {
         final var result = readers.stream().anyMatch(r -> r.read(this, in, out, location));
