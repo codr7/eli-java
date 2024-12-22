@@ -17,6 +17,7 @@ public class Core extends Lib {
     public static final IntType intType = new IntType("Int");
     public static final JMacroType jMacroType = new JMacroType("JMacro");
     public static final LibType libType = new LibType("Lib");
+    public static final ListType listType = new ListType("List");
     public static final MetaType metaType = new MetaType("Meta");
     public static final NilType nilType = new NilType("Nil");
     public static final PairType pairType = new PairType("Pair");
@@ -34,6 +35,7 @@ public class Core extends Lib {
         bind(intType);
         bind(jMacroType);
         bind(libType);
+        bind(listType);
         bind(metaType);
         bind(nilType);
         bind(pairType);

@@ -36,6 +36,7 @@ public final class VM {
         readers.add(CallReader.instance);
         readers.add(IntReader.instance);
         readers.add(IdReader.instance);
+        readers.add(ListReader.instance);
         infixReaders.add(PairReader.instance);
 
         userLib.bind(coreLib);
@@ -85,11 +86,19 @@ public final class VM {
             System.out.printf("% 4d %s\n", pc, op.toString(this));
 
             switch (op.code()) {
-                case BRANCH:
+                case ADD_ITEM: {
+                    final var addOp = (AddItem) op.data();
+                    final var t = registers.get(addOp.rTarget()).cast(Core.listType);
+                    t.add(registers.get(addOp.rItem()));
+                    pc++;
+                    break;
+                }
+                case BRANCH: {
                     final var branchOp = (Branch) op.data();
                     pc = registers.get(branchOp.rCondition()).toBit(this) ? pc + 1 : branchOp.endPc();
                     break;
-                case CALL:
+                }
+                case CALL: {
                     final var callOp = (Call) op.data();
                     final var t = registers.get(callOp.rTarget());
 
@@ -101,10 +110,11 @@ public final class VM {
                     }
 
                     break;
-                case CHECK:
+                }
+                case CHECK: {
                     final var checkOp = (Check) op.data();
                     final var expected = registers.get(checkOp.rValues());
-                    final var actual = registers.get(checkOp.rValues()+1);
+                    final var actual = registers.get(checkOp.rValues() + 1);
 
                     if (!expected.equals(actual)) {
                         throw new EvalError("Check failed; expected " +
@@ -114,46 +124,62 @@ public final class VM {
 
                     pc++;
                     break;
-                case COPY:
+                }
+                case COPY: {
                     final var copyOp = (Copy) op.data();
                     registers.set(copyOp.rTo(), registers.get(copyOp.rFrom()));
                     pc++;
                     break;
-                case GOTO:
-                    pc = ((Goto)op.data()).pc();
+                }
+                case CREATE_LIST: {
+                    final var createOp = (CreateList) op.data();
+                    registers.set(createOp.rTarget(), new Value<>(Core.listType, new ArrayList<>()));
+                    pc++;
                     break;
-                case LEFT:
-                    final var leftOp = (Left)op.data();
+                }
+                case GOTO: {
+                    pc = ((Goto) op.data()).pc();
+                    break;
+                }
+                case LEFT: {
+                    final var leftOp = (Left) op.data();
                     registers.set(leftOp.rResult(), registers.get(leftOp.rPair()).cast(Core.pairType).left());
                     pc++;
                     break;
-                case NOP:
+                }
+                case NOP: {
                     pc++;
                     break;
-                case PUT:
+                }
+                case PUT: {
                     final var putOp = (Put) op.data();
                     registers.set(putOp.rTarget(), putOp.value().dup(this));
                     pc++;
                     break;
-                case RIGHT:
-                    final var rightOp = (Right)op.data();
+                }
+                case RIGHT: {
+                    final var rightOp = (Right) op.data();
                     registers.set(rightOp.rResult(), registers.get(rightOp.rPair()).cast(Core.pairType).left());
                     pc++;
                     break;
-                case SET_PATH:
-                    final var setOp = (SetPath)op.data();
+                }
+                case SET_PATH: {
+                    final var setOp = (SetPath) op.data();
                     path = setOp.path();
                     pc++;
                     break;
-                case STOP:
+                }
+                case STOP: {
                     pc++;
                     return;
-                case ZIP:
-                    final var zipOp = (Zip)op.data();
+                }
+                case ZIP: {
+                    final var zipOp = (Zip) op.data();
                     final var left = registers.get(zipOp.rLeft());
                     final var right = registers.get(zipOp.rRight());
                     registers.set(zipOp.rResult(), new Value<>(Core.pairType, new Pair(left, right)));
                     pc++;
+                }
             }
         }
     }

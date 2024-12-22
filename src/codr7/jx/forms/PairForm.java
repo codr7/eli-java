@@ -14,10 +14,16 @@ public final class PairForm extends BaseForm {
     }
 
     public void emit(final VM vm, final int rResult) {
-        final var rLeft = vm.alloc(1);
-        left.emit(vm, rLeft);
-        right.emit(vm, rResult);
-        vm.emit(Zip.make(rLeft, rResult, rResult, location()));
+        final var v = value(vm);
+
+        if (v == null) {
+            final var rLeft = vm.alloc(1);
+            left.emit(vm, rLeft);
+            right.emit(vm, rResult);
+            vm.emit(Zip.make(rLeft, rResult, rResult, location()));
+        } else {
+            v.emit(vm, rResult, location());
+        }
     }
 
     public String toString(final VM vm) {
