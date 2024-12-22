@@ -1,21 +1,18 @@
 package codr7.jx.ops;
 
-import codr7.jx.Location;
-import codr7.jx.Op;
-import codr7.jx.OpCode;
-import codr7.jx.VM;
+import codr7.jx.*;
 
-public record Call(int rTarget, int rArguments, int arity, int rResult) {
-    public static Op make(final int rTarget,
+public record CallValue(IValue target, int rArguments, int arity, int rResult) {
+    public static Op make(final IValue target,
                           final int rArguments,
                           final int arity,
                           final int rResult,
                           final Location location) {
-        return new Op(OpCode.CALL, new Call(rTarget, arity, rArguments, rResult), location);
+        return new Op(OpCode.CALL_VALUE, new CallValue(target, arity, rArguments, rResult), location);
     }
 
     public String toString(final VM vm) {
-        return "rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
+        return "target: " + target.dump(vm) + " " +
                 "rArguments: " + rArguments + " " +
                 "arity: " + arity +
                 "rResult: " + rResult + " (" + vm.registers.get(rResult).dump(vm) + ")";

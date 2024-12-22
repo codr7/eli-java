@@ -3,7 +3,8 @@ package codr7.jx;
 public enum OpCode {
     ADD_ITEM,
     BRANCH,
-    CALL,
+    CALL_REGISTER,
+    CALL_VALUE,
     CHECK,
     COPY,
     CREATE_LIST,

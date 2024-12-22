@@ -98,9 +98,22 @@ public final class VM {
                     pc = registers.get(branchOp.rCondition()).toBit(this) ? pc + 1 : branchOp.endPc();
                     break;
                 }
-                case CALL: {
-                    final var callOp = (Call) op.data();
+                case CALL_REGISTER: {
+                    final var callOp = (CallRegister) op.data();
                     final var t = registers.get(callOp.rTarget());
+
+                    if (t.type() instanceof CallTrait ct) {
+                        pc++;
+                        ct.call(this, t, callOp.rArguments(), callOp.arity(), callOp.rResult(), op.location());
+                    } else {
+                        throw new EvalError("Call not supported: " + t.dump(this), op.location());
+                    }
+
+                    break;
+                }
+                case CALL_VALUE: {
+                    final var callOp = (CallValue) op.data();
+                    final var t = callOp.target();
 
                     if (t.type() instanceof CallTrait ct) {
                         pc++;

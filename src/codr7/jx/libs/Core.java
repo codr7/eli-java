@@ -16,6 +16,7 @@ public class Core extends Lib {
     public static final BitType bitType = new BitType("Bit");
     public static final IntType intType = new IntType("Int");
     public static final JMacroType jMacroType = new JMacroType("JMacro");
+    public static final JMethodType jMethodType = new JMethodType("JMethod");
     public static final LibType libType = new LibType("Lib");
     public static final ListType listType = new ListType("List");
     public static final MetaType metaType = new MetaType("Meta");
@@ -34,6 +35,7 @@ public class Core extends Lib {
         bind(bitType);
         bind(intType);
         bind(jMacroType);
+        bind(jMethodType);
         bind(libType);
         bind(listType);
         bind(metaType);
@@ -92,6 +94,13 @@ public class Core extends Lib {
                         vm.emit(actual, rValues+1);
                         vm.emit(Check.make(rValues, location));
                     });
+                });
+
+        bindMethod("say", new Arg[]{new Arg("body*")}, null,
+                (vm, args, rResult, location) -> {
+                    final var buffer = new StringBuilder();
+                    for (final var a: args) { buffer.append(a.toString(vm)); }
+                    System.out.println(buffer.toString());
                 });
     }
 }

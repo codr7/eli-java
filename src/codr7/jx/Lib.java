@@ -31,10 +31,13 @@ public class Lib {
         bind(new JMacro(id, arguments, result, body));
     }
 
+    public void bindMethod(final String id, final Arg[] arguments, final IType result, final JMethod.Body body) {
+        bind(new JMethod(id, arguments, result, body));
+    }
+
     public void bind(final IType value) { bind(value.id(), Core.metaType, value); }
-
     public void bind(final JMacro value) { bind(value.id(), Core.jMacroType, value); }
-
+    public void bind(final JMethod value) { bind(value.id(), Core.jMethodType, value); }
     public void bind(final Lib value) { bind(value.id, Core.libType, value); }
 
     public IValue find(final String id) {

@@ -1,9 +1,7 @@
-* add methods
-** inline body in emitCall
-** add method macro
-** bind after body
-** set rResult in emit
-** add method type
+* add string reader
+
+* make meta callable
+** add IValue create() method
 
 * add gui module
 https://www.javatpoint.com/java-swing
@@ -11,6 +9,12 @@ https://www.javatpoint.com/java-swing
 ** add Widget type
 ** add show method
 ** declarative api
+
+* add method macro
+** inline body in emitCall
+** add method macro
+** bind after body
+** set rResult in emit
 
 * add gui/chart module
 ** https://www.jfree.org/jfreechart/

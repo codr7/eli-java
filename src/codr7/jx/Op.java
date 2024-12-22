@@ -8,7 +8,8 @@ public record Op(OpCode code, Record data, Location location) {
         return code.name() + switch (data) {
             case AddItem op -> " " + op.toString(vm);
             case Branch op -> " " + op.toString(vm);
-            case Call op -> " " + op.toString(vm);
+            case CallRegister op -> " " + op.toString(vm);
+            case CallValue op -> " " + op.toString(vm);
             case Check op -> " " + op.toString(vm);
             case Copy op -> " " + op.toString(vm);
             case CreateList op -> " " + op.toString(vm);

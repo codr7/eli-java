@@ -22,5 +22,5 @@ public record JMacro(String id, Arg[] args, IType result, Body body) {
         body.call(vm, args, rResult, location);
     }
 
-    public String toString() { return String.format("(Macro %s)", id); }
+    public String toString() { return String.format("(JMacro %s)", id); }
 }
