@@ -16,9 +16,10 @@ public class IdReader implements Reader {
             var c = in.peek();
 
             if (c == 0 || Character.isWhitespace(c) ||
-                    c == '(' || c == ')' || c == '[' || c == ']' || c == '{' || c == '}' || c == '.' || c == ':') {
-                break;
-            }
+                    c == '(' || c == ')' ||
+                    c == '[' || c == ']' ||
+                    c == '{' || c == '}' ||
+                    c == '.' || c == ':' || c == '"') { break; }
 
             in.pop();
             buffer.append(c);

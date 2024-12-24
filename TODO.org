@@ -1,14 +1,6 @@
-* add string reader
-
-* make meta callable
-** add IValue create() method
-
-* add gui module
-https://www.javatpoint.com/java-swing
-** JFrame/setVisible
-** add Widget type
-** add show method
-** declarative api
+* figure out where setVisible is in hierarchy
+** add widget type
+** change show method
 
 * add method macro
 ** inline body in emitCall
@@ -16,19 +8,28 @@ https://www.javatpoint.com/java-swing
 ** bind after body
 ** set rResult in emit
 
+jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+jframe.pack();
+
+* def defn
+** lambda?
+
+* add gui tabs
+** Data / Chart
+
 * add gui/chart module
 ** https://www.jfree.org/jfreechart/
 
 * add db module
 ** jdbc / h2
 
-* read examples/bitcoin.csv
-https://www.investing.com/crypto/bitcoin/historical-data
+* read examples/stoj.csv
 https://opencsv.sourceforge.net/
+https://www.investing.com/crypto/bitcoin/historical-data
 ** calculate open/high/low as percentage of price
 ** log seq, series name, delta time, percentages & change
 
-* add bitcoin gui
+* add stoj gui
 ** top panel for selection
 *** id, start/end date and knobs for percentages/change
 *** find first log for id > start
@@ -37,6 +38,12 @@ https://opencsv.sourceforge.net/
 *** draw a projection for each found id & one for actual data if any
 ** table with records/chart
 
-* add swap op
-* add load macro
 * fibtail
+
+* switch registers to array
+** realloc using Arrays.copyOf(array, newSize) in eval
+** add VM.registerCount
+*** inc & return in alloc
+
+* add load macro
+* add swap op

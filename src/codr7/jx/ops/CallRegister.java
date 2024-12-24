@@ -11,13 +11,13 @@ public record CallRegister(int rTarget, int rArguments, int arity, int rResult) 
                           final int arity,
                           final int rResult,
                           final Location location) {
-        return new Op(OpCode.CALL_REGISTER, new CallRegister(rTarget, arity, rArguments, rResult), location);
+        return new Op(OpCode.CALL_REGISTER, new CallRegister(rTarget, rArguments, arity, rResult), location);
     }
 
     public String toString(final VM vm) {
         return "rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
                 "rArguments: " + rArguments + " " +
-                "arity: " + arity +
+                "arity: " + arity + " " +
                 "rResult: " + rResult + " (" + vm.registers.get(rResult).dump(vm) + ")";
     }
 }

@@ -1,2 +1,2 @@
-(define frame (gui/Frame "stoj"))
+(define frame (gui/new-frame "stoj" 600 400))
 (gui/show frame)

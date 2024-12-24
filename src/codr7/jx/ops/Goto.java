@@ -5,8 +5,6 @@ import codr7.jx.Op;
 import codr7.jx.OpCode;
 import codr7.jx.VM;
 
-import java.nio.file.Path;
-
 public record Goto(int pc) {
     public static Op make(final int pc, final Location location) {
         return new Op(OpCode.GOTO, new Goto(pc), location);

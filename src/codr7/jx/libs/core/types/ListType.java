@@ -4,7 +4,6 @@ import codr7.jx.BaseType;
 import codr7.jx.IValue;
 import codr7.jx.VM;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListType extends BaseType<List<IValue>> {
@@ -36,7 +35,7 @@ public class ListType extends BaseType<List<IValue>> {
         return true;
     }
 
-    public boolean toBit(final IValue value) { return !value.cast(this).isEmpty(); }
+    public boolean toBit(final VM vm, final IValue value) { return !value.cast(this).isEmpty(); }
 
     public String toString(final VM vm, final IValue value) {
         final var result = new StringBuilder();
@@ -51,5 +50,4 @@ public class ListType extends BaseType<List<IValue>> {
         result.append(']');
         return result.toString();
     }
-
 }
