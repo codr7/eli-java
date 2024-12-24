@@ -12,6 +12,6 @@ public record Copy(int rFrom, int rTo) {
 
     public String toString(final VM vm) {
         return "rFrom: " + rFrom + " (" + vm.registers.get(rFrom).dump(vm) + ") " +
-                "rTo: " + rFrom + " (" + vm.registers.get(rFrom).dump(vm) + ")";
+                "rTo: " + rTo + " (" + vm.registers.get(rTo).dump(vm) + ")";
     }
 }

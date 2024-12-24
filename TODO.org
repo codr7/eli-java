@@ -10,8 +10,7 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 * add db module
 ** jdbc / h2
 
-* def defn
-** lambda?
+* lambda?
 
 * read examples/stoj.csv
 https://opencsv.sourceforge.net/
