@@ -32,7 +32,6 @@ public class IdForm extends BaseForm {
     }
 
     public boolean isNil() { return id.equals("_"); }
-    public boolean isSep() { return id.equals(";"); }
     public String dump(final VM vm) { return id; }
     public IValue value(final VM vm) { return get(vm.currentLib, id, loc()); }
 }

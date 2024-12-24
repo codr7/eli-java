@@ -85,29 +85,16 @@ public class Core extends Lib {
                     });
                 });
 
-        bindMacro("method", new Arg[]{new Arg("name"), new Arg("args"), new Arg("body*")}, null,
+        bindMacro("method", new Arg[]{new Arg("name"), new Arg("args"), new Arg("result"), new Arg("body*")}, null,
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var mid = ((IdForm)args.removeFirst()).id;
                     final var margs = new ArrayList<Arg>();
-                    IType resultType = null;
                     final var argList = ((ListForm)args.removeFirst()).items;
+                    final IType resultType = args.removeFirst().getType(vm);
 
                     for (var i = 0; i < argList.length; i++) {
                         final var af = argList[i];
-
-                        if (af.isSep()) {
-                            if (i+1 < argList.length) {
-                                final var rf = argList[i+1];
-                                resultType = rf.getType(vm);
-
-                                if (resultType == null) {
-                                    throw new EmitError("Expected result type: " + rf.dump(vm), rf.loc());
-                                }
-                            }
-
-                            break;
-                        }
 
                         if (af instanceof IdForm aid) {
                             margs.add(new Arg(aid.id));

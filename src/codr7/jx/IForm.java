@@ -41,7 +41,6 @@ public interface IForm {
     }
 
     default boolean isNil() { return false; }
-    default boolean isSep() { return false; }
     Loc loc();
     String dump(VM vm);
     IValue value(VM vm);

@@ -6,9 +6,9 @@
   foo)
 
 (check 42
-  (method foo [;Int] 42)
+  (method foo [] Int 42)
   (foo))
 
 (check 42
-  (method foo [a;Int] a)
+  (method foo [a] Int a)
   (foo 42))

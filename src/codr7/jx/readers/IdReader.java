@@ -19,13 +19,11 @@ public class IdReader implements Reader {
                     c == '(' || c == ')' ||
                     c == '[' || c == ']' ||
                     c == '{' || c == '}' ||
-                    c == '.' || c == ':' || c == '"' ||
-                    (c == ';' && !buffer.isEmpty())) { break; }
+                    c == '.' || c == ':' || c == '"') { break; }
 
             in.pop();
             buffer.append(c);
             location.update(c);
-            if (c == ';') { break; }
         }
 
         if (buffer.isEmpty()) { return false; }
