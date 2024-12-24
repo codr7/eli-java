@@ -7,11 +7,9 @@ public interface IType {
     void addParentTypes(IType childType);
     default IValue dup(VM vm, IValue source) { return source; }
     String dump(VM vm, IValue value);
-
     default void emit(VM vm, IValue value, int rResult, Loc loc) {
         vm.emit(Put.make(rResult, value, loc));
     }
-
     boolean equals(IValue left, IValue right);
     String id();
     default boolean toBit(VM vm, IValue value) { return true; }

@@ -1,4 +1,3 @@
 package codr7.jx;
 
-public interface IDataType<T> extends IType {
-}
+public interface IDataType<T> extends IType { }

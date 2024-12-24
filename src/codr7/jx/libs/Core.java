@@ -80,7 +80,7 @@ public class Core extends Lib {
                         }
 
                         expected.emit(vm, rValues);
-                        vm.emit(actual, rValues+1);
+                        vm.emit(actual, rValues + 1);
                         vm.emit(Check.make(rValues, location));
                     });
                 });
@@ -88,9 +88,9 @@ public class Core extends Lib {
         bindMacro("method", new Arg[]{new Arg("name"), new Arg("args"), new Arg("result"), new Arg("body*")}, null,
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
-                    final var mid = ((IdForm)args.removeFirst()).id;
+                    final var mid = ((IdForm) args.removeFirst()).id;
                     final var margs = new ArrayList<Arg>();
-                    final var argList = ((ListForm)args.removeFirst()).items;
+                    final var argList = ((ListForm) args.removeFirst()).items;
                     final var rf = args.removeFirst();
                     final IType resultType = rf.getType(vm, rf.loc());
 
@@ -111,13 +111,13 @@ public class Core extends Lib {
                     vm.doLib(() -> {
                         for (var i = 0; i < margs.size(); i++) {
                             final var ma = margs.get(i);
-                            vm.currentLib.bind(ma.id(), bindingType, new Binding(null,rArgs+i));
+                            vm.currentLib.bind(ma.id(), bindingType, new Binding(null, rArgs + i));
                         }
 
                         vm.currentLib.bindMacro("recall", new Arg[0], null,
-                            (_vm, _, _, _location) -> {
-                                _vm.emit(Goto.make(startPc, _location));
-                            });
+                                (_vm, _, _, _location) -> {
+                                    _vm.emit(Goto.make(startPc, _location));
+                                });
 
                         vm.emit(args, rResult);
                     });
@@ -126,7 +126,7 @@ public class Core extends Lib {
                     vm.ops.set(skipPc, Goto.make(endPc, loc));
                     final var m = new Method(mid, margs.toArray(new Arg[0]), rArgs, resultType, rResult, startPc, endPc);
                     vm.currentLib.bind(m);
-            });
+                });
 
         bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")}, null,
                 (vm, _args, rResult, location) -> {
@@ -139,19 +139,23 @@ public class Core extends Lib {
                             throw new EmitError("Expected id: " + id.dump(vm), location);
                         }
 
-                        if (args.isEmpty()) { throw new EmitError("Missing value", location); }
+                        if (args.isEmpty()) {
+                            throw new EmitError("Missing value", location);
+                        }
                         final var value = args.removeFirst().eval(vm);
                         final var rValue = vm.alloc(1);
                         vm.registers.set(rValue, value);
-                        vm.currentLib.bind(((IdForm)id).id, Core.bindingType, new Binding(value.type(), rValue));
+                        vm.currentLib.bind(((IdForm) id).id, Core.bindingType, new Binding(value.type(), rValue));
                     }
                 });
 
         bindMethod("say", new Arg[]{new Arg("body*")}, null,
                 (vm, args, rResult, location) -> {
                     final var buffer = new StringBuilder();
-                    for (final var a: args) { buffer.append(a.toString(vm)); }
-                    System.out.println(buffer.toString());
+                    for (final var a : args) {
+                        buffer.append(a.toString(vm));
+                    }
+                    System.out.println(buffer);
                 });
     }
 }
