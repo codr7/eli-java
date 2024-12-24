@@ -37,6 +37,7 @@ public interface IForm {
     }
 
     default IType getType(final VM vm, final Loc loc) {
+        if (isNil()) { return null; }
         final var v = value(vm);
         if (v == null) { throw new EmitError("Expected type: " + dump(vm), loc); }
         final var t = v.cast(Core.metaType);
