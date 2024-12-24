@@ -20,12 +20,13 @@ public class GUI extends Lib {
         bind(widgetType);
 
         bindMethod("new-frame",
-                new Arg[]{new Arg("title"), new Arg("width"), new Arg("height")}, null,
+                new Arg[]{new Arg("title", Core.stringType), new Arg("size", Core.pairType)}, null,
                 (vm, args, rResult, location) -> {
                     final var title = args[0].cast(Core.stringType);
                     final var f = new JFrame(title);
-                    final var width = args[1].cast(Core.intType).intValue();
-                    final var height = args[2].cast(Core.intType).intValue();
+                    final var size = args[1].cast(Core.pairType);
+                    final var width = size.left().cast(Core.intType).intValue();
+                    final var height = size.right().cast(Core.intType).intValue();
                     f.setPreferredSize(new Dimension(width, height));
                     f.setLocationRelativeTo(null);
                     vm.registers.set(rResult, new Value<>(frameType, f));
