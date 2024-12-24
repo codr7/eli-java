@@ -1,5 +1,6 @@
 package codr7.jx;
 
+import codr7.jx.errors.EmitError;
 import codr7.jx.libs.Core;
 import codr7.jx.ops.CallRegister;
 import codr7.jx.ops.CallValue;
@@ -35,9 +36,12 @@ public interface IForm {
         return vm.registers.get(rResult);
     }
 
-    default IType getType(final VM vm) {
+    default IType getType(final VM vm, final Loc loc) {
         final var v = value(vm);
-        return (v == null) ? null : v.cast(Core.metaType);
+        if (v == null) { throw new EmitError("Expected type: " + dump(vm), loc); }
+        final var t = v.cast(Core.metaType);
+        if (t == null) { throw new EmitError("Expected type: " + dump(vm), loc); }
+        return t;
     }
 
     default boolean isNil() { return false; }

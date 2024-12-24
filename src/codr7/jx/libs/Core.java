@@ -91,7 +91,8 @@ public class Core extends Lib {
                     final var mid = ((IdForm)args.removeFirst()).id;
                     final var margs = new ArrayList<Arg>();
                     final var argList = ((ListForm)args.removeFirst()).items;
-                    final IType resultType = args.removeFirst().getType(vm);
+                    final var rf = args.removeFirst();
+                    final IType resultType = rf.getType(vm, rf.loc());
 
                     for (var i = 0; i < argList.length; i++) {
                         final var af = argList[i];
