@@ -1,3 +1,9 @@
+* bind return macro inside method body
+** add Label class
+*** switch Goto op to store Label
+*** use to implement return
+** add return test
+
 * add recall test
 ** add if macro
 ** add = method
@@ -45,3 +51,5 @@ https://www.investing.com/crypto/bitcoin/historical-data
 
 * add load macro
 * add swap op
+
+* add label/goto macros
