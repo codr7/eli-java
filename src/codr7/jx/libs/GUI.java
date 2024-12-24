@@ -4,17 +4,20 @@ import codr7.jx.Arg;
 import codr7.jx.Lib;
 import codr7.jx.Value;
 import codr7.jx.libs.gui.types.FrameType;
+import codr7.jx.libs.gui.types.WidgetType;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GUI extends Lib {
-    public static final FrameType frameType = new FrameType("Frame");
+    public static final WidgetType widgetType = new WidgetType("Widget");
+    public static final FrameType frameType = new FrameType("Frame", widgetType);
 
     public GUI() {
         super("gui");
 
         bind(frameType);
+        bind(widgetType);
 
         bindMethod("new-frame",
                 new Arg[]{new Arg("title"), new Arg("width"), new Arg("height")}, null,
@@ -28,9 +31,14 @@ public class GUI extends Lib {
                     vm.registers.set(rResult, new Value<>(frameType, f));
                 });
 
+        bindMethod("pack", new Arg[]{new Arg("frames*")}, null,
+                (vm, args, rResult, location) -> {
+                    for (final var a: args) { a.cast(frameType).pack(); }
+                });
+
         bindMethod("show", new Arg[]{new Arg("widgets*")}, null,
                 (vm, args, rResult, location) -> {
-                    for (final var a: args) { a.cast(frameType).setVisible(true); }
+                    for (final var a: args) { a.cast(widgetType).setVisible(true); }
                 });
     }
 }

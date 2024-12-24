@@ -1,27 +1,23 @@
-* figure out where setVisible is in hierarchy
-** add widget type
-** change show method
-
 * add method macro
 ** inline body in emitCall
-** add method macro
+** add method type
 ** bind after body
 ** set rResult in emit
 
-jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-jframe.pack();
-
-* def defn
-** lambda?
-
 * add gui tabs
+** add top panel
 ** Data / Chart
 
 * add gui/chart module
 ** https://www.jfree.org/jfreechart/
 
+jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 * add db module
 ** jdbc / h2
+
+* def defn
+** lambda?
 
 * read examples/stoj.csv
 https://opencsv.sourceforge.net/

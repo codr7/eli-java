@@ -1,2 +1,3 @@
-(define frame (gui/new-frame "stoj" 600 400))
-(gui/show frame)
+(define w (gui/new-frame "stoj" 600 400))
+(gui/pack w)
+(gui/show w)

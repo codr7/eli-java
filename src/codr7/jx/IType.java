@@ -3,6 +3,8 @@ package codr7.jx;
 import codr7.jx.ops.Put;
 
 public interface IType {
+    void addParentType(IType type, int weight);
+    void addParentTypes(IType childType);
     default IValue dup(VM vm, IValue source) { return source; }
     String dump(VM vm, IValue value);
 
