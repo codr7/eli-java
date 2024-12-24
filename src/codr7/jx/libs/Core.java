@@ -113,6 +113,11 @@ public class Core extends Lib {
                             vm.currentLib.bind(ma.id(), bindingType, new Binding(null,rArgs+i));
                         }
 
+                        vm.currentLib.bindMacro("recall", new Arg[0], null,
+                            (_vm, _, _, _location) -> {
+                                _vm.emit(Goto.make(startPc, _location));
+                            });
+
                         vm.emit(args, rResult);
                     });
 

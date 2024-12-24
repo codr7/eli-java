@@ -1,3 +1,7 @@
+* add if macro
+
+* add recall test
+
 * add gui tabs
 ** add top panel
 ** Data / Chart
