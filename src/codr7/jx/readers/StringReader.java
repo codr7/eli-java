@@ -10,7 +10,7 @@ import java.util.Deque;
 public class StringReader implements Reader {
     public static final StringReader instance = new StringReader();
 
-    public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Location location) {
+    public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc location) {
         if (in.peek() != '"') { return false; }
         final var loc = location.dup();
         location.update(in.pop());

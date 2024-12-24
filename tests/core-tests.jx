@@ -4,3 +4,11 @@
 (check 42
   (define foo 42)
   foo)
+
+(check 42
+  (method foo [;Int] 42)
+  (foo))
+
+(check 42
+  (method foo [a;Int] a)
+  (foo 42))

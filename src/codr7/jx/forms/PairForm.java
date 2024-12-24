@@ -7,8 +7,8 @@ import codr7.jx.ops.Zip;
 public final class PairForm extends BaseForm {
     public final IForm left, right;
 
-    public PairForm(final IForm left, final IForm right, final Location location) {
-        super(location);
+    public PairForm(final IForm left, final IForm right, final Loc loc) {
+        super(loc);
         this.left = left;
         this.right = right;
     }
@@ -20,13 +20,13 @@ public final class PairForm extends BaseForm {
             final var rLeft = vm.alloc(1);
             left.emit(vm, rLeft);
             right.emit(vm, rResult);
-            vm.emit(Zip.make(rLeft, rResult, rResult, location()));
+            vm.emit(Zip.make(rLeft, rResult, rResult, loc()));
         } else {
-            v.emit(vm, rResult, location());
+            v.emit(vm, rResult, loc());
         }
     }
 
-    public String toString(final VM vm) {
+    public String dump(final VM vm) {
         return left.toString() + ":" + right.toString();
     }
 

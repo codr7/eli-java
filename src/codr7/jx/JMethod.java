@@ -4,7 +4,7 @@ import codr7.jx.errors.EmitError;
 
 public record JMethod(String id, Arg[] args, IType result, Body body) {
     public interface Body {
-        void call(VM vm, IValue[] args, int rResult, Location location);
+        void call(VM vm, IValue[] args, int rResult, Loc loc);
     }
 
     public int arity() {
@@ -17,12 +17,12 @@ public record JMethod(String id, Arg[] args, IType result, Body body) {
                      final int rArgs,
                      final int arity,
                      final int rResult,
-                     final Location location) {
+                     final Loc loc) {
         final var a = arity();
-        if (a != -1 && arity < a) { throw new EmitError("Not enough args: " + this, location); }
+        if (a != -1 && arity < a) { throw new EmitError("Not enough args: " + this, loc); }
         final var args = new IValue[arity];
         for (var i = 0; i < arity ; i++) { args[i] = vm.registers.get(rArgs + i); }
-        body.call(vm, args, rResult, location);
+        body.call(vm, args, rResult, loc);
     }
 
 }

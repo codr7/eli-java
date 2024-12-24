@@ -1,17 +1,17 @@
 package codr7.jx;
 
-public class Location {
+public class Loc {
     public final String source;
     private int line, column;
 
-    private Location(final String source, final int line, final int column) {
+    private Loc(final String source, final int line, final int column) {
         this.source = source;
         this.line = line;
         this.column = column;
     }
 
-    public Location(final String source) { this(source, 1, 1); }
-    public Location dup() { return new Location(source, line, column); }
+    public Loc(final String source) { this(source, 1, 1); }
+    public Loc dup() { return new Loc(source, line, column); }
     public int line() { return line; }
 
     public char update(final char c) {

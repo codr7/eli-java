@@ -10,8 +10,8 @@ public record Value<T>(IDataType<T> type, T data) implements IValue {
         return other instanceof Value && type.equals(this, (Value<T>)other);
     }
 
-    public void emit(final VM vm, final int rResult, final Location location) {
-        type.emit(vm, this, rResult, location);
+    public void emit(final VM vm, final int rResult, final Loc loc) {
+        type.emit(vm, this, rResult, loc);
     }
 
     public boolean toBit(final VM vm) { return type.toBit(vm, this); }

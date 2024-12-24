@@ -9,8 +9,8 @@ import codr7.jx.ops.Right;
 public class CallForm extends BaseForm {
     private final IForm[] body;
 
-    public CallForm(IForm[] body, final Location location) {
-        super(location);
+    public CallForm(IForm[] body, final Loc loc) {
+        super(loc);
         this.body = body;
     }
 
@@ -32,23 +32,23 @@ public class CallForm extends BaseForm {
                 break;
             }
 
-            throw new EmitError("Invalid target: %s" + tf, location());
+            throw new EmitError("Invalid target: %s" + tf, loc());
         }
 
         var t = tf.value(vm);
-        if (t == null) { throw new EmitError("Unknown target: " + tf, location()); }
-        if (t.type() instanceof CallTrait ct) { ct.emitCall(vm, t, body, rResult, location()); }
-        if (getLeft) { vm.emit(Left.make(rResult, rResult, tf.location())); }
-        else for (; rightCount > 0; rightCount--) { vm.emit(Right.make(rResult, rResult, tf.location())); }
+        if (t == null) { throw new EmitError("Unknown target: " + tf, loc()); }
+        if (t.type() instanceof CallTrait ct) { ct.emitCall(vm, t, body, rResult, loc()); }
+        if (getLeft) { vm.emit(Left.make(rResult, rResult, tf.loc())); }
+        else for (; rightCount > 0; rightCount--) { vm.emit(Right.make(rResult, rResult, tf.loc())); }
     }
 
-    public String toString(VM vm) {
+    public String dump(VM vm) {
         final var result = new StringBuilder();
         result.append('(');
 
         for (var i = 0; i < body.length; i++) {
             if (i > 0) { result.append(' '); }
-            result.append(body[i].toString(vm));
+            result.append(body[i].dump(vm));
         }
 
         result.append(')');

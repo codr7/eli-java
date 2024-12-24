@@ -4,7 +4,7 @@ import codr7.jx.errors.EmitError;
 
 public record JMacro(String id, Arg[] args, IType result, Body body) {
     public interface Body {
-        void call(VM vm, IForm[] args, int rResult, Location location);
+        void call(VM vm, IForm[] args, int rResult, Loc loc);
     }
 
     public int arity() {
@@ -16,10 +16,10 @@ public record JMacro(String id, Arg[] args, IType result, Body body) {
     public void emit(final VM vm,
                      final IForm[] args,
                      final int rResult,
-                     final Location location) {
+                     final Loc loc) {
         final var arity = arity();
-        if (arity != -1 && args.length < arity) { throw new EmitError("Not enough args: " + this, location); }
-        body.call(vm, args, rResult, location);
+        if (arity != -1 && args.length < arity) { throw new EmitError("Not enough args: " + this, loc); }
+        body.call(vm, args, rResult, loc);
     }
 
     public String toString() { return String.format("(JMacro %s)", id); }

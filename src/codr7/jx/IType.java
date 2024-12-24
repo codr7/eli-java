@@ -8,8 +8,8 @@ public interface IType {
     default IValue dup(VM vm, IValue source) { return source; }
     String dump(VM vm, IValue value);
 
-    default void emit(VM vm, IValue value, int rResult, Location location) {
-        vm.emit(Put.make(rResult, value, location));
+    default void emit(VM vm, IValue value, int rResult, Loc loc) {
+        vm.emit(Put.make(rResult, value, loc));
     }
 
     boolean equals(IValue left, IValue right);

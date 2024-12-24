@@ -7,8 +7,8 @@ public record CallValue(IValue target, int rArguments, int arity, int rResult) {
                           final int rArgs,
                           final int arity,
                           final int rResult,
-                          final Location location) {
-        return new Op(OpCode.CALL_VALUE, new CallValue(target, rArgs, arity, rResult), location);
+                          final Loc loc) {
+        return new Op(OpCode.CALL_VALUE, new CallValue(target, rArgs, arity, rResult), loc);
     }
 
     public String toString(final VM vm) {

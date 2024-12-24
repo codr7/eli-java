@@ -9,7 +9,7 @@ import java.util.Deque;
 public class IntReader implements Reader {
     public static final IntReader instance = new IntReader();
 
-    public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Location location) {
+    public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc location) {
         var c = in.peek();
         if (!Character.isDigit(c)) { return false; }
         final var loc = location.dup();

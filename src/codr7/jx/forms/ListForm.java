@@ -10,10 +10,10 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class ListForm extends BaseForm {
-    private final IForm[] items;
+    public final IForm[] items;
 
-    public ListForm(IForm[] items, final Location location) {
-        super(location);
+    public ListForm(IForm[] items, final Loc loc) {
+        super(loc);
         this.items = items;
     }
 
@@ -21,25 +21,25 @@ public class ListForm extends BaseForm {
         final var v = value(vm);
 
         if (v == null) {
-            vm.emit(CreateList.make(rResult, location()));
+            vm.emit(CreateList.make(rResult, loc()));
             final var rItem = vm.alloc(1);
 
             for (final var it: items) {
                 it.emit(vm, rItem);
-                vm.emit(AddItem.make(rResult, rItem, it.location()));
+                vm.emit(AddItem.make(rResult, rItem, it.loc()));
             }
         } else {
-            v.emit(vm, rResult, location());
+            v.emit(vm, rResult, loc());
         }
     }
 
-    public String toString(VM vm) {
+    public String dump(VM vm) {
         final var result = new StringBuilder();
         result.append('[');
 
         for (var i = 0; i < items.length; i++) {
             if (i > 0) { result.append(' '); }
-            result.append(items[i].toString(vm));
+            result.append(items[i].dump(vm));
         }
 
         result.append(']');

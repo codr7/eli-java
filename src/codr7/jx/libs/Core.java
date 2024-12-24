@@ -3,11 +3,15 @@ package codr7.jx.libs;
 import codr7.jx.*;
 import codr7.jx.errors.EmitError;
 import codr7.jx.forms.IdForm;
+import codr7.jx.forms.ListForm;
 import codr7.jx.forms.LiteralForm;
 import codr7.jx.libs.core.types.*;
 import codr7.jx.ops.Check;
+import codr7.jx.ops.Goto;
+import codr7.jx.ops.Nop;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 
@@ -20,6 +24,7 @@ public class Core extends Lib {
     public static final LibType libType = new LibType("Lib");
     public static final ListType listType = new ListType("List");
     public static final MetaType metaType = new MetaType("Meta");
+    public static final MethodType methodType = new MethodType("Method");
     public static final NilType nilType = new NilType("Nil");
     public static final PairType pairType = new PairType("Pair");
     public static final StringType stringType = new StringType("String");
@@ -40,6 +45,7 @@ public class Core extends Lib {
         bind(libType);
         bind(listType);
         bind(metaType);
+        bind(methodType);
         bind(nilType);
         bind(pairType);
         bind(stringType);
@@ -57,7 +63,7 @@ public class Core extends Lib {
                         final var id = args.removeFirst();
 
                         if (!(id instanceof IdForm)) {
-                            throw new EmitError("Expected id: " + id.toString(vm), location);
+                            throw new EmitError("Expected id: " + id.dump(vm), location);
                         }
 
                         if (args.isEmpty()) { throw new EmitError("Missing value", location); }
@@ -87,7 +93,7 @@ public class Core extends Lib {
                         if (args.isEmpty()) {
                             actual = new ArrayDeque<>();
                             actual.add(expected);
-                            expected = new LiteralForm(Core.T, expected.location());
+                            expected = new LiteralForm(Core.T, expected.loc());
                         } else {
                             actual = args;
                         }
@@ -97,6 +103,56 @@ public class Core extends Lib {
                         vm.emit(Check.make(rValues, location));
                     });
                 });
+
+        bindMacro("method", new Arg[]{new Arg("name"), new Arg("args"), new Arg("body*")}, null,
+                (vm, _args, rResult, loc) -> {
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+                    final var mid = ((IdForm)args.removeFirst()).id;
+                    final var margs = new ArrayList<Arg>();
+                    IType resultType = null;
+                    final var argList = ((ListForm)args.removeFirst()).items;
+
+                    for (var i = 0; i < argList.length; i++) {
+                        final var af = argList[i];
+
+                        if (af.isSep()) {
+                            if (i+1 < argList.length) {
+                                final var rf = argList[i+1];
+                                resultType = rf.getType(vm);
+
+                                if (resultType == null) {
+                                    throw new EmitError("Expected result type: " + rf.dump(vm), rf.loc());
+                                }
+                            }
+
+                            break;
+                        }
+
+                        if (af instanceof IdForm aid) {
+                            margs.add(new Arg(aid.id));
+                        } else {
+                            throw new EmitError("Invalid arg: " + af.dump(vm), af.loc());
+                        }
+                    }
+
+                    final var rArgs = vm.alloc(margs.size());
+                    final var skipPc = vm.emit(Nop.make(loc));
+                    final var startPc = vm.emitPc();
+
+                    vm.doLib(() -> {
+                        for (var i = 0; i < margs.size(); i++) {
+                            final var ma = margs.get(i);
+                            vm.currentLib.bind(ma.id(), bindingType, new Binding(null,rArgs+i));
+                        }
+
+                        vm.emit(args, rResult);
+                    });
+
+                    final var endPc = vm.emitPc();
+                    vm.ops.set(skipPc, Goto.make(endPc, loc));
+                    final var m = new Method(mid, margs.toArray(new Arg[0]), rArgs, resultType, rResult, startPc, endPc);
+                    vm.currentLib.bind(m);
+            });
 
         bindMethod("say", new Arg[]{new Arg("body*")}, null,
                 (vm, args, rResult, location) -> {

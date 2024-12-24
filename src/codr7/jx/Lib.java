@@ -39,6 +39,7 @@ public class Lib {
     public void bind(final JMacro value) { bind(value.id(), Core.jMacroType, value); }
     public void bind(final JMethod value) { bind(value.id(), Core.jMethodType, value); }
     public void bind(final Lib value) { bind(value.id, Core.libType, value); }
+    public void bind(final Method value) { bind(value.id(), Core.methodType, value); }
 
     public IValue find(final String id) {
         final var v = bindings.get(id);

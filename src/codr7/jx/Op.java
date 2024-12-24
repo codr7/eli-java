@@ -2,7 +2,7 @@ package codr7.jx;
 
 import codr7.jx.ops.*;
 
-public record Op(OpCode code, Record data, Location location) {
+public record Op(OpCode code, Record data, Loc loc) {
     public String toString(final VM vm) {
         if (data == null) { return code.name(); }
         return code.name() + switch (data) {

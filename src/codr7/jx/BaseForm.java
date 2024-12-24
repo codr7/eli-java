@@ -1,11 +1,11 @@
 package codr7.jx;
 
 public abstract class BaseForm implements IForm {
-    private final Location location;
+    private final Loc loc;
 
-    public BaseForm(final Location location) {
-        this.location = location;
+    public BaseForm(final Loc loc) {
+        this.loc = loc;
     }
 
-    public Location location() { return location; }
+    public Loc loc() { return loc; }
 }

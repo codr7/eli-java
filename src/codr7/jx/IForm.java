@@ -1,5 +1,6 @@
 package codr7.jx;
 
+import codr7.jx.libs.Core;
 import codr7.jx.ops.CallRegister;
 import codr7.jx.ops.CallValue;
 import codr7.jx.ops.Goto;
@@ -16,9 +17,9 @@ public interface IForm {
         if (t == null) {
             final var rTarget = vm.alloc(1);
             emit(vm, rTarget);
-            vm.emit(CallRegister.make(rTarget, rParams, arity, rResult, location()));
+            vm.emit(CallRegister.make(rTarget, rParams, arity, rResult, loc()));
         } else {
-            vm.emit(CallValue.make(t, rParams, arity, rResult, location()));
+            vm.emit(CallValue.make(t, rParams, arity, rResult, loc()));
         }
     }
 
@@ -26,16 +27,22 @@ public interface IForm {
         final var v = value(vm);
         if (v != null) { return v; }
         final var rResult = vm.alloc(1);
-        final var skipPc = vm.emit(Nop.make(location()));
+        final var skipPc = vm.emit(Nop.make(loc()));
         final var startPc = vm.emitPc();
         emit(vm, rResult);
-        vm.ops.set(skipPc, Goto.make(vm.emitPc(), location()));
+        vm.ops.set(skipPc, Goto.make(vm.emitPc(), loc()));
         vm.eval(startPc);
         return vm.registers.get(rResult);
     }
 
+    default IType getType(final VM vm) {
+        final var v = value(vm);
+        return (v == null) ? null : v.cast(Core.metaType);
+    }
+
     default boolean isNil() { return false; }
-    Location location();
-    String toString(VM vm);
+    default boolean isSep() { return false; }
+    Loc loc();
+    String dump(VM vm);
     IValue value(VM vm);
 }

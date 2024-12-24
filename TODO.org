@@ -1,8 +1,5 @@
-* add method macro
-** inline body in emitCall
-** add method type
-** bind after body
-** set rResult in emit
+(method foo [;Int] 42)
+(method foo [a;Int] a)
 
 * add gui tabs
 ** add top panel
@@ -40,6 +37,9 @@ https://www.investing.com/crypto/bitcoin/historical-data
 ** realloc using Arrays.copyOf(array, newSize) in eval
 ** add VM.registerCount
 *** inc & return in alloc
+
+* switch ops to array
+** realloc using Arrays.copyOf(array, newSize) in eval
 
 * add load macro
 * add swap op

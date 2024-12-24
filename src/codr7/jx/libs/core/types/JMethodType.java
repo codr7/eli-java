@@ -11,18 +11,18 @@ public class JMethodType extends BaseType<JMethod> implements CallTrait {
                      final int rArgs,
                      final int arity,
                      final int rResult,
-                     final Location location) {
-        target.cast(this).call(vm, rArgs, arity, rResult, location);
+                     final Loc loc) {
+        target.cast(this).call(vm, rArgs, arity, rResult, loc);
     }
 
     public void emitCall(final VM vm,
                          final IValue target,
                          final IForm[] body,
                          final int rResult,
-                         final Location location) {
+                         final Loc loc) {
         final var arity = body.length - 1;
         final var rArgs = vm.alloc(arity);
         for (var i = 0; i < arity; i++) { body[i+1].emit(vm, rArgs + i); }
-        vm.emit(CallValue.make(target, rArgs, arity, rResult, location));
+        vm.emit(CallValue.make(target, rArgs, arity, rResult, loc));
     }
 }

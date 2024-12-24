@@ -10,7 +10,7 @@ public class JMacroType extends BaseType<JMacro> implements CallTrait {
                      final int rArgs,
                      final int arity,
                      final int rResult,
-                     final Location location) {
+                     final Loc loc) {
         throw new RuntimeException("Not implemented");
     }
 
@@ -18,9 +18,9 @@ public class JMacroType extends BaseType<JMacro> implements CallTrait {
                          final IValue target,
                          final IForm[] body,
                          final int rResult,
-                         final Location location) {
+                         final Loc loc) {
         final IForm[] args = new IForm[body.length - 1];
         System.arraycopy(body, 1, args, 0, args.length);
-        target.cast(this).emit(vm, args, rResult, location);
+        target.cast(this).emit(vm, args, rResult, loc);
     }
 }
