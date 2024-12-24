@@ -1,6 +1,3 @@
-(method foo [;Int] 42)
-(method foo [a;Int] a)
-
 * add gui tabs
 ** add top panel
 ** Data / Chart

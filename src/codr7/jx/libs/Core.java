@@ -55,25 +55,6 @@ public class Core extends Lib {
         bind("T", T);
         bind("F", F);
 
-        bindMacro("define", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")}, null,
-                (vm, _args, rResult, location) -> {
-                    final var args = new ArrayDeque<>(Arrays.asList(_args));
-
-                    while (!args.isEmpty()) {
-                        final var id = args.removeFirst();
-
-                        if (!(id instanceof IdForm)) {
-                            throw new EmitError("Expected id: " + id.dump(vm), location);
-                        }
-
-                        if (args.isEmpty()) { throw new EmitError("Missing value", location); }
-                        final var value = args.removeFirst().eval(vm);
-                        final var rValue = vm.alloc(1);
-                        vm.registers.set(rValue, value);
-                        vm.currentLib.bind(((IdForm)id).id, Core.bindingType, new Binding(value.type(), rValue));
-                    }
-                });
-
         bindMacro("do", new Arg[]{new Arg("body*")}, null,
                 (vm, args, rResult, location) -> {
                     vm.doLib(() -> {
@@ -153,6 +134,25 @@ public class Core extends Lib {
                     final var m = new Method(mid, margs.toArray(new Arg[0]), rArgs, resultType, rResult, startPc, endPc);
                     vm.currentLib.bind(m);
             });
+
+        bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")}, null,
+                (vm, _args, rResult, location) -> {
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+
+                    while (!args.isEmpty()) {
+                        final var id = args.removeFirst();
+
+                        if (!(id instanceof IdForm)) {
+                            throw new EmitError("Expected id: " + id.dump(vm), location);
+                        }
+
+                        if (args.isEmpty()) { throw new EmitError("Missing value", location); }
+                        final var value = args.removeFirst().eval(vm);
+                        final var rValue = vm.alloc(1);
+                        vm.registers.set(rValue, value);
+                        vm.currentLib.bind(((IdForm)id).id, Core.bindingType, new Binding(value.type(), rValue));
+                    }
+                });
 
         bindMethod("say", new Arg[]{new Arg("body*")}, null,
                 (vm, args, rResult, location) -> {
