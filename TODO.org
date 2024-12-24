@@ -51,5 +51,3 @@ https://www.investing.com/crypto/bitcoin/historical-data
 
 * add load macro
 * add swap op
-
-* add label/goto macros
