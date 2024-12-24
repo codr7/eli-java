@@ -231,6 +231,7 @@ public final class VM {
                     final var right = registers.get(zipOp.rRight());
                     registers.set(zipOp.rResult(), new Value<>(Core.pairType, new Pair(left, right)));
                     pc++;
+                    break;
                 }
             }
         }
