@@ -35,8 +35,8 @@
 
   (foo 44))
 
-(check 362880
-  (method factorial [n acc] Int
-    (if-else (is n 1) acc (recall (- n 1) (* n acc))))
+(check 3628800
+  (method fact [acc n] Int
+    (if-else (is n 1) acc (recall (* n acc) (dec n))))
 
-  (factorial 10 1))
+  (fact 1 10))

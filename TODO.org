@@ -3,8 +3,9 @@
 ** add bench macro
 *** add time type (Duration)
 
-* fibtail
+* fib-tail
 ** add >
+** add +
 ** add test
 ** add benchmark
 
