@@ -2,6 +2,12 @@
 ** add dec macro
 ** add if macro
 
+* fibtail
+** add >
+*** specialize for int
+** add bench macro
+*** add time type (Duration)
+
 * add gui tabs
 ** add top panel
 ** Data / Chart
@@ -30,8 +36,6 @@ https://www.investing.com/crypto/bitcoin/historical-data
 *** match back in time if as far as possible
 *** draw a projection for each found id & one for actual data if any
 ** table with records/chart
-
-* fibtail
 
 * switch registers to array
 ** realloc using Arrays.copyOf(array, newSize) in eval
