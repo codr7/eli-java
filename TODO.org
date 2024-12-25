@@ -1,7 +1,9 @@
-* add factorial benchmark
-** port factorial to python
+* add fact benchmark
+** port fact to python
 ** add bench macro
 *** add time type (Duration)
+
+* change bench to use iter/ops
 
 * move copy from dec macro into Dec op
 ** bench

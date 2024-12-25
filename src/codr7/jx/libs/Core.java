@@ -25,6 +25,7 @@ public class Core extends Lib {
     public static final MethodType methodType = new MethodType("Method");
     public static final NilType nilType = new NilType("Nil");
     public static final PairType pairType = new PairType("Pair");
+    public static final RangeType rangeType = new RangeType("Range");
     public static final StringType stringType = new StringType("String");
 
     public static final IValue NIL = new Value<>(nilType, null);
@@ -46,6 +47,7 @@ public class Core extends Lib {
         bind(methodType);
         bind(nilType);
         bind(pairType);
+        bind(rangeType);
         bind(stringType);
 
         bind("_", NIL);
