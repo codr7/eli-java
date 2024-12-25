@@ -110,19 +110,17 @@ public final class VM {
         }
     }
 
-    public IValue eval(final String in, final Loc loc) {
-        final var rResult = alloc(1);
+    public void eval(final String in, final int rResult, final Loc loc) {
         final var skipPc = emit(Nop.make(loc));
         final var startPc = emit(read(in, loc), rResult);
         ops.set(skipPc, Goto.make(emitPc(), loc));
         eval(startPc);
-        return registers.get(rResult);
     }
 
     public void eval() {
         for (; ; ) {
             final Op op = ops.get(pc);
-            System.out.printf("% 4d %s\n", pc, op.toString(this));
+            System.out.printf("% 4d %s\n", pc, op.dump(this));
 
             switch (op.code()) {
                 case ADD_ITEM: {

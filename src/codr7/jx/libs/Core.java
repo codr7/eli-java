@@ -68,6 +68,32 @@ public class Core extends Lib {
                     vm.registers.set(rResult, new Value<>(bitType, result));
                 });
 
+        bindMethod("-", new Arg[]{new Arg("args*")}, null,
+                (vm, args, rResult, location) -> {
+                    var result = args[0].cast(intType);
+
+                    if (args.length == 1) {
+                        result = -result;
+                    } else {
+                        for (var i = 1; i < args.length; i++) {
+                            result -= args[i].cast(intType);
+                        }
+                        }
+
+                    vm.registers.set(rResult, new Value<>(intType, result));
+                });
+
+        bindMethod("*", new Arg[]{new Arg("args*")}, null,
+                (vm, args, rResult, location) -> {
+                    var result = 1L;
+
+                        for (final var a: args) {
+                            result *= a.cast(intType);
+                        }
+
+                    vm.registers.set(rResult, new Value<>(intType, result));
+                });
+
         bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")}, null,
                 (vm, args, rResult, loc) -> {
                     final var t = args[0];
@@ -180,9 +206,17 @@ public class Core extends Lib {
                             vm.currentLib.bind(ma.id(), bindingType, new Binding(null, rArgs + i));
                         }
 
-                        vm.currentLib.bindMacro("recall", new Arg[0], null,
-                                (_vm, _, _, _location) -> {
-                                    _vm.emit(Goto.make(startPc, _location));
+                        vm.currentLib.bindMacro("recall", margs.toArray(new Arg[0]), null,
+                                (_vm, recallArgs, recallResult, _loc) -> {
+                                    for (int i = 0; i < recallArgs.length; i++) {
+                                        recallArgs[i].emit(vm, rArgs+i);
+                                    }
+
+                                    _vm.emit(Goto.make(startPc, _loc));
+
+                                    if (recallResult != rResult) {
+                                        _vm.emit(Copy.make(recallResult, rResult, _loc));
+                                    }
                                 });
 
                         vm.emit(args, rResult);

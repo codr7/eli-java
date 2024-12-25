@@ -6,12 +6,14 @@ import java.nio.charset.StandardCharsets;
 public class REPL {
     private final BufferedReader in;
     private final PrintStream out;
+    private final int rResult;
     private final VM vm;
 
     public REPL(final VM vm, final InputStream in, final PrintStream out) {
         this.vm = vm;
         this.in = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
         this.out = out;
+        this.rResult = vm.alloc(1);
     }
 
     public void run() {
@@ -28,8 +30,8 @@ public class REPL {
 
             if (line.isEmpty()) {
                 try {
-                    final IValue result = vm.eval(inputBuffer.toString(), location);
-                    out.println(result.dump(vm));
+                    vm.eval(inputBuffer.toString(), rResult, location);
+                    out.println(vm.registers.get(rResult).dump(vm));
                 } catch (final Exception e) {
                     out.println(e.getMessage());
                 } finally {

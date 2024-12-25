@@ -45,9 +45,11 @@ public class MethodType extends BaseType<Method> implements CallTrait {
                          final Loc loc) {
         final var m = target.cast(this);
         final var arity = body.length - 1;
+
         for (var i = 0; i < arity; i++) {
             body[i + 1].emit(vm, m.rArgs() + i);
         }
+
         for (var i = m.startPc(); i < m.endPc(); i++) {
             vm.emit(vm.ops.get(i));
         }

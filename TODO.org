@@ -1,13 +1,18 @@
-* add recall test
-** add arg support in recall macro
+* fix factorial test
+** add Op.relocate(deltaPc)
+*** case like dump
+*** bump all pcs
+*** call in MethodType when inlining code
 
-(method factorial [n acc] Int (if-else (is n 1) acc (recall (- n 1) (* acc n))))
+* add factorial benchmark
+** port factorial to python
+** add bench macro
+*** add time type (Duration)
 
 * fibtail
 ** add >
-*** specialize for int
-** add bench macro
-*** add time type (Duration)
+** add test
+** add benchmark
 
 (^fib-tail [n a b] Int
   (if-else (> n 1) (recall (dec n) b (+ a b)) (if-else (is n 0) a b)))
