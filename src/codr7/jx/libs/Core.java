@@ -6,10 +6,7 @@ import codr7.jx.forms.IdForm;
 import codr7.jx.forms.ListForm;
 import codr7.jx.forms.LiteralForm;
 import codr7.jx.libs.core.types.*;
-import codr7.jx.ops.Branch;
-import codr7.jx.ops.Check;
-import codr7.jx.ops.Goto;
-import codr7.jx.ops.Nop;
+import codr7.jx.ops.*;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -69,6 +66,33 @@ public class Core extends Lib {
                     }
 
                     vm.registers.set(rResult, new Value<>(bitType, result));
+                });
+
+        bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")}, null,
+                (vm, args, rResult, loc) -> {
+                    final var t = args[0];
+                    final var v = t.value(vm);
+
+                    if (v.type() != bindingType) {
+                        throw new EmitError("Expected binding: " + t.dump(vm), t.loc());
+                    }
+
+                    final var rValue = v.cast(bindingType).rValue();
+                    var delta = 1L;
+
+                    if (args.length > 1) {
+                        final var d = args[1];
+                        final var dv = d.value(vm);
+
+                        if (dv == null || dv.type() != intType) {
+                            throw new EmitError("Expected Int: " + d.dump(vm), t.loc());
+                        }
+
+                        delta = dv.cast(intType);
+                    }
+
+                    vm.emit(Dec.make(rValue, delta, loc));
+                    vm.emit(Copy.make(rValue, rResult, loc));
                 });
 
         bindMacro("do", new Arg[]{new Arg("body*")}, null,

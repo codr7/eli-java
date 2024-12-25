@@ -189,6 +189,13 @@ public final class VM {
                     pc++;
                     break;
                 }
+                case DEC: {
+                    final var decOp = (Dec) op.data();
+                    final var v = registers.get(decOp.rTarget()).cast(Core.intType);
+                    registers.set(decOp.rTarget(), new Value<>(Core.intType, v - 1));
+                    pc++;
+                    break;
+                }
                 case GOTO: {
                     pc = ((Goto) op.data()).pc();
                     break;

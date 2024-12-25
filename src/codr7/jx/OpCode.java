@@ -8,6 +8,7 @@ public enum OpCode {
     CHECK,
     COPY,
     CREATE_LIST,
+    DEC,
     GOTO,
     LEFT,
     NOP,

@@ -28,3 +28,9 @@
 (check 42
   (method foo [a] Int a)
   (foo 42))
+
+(check 42
+  (method foo [n] Int
+    (dec n) (dec n))
+
+  (foo 44))

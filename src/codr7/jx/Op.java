@@ -13,6 +13,7 @@ public record Op(OpCode code, Record data, Loc loc) {
             case Check op -> " " + op.toString(vm);
             case Copy op -> " " + op.toString(vm);
             case CreateList op -> " " + op.toString(vm);
+            case Dec op -> " " + op.toString(vm);
             case Goto op -> " " + op.toString(vm);
             case Left op -> " " + op.toString(vm);
             case Put op -> " " + op.toString(vm);
