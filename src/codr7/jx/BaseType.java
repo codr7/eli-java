@@ -15,11 +15,11 @@ public abstract class BaseType<T> implements IDataType<T> {
         for (final var pt: parentTypes) { pt.addParentTypes(this); }
     }
 
-    @Override public void addParentType(final IType type, final int weight) {
+    @Override final public void addParentType(final IType type, final int weight) {
         parentTypes.compute(type, (k, w) -> (w == null) ? weight : weight + w);
     }
 
-    @Override public void addParentTypes(final IType childType) {
+    @Override final public void addParentTypes(final IType childType) {
         for (final var pe: parentTypes.entrySet()) {
             childType.addParentType(pe.getKey(), pe.getValue());
         }
@@ -31,6 +31,8 @@ public abstract class BaseType<T> implements IDataType<T> {
         return left.cast(this).equals(right.cast(this));
     }
 
-    @Override public String id() { return id; }
+    @Override final public String id() { return id; }
+
+    @Override final public boolean is(IValue left, IValue right) { return left.cast(this) == right.cast(this); }
 }
 

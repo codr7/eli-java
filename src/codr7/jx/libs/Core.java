@@ -55,6 +55,21 @@ public class Core extends Lib {
         bind("T", T);
         bind("F", F);
 
+        bindMethod("=", new Arg[]{new Arg("args*")}, null,
+                (vm, args, rResult, location) -> {
+                    final var lhs = args[0];
+                    var result = true;
+
+                    for (var i = 1; i < args.length; i++) {
+                        if (!lhs.equals(args[i])) {
+                            result = false;
+                            break;
+                        }
+                    }
+
+                    vm.registers.set(rResult, new Value<>(bitType, result));
+                });
+
         bindMacro("do", new Arg[]{new Arg("body*")}, null,
                 (vm, args, rResult, location) -> {
                     vm.doLib(() -> {
@@ -83,6 +98,21 @@ public class Core extends Lib {
                         vm.emit(actual, rValues + 1);
                         vm.emit(Check.make(rValues, location));
                     });
+                });
+
+        bindMethod("is", new Arg[]{new Arg("args*")}, null,
+                (vm, args, rResult, location) -> {
+                    final var lhs = args[0];
+                    var result = true;
+
+                    for (var i = 1; i < args.length; i++) {
+                        if (!lhs.is(args[i])) {
+                            result = false;
+                            break;
+                        }
+                    }
+
+                    vm.registers.set(rResult, new Value<>(bitType, result));
                 });
 
         bindMacro("method", new Arg[]{new Arg("name"), new Arg("args"), new Arg("result"), new Arg("body*")}, null,

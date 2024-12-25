@@ -12,6 +12,7 @@ public interface IType {
     }
     boolean equals(IValue left, IValue right);
     String id();
+    boolean is(IValue left, IValue right);
     default boolean toBit(VM vm, IValue value) { return true; }
     default String toString(VM vm, IValue value) { return dump(vm, value); }
 }

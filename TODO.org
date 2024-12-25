@@ -1,8 +1,6 @@
 * add recall test
-** add if macro
-** add = method
-*** call equals
 ** add dec macro
+** add if macro
 
 * add gui tabs
 ** add top panel

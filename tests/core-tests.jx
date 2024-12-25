@@ -5,6 +5,16 @@
   (var foo 42)
   foo)
 
+(check (is 1 1 1))
+
+(check F
+  (is 1 1 2))
+
+(check (= 1 1 1))
+
+(check F
+  (= 1 1 2))
+
 (check 42
   (method foo [] Int 42)
   (foo))
