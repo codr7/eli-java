@@ -3,8 +3,19 @@ package codr7.jx;
 import codr7.jx.ops.*;
 
 public record Op(OpCode code, Record data, Loc loc) {
+    public Op relocate(final int deltaPc) {
+        return switch (data) {
+            case Branch op -> op.relocate(deltaPc, loc);
+            case Goto op -> op.relocate(deltaPc, loc);
+            default -> this;
+        };
+    }
+
     public String dump(final VM vm) {
-        if (data == null) { return code.name(); }
+        if (data == null) {
+            return code.name();
+        }
+
         return code.name() + switch (data) {
             case AddItem op -> " " + op.toString(vm);
             case Branch op -> " " + op.toString(vm);

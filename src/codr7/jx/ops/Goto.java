@@ -10,5 +10,9 @@ public record Goto(int pc) {
         return new Op(OpCode.GOTO, new Goto(pc), loc);
     }
 
+    public Op relocate(final int deltaPc, final Loc loc) {
+        return make(pc + deltaPc, loc);
+    }
+
     public String toString(final VM vm) { return "pc: " + pc; }
 }

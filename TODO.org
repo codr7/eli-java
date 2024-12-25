@@ -1,9 +1,3 @@
-* fix factorial test
-** add Op.relocate(deltaPc)
-*** case like dump
-*** bump all pcs
-*** call in MethodType when inlining code
-
 * add factorial benchmark
 ** port factorial to python
 ** add bench macro

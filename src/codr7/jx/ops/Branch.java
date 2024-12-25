@@ -8,6 +8,10 @@ public record Branch(int rCondition, int elsePc) {
         return new Op(OpCode.BRANCH, new Branch(rCondition, elsePc), loc);
     }
 
+    public Op relocate(final int deltaPc, final Loc loc) {
+        return make(rCondition, elsePc + deltaPc, loc);
+    }
+
     public String toString(final VM vm) {
         return "rCondition: " + rCondition + " (" + vm.registers.get(rCondition).dump(vm) + ") " +
                 "elsePc: " + elsePc;

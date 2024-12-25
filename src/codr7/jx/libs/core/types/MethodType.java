@@ -50,8 +50,10 @@ public class MethodType extends BaseType<Method> implements CallTrait {
             body[i + 1].emit(vm, m.rArgs() + i);
         }
 
+        final var deltaPc = vm.emitPc() - m.startPc();
+
         for (var i = m.startPc(); i < m.endPc(); i++) {
-            vm.emit(vm.ops.get(i));
+            vm.emit(vm.ops.get(i).relocate(deltaPc));
         }
 
         if (m.resultType() != null && rResult != m.rResult()) {
