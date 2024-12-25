@@ -18,7 +18,7 @@ public class MethodType extends BaseType<Method> implements CallTrait {
         final var m = target.cast(this);
         final var ma = m.arity();
         if (ma != -1 && arity < ma) {
-            throw new EvalError("Not enough args: " + m.dump(vm), loc);
+            throw new EvalError("Not enough args: " + target.dump(vm), loc);
         }
 
         if (rArgs != m.rArgs()) {
@@ -32,6 +32,10 @@ public class MethodType extends BaseType<Method> implements CallTrait {
         if (m.resultType() != null && rResult != m.rResult()) {
             vm.registers.set(rResult, vm.registers.get(m.rResult()));
         }
+    }
+
+    public String dump(final VM vm) {
+        return "(Method " + id + ")";
     }
 
     public void emitCall(final VM vm,

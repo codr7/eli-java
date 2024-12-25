@@ -25,4 +25,7 @@ public record JMethod(String id, Arg[] args, IType result, Body body) {
         body.call(vm, args, rResult, loc);
     }
 
+    public String dump(final VM vm) {
+        return "(JMethod " + id + ")";
+    }
 }

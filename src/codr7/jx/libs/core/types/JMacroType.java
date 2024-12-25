@@ -23,4 +23,8 @@ public class JMacroType extends BaseType<JMacro> implements CallTrait {
         System.arraycopy(body, 1, args, 0, args.length);
         target.cast(this).emit(vm, args, rResult, loc);
     }
+
+    public String dump(final VM vm) {
+        return "(JMacro " + id + ")";
+    }
 }
