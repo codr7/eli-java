@@ -9,7 +9,7 @@ import java.util.List;
 public class ListType extends BaseType<List<IValue>> {
     public ListType(final String id) { super(id); }
 
-    public String dump(final VM vm, final IValue value) {
+    @Override public String dump(final VM vm, final IValue value) {
         final var result = new StringBuilder();
         result.append('[');
         final var v = value.cast(this);
@@ -23,7 +23,7 @@ public class ListType extends BaseType<List<IValue>> {
         return result.toString();
     }
 
-    public boolean equals(IValue left, IValue right) {
+    @Override public boolean equals(IValue left, IValue right) {
         final var lv = left.cast(this);
         final var rv = right.cast(this);
         if (lv.size() != rv.size()) { return false; }
@@ -35,9 +35,9 @@ public class ListType extends BaseType<List<IValue>> {
         return true;
     }
 
-    public boolean toBit(final VM vm, final IValue value) { return !value.cast(this).isEmpty(); }
+    @Override public boolean toBit(final VM vm, final IValue value) { return !value.cast(this).isEmpty(); }
 
-    public String toString(final VM vm, final IValue value) {
+    @Override public String toString(final VM vm, final IValue value) {
         final var result = new StringBuilder();
         result.append('[');
         final var v = value.cast(this);

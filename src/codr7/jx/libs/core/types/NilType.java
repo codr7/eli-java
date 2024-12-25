@@ -6,6 +6,6 @@ import codr7.jx.VM;
 
 public class NilType extends BaseType<Void> {
     public NilType(final String id) { super(id); }
-    public String dump(final VM vm, final IValue value) { return "_"; }
-    public boolean toBit(final IValue value) { return false; }
+    @Override public String dump(final VM vm, final IValue value) { return "_"; }
+    @Override public boolean toBit(final VM vm, final IValue value) { return false; }
 }

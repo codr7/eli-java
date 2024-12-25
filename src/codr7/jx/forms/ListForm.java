@@ -17,7 +17,7 @@ public class ListForm extends BaseForm {
         this.items = items;
     }
 
-    public void emit(final VM vm, final int rResult) {
+    @Override public void emit(final VM vm, final int rResult) {
         final var v = value(vm);
 
         if (v == null) {
@@ -33,7 +33,7 @@ public class ListForm extends BaseForm {
         }
     }
 
-    public String dump(VM vm) {
+    @Override public String dump(VM vm) {
         final var result = new StringBuilder();
         result.append('[');
 
@@ -48,7 +48,7 @@ public class ListForm extends BaseForm {
 
     public Stream<IValue> itemValues(VM vm) {  return Arrays.stream(items).map(it -> it.value(vm)); }
 
-    public IValue value(VM vm) {
+    @Override public IValue value(VM vm) {
         final var vs = Arrays.stream(items).map(it -> it.value(vm));
         if (itemValues(vm).anyMatch(Objects::isNull)) { return null; }
         return new Value<>(Core.listType, itemValues(vm).toList());

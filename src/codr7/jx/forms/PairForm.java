@@ -13,7 +13,7 @@ public final class PairForm extends BaseForm {
         this.right = right;
     }
 
-    public void emit(final VM vm, final int rResult) {
+    @Override public void emit(final VM vm, final int rResult) {
         final var v = value(vm);
 
         if (v == null) {
@@ -26,11 +26,11 @@ public final class PairForm extends BaseForm {
         }
     }
 
-    public String dump(final VM vm) {
+    @Override public String dump(final VM vm) {
         return left.toString() + ":" + right.toString();
     }
 
-    public IValue value(final VM vm) {
+    @Override public IValue value(final VM vm) {
         final var lv = left.value(vm);
 
         if (lv != null) {

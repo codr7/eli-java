@@ -6,6 +6,6 @@ import codr7.jx.VM;
 
 public class BitType extends BaseType<Boolean> {
     public BitType(final String id) { super(id); }
-    public String dump(final VM vm, final IValue value) { return value.cast(this) ? "T" : "F"; }
-    public boolean toBit(final IValue value) { return value.cast(this); }
+    @Override public String dump(final VM vm, final IValue value) { return value.cast(this) ? "T" : "F"; }
+    @Override public boolean toBit(final VM vm, final IValue value) { return value.cast(this); }
 }

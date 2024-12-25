@@ -9,15 +9,15 @@ public class StringType extends BaseType<String> {
         super(id);
     }
 
-    public String dump(final VM vm, final IValue value) {
+    @Override public String dump(final VM vm, final IValue value) {
         return '"' + value.cast(this) + '"';
     }
 
-    public boolean toBit(final VM vm, final IValue value) {
+    @Override public boolean toBit(final VM vm, final IValue value) {
         return !value.cast(this).isEmpty();
     }
 
-    public String toString(final VM vm, final IValue value) {
+    @Override public String toString(final VM vm, final IValue value) {
         return value.cast(this);
     }
 }

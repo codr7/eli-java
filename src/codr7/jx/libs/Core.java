@@ -6,6 +6,7 @@ import codr7.jx.forms.IdForm;
 import codr7.jx.forms.ListForm;
 import codr7.jx.forms.LiteralForm;
 import codr7.jx.libs.core.types.*;
+import codr7.jx.ops.Branch;
 import codr7.jx.ops.Check;
 import codr7.jx.ops.Goto;
 import codr7.jx.ops.Nop;
@@ -100,8 +101,19 @@ public class Core extends Lib {
                     });
                 });
 
+        bindMacro("if-else", new Arg[]{new Arg("cond"), new Arg("left"), new Arg("right")}, null,
+                (vm, args, rResult, loc) -> {
+                    args[0].emit(vm, rResult);
+                    final var branchPc = vm.emit(Nop.make(loc));
+                    args[1].emit(vm, rResult);
+                    final var skipElsePc = vm.emit(Nop.make(loc));
+                    vm.ops.set(branchPc, Branch.make(rResult, vm.emitPc(), loc));
+                    args[2].emit(vm, rResult);
+                    vm.ops.set(skipElsePc, Goto.make(vm.emitPc(), loc));
+                });
+
         bindMethod("is", new Arg[]{new Arg("args*")}, null,
-                (vm, args, rResult, location) -> {
+                (vm, args, rResult, loc) -> {
                     final var lhs = args[0];
                     var result = true;
 

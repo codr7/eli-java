@@ -134,7 +134,7 @@ public final class VM {
                 }
                 case BRANCH: {
                     final var branchOp = (Branch) op.data();
-                    pc = registers.get(branchOp.rCondition()).toBit(this) ? pc + 1 : branchOp.endPc();
+                    pc = registers.get(branchOp.rCondition()).toBit(this) ? pc + 1 : branchOp.elsePc();
                     break;
                 }
                 case CALL_REGISTER: {

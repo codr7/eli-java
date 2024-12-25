@@ -6,7 +6,7 @@ import codr7.jx.ops.CallValue;
 public class JMethodType extends BaseType<JMethod> implements CallTrait {
     public JMethodType(final String id) { super(id); }
 
-    public void call(final VM vm,
+    @Override public void call(final VM vm,
                      final IValue target,
                      final int rArgs,
                      final int arity,
@@ -19,7 +19,7 @@ public class JMethodType extends BaseType<JMethod> implements CallTrait {
         return "(JMethod " + value.cast(this).id() + ")";
     }
 
-    public void emitCall(final VM vm,
+    @Override public void emitCall(final VM vm,
                          final IValue target,
                          final IForm[] body,
                          final int rResult,

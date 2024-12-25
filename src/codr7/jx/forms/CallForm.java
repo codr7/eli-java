@@ -14,7 +14,7 @@ public class CallForm extends BaseForm {
         this.body = body;
     }
 
-    public void emit(final VM vm, final int rResult) {
+    @Override public void emit(final VM vm, final int rResult) {
         var getLeft = false;
         var rightCount = 0;
         var tf = body[0];
@@ -42,7 +42,7 @@ public class CallForm extends BaseForm {
         else for (; rightCount > 0; rightCount--) { vm.emit(Right.make(rResult, rResult, tf.loc())); }
     }
 
-    public String dump(VM vm) {
+    @Override public String dump(VM vm) {
         final var result = new StringBuilder();
         result.append('(');
 
@@ -55,5 +55,5 @@ public class CallForm extends BaseForm {
         return result.toString();
     }
 
-    public IValue value(VM vm) { return null; }
+    @Override public IValue value(VM vm) { return null; }
 }

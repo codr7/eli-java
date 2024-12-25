@@ -27,11 +27,11 @@ public class IdForm extends BaseForm {
         this.id = id;
     }
 
-    public void emit(final VM vm, final int rResult) {
+    @Override public void emit(final VM vm, final int rResult) {
         get(vm.currentLib, id, loc()).emit(vm, rResult, loc());
     }
 
-    public boolean isNil() { return id.equals("_"); }
-    public String dump(final VM vm) { return id; }
-    public IValue value(final VM vm) { return get(vm.currentLib, id, loc()); }
+    @Override public boolean isNil() { return id.equals("_"); }
+    @Override public String dump(final VM vm) { return id; }
+    @Override public IValue value(final VM vm) { return get(vm.currentLib, id, loc()); }
 }

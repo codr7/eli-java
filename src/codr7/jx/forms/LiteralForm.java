@@ -14,11 +14,11 @@ public class LiteralForm extends BaseForm {
         this.value = value;
     }
 
-    public void emit(final VM vm, final int rResult) {
+    @Override public void emit(final VM vm, final int rResult) {
         vm.emit(Put.make(rResult, value, loc()));
     }
 
-    public String dump(final VM vm) { return value.dump(vm); }
+    @Override public String dump(final VM vm) { return value.dump(vm); }
 
-    public IValue value(final VM vm) { return value; }
+    @Override public IValue value(final VM vm) { return value; }
 }

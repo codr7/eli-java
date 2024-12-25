@@ -1,12 +1,17 @@
 * add recall test
 ** add dec macro
-** add if macro
+** add arg support in recall macro
+
+(method factorial [n acc] Int (if-else (is n 1) acc (recall (- n 1) (* acc n))))
 
 * fibtail
 ** add >
 *** specialize for int
 ** add bench macro
 *** add time type (Duration)
+
+(^fib-tail [n a b] Int
+  (if-else (> n 1) (recall (dec n) b (+ a b)) (if-else (is n 0) a b)))
 
 * add gui tabs
 ** add top panel

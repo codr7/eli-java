@@ -15,6 +15,12 @@
 (check F
   (= 1 1 2))
 
+(check 1
+  (if-else T 1 2))
+
+(check 2
+  (if-else F 1 2))
+
 (check 42
   (method foo [] Int 42)
   (foo))
