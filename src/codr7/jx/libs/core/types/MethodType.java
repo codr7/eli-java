@@ -9,7 +9,7 @@ public class MethodType extends BaseType<Method> implements CallTrait {
         super(id);
     }
 
-    public void call(final VM vm,
+    @Override public void call(final VM vm,
                      final IValue target,
                      final int rArgs,
                      final int arity,
@@ -34,11 +34,11 @@ public class MethodType extends BaseType<Method> implements CallTrait {
         }
     }
 
-    public String dump(final VM vm) {
-        return "(Method " + id + ")";
+    @Override public String dump(final VM vm, final IValue value) {
+        return "(Method " + value.cast(this).id() + ")";
     }
 
-    public void emitCall(final VM vm,
+    @Override public void emitCall(final VM vm,
                          final IValue target,
                          final IForm[] body,
                          final int rResult,

@@ -15,6 +15,10 @@ public class JMethodType extends BaseType<JMethod> implements CallTrait {
         target.cast(this).call(vm, rArgs, arity, rResult, loc);
     }
 
+    @Override public String dump(final VM vm, final IValue value) {
+        return "(JMethod " + value.cast(this).id() + ")";
+    }
+
     public void emitCall(final VM vm,
                          final IValue target,
                          final IForm[] body,

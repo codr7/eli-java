@@ -24,8 +24,4 @@ public record JMethod(String id, Arg[] args, IType result, Body body) {
         for (var i = 0; i < arity ; i++) { args[i] = vm.registers.get(rArgs + i); }
         body.call(vm, args, rResult, loc);
     }
-
-    public String dump(final VM vm) {
-        return "(JMethod " + id + ")";
-    }
 }
