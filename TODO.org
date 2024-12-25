@@ -5,6 +5,11 @@
 
 * change bench to use iter/ops
 
+* add range method
+** add RangeTrait
+** create range
+** optional max
+
 * move copy from dec macro into Dec op
 ** bench
 
