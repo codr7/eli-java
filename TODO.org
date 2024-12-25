@@ -3,6 +3,9 @@
 ** add bench macro
 *** add time type (Duration)
 
+* move copy from dec macro into Dec op
+** bench
+
 * fib-tail
 ** add >
 ** add +
