@@ -60,6 +60,57 @@ public class Core extends Lib {
         bind("T", T);
         bind("F", F);
 
+        bindMacro("^", new Arg[]{new Arg("name"), new Arg("args"), new Arg("result"), new Arg("body*")}, null,
+                (vm, _args, rResult, loc) -> {
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+                    final var mid = ((IdForm) args.removeFirst()).id;
+                    final var margs = new ArrayList<Arg>();
+                    final var argList = ((ListForm) args.removeFirst()).items;
+                    final var rf = args.removeFirst();
+                    final IType resultType = rf.getType(vm, rf.loc());
+
+                    for (var i = 0; i < argList.length; i++) {
+                        final var af = argList[i];
+
+                        if (af instanceof IdForm aid) {
+                            margs.add(new Arg(aid.id));
+                        } else {
+                            throw new EmitError("Invalid arg: " + af.dump(vm), af.loc());
+                        }
+                    }
+
+                    final var rArgs = vm.alloc(margs.size());
+                    final var skipPc = vm.emit(Nop.make(loc));
+                    final var startPc = vm.emitPc();
+
+                    vm.doLib(() -> {
+                        for (var i = 0; i < margs.size(); i++) {
+                            final var ma = margs.get(i);
+                            vm.currentLib.bind(ma.id(), bindingType, new Binding(null, rArgs + i));
+                        }
+
+                        vm.currentLib.bindMacro("recall", margs.toArray(new Arg[0]), null,
+                                (_vm, recallArgs, recallResult, _loc) -> {
+                                    for (int i = 0; i < recallArgs.length; i++) {
+                                        recallArgs[i].emit(vm, rArgs + i);
+                                    }
+
+                                    _vm.emit(Goto.make(startPc, _loc));
+
+                                    if (recallResult != rResult) {
+                                        _vm.emit(Copy.make(recallResult, rResult, _loc));
+                                    }
+                                });
+
+                        vm.emit(args, rResult);
+                    });
+
+                    final var endPc = vm.emitPc();
+                    vm.ops.set(skipPc, Goto.make(endPc, loc));
+                    final var m = new Method(mid, margs.toArray(new Arg[0]), rArgs, resultType, rResult, startPc, endPc);
+                    vm.currentLib.bind(m);
+                });
+
         bindMethod("=", new Arg[]{new Arg("args*")}, null,
                 (vm, args, rResult, location) -> {
                     final var lhs = args[0];
@@ -85,7 +136,7 @@ public class Core extends Lib {
                         for (var i = 1; i < args.length; i++) {
                             result -= args[i].cast(intType);
                         }
-                        }
+                    }
 
                     vm.registers.set(rResult, new Value<>(intType, result));
                 });
@@ -94,25 +145,25 @@ public class Core extends Lib {
                 (vm, args, rResult, loc) -> {
                     var result = 1L;
 
-                        for (final var a: args) {
-                            result *= a.cast(intType);
-                        }
+                    for (final var a : args) {
+                        result *= a.cast(intType);
+                    }
 
                     vm.registers.set(rResult, new Value<>(intType, result));
                 });
 
         bindMacro("bench", new Arg[]{new Arg("reps", intType), new Arg("body*", intType)}, null,
                 (vm, _args, rResult, loc) -> {
-                        final var args = new ArrayDeque<>(Arrays.asList(_args));
-                        final var reps = args.removeFirst().eval(vm).cast(intType);
-                        final var benchPc = vm.emit(Nop.make(loc));
-                        final var rIter = vm.alloc(1);
-                        vm.emit(Put.make(rIter, new Value<>(iterType, new IntRange(0, reps, 1)), loc));
-                        final var iterPc = vm.emit(Nop.make(loc));
-                        vm.emit(args, rResult);
-                        vm.emit(Goto.make(iterPc, loc));
-                        vm.ops.set(iterPc, Next.make(rIter, -1, vm.emitPc(), loc));
-                        vm.ops.set(benchPc, Bench.make(vm.emitPc(), rResult, loc));
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+                    final var reps = args.removeFirst().eval(vm).cast(intType);
+                    final var benchPc = vm.emit(Nop.make(loc));
+                    final var rIter = vm.alloc(1);
+                    vm.emit(Put.make(rIter, new Value<>(iterType, new IntRange(0, reps, 1)), loc));
+                    final var iterPc = vm.emit(Nop.make(loc));
+                    vm.emit(args, rResult);
+                    vm.emit(Goto.make(iterPc, loc));
+                    vm.ops.set(iterPc, Next.make(rIter, -1, vm.emitPc(), loc));
+                    vm.ops.set(benchPc, Bench.make(vm.emitPc(), rResult, loc));
                 });
 
         bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")}, null,
@@ -172,7 +223,7 @@ public class Core extends Lib {
                     });
                 });
 
-        bindMacro("if-else", new Arg[]{new Arg("cond"), new Arg("left"), new Arg("right")}, null,
+        bindMacro("if", new Arg[]{new Arg("cond"), new Arg("left"), new Arg("right")}, null,
                 (vm, args, rResult, loc) -> {
                     args[0].emit(vm, rResult);
                     final var branchPc = vm.emit(Nop.make(loc));
@@ -196,57 +247,6 @@ public class Core extends Lib {
                     }
 
                     vm.registers.set(rResult, new Value<>(bitType, result));
-                });
-
-        bindMacro("method", new Arg[]{new Arg("name"), new Arg("args"), new Arg("result"), new Arg("body*")}, null,
-                (vm, _args, rResult, loc) -> {
-                    final var args = new ArrayDeque<>(Arrays.asList(_args));
-                    final var mid = ((IdForm) args.removeFirst()).id;
-                    final var margs = new ArrayList<Arg>();
-                    final var argList = ((ListForm) args.removeFirst()).items;
-                    final var rf = args.removeFirst();
-                    final IType resultType = rf.getType(vm, rf.loc());
-
-                    for (var i = 0; i < argList.length; i++) {
-                        final var af = argList[i];
-
-                        if (af instanceof IdForm aid) {
-                            margs.add(new Arg(aid.id));
-                        } else {
-                            throw new EmitError("Invalid arg: " + af.dump(vm), af.loc());
-                        }
-                    }
-
-                    final var rArgs = vm.alloc(margs.size());
-                    final var skipPc = vm.emit(Nop.make(loc));
-                    final var startPc = vm.emitPc();
-
-                    vm.doLib(() -> {
-                        for (var i = 0; i < margs.size(); i++) {
-                            final var ma = margs.get(i);
-                            vm.currentLib.bind(ma.id(), bindingType, new Binding(null, rArgs + i));
-                        }
-
-                        vm.currentLib.bindMacro("recall", margs.toArray(new Arg[0]), null,
-                                (_vm, recallArgs, recallResult, _loc) -> {
-                                    for (int i = 0; i < recallArgs.length; i++) {
-                                        recallArgs[i].emit(vm, rArgs+i);
-                                    }
-
-                                    _vm.emit(Goto.make(startPc, _loc));
-
-                                    if (recallResult != rResult) {
-                                        _vm.emit(Copy.make(recallResult, rResult, _loc));
-                                    }
-                                });
-
-                        vm.emit(args, rResult);
-                    });
-
-                    final var endPc = vm.emitPc();
-                    vm.ops.set(skipPc, Goto.make(endPc, loc));
-                    final var m = new Method(mid, margs.toArray(new Arg[0]), rArgs, resultType, rResult, startPc, endPc);
-                    vm.currentLib.bind(m);
                 });
 
         bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")}, null,

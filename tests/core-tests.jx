@@ -16,27 +16,27 @@
   (= 1 1 2))
 
 (check 1
-  (if-else T 1 2))
+  (if T 1 2))
 
 (check 2
-  (if-else F 1 2))
+  (if F 1 2))
 
 (check 42
-  (method foo [] Int 42)
+  (^ foo [] Int 42)
   (foo))
 
 (check 42
-  (method foo [a] Int a)
+  (^ foo [a] Int a)
   (foo 42))
 
 (check 42
-  (method foo [n] Int
+  (^ foo [n] Int
     (dec n) (dec n))
 
   (foo 44))
 
 (check 3628800
-  (method fact [acc n] Int
-    (if-else (is n 1) acc (recall (* n acc) (dec n))))
+  (^ fact [acc n] Int
+    (if (is n 1) acc (recall (* n acc) (dec n))))
 
   (fact 1 10))
