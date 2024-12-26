@@ -1,15 +1,3 @@
-* add fact benchmark
-** port fact to python
-** add bench macro
-*** add time type (Duration)
-
-* change bench to use iter/ops
-
-* add range method
-** add RangeTrait
-** create range
-** optional max
-
 * move copy from dec macro into Dec op
 ** bench
 
@@ -17,10 +5,11 @@
 ** add >
 ** add +
 ** add test
-** add benchmark
 
 (^fib-tail [n a b] Int
   (if-else (> n 1) (recall (dec n) b (+ a b)) (if-else (is n 0) a b)))
+
+* skip binding nil method args
 
 * add gui tabs
 ** add top panel
@@ -61,3 +50,15 @@ https://www.investing.com/crypto/bitcoin/historical-data
 
 * add load macro
 * add swap op
+
+* add range method
+** add RangeTrait
+** create range
+** optional max
+
+* add optional arg types
+** look for startsWith @
+** apply to all preceding args
+** allow @? for missing
+
+n a b @Int

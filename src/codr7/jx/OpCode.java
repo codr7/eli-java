@@ -2,6 +2,7 @@ package codr7.jx;
 
 public enum OpCode {
     ADD_ITEM,
+    BENCH,
     BRANCH,
     CALL_REGISTER,
     CALL_VALUE,
@@ -11,6 +12,7 @@ public enum OpCode {
     DEC,
     GOTO,
     LEFT,
+    NEXT,
     NOP,
     PUT,
     RIGHT,

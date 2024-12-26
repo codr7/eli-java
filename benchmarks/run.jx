@@ -1,4 +1,4 @@
 (method fact [acc n] Int
   (if-else (is n 1) acc (recall (* n acc) (dec n))))
 
-(say "fact " (bench 1000 (fact 1 100)))
+(say "fact " (bench 10000 (fact 1 900)))

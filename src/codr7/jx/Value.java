@@ -5,7 +5,7 @@ public record Value<T>(IDataType<T> type, T data) implements IValue {
     public IValue dup(final VM vm) { return type.dup(vm, this); }
     public String dump(final VM vm) { return type.dump(vm, this); }
 
-    @Override public boolean equals(final Object other) {
+    public boolean equals(final Object other) {
         return other instanceof IValue v && v.type() == type && type.equals(this, (Value<T>)other);
     }
 

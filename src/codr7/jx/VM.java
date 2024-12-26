@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -120,7 +121,7 @@ public final class VM {
     public void eval() {
         for (; ; ) {
             final Op op = ops.get(pc);
-            System.out.printf("% 4d %s\n", pc, op.dump(this));
+            //System.out.printf("% 4d %s\n", pc, op.dump(this));
 
             switch (op.code()) {
                 case ADD_ITEM: {
@@ -128,6 +129,15 @@ public final class VM {
                     final var t = registers.get(addOp.rTarget()).cast(Core.listType);
                     t.add(registers.get(addOp.rItem()));
                     pc++;
+                    break;
+                }
+                case BENCH: {
+                    final var benchOp = (Bench) op.data();
+                    final var started = System.nanoTime();
+                    eval(pc+1, benchOp.endPc());
+                    final var elapsed = Duration.ofNanos(System.nanoTime() - started);
+                    registers.set(benchOp.rResult(), new Value<>(Core.timeType, elapsed));
+                    pc = benchOp.endPc();
                     break;
                 }
                 case BRANCH: {
@@ -202,6 +212,14 @@ public final class VM {
                     final var leftOp = (Left) op.data();
                     registers.set(leftOp.rResult(), registers.get(leftOp.rPair()).cast(Core.pairType).left());
                     pc++;
+                    break;
+                }
+                case NEXT: {
+                    final var nextOp = (Next) op.data();
+                    final var iter = registers.get(nextOp.rIter()).cast(Core.iterType);
+                    pc = (iter.next(this, nextOp.rItem(), op.loc()))
+                        ? pc + 1
+                        : nextOp.endPc();
                     break;
                 }
                 case NOP: {

@@ -5,6 +5,7 @@ import codr7.jx.ops.*;
 public record Op(OpCode code, Record data, Loc loc) {
     public Op relocate(final int deltaPc) {
         return switch (data) {
+            case Bench op -> op.relocate(deltaPc, loc);
             case Branch op -> op.relocate(deltaPc, loc);
             case Goto op -> op.relocate(deltaPc, loc);
             default -> this;
@@ -18,6 +19,7 @@ public record Op(OpCode code, Record data, Loc loc) {
 
         return code.name() + switch (data) {
             case AddItem op -> " " + op.toString(vm);
+            case Bench op -> " " + op.toString(vm);
             case Branch op -> " " + op.toString(vm);
             case CallRegister op -> " " + op.toString(vm);
             case CallValue op -> " " + op.toString(vm);
@@ -27,6 +29,7 @@ public record Op(OpCode code, Record data, Loc loc) {
             case Dec op -> " " + op.toString(vm);
             case Goto op -> " " + op.toString(vm);
             case Left op -> " " + op.toString(vm);
+            case Next op -> " " + op.toString(vm);
             case Put op -> " " + op.toString(vm);
             case Right op -> " " + op.toString(vm);
             case SetPath op -> " " + op.toString(vm);

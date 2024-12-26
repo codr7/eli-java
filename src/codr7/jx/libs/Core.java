@@ -5,6 +5,7 @@ import codr7.jx.errors.EmitError;
 import codr7.jx.forms.IdForm;
 import codr7.jx.forms.ListForm;
 import codr7.jx.forms.LiteralForm;
+import codr7.jx.libs.core.iters.IntRange;
 import codr7.jx.libs.core.types.*;
 import codr7.jx.ops.*;
 
@@ -17,6 +18,7 @@ public class Core extends Lib {
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
     public static final IntType intType = new IntType("Int");
+    public static final IterType iterType = new IterType("Iter");
     public static final JMacroType jMacroType = new JMacroType("JMacro");
     public static final JMethodType jMethodType = new JMethodType("JMethod");
     public static final LibType libType = new LibType("Lib");
@@ -27,6 +29,7 @@ public class Core extends Lib {
     public static final PairType pairType = new PairType("Pair");
     public static final RangeType rangeType = new RangeType("Range");
     public static final StringType stringType = new StringType("String");
+    public static final TimeType timeType = new TimeType("Time");
 
     public static final IValue NIL = new Value<>(nilType, null);
 
@@ -39,6 +42,7 @@ public class Core extends Lib {
         bind(bindingType);
         bind(bitType);
         bind(intType);
+        bind(iterType);
         bind(jMacroType);
         bind(jMethodType);
         bind(libType);
@@ -49,6 +53,7 @@ public class Core extends Lib {
         bind(pairType);
         bind(rangeType);
         bind(stringType);
+        bind(timeType);
 
         bind("_", NIL);
 
@@ -86,7 +91,7 @@ public class Core extends Lib {
                 });
 
         bindMethod("*", new Arg[]{new Arg("args*")}, null,
-                (vm, args, rResult, location) -> {
+                (vm, args, rResult, loc) -> {
                     var result = 1L;
 
                         for (final var a: args) {
@@ -94,6 +99,20 @@ public class Core extends Lib {
                         }
 
                     vm.registers.set(rResult, new Value<>(intType, result));
+                });
+
+        bindMacro("bench", new Arg[]{new Arg("reps", intType), new Arg("body*", intType)}, null,
+                (vm, _args, rResult, loc) -> {
+                        final var args = new ArrayDeque<>(Arrays.asList(_args));
+                        final var reps = args.removeFirst().eval(vm).cast(intType);
+                        final var benchPc = vm.emit(Nop.make(loc));
+                        final var rIter = vm.alloc(1);
+                        vm.emit(Put.make(rIter, new Value<>(iterType, new IntRange(0, reps, 1)), loc));
+                        final var iterPc = vm.emit(Nop.make(loc));
+                        vm.emit(args, rResult);
+                        vm.emit(Goto.make(iterPc, loc));
+                        vm.ops.set(iterPc, Next.make(rIter, -1, vm.emitPc(), loc));
+                        vm.ops.set(benchPc, Bench.make(vm.emitPc(), rResult, loc));
                 });
 
         bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")}, null,
