@@ -218,8 +218,7 @@ public class Core extends Lib {
                         delta = dv.cast(intType);
                     }
 
-                    vm.emit(Dec.make(rValue, delta, loc));
-                    vm.emit(Copy.make(rValue, rResult, 1, loc));
+                    vm.emit(Dec.make(rValue, delta, rResult, loc));
                 });
 
         bindMacro("do", new Arg[]{new Arg("body*")}, null,

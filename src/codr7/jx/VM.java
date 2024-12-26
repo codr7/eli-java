@@ -205,7 +205,9 @@ public final class VM {
                 case DEC: {
                     final var decOp = (Dec) op.data();
                     final var v = registers.get(decOp.rTarget()).cast(Core.intType);
-                    registers.set(decOp.rTarget(), new Value<>(Core.intType, v - 1));
+                    final var nv = new Value<>(Core.intType, v - 1);
+                    registers.set(decOp.rTarget(), nv);
+                    if (decOp.rResult() != -1) { registers.set(decOp.rResult(), nv); }
                     pc++;
                     break;
                 }
