@@ -24,6 +24,7 @@ public class IdReader implements Reader {
             in.pop();
             buffer.append(c);
             location.update(c);
+            if (c == '^') { break; }
         }
 
         if (buffer.isEmpty()) { return false; }

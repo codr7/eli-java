@@ -60,7 +60,7 @@ public class Core extends Lib {
         bind("T", T);
         bind("F", F);
 
-        bindMacro("^", new Arg[]{new Arg("name"), new Arg("args"), new Arg("result"), new Arg("body*")}, null,
+        bindMacro("^", new Arg[]{new Arg("id"), new Arg("args"), new Arg("result"), new Arg("body*")}, null,
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var mid = ((IdForm) args.removeFirst()).id;

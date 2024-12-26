@@ -22,21 +22,21 @@
   (if F 1 2))
 
 (check 42
-  (^ foo [] Int 42)
+  (^foo [] Int 42)
   (foo))
 
 (check 42
-  (^ foo [a] Int a)
+  (^foo [a] Int a)
   (foo 42))
 
 (check 42
-  (^ foo [n] Int
+  (^foo [n] Int
     (dec n) (dec n))
 
   (foo 44))
 
 (check 3628800
-  (^ fact [acc n] Int
+  (^fact [acc n] Int
     (if (is n 1) acc (recall (* n acc) (dec n))))
 
   (fact 1 10))
