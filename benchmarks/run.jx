@@ -2,3 +2,9 @@
   (if (is n 1) acc (recall (* n acc) (dec n))))
 
 (say "fact " (bench 10000 (fact 1 900)))
+
+(^fib [n a b] Int
+  (if (> n 1) (recall (dec n) b (+ a b)) (if (is n 0) a b)))
+
+(say "fib " (bench 100000 (fib 80 0 1)))
+

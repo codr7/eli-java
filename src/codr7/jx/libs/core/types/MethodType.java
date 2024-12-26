@@ -57,7 +57,7 @@ public class MethodType extends BaseType<Method> implements CallTrait {
         }
 
         if (m.resultType() != null && rResult != m.rResult()) {
-            vm.emit(Copy.make(m.rResult(), rResult, loc));
+            vm.emit(Copy.make(m.rResult(), rResult, 1, loc));
         }
     }
 }

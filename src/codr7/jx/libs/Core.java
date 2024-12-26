@@ -91,14 +91,17 @@ public class Core extends Lib {
 
                         vm.currentLib.bindMacro("recall", margs.toArray(new Arg[0]), null,
                                 (_vm, recallArgs, recallResult, _loc) -> {
+                                    final var rRecallArgs = vm.alloc(recallArgs.length);
+
                                     for (int i = 0; i < recallArgs.length; i++) {
-                                        recallArgs[i].emit(vm, rArgs + i);
+                                        recallArgs[i].emit(vm, rRecallArgs + i);
                                     }
 
+                                    _vm.emit(Copy.make(rRecallArgs, rArgs, recallArgs.length, loc));
                                     _vm.emit(Goto.make(startPc, _loc));
 
                                     if (recallResult != rResult) {
-                                        _vm.emit(Copy.make(recallResult, rResult, _loc));
+                                        _vm.emit(Copy.make(recallResult, rResult, 1, _loc));
                                     }
                                 });
 
@@ -124,6 +127,32 @@ public class Core extends Lib {
                     }
 
                     vm.registers.set(rResult, new Value<>(bitType, result));
+                });
+
+        bindMethod(">", new Arg[]{new Arg("args*")}, null,
+                (vm, args, rResult, location) -> {
+                    var lhs = args[0].cast(intType);
+                    var result = true;
+
+                    for (var i = 1; i < args.length; i++) {
+                        final var rhs = args[i].cast(intType);
+
+                        if (lhs <= rhs) {
+                            result = false;
+                            break;
+                        }
+
+                        lhs = rhs;
+                    }
+
+                    vm.registers.set(rResult, new Value<>(bitType, result));
+                });
+
+        bindMethod("+", new Arg[]{new Arg("args*")}, null,
+                (vm, args, rResult, location) -> {
+                    var result = 0L;
+                    for (final var a: args) { result += a.cast(intType); }
+                    vm.registers.set(rResult, new Value<>(intType, result));
                 });
 
         bindMethod("-", new Arg[]{new Arg("args*")}, null,
@@ -190,7 +219,7 @@ public class Core extends Lib {
                     }
 
                     vm.emit(Dec.make(rValue, delta, loc));
-                    vm.emit(Copy.make(rValue, rResult, loc));
+                    vm.emit(Copy.make(rValue, rResult, 1, loc));
                 });
 
         bindMacro("do", new Arg[]{new Arg("body*")}, null,
