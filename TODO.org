@@ -1,4 +1,14 @@
+* extract dec copy
+
 * skip binding nil method args
+
+* add vm.compile(startPc)
+** loop until no more changes
+** Replace unused COPY with NOP
+** Replace NOP GOTO with GOTO
+** Replace GOTO NOP with GOTO
+*** extend
+** replaces NOP NOP with GOTO
 
 * add return macro
 ** emit nop and log pc in list
