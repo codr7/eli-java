@@ -1,6 +1,3 @@
-* move copy from dec macro into Dec op
-** bench
-
 * fib-tail
 ** add >
 ** add +
@@ -8,6 +5,15 @@
 
 (^fib-tail [n a b] Int
   (if-else (> n 1) (recall (dec n) b (+ a b)) (if-else (is n 0) a b)))
+
+* move copy from dec macro into Dec op
+** bench
+
+* switch registers to array
+** realloc using Arrays.copyOf(array, newSize) in eval
+** add VM.registerCount
+*** inc & return in alloc
+** bench
 
 * skip binding nil method args
 
@@ -39,11 +45,6 @@ https://www.investing.com/crypto/bitcoin/historical-data
 *** match back in time if as far as possible
 *** draw a projection for each found id & one for actual data if any
 ** table with records/chart
-
-* switch registers to array
-** realloc using Arrays.copyOf(array, newSize) in eval
-** add VM.registerCount
-*** inc & return in alloc
 
 * switch ops to array
 ** realloc using Arrays.copyOf(array, newSize) in eval
