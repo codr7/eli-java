@@ -11,9 +11,6 @@ def fact(acc, n):
 ''',
 'fact(1, 900)'))
 
-def fib(n, a, b):
-  return a if n == 0 else b if n == 1 else fib(n-1, b, a+b)
-
 print('fib ', benchmark(100000, '''
 def fib(n, a, b):
   return a if n == 0 else b if n == 1 else fib(n-1, b, a+b)
