@@ -187,12 +187,7 @@ public final class VM {
                 }
                 case COPY: {
                     final var copyOp = (Copy) op.data();
-                    //Use System.arraycopy instead
-
-                    for (var i = 0; i < copyOp.count(); i++) {
-                        registers.set(copyOp.rTo() + i, registers.get(copyOp.rFrom() + i));
-                    }
-
+                    registers.set(copyOp.rTo(), registers.get(copyOp.rFrom()));
                     pc++;
                     break;
                 }
@@ -207,7 +202,6 @@ public final class VM {
                     final var v = registers.get(decOp.rTarget()).cast(Core.intType);
                     final var nv = new Value<>(Core.intType, v - 1);
                     registers.set(decOp.rTarget(), nv);
-                    if (decOp.rResult() != -1) { registers.set(decOp.rResult(), nv); }
                     pc++;
                     break;
                 }

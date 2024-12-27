@@ -93,15 +93,18 @@ public class Core extends Lib {
                                 (_vm, recallArgs, recallResult, _loc) -> {
                                     final var rRecallArgs = vm.alloc(recallArgs.length);
 
-                                    for (int i = 0; i < recallArgs.length; i++) {
+                                    for (var i = 0; i < recallArgs.length; i++) {
                                         recallArgs[i].emit(vm, rRecallArgs + i);
                                     }
 
-                                    _vm.emit(Copy.make(rRecallArgs, rArgs, recallArgs.length, loc));
+                                    for (var i = 0; i < recallArgs.length; i++) {
+                                        _vm.emit(Copy.make(rRecallArgs+i, rArgs+i, loc));
+                                    }
+
                                     _vm.emit(Goto.make(startPc, _loc));
 
                                     if (recallResult != rResult) {
-                                        _vm.emit(Copy.make(recallResult, rResult, 1, _loc));
+                                        _vm.emit(Copy.make(recallResult, rResult, _loc));
                                     }
                                 });
 
@@ -218,7 +221,8 @@ public class Core extends Lib {
                         delta = dv.cast(intType);
                     }
 
-                    vm.emit(Dec.make(rValue, delta, rResult, loc));
+                    vm.emit(Dec.make(rValue, delta, loc));
+                    if (rResult != rValue) { vm.emit(Copy.make(rValue, rResult, loc)); }
                 });
 
         bindMacro("do", new Arg[]{new Arg("body*")}, null,
