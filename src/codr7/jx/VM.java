@@ -65,6 +65,10 @@ public final class VM {
         }
     }
 
+    public void dumpOps(final int startPc) {
+        for (var i = startPc; i < ops.size(); i++) { System.out.printf("% 4d %s\n", i, ops.get(i).dump(this)); }
+    }
+
     public int emit(final Op op) {
         final var pc = emitPc();
         ops.add(op);
@@ -121,7 +125,6 @@ public final class VM {
     public void eval() {
         for (; ; ) {
             final Op op = ops.get(pc);
-            //System.out.printf("% 4d %s\n", pc, op.dump(this));
 
             switch (op.code()) {
                 case ADD_ITEM: {

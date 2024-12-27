@@ -1,9 +1,6 @@
 fact PT1.481252863S
 fib PT1.212838517S
 
-* add main list flag
-** dump ops
-
 * skip binding nil method args
 
 * add vm.compile(startPc)

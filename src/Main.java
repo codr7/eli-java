@@ -2,6 +2,8 @@ import codr7.jx.REPL;
 import codr7.jx.VM;
 
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,8 +16,15 @@ public class Main {
         } else {
             final var rResult = vm.alloc(1);
             final var startPc = vm.emitPc();
-            for (final var a: args) { vm.load(Paths.get(a), rResult); }
-            vm.eval(startPc);
+            final var as = new ArrayDeque<>(Arrays.asList(args));
+            if (as.getFirst().equals("--list")) {
+                as.removeFirst();
+                for (final var a: as) { vm.load(Paths.get(a), rResult); }
+                vm.dumpOps(startPc);
+            } else {
+                for (final var a: as) { vm.load(Paths.get(a), rResult); }
+                vm.eval(startPc);
+            }
         }
     }
 }
