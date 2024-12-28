@@ -2,13 +2,20 @@ fact PT1.481252863S
 fib PT1.212838517S
 
 * move UnusedPut.findRead() to vm
+** change result type to Integer
 ** rewrite UnusedCopy like UnusedRead
 ** test/benchmark
 
-* fix defragOps
+* fix vm.defragOps()
 ** relocate all ops for each nop
 *** add minPc arg to relocate
 **** only relocate if value >= minPc
+
+* emit Method body to correct rResult
+** store body form in method
+** skip copy
+
+* add double copy compiler
 
 * try matching data directly in eval loop
 ** benchmark
