@@ -1,12 +1,18 @@
 fact PT1.481252863S
 fib PT1.212838517S
 
-* add Put compiler
-** remove unread PUT ops
+* move UnusedPut.findRead() to vm
+** rewrite UnusedCopy like UnusedRead
+** test/benchmark
 
 * fix defragOps
-** relocate all for each nop
+** relocate all ops for each nop
 *** add minPc arg to relocate
+**** only relocate if value >= minPc
+
+* try matching data directly in eval loop
+** benchmark
+** simplify op?
 
 * skip binding nil method args
 
