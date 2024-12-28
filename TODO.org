@@ -1,11 +1,14 @@
 fact PT1.481252863S
 fib PT1.212838517S
 
-* skip binding nil method args
+* add Put compiler
+** remove unread PUT ops
 
-* add VM.defrag_ops(startPc)
-** skip Nop's & relocate ops
-** call at end of compile
+* fix defragOps
+** relocate all for each nop
+*** add minPc arg to relocate
+
+* skip binding nil method args
 
 * add return macro
 ** emit nop and log pc in list

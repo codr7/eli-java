@@ -8,7 +8,7 @@ import codr7.jx.VM;
 import java.util.Set;
 
 public record Copy(int rFrom, int rTo) {
-    public void io(final Set<Integer> read, final Set<Integer> write) {
+    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
         read.add(rFrom);
         write.add(rTo);
     }

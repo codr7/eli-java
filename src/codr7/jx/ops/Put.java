@@ -5,7 +5,7 @@ import codr7.jx.*;
 import java.util.Set;
 
 public record Put(int rTarget, IValue value) {
-    public void io(final Set<Integer> read, final Set<Integer> write) {
+    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
         write.add(rTarget);
     }
 

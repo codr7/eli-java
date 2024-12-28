@@ -8,7 +8,7 @@ import codr7.jx.VM;
 import java.util.Set;
 
 public record Zip(int rLeft, int rRight, int rResult) {
-    public void io(final Set<Integer> read, final Set<Integer> write) {
+    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
         read.add(rLeft);
         read.add(rRight);
         write.add(rResult);

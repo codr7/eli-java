@@ -1,6 +1,6 @@
 package codr7.jx;
 
-import codr7.jx.compilers.GotoGoto;
+import codr7.jx.compilers.Goto;
 import codr7.jx.compilers.UnusedCopy;
 import codr7.jx.errors.EvalError;
 import codr7.jx.libs.Core;
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import static codr7.jx.OpCode.NOP;
 import static codr7.jx.OpCode.STOP;
 
 public final class VM {
@@ -47,7 +48,7 @@ public final class VM {
         readers.add(StringReader.instance);
         infixReaders.add(PairReader.instance);
 
-        compilers.add(GotoGoto.instance);
+        compilers.add(Goto.instance);
         compilers.add(UnusedCopy.instance);
 
         userLib.bind(coreLib);
@@ -72,6 +73,19 @@ public final class VM {
             for (final var c: compilers) {
                 if (c.compile(this, startPc)) { done = false; }
             }
+        }
+
+        //defragOps(startPc);
+    }
+
+    public void defragOps(final int startPc) {
+        final var tmp = new ArrayList<Op>(ops.subList(startPc, ops.size()));
+        while (ops.size() > startPc) { ops.removeLast(); }
+        var nops = 0;
+
+        for (final var op: tmp) {
+            if (op.code() == NOP) { nops++; }
+            else { ops.add(op.relocate(-nops)); }
         }
     }
 
@@ -138,7 +152,7 @@ public final class VM {
     public void eval(final String in, final int rResult, final Loc loc) {
         final var skipPc = emit(Nop.make(loc));
         final var startPc = emit(read(in, loc), rResult);
-        ops.set(skipPc, Goto.make(emitPc(), loc));
+        ops.set(skipPc, codr7.jx.ops.Goto.make(emitPc(), loc));
         eval(startPc);
     }
 
@@ -229,7 +243,7 @@ public final class VM {
                     break;
                 }
                 case GOTO: {
-                    pc = ((Goto) op.data()).pc();
+                    pc = ((codr7.jx.ops.Goto) op.data()).pc();
                     break;
                 }
                 case LEFT: {

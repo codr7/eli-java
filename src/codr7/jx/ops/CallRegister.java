@@ -4,14 +4,23 @@ import codr7.jx.Loc;
 import codr7.jx.Op;
 import codr7.jx.OpCode;
 import codr7.jx.VM;
+import codr7.jx.libs.Core;
 
 import java.util.Set;
 
 public record CallRegister(int rTarget, int rArguments, int arity, int rResult) {
-    public void io(final Set<Integer> read, final Set<Integer> write) {
+    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
         read.add(rTarget);
-        read.add(rArguments);
+        for (var i = 0; i < arity; i++) { read.add(rArguments+i); }
         write.add(rResult);
+
+        final var t = vm.registers.get(rTarget);
+
+        if (t.type() == Core.methodType) {
+            final var m = t.cast(Core.methodType);
+            for (var i = 0; i < m.args().length; i++) { read.add(m.rArgs()+i); }
+            write.add(m.rResult());
+        }
     }
 
     public static Op make(final int rTarget,

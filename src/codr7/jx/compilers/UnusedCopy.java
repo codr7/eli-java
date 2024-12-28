@@ -25,20 +25,18 @@ import static codr7.jx.OpCode.COPY;
                     final var w = new HashSet<Integer>();
                     var used = false;
 
-                    for (var cpc = pc+1; cpc < vm.ops.size(); cpc++) {
+                    for (var cpc = 0; cpc < vm.ops.size(); cpc++) {
                         final var cop = vm.ops.get(cpc);
-                        cop.io(r, w);
+                        cop.io(vm, r, w);
 
                         if (r.contains(rTo)) {
                             used = true;
-                            break;
-                        } else if (w.contains(rTo)) {
                             break;
                         }
                     }
 
                     if (!used) {
-                        System.out.println("Unused COPY " + pc);
+                        System.out.println("Unused COPY " + pc + " " + op.dump(vm) + " " + op.loc());
                         vm.ops.set(pc, Nop.make(op.loc()));
                         changed = true;
                     }

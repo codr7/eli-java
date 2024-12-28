@@ -1,13 +1,20 @@
 package codr7.jx.ops;
 
 import codr7.jx.*;
+import codr7.jx.libs.Core;
 
 import java.util.Set;
 
 public record CallValue(IValue target, int rArguments, int arity, int rResult) {
-    public void io(final Set<Integer> read, final Set<Integer> write) {
-        read.add(rArguments);
+    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
+        for (var i = 0; i < arity; i++) { read.add(rArguments+i); }
         write.add(rResult);
+
+        if (target.type() == Core.methodType) {
+            final var m = target.cast(Core.methodType);
+            for (var i = 0; i < m.args().length; i++) { read.add(m.rArgs()+i); }
+            write.add(m.rResult());
+        }
     }
 
     public static Op make(final IValue target,

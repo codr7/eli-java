@@ -31,51 +31,51 @@ public record Op(OpCode code, Record data, Loc loc) {
         };
     }
 
-    public void io(final Set<Integer> read, final Set<Integer> write) {
+    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
         if (data == null) { return; }
 
         switch (data) {
             case AddItem op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case Bench op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case Branch op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case CallRegister op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case CallValue op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case Check op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case Copy op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case CreateList op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case Dec op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case Left op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case Next op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case Put op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case Right op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             case Zip op:
-                op.io(read, write);
+                op.io(vm, read, write);
                 break;
             default:
                 break;

@@ -6,7 +6,7 @@ import codr7.jx.*;
 import java.util.Set;
 
 public record Branch(int rCondition, int elsePc) {
-    public void io(final Set<Integer> read, final Set<Integer> write) {
+    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
         read.add(rCondition);
     }
 
