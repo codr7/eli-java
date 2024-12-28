@@ -5,7 +5,14 @@ import codr7.jx.Op;
 import codr7.jx.OpCode;
 import codr7.jx.VM;
 
+import java.util.Set;
+
 public record Check(int rValues) {
+    public void io(final Set<Integer> read, final Set<Integer> write) {
+        read.add(rValues);
+        write.add(rValues+1);
+    }
+
     public static Op make(final int rValues, final Loc loc) {
         return new Op(OpCode.CHECK, new Check(rValues), loc);
     }

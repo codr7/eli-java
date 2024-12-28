@@ -3,11 +3,9 @@ fib PT1.212838517S
 
 * skip binding nil method args
 
-* add vm.compile(startPc)
-** Replace unused COPY with NOP
-*** add Op.io(Set<Integer> read, Set<Intege> write)
-** add VM.defrag_ops()
-*** skip Nop's & relocate ops
+* add VM.defrag_ops(startPc)
+** skip Nop's & relocate ops
+** call at end of compile
 
 * add return macro
 ** emit nop and log pc in list

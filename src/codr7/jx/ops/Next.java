@@ -5,7 +5,14 @@ import codr7.jx.Op;
 import codr7.jx.OpCode;
 import codr7.jx.VM;
 
+import java.util.Set;
+
 public record Next(int rIter, int rItem, int endPc) {
+    public void io(final Set<Integer> read, final Set<Integer> write) {
+        read.add(rIter);
+        write.add(rItem);
+    }
+
     public static Op make(final int rIter, final int rItem, final int endPc, final Loc loc) {
         return new Op(OpCode.NEXT, new Next(rIter, rItem, endPc), loc);
     }

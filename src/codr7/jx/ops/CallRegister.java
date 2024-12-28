@@ -5,7 +5,15 @@ import codr7.jx.Op;
 import codr7.jx.OpCode;
 import codr7.jx.VM;
 
+import java.util.Set;
+
 public record CallRegister(int rTarget, int rArguments, int arity, int rResult) {
+    public void io(final Set<Integer> read, final Set<Integer> write) {
+        read.add(rTarget);
+        read.add(rArguments);
+        write.add(rResult);
+    }
+
     public static Op make(final int rTarget,
                           final int rArguments,
                           final int arity,

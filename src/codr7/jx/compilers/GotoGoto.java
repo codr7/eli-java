@@ -6,6 +6,7 @@ import codr7.jx.VM;
 import codr7.jx.ops.Goto;
 
 import static codr7.jx.OpCode.GOTO;
+import static codr7.jx.OpCode.NOP;
 
 public record GotoGoto() implements Compiler {
     public static final GotoGoto instance = new GotoGoto();
@@ -22,12 +23,13 @@ public record GotoGoto() implements Compiler {
 
                 while (true) {
                     final var gop = vm.ops.get(gpc);
-                    if (gop.code() != GOTO) { break; }
-                    gpc = ((Goto)gop.data()).pc();
+                    if (gop.code() == NOP) { gpc++; }
+                    else if (gop.code() == GOTO) { gpc = ((Goto) gop.data()).pc(); }
+                    else { break; }
                 }
 
                 if (gpc != oldPc) {
-                    System.out.println("Extending GOTO " + pc);
+                    System.out.println("GOTO GOTO " + pc);
                     vm.ops.set(pc, Goto.make(gpc, op.loc()));
                     changed = true;
                 }
