@@ -15,10 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 import static codr7.jx.OpCode.NOP;
 import static codr7.jx.OpCode.STOP;
@@ -298,6 +295,37 @@ public final class VM {
                 }
             }
         }
+    }
+
+    public Integer findRead(final int rTarget, final int startPc, final Set<Integer> skip) {
+        final var r = new HashSet<Integer>();
+        final var w = new HashSet<Integer>();
+        for (var pc = startPc; pc < ops.size();) {
+            if (skip.contains(pc)) { break; }
+            skip.add(pc);
+            final var op = ops.get(pc);
+            op.io(this, r, w);
+            if (r.contains(rTarget)) { return pc; }
+            if (w.contains(rTarget)) { break; }
+
+            if (op.data() == null) {
+                pc ++;
+            } else {
+                switch (op.data()) {
+                    case codr7.jx.ops.Goto gotoOp: {
+                        final var result = findRead(rTarget, pc + 1, skip);
+                        if (result != null) { return result; }
+                        pc = gotoOp.pc();
+                        break;
+                    }
+                    default:
+                        pc++;
+                        break;
+                }
+            }
+        }
+
+        return null;
     }
 
     public void load(final Path path, int rResult) {

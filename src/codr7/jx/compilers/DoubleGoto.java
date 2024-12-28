@@ -28,7 +28,8 @@ public record DoubleGoto() implements Compiler {
                 }
 
                 if (gpc != oldPc) {
-                    System.out.println("Double GOTO: " + pc + " " + op.dump(vm) + " " + op.loc());
+                    final var gop = vm.ops.get(gpc);
+                    System.out.println("Removing op: " + gpc + " " + gop.dump(vm) + " " + gop.loc());
                     vm.ops.set(pc, Goto.make(gpc, op.loc()));
                     changed = true;
                 }

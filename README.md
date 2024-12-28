@@ -14,6 +14,6 @@ fib 0.634149815
 $ java -jar jx.jar benchmarks/run.jx
 ```
 ```
-fact 0.811809149
-fib 0.694091269
+fact 0.910086461S
+fib 0.679725578S
 ```

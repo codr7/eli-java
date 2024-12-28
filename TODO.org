@@ -1,10 +1,5 @@
-fact PT1.481252863S
-fib PT1.212838517S
-
-* move UnusedPut.findRead() to vm
-** change result type to Integer
-** rewrite UnusedCopy like UnusedRead
-** test/benchmark
+fact PT0.910086461S
+fib PT0.679725578S
 
 * fix vm.defragOps()
 ** relocate all ops for each nop

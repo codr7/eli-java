@@ -12,29 +12,15 @@ import static codr7.jx.OpCode.COPY;
 public record UnusedCopy() implements Compiler {
     public static final UnusedCopy instance = new UnusedCopy();
 
-    public boolean compile(VM vm, int startPc) {
+    public boolean compile(final VM vm, final int startPc) {
         var changed = false;
 
         for (var pc = startPc; pc < vm.ops.size(); pc++) {
             final var op = vm.ops.get(pc);
 
             if (op.code() == COPY) {
-                final var rTo = ((Copy) op.data()).rTo();
-                final var r = new HashSet<Integer>();
-                final var w = new HashSet<Integer>();
-                var used = false;
-
-                for (final var copyOp: vm.ops) {
-                    copyOp.io(vm, r, w);
-
-                    if (r.contains(rTo)) {
-                        used = true;
-                        break;
-                    }
-                }
-
-                if (!used) {
-                    System.out.println("Unused COPY: " + pc + " " + op.dump(vm) + " " + op.loc());
+                if (vm.findRead(((Copy) op.data()).rTo(), pc + 1, new HashSet<>(pc)) == null) {
+                    System.out.println("Removing op: " + pc + " " + op.dump(vm) + " " + op.loc());
                     vm.ops.set(pc, Nop.make(op.loc()));
                     changed = true;
                 }
