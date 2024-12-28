@@ -4,14 +4,10 @@ fib PT1.212838517S
 * skip binding nil method args
 
 * add vm.compile(startPc)
-** loop until no more changes
 ** Replace unused COPY with NOP
-** Replace NOP GOTO with GOTO
-** Replace GOTO NOP with GOTO
-*** extend
-** replaces NOP NOP with GOTO
-** replace GOTO->GOTO with GOTO
-*** extend
+*** add Op.io(Set<Integer> read, Set<Intege> write)
+** add VM.defrag_ops()
+*** skip Nop's & relocate ops
 
 * add return macro
 ** emit nop and log pc in list

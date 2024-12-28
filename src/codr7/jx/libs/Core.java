@@ -198,6 +198,29 @@ public class Core extends Lib {
                     vm.ops.set(benchPc, Bench.make(vm.emitPc(), rResult, loc));
                 });
 
+        bindMacro("check", new Arg[]{new Arg("expected"), new Arg("body*")}, null,
+                (vm, _args, rResult, location) -> {
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+                    final var rValues = vm.alloc(2);
+
+                    vm.doLib(() -> {
+                        var expected = args.removeFirst();
+                        Deque<IForm> actual;
+
+                        if (args.isEmpty()) {
+                            actual = new ArrayDeque<>();
+                            actual.add(expected);
+                            expected = new LiteralForm(Core.T, expected.loc());
+                        } else {
+                            actual = args;
+                        }
+
+                        expected.emit(vm, rValues);
+                        vm.emit(actual, rValues + 1);
+                        vm.emit(Check.make(rValues, location));
+                    });
+                });
+
         bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")}, null,
                 (vm, args, rResult, loc) -> {
                     final var t = args[0];
@@ -229,29 +252,6 @@ public class Core extends Lib {
                 (vm, args, rResult, location) -> {
                     vm.doLib(() -> {
                         vm.emit(new ArrayDeque<>(Arrays.asList(args)), rResult);
-                    });
-                });
-
-        bindMacro("check", new Arg[]{new Arg("expected"), new Arg("body*")}, null,
-                (vm, _args, rResult, location) -> {
-                    final var args = new ArrayDeque<>(Arrays.asList(_args));
-                    final var rValues = vm.alloc(2);
-
-                    vm.doLib(() -> {
-                        var expected = args.removeFirst();
-                        Deque<IForm> actual;
-
-                        if (args.isEmpty()) {
-                            actual = new ArrayDeque<>();
-                            actual.add(expected);
-                            expected = new LiteralForm(Core.T, expected.loc());
-                        } else {
-                            actual = args;
-                        }
-
-                        expected.emit(vm, rValues);
-                        vm.emit(actual, rValues + 1);
-                        vm.emit(Check.make(rValues, location));
                     });
                 });
 

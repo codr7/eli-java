@@ -1,5 +1,6 @@
 package codr7.jx;
 
+import codr7.jx.compilers.GotoGoto;
 import codr7.jx.errors.EvalError;
 import codr7.jx.libs.Core;
 import codr7.jx.libs.GUI;
@@ -20,17 +21,20 @@ import java.util.List;
 import static codr7.jx.OpCode.STOP;
 
 public final class VM {
-    public static final int VERSION = 1;
+    public final static int VERSION = 1;
 
+    public final List<Compiler> compilers = new ArrayList<>();
     public final List<Reader> infixReaders = new ArrayList<>();
     public final ArrayList<Op> ops = new ArrayList<>();
+    public Path path = Paths.get("");
+    public int pc = 0;
     public final List<Reader> readers = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
+
     public final Core coreLib = new Core();
     public final GUI guiLib = new GUI();
     public final Lib userLib = new Lib("user");
-    public Path path = Paths.get("");
-    public int pc = 0;
+
     public Lib currentLib = null;
 
     public VM() {
@@ -41,6 +45,8 @@ public final class VM {
         readers.add(ListReader.instance);
         readers.add(StringReader.instance);
         infixReaders.add(PairReader.instance);
+
+        compilers.add(GotoGoto.instance);
 
         userLib.bind(coreLib);
         userLib.bind(guiLib);
@@ -53,6 +59,18 @@ public final class VM {
             registers.add(Core.NIL);
         }
         return result;
+    }
+
+    public void compile(final int startPc) {
+        var done = false;
+
+        while (!done) {
+            done = true;
+
+            for (final var c: compilers) {
+                if (c.compile(this, startPc)) { done = false; }
+            }
+        }
     }
 
     public void doLib(final DoLibBody body) {
@@ -269,14 +287,18 @@ public final class VM {
         final var p = prevPath.resolve(path);
         final var location = new Loc(p.toString());
         Deque<IForm> out;
+
         try {
             out = read(Files.readString(p), location);
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
+
         emit(SetPath.make(p.getParent(), location));
+        final var startPc = emitPc();
         emit(out, rResult);
         emit(SetPath.make(prevPath, location));
+        compile(startPc);
     }
 
     public boolean read(final Input in, final Deque<IForm> out, final Loc loc) {
