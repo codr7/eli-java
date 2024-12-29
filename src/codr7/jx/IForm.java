@@ -31,7 +31,7 @@ public interface IForm {
         final var skipPc = vm.emit(Nop.make(loc()));
         final var startPc = vm.emitPc();
         emit(vm, rResult);
-        vm.ops.set(skipPc, Goto.make(vm.emitPc(), loc()));
+        vm.ops.set(skipPc, Goto.make(vm.label(), loc()));
         vm.eval(startPc);
         return vm.registers.get(rResult);
     }

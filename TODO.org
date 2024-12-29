@@ -1,9 +1,6 @@
 fact PT0.910086461S
 fib PT0.679725578S
 
-* convert all pcs to labels
-** store labels in vm
-
 * fix vm.defragOps()
 ** relocate all labels for each nop
 

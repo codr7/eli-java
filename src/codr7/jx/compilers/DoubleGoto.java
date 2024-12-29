@@ -18,8 +18,8 @@ public record DoubleGoto() implements Compiler {
             final var op = vm.ops.get(pc);
 
             if (op.code() == GOTO) {
-                var firstTargetPc = ((codr7.jx.ops.Goto)op.data()).pc();
-                var tpc = firstTargetPc;
+                var firstTarget = ((codr7.jx.ops.Goto)op.data()).target();
+                var tpc = firstTarget.pc;
 
                 while (true) {
                     final var gop = vm.ops.get(tpc);
@@ -27,13 +27,13 @@ public record DoubleGoto() implements Compiler {
                     else if (gop.code() == GOTO) {
                         System.out.println("Skipping: " + tpc + " " + gop.dump(vm) + " " + gop.loc());
                         vm.ops.set(tpc, Nop.make(op.loc()));
-                        tpc = ((Goto) gop.data()).pc();
+                        tpc = ((Goto) gop.data()).target().pc;
                     } else { break; }
                 }
 
-                if (tpc != firstTargetPc) {
+                if (tpc != firstTarget.pc) {
                     System.out.println("Extending: " + pc + " " + op.dump(vm) + " " + op.loc());
-                    vm.ops.set(pc, Goto.make(tpc, op.loc()));
+                    vm.ops.set(pc, Goto.make(vm.label(tpc), op.loc()));
                     changed = true;
                 }
             }

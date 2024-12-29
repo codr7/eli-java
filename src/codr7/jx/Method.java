@@ -41,7 +41,7 @@ public record Method(String id,
                             _vm.emit(Copy.make(rRecallArgs+i, rArgs+i, loc));
                         }
 
-                        _vm.emit(Goto.make(start.pc, _loc));
+                        _vm.emit(Goto.make(start, _loc));
                     });
 
             vm.emit(new ArrayDeque<>(Arrays.asList(body)), rResult);

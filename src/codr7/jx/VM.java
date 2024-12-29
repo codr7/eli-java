@@ -75,7 +75,7 @@ public final class VM {
             }
         }
 
-        //defragOps(startPc);
+        defragOps(startPc);
     }
 
     public void defragOps(final int startPc) {
@@ -160,7 +160,7 @@ public final class VM {
     public void eval(final String in, final int rResult, final Loc loc) {
         final var skipPc = emit(Nop.make(loc));
         final var startPc = emit(read(in, loc), rResult);
-        ops.set(skipPc, codr7.jx.ops.Goto.make(emitPc(), loc));
+        ops.set(skipPc, codr7.jx.ops.Goto.make(label(), loc));
         eval(startPc);
     }
 
@@ -251,7 +251,7 @@ public final class VM {
                     break;
                 }
                 case GOTO: {
-                    pc = ((codr7.jx.ops.Goto) op.data()).pc();
+                    pc = ((codr7.jx.ops.Goto) op.data()).target().pc;
                     break;
                 }
                 case LEFT: {
@@ -265,7 +265,7 @@ public final class VM {
                     final var iter = registers.get(nextOp.rIter()).cast(Core.iterType);
                     pc = (iter.next(this, nextOp.rItem(), op.loc()))
                         ? pc + 1
-                        : nextOp.endPc();
+                        : nextOp.bodyEnd().pc;
                     break;
                 }
                 case NOP: {
@@ -324,7 +324,7 @@ public final class VM {
                     case codr7.jx.ops.Goto gotoOp: {
                         final var result = findRead(rTarget, pc + 1, skip);
                         if (result != null) { return result; }
-                        pc = gotoOp.pc();
+                        pc = gotoOp.target().pc;
                         break;
                     }
                     default:
