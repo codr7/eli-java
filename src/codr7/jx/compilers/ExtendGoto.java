@@ -18,7 +18,7 @@ public record ExtendGoto() implements Compiler {
             final var op = vm.ops.get(pc);
 
             if (op.code() == GOTO) {
-                var firstTarget = ((codr7.jx.ops.Goto)op.data()).target();
+                var firstTarget = ((Goto)op.data()).target();
                 var tpc = firstTarget.pc;
 
                 while (true) {
@@ -28,10 +28,15 @@ public record ExtendGoto() implements Compiler {
                         System.out.println("Skipping: " + tpc + " " + gop.dump(vm) + " " + gop.loc());
                         vm.ops.set(tpc, Nop.make(op.loc()));
                         tpc = ((Goto) gop.data()).target().pc;
+                        changed = true;
                     } else { break; }
                 }
 
-                if (tpc != firstTarget.pc) {
+                if (tpc == pc+1) {
+                    System.out.println("Skipping: " + pc + " " + op.dump(vm) + " " + op.loc());
+                    vm.ops.set(pc, Nop.make(op.loc()));
+                    changed = true;
+                } else if (tpc != firstTarget.pc) {
                     System.out.println("Extending: " + pc + " " + op.dump(vm) + " " + op.loc());
                     vm.ops.set(pc, Goto.make(vm.label(tpc), op.loc()));
                     changed = true;

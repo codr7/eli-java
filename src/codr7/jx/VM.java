@@ -73,12 +73,16 @@ public final class VM {
             for (final var c: compilers) {
                 if (c.compile(this, startPc)) { done = false; }
             }
+
+            if (defragOps(startPc)) { done = false; }
         }
 
-        defragOps(startPc);
+
     }
 
-    public void defragOps(final int startPc) {
+    public boolean defragOps(final int startPc) {
+        var changed = false;
+
         for (var i = startPc; i < ops.size();) {
             final var op = ops.get(i);
 
@@ -90,10 +94,14 @@ public final class VM {
                         l.pc--;
                     }
                 }
+
+                changed = true;
             } else {
                 i++;
             }
         }
+
+        return changed;
     }
 
     public void doLib(final Lib lib, final DoLibBody body) {

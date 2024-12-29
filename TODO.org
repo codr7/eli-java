@@ -1,9 +1,6 @@
 fact PT0.910086461S
 fib PT0.679725578S
 
-* improve goto compiler
-** remove goto next pc
-
 * add double copy compiler
 ** x->y, y->z without read
 
