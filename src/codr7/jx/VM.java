@@ -328,6 +328,8 @@ public final class VM {
         return null;
     }
 
+    public Label label(final int pc) { return new Label(pc); }
+
     public void load(final Path path, int rResult) {
         final var prevPath = this.path;
         final var p = prevPath.resolve(path);

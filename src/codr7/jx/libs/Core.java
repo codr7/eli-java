@@ -81,39 +81,15 @@ public class Core extends Lib {
 
                     final var rArgs = vm.alloc(margs.size());
                     final var skipPc = vm.emit(Nop.make(loc));
-                    final var startPc = vm.emitPc();
-
-                    vm.doLib(() -> {
-                        for (var i = 0; i < margs.size(); i++) {
-                            final var ma = margs.get(i);
-                            vm.currentLib.bind(ma.id(), bindingType, new Binding(null, rArgs + i));
-                        }
-
-                        vm.currentLib.bindMacro("recall", margs.toArray(new Arg[0]), null,
-                                (_vm, recallArgs, recallResult, _loc) -> {
-                                    final var rRecallArgs = vm.alloc(recallArgs.length);
-
-                                    for (var i = 0; i < recallArgs.length; i++) {
-                                        recallArgs[i].emit(vm, rRecallArgs + i);
-                                    }
-
-                                    for (var i = 0; i < recallArgs.length; i++) {
-                                        _vm.emit(Copy.make(rRecallArgs+i, rArgs+i, loc));
-                                    }
-
-                                    _vm.emit(Goto.make(startPc, _loc));
-
-                                    if (recallResult != rResult) {
-                                        _vm.emit(Copy.make(recallResult, rResult, _loc));
-                                    }
-                                });
-
-                        vm.emit(args, rResult);
-                    });
-
-                    final var endPc = vm.emitPc();
-                    vm.ops.set(skipPc, Goto.make(endPc, loc));
-                    final var m = new Method(mid, margs.toArray(new Arg[0]), rArgs, resultType, rResult, startPc, endPc);
+                    final var m = new Method(
+                            mid,
+                            margs.toArray(new Arg[0]), rArgs,
+                            resultType, rResult,
+                            args.toArray(new IForm[0]),
+                            vm.label(vm.emitPc()), vm.label(-1));
+                    m.emitBody(vm, rResult, loc);
+                    m.end().pc = vm.emitPc();
+                    vm.ops.set(skipPc, Goto.make(m.end().pc, loc));
                     vm.currentLib.bind(m);
                 });
 

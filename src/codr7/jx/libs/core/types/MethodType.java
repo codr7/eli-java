@@ -27,7 +27,7 @@ public class MethodType extends BaseType<Method> implements CallTrait {
             }
         }
 
-        vm.eval(m.startPc(), m.endPc());
+        vm.eval(m.start().pc, m.end().pc);
 
         if (m.resultType() != null && rResult != m.rResult()) {
             vm.registers.set(rResult, vm.registers.get(m.rResult()));
@@ -50,9 +50,9 @@ public class MethodType extends BaseType<Method> implements CallTrait {
             body[i + 1].emit(vm, m.rArgs() + i);
         }
 
-        final var deltaPc = vm.emitPc() - m.startPc();
+        final var deltaPc = vm.emitPc() - m.start().pc;
 
-        for (var i = m.startPc(); i < m.endPc(); i++) {
+        for (var i = m.start().pc; i < m.end().pc; i++) {
             vm.emit(vm.ops.get(i).relocate(deltaPc));
         }
 
