@@ -1,10 +1,15 @@
 fact PT0.910086461S
 fib PT0.679725578S
 
-* fix vm.defragOps()
-** relocate all labels for each nop
+* improve goto compiler
+** remove goto next pc
 
 * add double copy compiler
+** x->y, y->z without read
+
+* improve put compiler
+** put x, copy x y -> put y
+*** no reads of x besides copy
 
 * try matching data directly in eval loop
 ** benchmark

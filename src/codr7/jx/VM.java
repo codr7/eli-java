@@ -1,6 +1,6 @@
 package codr7.jx;
 
-import codr7.jx.compilers.DoubleGoto;
+import codr7.jx.compilers.ExtendGoto;
 import codr7.jx.compilers.UnusedCopy;
 import codr7.jx.compilers.UnusedPut;
 import codr7.jx.errors.EvalError;
@@ -47,7 +47,7 @@ public final class VM {
         readers.add(StringReader.instance);
         infixReaders.add(PairReader.instance);
 
-        compilers.add(DoubleGoto.instance);
+        compilers.add(ExtendGoto.instance);
         compilers.add(UnusedCopy.instance);
         compilers.add(UnusedPut.instance);
 

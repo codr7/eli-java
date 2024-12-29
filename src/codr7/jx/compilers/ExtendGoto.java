@@ -8,8 +8,8 @@ import codr7.jx.ops.Nop;
 import static codr7.jx.OpCode.GOTO;
 import static codr7.jx.OpCode.NOP;
 
-public record DoubleGoto() implements Compiler {
-    public static final DoubleGoto instance = new DoubleGoto();
+public record ExtendGoto() implements Compiler {
+    public static final ExtendGoto instance = new ExtendGoto();
 
     public boolean compile(VM vm, int startPc) {
         var changed = false;
