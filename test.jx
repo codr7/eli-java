@@ -1,2 +1,1 @@
-(^ foo [x] Int 42)
-(say (foo 7))
+(if T _ _)
