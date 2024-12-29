@@ -81,13 +81,4 @@ public record Op(OpCode code, Record data, Loc loc) {
                 break;
         }
     }
-
-    public Op relocate(final int deltaPc) {
-        return switch (data) {
-            case Bench op -> op.relocate(deltaPc, loc);
-            case Branch op -> op.relocate(deltaPc, loc);
-            case Goto op -> op.relocate(deltaPc, loc);
-            default -> this;
-        };
-    }
 }

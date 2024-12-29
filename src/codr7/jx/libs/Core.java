@@ -172,7 +172,7 @@ public class Core extends Lib {
                     vm.emit(args, rResult);
                     vm.emit(Goto.make(iterPc, loc));
                     vm.ops.set(iterPc, Next.make(rIter, -1, vm.emitPc(), loc));
-                    vm.ops.set(benchPc, Bench.make(vm.emitPc(), rResult, loc));
+                    vm.ops.set(benchPc, Bench.make(vm.label(), rResult, loc));
                 });
 
         bindMacro("check", new Arg[]{new Arg("expected"), new Arg("body*")}, null,
@@ -238,7 +238,7 @@ public class Core extends Lib {
                     final var branchPc = vm.emit(Nop.make(loc));
                     args[1].emit(vm, rResult);
                     final var skipElsePc = vm.emit(Nop.make(loc));
-                    vm.ops.set(branchPc, Branch.make(rResult, vm.emitPc(), loc));
+                    vm.ops.set(branchPc, Branch.make(rResult, vm.label(), loc));
                     args[2].emit(vm, rResult);
                     vm.ops.set(skipElsePc, Goto.make(vm.emitPc(), loc));
                 });

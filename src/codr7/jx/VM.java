@@ -25,6 +25,7 @@ public final class VM {
 
     public final List<Compiler> compilers = new ArrayList<>();
     public final List<Reader> infixReaders = new ArrayList<>();
+    public final List<Label> labels = new ArrayList<>();
     public final ArrayList<Op> ops = new ArrayList<>();
     public Path path = Paths.get("");
     public int pc = 0;
@@ -78,13 +79,20 @@ public final class VM {
     }
 
     public void defragOps(final int startPc) {
-        final var tmp = new ArrayList<Op>(ops.subList(startPc, ops.size()));
-        while (ops.size() > startPc) { ops.removeLast(); }
-        var nops = 0;
+        for (var i = startPc; i < ops.size();) {
+            final var op = ops.get(i);
 
-        for (final var op: tmp) {
-            if (op.code() == NOP) { nops++; }
-            else { ops.add(op.relocate(-nops)); }
+            if (op.code() == NOP) {
+                ops.remove(i);
+
+                for (final var l: labels) {
+                    if (l.pc > i) {
+                        l.pc--;
+                    }
+                }
+            } else {
+                i++;
+            }
         }
     }
 
@@ -171,15 +179,15 @@ public final class VM {
                 case BENCH: {
                     final var benchOp = (Bench) op.data();
                     final var started = System.nanoTime();
-                    eval(pc+1, benchOp.endPc());
+                    eval(pc+1, benchOp.bodyEnd().pc);
                     final var elapsed = Duration.ofNanos(System.nanoTime() - started);
                     registers.set(benchOp.rResult(), new Value<>(Core.timeType, elapsed));
-                    pc = benchOp.endPc();
+                    pc = benchOp.bodyEnd().pc;
                     break;
                 }
                 case BRANCH: {
                     final var branchOp = (Branch) op.data();
-                    pc = registers.get(branchOp.rCondition()).toBit(this) ? pc + 1 : branchOp.elsePc();
+                    pc = registers.get(branchOp.rCondition()).toBit(this) ? pc + 1 : branchOp.elseStart().pc;
                     break;
                 }
                 case CALL_REGISTER: {
@@ -329,7 +337,15 @@ public final class VM {
         return null;
     }
 
-    public Label label(final int pc) { return new Label(pc); }
+    public Label label(final int pc) {
+        final var l = new Label(pc);
+        labels.add(l);
+        return l;
+    }
+
+    public Label label() {
+        return label(emitPc());
+    }
 
     public void load(final Path path, int rResult) {
         final var prevPath = this.path;
