@@ -1,12 +1,15 @@
 fact PT0.910086461S
 fib PT0.679725578S
 
+fact PT0.961080283S
+fib PT0.000221175S
+
+* special case put compiler
+** check if found read is COPY
+*** update PUT & NOP COPY if true and no more reads are found after COPY
+
 * add double copy compiler
 ** x->y, y->z without read
-
-* improve put compiler
-** put x, copy x y -> put y
-*** no reads of x besides copy
 
 * try matching data directly in eval loop
 ** benchmark
