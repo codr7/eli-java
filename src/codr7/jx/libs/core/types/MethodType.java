@@ -4,6 +4,9 @@ import codr7.jx.*;
 import codr7.jx.errors.EvalError;
 import codr7.jx.ops.Copy;
 
+import java.util.ArrayDeque;
+import java.util.Arrays;
+
 public class MethodType extends BaseType<Method> implements CallTrait {
     public MethodType(final String id) {
         super(id);
@@ -45,19 +48,7 @@ public class MethodType extends BaseType<Method> implements CallTrait {
                          final Loc loc) {
         final var m = target.cast(this);
         final var arity = body.length - 1;
-
-        for (var i = 0; i < arity; i++) {
-            body[i + 1].emit(vm, m.rArgs() + i);
-        }
-
-        final var deltaPc = vm.emitPc() - m.start().pc;
-
-        for (var i = m.start().pc; i < m.end().pc; i++) {
-            vm.emit(vm.ops.get(i).relocate(deltaPc));
-        }
-
-        if (m.resultType() != null && rResult != m.rResult()) {
-            vm.emit(Copy.make(m.rResult(), rResult, loc));
-        }
+        for (var i = 0; i < arity; i++) { body[i + 1].emit(vm, m.rArgs() + i); }
+        m.emitBody(vm, m.rResult(), loc);
     }
 }

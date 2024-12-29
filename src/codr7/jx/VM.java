@@ -88,9 +88,10 @@ public final class VM {
         }
     }
 
-    public void doLib(final DoLibBody body) {
+    public void doLib(final Lib lib, final DoLibBody body) {
         final var prevLib = currentLib;
-        currentLib = new Lib(prevLib);
+        currentLib = new Lib((lib == null) ? prevLib : lib);
+
         try {
             body.call();
         } finally {

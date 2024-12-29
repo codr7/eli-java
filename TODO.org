@@ -1,14 +1,11 @@
 fact PT0.910086461S
 fib PT0.679725578S
 
-* fix vm.defragOps()
-** relocate all ops for each nop
-*** add minPc arg to relocate
-**** only relocate if value >= minPc
+* convert all pcs to labels
+** store labels in vm
 
-* emit Method body to correct rResult
-** store body form in method
-** skip copy
+* fix vm.defragOps()
+** relocate all labels for each nop
 
 * add double copy compiler
 

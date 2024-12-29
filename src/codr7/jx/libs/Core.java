@@ -86,6 +86,7 @@ public class Core extends Lib {
                             margs.toArray(new Arg[0]), rArgs,
                             resultType, rResult,
                             args.toArray(new IForm[0]),
+                            vm.currentLib,
                             vm.label(vm.emitPc()), vm.label(-1));
                     m.emitBody(vm, rResult, loc);
                     m.end().pc = vm.emitPc();
@@ -179,7 +180,7 @@ public class Core extends Lib {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var rValues = vm.alloc(2);
 
-                    vm.doLib(() -> {
+                    vm.doLib(null, () -> {
                         var expected = args.removeFirst();
                         Deque<IForm> actual;
 
@@ -226,7 +227,7 @@ public class Core extends Lib {
 
         bindMacro("do", new Arg[]{new Arg("body*")}, null,
                 (vm, args, rResult, location) -> {
-                    vm.doLib(() -> {
+                    vm.doLib(null, () -> {
                         vm.emit(new ArrayDeque<>(Arrays.asList(args)), rResult);
                     });
                 });
