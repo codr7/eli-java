@@ -20,7 +20,7 @@ public record UnusedCopy() implements Compiler {
 
             if (op.code() == COPY) {
                 if (vm.findRead(((Copy) op.data()).rTo(), pc + 1, new HashSet<>(pc)) == null) {
-                    System.out.println("Removing op: " + pc + " " + op.dump(vm) + " " + op.loc());
+                    System.out.println("Removing: " + pc + " " + op.dump(vm) + " " + op.loc());
                     vm.ops.set(pc, Nop.make(op.loc()));
                     changed = true;
                 }

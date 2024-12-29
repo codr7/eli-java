@@ -32,6 +32,7 @@ public record DoubleGoto() implements Compiler {
                 }
 
                 if (tpc != firstTargetPc) {
+                    System.out.println("Extending: " + pc + " " + op.dump(vm) + " " + op.loc());
                     vm.ops.set(pc, Goto.make(tpc, op.loc()));
                     changed = true;
                 }

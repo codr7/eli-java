@@ -6,7 +6,6 @@ import codr7.jx.ops.Nop;
 import codr7.jx.ops.Put;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import static codr7.jx.OpCode.PUT;
 
@@ -21,7 +20,7 @@ public record UnusedPut() implements Compiler {
 
             if (op.code() == PUT) {
                 if (vm.findRead(((Put) op.data()).rTarget(), pc + 1, new HashSet<>(pc)) == null) {
-                    System.out.println("Removing op: " + pc + " " + op.dump(vm) + " " + op.loc());
+                    System.out.println("Removing: " + pc + " " + op.dump(vm) + " " + op.loc());
                     vm.ops.set(pc, Nop.make(op.loc()));
                     changed = true;
                 }
