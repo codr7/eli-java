@@ -8,6 +8,7 @@ fib PT0.002453173S
 
 * add double copy compiler
 ** x->y, y->z without read
+** test.jx
 
 * try matching data directly in eval loop
 ** benchmark
