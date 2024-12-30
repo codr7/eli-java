@@ -17,8 +17,7 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.*;
 
-import static codr7.jx.OpCode.NOP;
-import static codr7.jx.OpCode.STOP;
+import static codr7.jx.OpCode.*;
 
 public final class VM {
     public final static int VERSION = 1;
@@ -217,7 +216,7 @@ public final class VM {
 
                     if (t.type() instanceof CallTrait ct) {
                         pc++;
-                        ct.call(this, t, callOp.rArguments(), callOp.arity(), callOp.rResult(), op.loc());
+                        ct.call(this, t, callOp.rArgs(), callOp.arity(), callOp.rResult(), op.loc());
                     } else {
                         throw new EvalError("Call not supported: " + t.dump(this), op.loc());
                     }
@@ -317,8 +316,10 @@ public final class VM {
     public Integer findRead(final int rTarget, final int startPc, final Set<Integer> skip) {
         final var r = new HashSet<Integer>();
         final var w = new HashSet<Integer>();
+
         for (var pc = startPc; pc < ops.size();) {
-            if (skip.contains(pc)) { break; }
+            while (skip.contains(pc)) { pc++; }
+            if (pc == ops.size()) { break; }
             skip.add(pc);
             final var op = ops.get(pc);
             op.io(this, r, w);
@@ -329,10 +330,16 @@ public final class VM {
                 pc ++;
             } else {
                 switch (op.data()) {
-                    case codr7.jx.ops.Goto gotoOp: {
-                        final var result = findRead(rTarget, pc + 1, skip);
+                    case Branch branchOp: {
+                        final var result = findRead(rTarget, branchOp.elseStart().pc, skip);
                         if (result != null) { return result; }
-                        pc = gotoOp.target().pc;
+                        pc++;
+                        break;
+                    }
+                    case Goto gotoOp: {
+                        final var result = findRead(rTarget, gotoOp.target().pc, skip);
+                        if (result != null) { return result; }
+                        pc++;
                         break;
                     }
                     default:

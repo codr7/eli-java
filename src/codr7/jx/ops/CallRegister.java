@@ -33,7 +33,7 @@ public record CallRegister(int rTarget, int rArguments, int arity, int rResult) 
 
     public String toString(final VM vm) {
         return "rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
-                "rArguments: " + rArguments + " " +
+                "rArgs: " + rArguments + " " +
                 "arity: " + arity + " " +
                 "rResult: " + rResult + " (" + vm.registers.get(rResult).dump(vm) + ")";
     }

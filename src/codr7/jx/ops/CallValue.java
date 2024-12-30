@@ -5,9 +5,9 @@ import codr7.jx.libs.Core;
 
 import java.util.Set;
 
-public record CallValue(IValue target, int rArguments, int arity, int rResult) {
+public record CallValue(IValue target, int rArgs, int arity, int rResult) {
     public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        for (var i = 0; i < arity; i++) { read.add(rArguments+i); }
+        for (var i = 0; i < arity; i++) { read.add(rArgs + i); }
         write.add(rResult);
 
         if (target.type() == Core.methodType) {
@@ -27,7 +27,7 @@ public record CallValue(IValue target, int rArguments, int arity, int rResult) {
 
     public String toString(final VM vm) {
         return "target: " + target.dump(vm) + " " +
-                "rArguments: " + rArguments + " " +
+                "rArgs: " + rArgs + " " +
                 "arity: " + arity + " " +
                 "rResult: " + rResult + " (" + vm.registers.get(rResult).dump(vm) + ")";
     }
