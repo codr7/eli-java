@@ -44,10 +44,11 @@ public record UnusedPut() implements Compiler {
                         final var postRpc = vm.findRead(rTarget, 0, skip);
 
                         if (postRpc == null) {
-                            System.out.println("Removing: " + rpc + " " + rop.dump(vm) + " " + rop.loc());
+                            System.out.println("DELETE " + rpc + " " + rop.dump(vm) + " " + rop.loc());
                             vm.ops.set(rpc, Nop.make(rop.loc()));
-                            vm.ops.set(pc, Put.make(rTo, putOp.value(), op.loc()));
-                            System.out.println("Updated: " + pc + " " + vm.ops.get(pc).dump(vm) + " " + op.loc());
+                            final var uop = Put.make(rTo, putOp.value(), op.loc());
+                            vm.ops.set(pc, uop);
+                            System.out.println("UPDATE " + pc + " " + uop.dump(vm) + " " + uop.loc());
                         }
                     }
                 }

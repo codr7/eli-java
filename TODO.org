@@ -4,11 +4,11 @@ fib PT0.679725578S
 fact PT0.826501294S
 fib PT0.002453173S
 
-* backup/restore pc in eval(from/from, to)
-
 * add double copy compiler
 ** x->y, y->z without read
-** test.jx
+** test/bench
+
+* backup/restore pc in eval(from/from, to)
 
 * try matching data directly in eval loop
 ** benchmark

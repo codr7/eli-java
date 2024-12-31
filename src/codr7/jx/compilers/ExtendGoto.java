@@ -25,7 +25,7 @@ public record ExtendGoto() implements Compiler {
                     final var gop = vm.ops.get(tpc);
                     if (gop.code() == NOP) { tpc++; }
                     else if (gop.code() == GOTO) {
-                        System.out.println("Skipping: " + tpc + " " + gop.dump(vm) + " " + gop.loc());
+                        System.out.println("DELETE " + tpc + " " + gop.dump(vm) + " " + gop.loc());
                         vm.ops.set(tpc, Nop.make(op.loc()));
                         tpc = ((Goto) gop.data()).target().pc;
                         changed = true;
@@ -33,12 +33,13 @@ public record ExtendGoto() implements Compiler {
                 }
 
                 if (tpc == pc+1) {
-                    System.out.println("Skipping: " + pc + " " + op.dump(vm) + " " + op.loc());
+                    System.out.println("DELETE " + pc + " " + op.dump(vm) + " " + op.loc());
                     vm.ops.set(pc, Nop.make(op.loc()));
                     changed = true;
                 } else if (tpc != firstTarget.pc) {
-                    System.out.println("Extending: " + pc + " " + op.dump(vm) + " " + op.loc());
-                    vm.ops.set(pc, Goto.make(vm.label(tpc), op.loc()));
+                    final var uop = Goto.make(vm.label(tpc), op.loc());
+                    vm.ops.set(pc, uop);
+                    System.out.println("UPDATE " + pc + " " + uop.dump(vm) + " " + uop.loc());
                     changed = true;
                 }
             }
