@@ -19,10 +19,41 @@ public record UnusedCopy() implements Compiler {
             final var op = vm.ops.get(pc);
 
             if (op.code() == COPY) {
-                if (vm.findRead(((Copy) op.data()).rTo(), pc + 1, new HashSet<>(pc)) == null) {
-                    System.out.println("DELETE " + pc + " " + op.dump(vm) + " " + op.loc());
+                final var cop = ((Copy) op.data());
+                final var skip = new HashSet<Integer>();
+                skip.add(pc);
+                final var rpc = vm.findRead(cop.rTo(), pc+1, skip);
+
+                if (rpc == null) {
                     vm.ops.set(pc, Nop.make(op.loc()));
+                    System.out.println("DELETE " + pc + " " + op.dump(vm) + " " + op.loc());
                     changed = true;
+                } else {
+                    final var rop = vm.ops.get(rpc);
+
+                    if (rop.code() == COPY) {
+                        final var cop2 = ((Copy) rop.data());
+                        skip.clear();
+                        skip.add(pc);
+                        skip.add(rpc);
+
+                        if (vm.findRead(cop.rTo(), rpc+1, skip) == null) {
+                            if (cop2.rTo() == cop.rFrom()) {
+                                vm.ops.set(pc, Nop.make(rop.loc()));
+                                System.out.println("DELETE " + pc + " " + op.dump(vm) + " " + op.loc());
+                                vm.ops.set(rpc, Nop.make(rop.loc()));
+                                System.out.println("DELETE " + rpc + " " + rop.dump(vm) + " " + rop.loc());
+                                changed = true;
+                            } else {
+                                /*final var uop = Copy.make(cop.rFrom(), ((Copy) rop.data()).rTo(), op.loc());
+                                vm.ops.set(pc, uop);
+                                System.out.println("!UPDATE " + pc + " " + uop.dump(vm) + " " + uop.loc());
+                                vm.ops.set(rpc, Nop.make(rop.loc()));
+                                System.out.println("!DELETE " + rpc + " " + rop.dump(vm) + " " + rop.loc());
+                                changed = true;*/
+                            }
+                        }
+                    }
                 }
             }
         }

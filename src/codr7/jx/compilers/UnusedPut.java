@@ -28,8 +28,8 @@ public record UnusedPut() implements Compiler {
                 final var rpc = vm.findRead(rTarget, pc+1, skip);
 
                 if (rpc == null) {
-                    System.out.println("Removing: " + pc + " " + op.dump(vm) + " " + op.loc());
                     vm.ops.set(pc, Nop.make(op.loc()));
+                    System.out.println("DELETE " + pc + " " + op.dump(vm) + " " + op.loc());
                     changed = true;
                 } else {
                     final var rop = vm.ops.get(rpc);

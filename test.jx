@@ -1,2 +1,5 @@
 (^fib [n a b] Int
+    (say n " " a " " b)
     (if (> n 1) (recall (dec n) b (+ a b)) (if (is n 0) a b)))
+
+(say (fib 10 0 1))
