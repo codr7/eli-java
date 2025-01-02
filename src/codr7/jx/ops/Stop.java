@@ -2,10 +2,11 @@ package codr7.jx.ops;
 
 import codr7.jx.Loc;
 import codr7.jx.Op;
-import codr7.jx.OpCode;
+import codr7.jx.VM;
 
-public record Stop() {
-    public static Op make(final Loc loc) {
-        return new Op(OpCode.STOP, null, loc);
-    }
+import java.util.Set;
+
+public record Stop() implements Op {
+    @Override public String dump(VM vm) { return "STOP"; }
+    @Override public void io(VM vm, Set<Integer> read, Set<Integer> write) {}
 }

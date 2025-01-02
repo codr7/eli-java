@@ -38,10 +38,10 @@ public record Method(String id,
                         }
 
                         for (var i = 0; i < recallArgs.length; i++) {
-                            _vm.emit(Copy.make(rRecallArgs+i, rArgs+i, loc));
+                            _vm.emit(new Copy(rRecallArgs+i, rArgs+i, loc));
                         }
 
-                        _vm.emit(Goto.make(start, _loc));
+                        _vm.emit(new Goto(start, _loc));
                     });
 
             vm.emit(new ArrayDeque<>(Arrays.asList(body)), rResult);

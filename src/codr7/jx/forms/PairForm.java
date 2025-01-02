@@ -20,7 +20,7 @@ public final class PairForm extends BaseForm {
             final var rLeft = vm.alloc(1);
             left.emit(vm, rLeft);
             right.emit(vm, rResult);
-            vm.emit(Zip.make(rLeft, rResult, rResult, loc()));
+            vm.emit(new Zip(rLeft, rResult, rResult, loc()));
         } else {
             v.emit(vm, rResult, loc());
         }

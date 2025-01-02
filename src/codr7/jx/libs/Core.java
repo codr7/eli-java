@@ -80,7 +80,7 @@ public class Core extends Lib {
                     }
 
                     final var rArgs = vm.alloc(margs.size());
-                    final var skipPc = vm.emit(Nop.make(loc));
+                    final var skipPc = vm.emit(new Nop());
                     final var m = new Method(
                             mid,
                             margs.toArray(new Arg[0]), rArgs,
@@ -90,7 +90,7 @@ public class Core extends Lib {
                             vm.label(vm.emitPc()), vm.label(-1));
                     m.emitBody(vm, rResult, loc);
                     m.end().pc = vm.emitPc();
-                    vm.ops.set(skipPc, Goto.make(m.end(), loc));
+                    vm.ops.set(skipPc, new Goto(m.end(), loc));
                     vm.currentLib.bind(m);
                 });
 
@@ -165,15 +165,15 @@ public class Core extends Lib {
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var reps = args.removeFirst().eval(vm).cast(intType);
-                    final var benchPc = vm.emit(Nop.make(loc));
+                    final var benchPc = vm.emit(new Nop());
                     final var rIter = vm.alloc(1);
-                    vm.emit(Put.make(rIter, new Value<>(iterType, new IntRange(0, reps, 1)), loc));
+                    vm.emit(new Put(rIter, new Value<>(iterType, new IntRange(0, reps, 1)), loc));
                     final var bodyEnd = vm.label(-1);
-                    final var iterPc = vm.emit(Next.make(rIter, -1, bodyEnd, loc));
+                    final var iterPc = vm.emit(new Next(rIter, -1, bodyEnd, loc));
                     vm.emit(args, rResult);
-                    vm.emit(Goto.make(vm.label(iterPc), loc));
+                    vm.emit(new Goto(vm.label(iterPc), loc));
                     bodyEnd.pc = vm.emitPc();
-                    vm.ops.set(benchPc, Bench.make(vm.label(), rResult, loc));
+                    vm.ops.set(benchPc, new Bench(vm.label(), rResult, loc));
                 });
 
         bindMacro("check", new Arg[]{new Arg("expected"), new Arg("body*")}, null,
@@ -195,7 +195,7 @@ public class Core extends Lib {
 
                         expected.emit(vm, rValues);
                         vm.emit(actual, rValues + 1);
-                        vm.emit(Check.make(rValues, location));
+                        vm.emit(new Check(rValues, location));
                     });
                 });
 
@@ -222,8 +222,8 @@ public class Core extends Lib {
                         delta = dv.cast(intType);
                     }
 
-                    vm.emit(Dec.make(rValue, delta, loc));
-                    if (rResult != rValue) { vm.emit(Copy.make(rValue, rResult, loc)); }
+                    vm.emit(new Dec(rValue, delta, loc));
+                    if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
                 });
 
         bindMacro("do", new Arg[]{new Arg("body*")}, null,
@@ -236,12 +236,12 @@ public class Core extends Lib {
         bindMacro("if", new Arg[]{new Arg("cond"), new Arg("left"), new Arg("right")}, null,
                 (vm, args, rResult, loc) -> {
                     args[0].emit(vm, rResult);
-                    final var branchPc = vm.emit(Nop.make(loc));
+                    final var branchPc = vm.emit(new Nop());
                     args[1].emit(vm, rResult);
-                    final var skipElsePc = vm.emit(Nop.make(loc));
-                    vm.ops.set(branchPc, Branch.make(rResult, vm.label(), loc));
+                    final var skipElsePc = vm.emit(new Nop());
+                    vm.ops.set(branchPc, new Branch(rResult, vm.label(), loc));
                     args[2].emit(vm, rResult);
-                    vm.ops.set(skipElsePc, Goto.make(vm.label(), loc));
+                    vm.ops.set(skipElsePc, new Goto(vm.label(), loc));
                 });
 
         bindMethod("is", new Arg[]{new Arg("args*")}, null,

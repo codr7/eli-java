@@ -18,9 +18,9 @@ public interface IForm {
         if (t == null) {
             final var rTarget = vm.alloc(1);
             emit(vm, rTarget);
-            vm.emit(CallRegister.make(rTarget, rParams, arity, rResult, loc()));
+            vm.emit(new CallRegister(rTarget, rParams, arity, rResult, loc()));
         } else {
-            vm.emit(CallValue.make(t, rParams, arity, rResult, loc()));
+            vm.emit(new CallValue(t, rParams, arity, rResult, loc()));
         }
     }
 
@@ -28,10 +28,10 @@ public interface IForm {
         final var v = value(vm);
         if (v != null) { return v; }
         final var rResult = vm.alloc(1);
-        final var skipPc = vm.emit(Nop.make(loc()));
+        final var skipPc = vm.emit(new Nop());
         final var startPc = vm.emitPc();
         emit(vm, rResult);
-        vm.ops.set(skipPc, Goto.make(vm.label(), loc()));
+        vm.ops.set(skipPc, new Goto(vm.label(), loc()));
         vm.eval(startPc);
         return vm.registers.get(rResult);
     }

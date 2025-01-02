@@ -27,6 +27,6 @@ public class JMethodType extends BaseType<JMethod> implements CallTrait {
         final var arity = body.length - 1;
         final var rArgs = vm.alloc(arity);
         for (var i = 0; i < arity; i++) { body[i+1].emit(vm, rArgs + i); }
-        vm.emit(CallValue.make(target, rArgs, arity, rResult, loc));
+        vm.emit(new CallValue(target, rArgs, arity, rResult, loc));
     }
 }

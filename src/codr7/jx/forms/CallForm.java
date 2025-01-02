@@ -38,8 +38,8 @@ public class CallForm extends BaseForm {
         var t = tf.value(vm);
         if (t == null) { throw new EmitError("Unknown target: " + tf, loc()); }
         if (t.type() instanceof CallTrait ct) { ct.emitCall(vm, t, body, rResult, loc()); }
-        if (getLeft) { vm.emit(Left.make(rResult, rResult, tf.loc())); }
-        else for (; rightCount > 0; rightCount--) { vm.emit(Right.make(rResult, rResult, tf.loc())); }
+        if (getLeft) { vm.emit(new Left(rResult, rResult, tf.loc())); }
+        else for (; rightCount > 0; rightCount--) { vm.emit(new Right(rResult, rResult, tf.loc())); }
     }
 
     @Override public String dump(VM vm) {

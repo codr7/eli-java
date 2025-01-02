@@ -17,8 +17,6 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.*;
 
-import static codr7.jx.OpCode.*;
-
 public final class VM {
     public final static int VERSION = 1;
 
@@ -85,7 +83,7 @@ public final class VM {
         for (var i = startPc; i < ops.size();) {
             final var op = ops.get(i);
 
-            if (op.code() == NOP) {
+            if (op instanceof Nop) {
                 ops.remove(i);
 
                 for (final var l: labels) {
@@ -138,11 +136,7 @@ public final class VM {
 
     public void eval(final int fromPc) {
         final var lop = ops.getLast();
-        var stopPc = -1;
-        if (lop.code() != STOP) {
-            stopPc = emit(Stop.make(lop.loc()));
-        }
-
+        var stopPc = (lop instanceof Stop) ? ops.size()-1 : emit(new Stop());
         final var prevPc = pc;
         pc = fromPc;
 
@@ -150,7 +144,7 @@ public final class VM {
             eval();
         } finally {
             if (stopPc != -1) {
-                ops.set(stopPc, Nop.make(ops.get(stopPc).loc()));
+                ops.set(stopPc, new Nop());
             }
 
             pc = prevPc;
@@ -159,7 +153,7 @@ public final class VM {
 
     public void eval(final int fromPc, final int toPc) {
         var prevOp = ops.get(toPc);
-        ops.set(toPc, Stop.make(prevOp.loc()));
+        ops.set(toPc, new Stop());
         final var prevPc = pc;
         pc = fromPc;
 
@@ -172,68 +166,60 @@ public final class VM {
     }
 
     public void eval(final String in, final int rResult, final Loc loc) {
-        final var skipPc = emit(Nop.make(loc));
+        final var skipPc = emit(new Nop());
         final var startPc = emit(read(in, loc), rResult);
-        ops.set(skipPc, codr7.jx.ops.Goto.make(label(), loc));
+        ops.set(skipPc, new Goto(label(), loc));
         eval(startPc);
     }
 
     public void eval() {
         for (; ; ) {
-            final Op op = ops.get(pc);
-
-            switch (op.code()) {
-                case ADD_ITEM: {
-                    final var addOp = (AddItem) op.data();
-                    final var t = registers.get(addOp.rTarget()).cast(Core.listType);
-                    t.add(registers.get(addOp.rItem()));
+            switch (ops.get(pc)) {
+                case AddItem op: {
+                    final var t = registers.get(op.rTarget()).cast(Core.listType);
+                    t.add(registers.get(op.rItem()));
                     pc++;
                     break;
                 }
-                case BENCH: {
-                    final var benchOp = (Bench) op.data();
+                case Bench op: {
                     final var started = System.nanoTime();
-                    eval(pc+1, benchOp.bodyEnd().pc);
+                    eval(pc+1, op.bodyEnd().pc);
                     final var elapsed = Duration.ofNanos(System.nanoTime() - started);
-                    registers.set(benchOp.rResult(), new Value<>(Core.timeType, elapsed));
-                    pc = benchOp.bodyEnd().pc;
+                    registers.set(op.rResult(), new Value<>(Core.timeType, elapsed));
+                    pc = op.bodyEnd().pc;
                     break;
                 }
-                case BRANCH: {
-                    final var branchOp = (Branch) op.data();
-                    pc = registers.get(branchOp.rCondition()).toBit(this) ? pc + 1 : branchOp.elseStart().pc;
+                case Branch op: {
+                    pc = registers.get(op.rCondition()).toBit(this) ? pc + 1 : op.elseStart().pc;
                     break;
                 }
-                case CALL_REGISTER: {
-                    final var callOp = (CallRegister) op.data();
-                    final var t = registers.get(callOp.rTarget());
+                case CallRegister op: {
+                    final var t = registers.get(op.rTarget());
 
                     if (t.type() instanceof CallTrait ct) {
                         pc++;
-                        ct.call(this, t, callOp.rArguments(), callOp.arity(), callOp.rResult(), op.loc());
+                        ct.call(this, t, op.rArguments(), op.arity(), op.rResult(), op.loc());
                     } else {
                         throw new EvalError("Call not supported: " + t.dump(this), op.loc());
                     }
 
                     break;
                 }
-                case CALL_VALUE: {
-                    final var callOp = (CallValue) op.data();
-                    final var t = callOp.target();
+                case CallValue op: {
+                    final var t = op.target();
 
                     if (t.type() instanceof CallTrait ct) {
                         pc++;
-                        ct.call(this, t, callOp.rArgs(), callOp.arity(), callOp.rResult(), op.loc());
+                        ct.call(this, t, op.rArgs(), op.arity(), op.rResult(), op.loc());
                     } else {
                         throw new EvalError("Call not supported: " + t.dump(this), op.loc());
                     }
 
                     break;
                 }
-                case CHECK: {
-                    final var checkOp = (Check) op.data();
-                    final var expected = registers.get(checkOp.rValues());
-                    final var actual = registers.get(checkOp.rValues() + 1);
+                case Check op: {
+                    final var expected = registers.get(op.rValues());
+                    final var actual = registers.get(op.rValues() + 1);
 
                     if (!expected.equals(actual)) {
                         throw new EvalError("Check failed; expected " +
@@ -244,78 +230,71 @@ public final class VM {
                     pc++;
                     break;
                 }
-                case COPY: {
-                    final var copyOp = (Copy) op.data();
-                    registers.set(copyOp.rTo(), registers.get(copyOp.rFrom()));
+                case Copy op: {
+                    registers.set(op.rTo(), registers.get(op.rFrom()));
                     pc++;
                     break;
                 }
-                case CREATE_LIST: {
-                    final var createOp = (CreateList) op.data();
-                    registers.set(createOp.rTarget(), new Value<>(Core.listType, new ArrayList<>()));
+                case CreateList op: {
+                    registers.set(op.rTarget(), new Value<>(Core.listType, new ArrayList<>()));
                     pc++;
                     break;
                 }
-                case DEC: {
-                    final var decOp = (Dec) op.data();
-                    final var v = registers.get(decOp.rTarget()).cast(Core.intType);
+                case Dec op: {
+                    final var v = registers.get(op.rTarget()).cast(Core.intType);
                     final var nv = new Value<>(Core.intType, v - 1);
-                    registers.set(decOp.rTarget(), nv);
+                    registers.set(op.rTarget(), nv);
                     pc++;
                     break;
                 }
-                case GOTO: {
-                    pc = ((codr7.jx.ops.Goto) op.data()).target().pc;
+                case Goto op: {
+                    pc = op.target().pc;
                     break;
                 }
-                case LEFT: {
-                    final var leftOp = (Left) op.data();
-                    registers.set(leftOp.rResult(), registers.get(leftOp.rPair()).cast(Core.pairType).left());
+                case Left op: {
+                    registers.set(op.rResult(), registers.get(op.rPair()).cast(Core.pairType).left());
                     pc++;
                     break;
                 }
-                case NEXT: {
-                    final var nextOp = (Next) op.data();
-                    final var iter = registers.get(nextOp.rIter()).cast(Core.iterType);
-                    pc = (iter.next(this, nextOp.rItem(), op.loc()))
+                case Next op: {
+                    final var iter = registers.get(op.rIter()).cast(Core.iterType);
+                    pc = (iter.next(this, op.rItem(), op.loc()))
                         ? pc + 1
-                        : nextOp.bodyEnd().pc;
+                        : op.bodyEnd().pc;
                     break;
                 }
-                case NOP: {
+                case Nop _: {
                     pc++;
                     break;
                 }
-                case PUT: {
-                    final var putOp = (Put) op.data();
-                    registers.set(putOp.rTarget(), putOp.value().dup(this));
+                case Put op: {
+                    registers.set(op.rTarget(), op.value().dup(this));
                     pc++;
                     break;
                 }
-                case RIGHT: {
-                    final var rightOp = (Right) op.data();
-                    registers.set(rightOp.rResult(), registers.get(rightOp.rPair()).cast(Core.pairType).left());
+                case Right op: {
+                    registers.set(op.rResult(), registers.get(op.rPair()).cast(Core.pairType).left());
                     pc++;
                     break;
                 }
-                case SET_PATH: {
-                    final var setOp = (SetPath) op.data();
-                    path = setOp.path();
+                case SetPath op: {
+                    path = op.path();
                     pc++;
                     break;
                 }
-                case STOP: {
+                case Stop _: {
                     pc++;
                     return;
                 }
-                case ZIP: {
-                    final var zipOp = (Zip) op.data();
-                    final var left = registers.get(zipOp.rLeft());
-                    final var right = registers.get(zipOp.rRight());
-                    registers.set(zipOp.rResult(), new Value<>(Core.pairType, new Pair(left, right)));
+                case Zip op: {
+                    final var left = registers.get(op.rLeft());
+                    final var right = registers.get(op.rRight());
+                    registers.set(op.rResult(), new Value<>(Core.pairType, new Pair(left, right)));
                     pc++;
                     break;
                 }
+                case Op op:
+                    throw new RuntimeException("Invalid op: " + op.dump(this));
             }
         }
     }
@@ -333,10 +312,7 @@ public final class VM {
             if (r.contains(rTarget)) { return pc; }
             if (w.contains(rTarget)) { break; }
 
-            if (op.data() == null) {
-                pc ++;
-            } else {
-                switch (op.data()) {
+                switch (op) {
                     case Branch branchOp: {
                         final var result = findRead(rTarget, branchOp.elseStart().pc, skip);
                         if (result != null) { return result; }
@@ -354,7 +330,6 @@ public final class VM {
                         break;
                 }
             }
-        }
 
         return null;
     }
@@ -387,10 +362,10 @@ public final class VM {
             throw new RuntimeException(e);
         }
 
-        emit(SetPath.make(p.getParent(), location));
+        emit(new SetPath(p.getParent(), location));
         final var startPc = emitPc();
         emit(out, rResult);
-        emit(SetPath.make(prevPath, location));
+        emit(new SetPath(prevPath, location));
         compile(startPc);
     }
 

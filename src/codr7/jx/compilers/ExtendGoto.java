@@ -5,9 +5,6 @@ import codr7.jx.VM;
 import codr7.jx.ops.Goto;
 import codr7.jx.ops.Nop;
 
-import static codr7.jx.OpCode.GOTO;
-import static codr7.jx.OpCode.NOP;
-
 public record ExtendGoto() implements Compiler {
     public static final ExtendGoto instance = new ExtendGoto();
 
@@ -17,29 +14,29 @@ public record ExtendGoto() implements Compiler {
         for (var pc = startPc; pc < vm.ops.size(); pc++) {
             final var op = vm.ops.get(pc);
 
-            if (op.code() == GOTO) {
-                var firstTarget = ((Goto)op.data()).target();
+            if (op instanceof Goto gop) {
+                var firstTarget = gop.target();
                 var tpc = firstTarget.pc;
 
                 while (true) {
-                    final var gop = vm.ops.get(tpc);
-                    if (gop.code() == NOP) { tpc++; }
-                    else if (gop.code() == GOTO) {
-                        System.out.println("DELETE " + tpc + " " + gop.dump(vm) + " " + gop.loc());
-                        vm.ops.set(tpc, Nop.make(op.loc()));
-                        tpc = ((Goto) gop.data()).target().pc;
+                    final var op2 = vm.ops.get(tpc);
+                    if (op2 instanceof Nop) { tpc++; }
+                    else if (op2 instanceof Goto gop2) {
+                        System.out.println("DELETE " + tpc + " " + op2.dump(vm));
+                        vm.ops.set(tpc, new Nop());
+                        tpc = gop2.target().pc;
                         changed = true;
                     } else { break; }
                 }
 
                 if (tpc == pc+1) {
-                    System.out.println("DELETE " + pc + " " + op.dump(vm) + " " + op.loc());
-                    vm.ops.set(pc, Nop.make(op.loc()));
+                    System.out.println("DELETE " + pc + " " + op.dump(vm));
+                    vm.ops.set(pc, new Nop());
                     changed = true;
                 } else if (tpc != firstTarget.pc) {
-                    final var uop = Goto.make(vm.label(tpc), op.loc());
+                    final var uop = new Goto(vm.label(tpc), gop.loc());
                     vm.ops.set(pc, uop);
-                    System.out.println("UPDATE " + pc + " " + uop.dump(vm) + " " + uop.loc());
+                    System.out.println("UPDATE " + pc + " " + uop.dump(vm));
                     changed = true;
                 }
             }

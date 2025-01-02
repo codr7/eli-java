@@ -21,12 +21,12 @@ public class ListForm extends BaseForm {
         final var v = value(vm);
 
         if (v == null) {
-            vm.emit(CreateList.make(rResult, loc()));
+            vm.emit(new CreateList(rResult, loc()));
             final var rItem = vm.alloc(1);
 
             for (final var it: items) {
                 it.emit(vm, rItem);
-                vm.emit(AddItem.make(rResult, rItem, it.loc()));
+                vm.emit(new AddItem(rResult, rItem, it.loc()));
             }
         } else {
             v.emit(vm, rResult, loc());

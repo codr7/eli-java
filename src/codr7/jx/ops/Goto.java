@@ -2,10 +2,9 @@ package codr7.jx.ops;
 
 import codr7.jx.*;
 
-public record Goto(Label target) {
-    public static Op make(final Label target, final Loc loc) {
-        return new Op(OpCode.GOTO, new Goto(target), loc);
-    }
+import java.util.Set;
 
-    public String toString(final VM vm) { return "target: " + target; }
+public record Goto(Label target, Loc loc) implements Op {
+    @Override public String dump(final VM vm) { return "GOTO target: " + target; }
+    @Override public void io(VM vm, Set<Integer> read, Set<Integer> write) {}
 }
