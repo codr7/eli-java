@@ -5,8 +5,6 @@ import codr7.jx.VM;
 import codr7.jx.ops.Copy;
 import codr7.jx.ops.Nop;
 
-import java.util.HashSet;
-
 import static codr7.jx.OpCode.COPY;
 
 public record UnusedCopy() implements Compiler {
@@ -20,9 +18,7 @@ public record UnusedCopy() implements Compiler {
 
             if (op.code() == COPY) {
                 final var cop = ((Copy) op.data());
-                final var skip = new HashSet<Integer>();
-                skip.add(pc);
-                final var rpc = vm.findRead(cop.rTo(), pc+1, skip);
+                final var rpc = vm.findRead(cop.rTo(), pc+1, pc);
 
                 if (rpc == null) {
                     vm.ops.set(pc, Nop.make(op.loc()));
@@ -33,11 +29,9 @@ public record UnusedCopy() implements Compiler {
 
                     if (rop.code() == COPY) {
                         final var cop2 = ((Copy) rop.data());
-                        skip.clear();
-                        skip.add(pc);
-                        skip.add(rpc);
 
-                        if (vm.findRead(cop.rTo(), rpc+1, skip) == null) {
+                        if (vm.findRead(cop.rTo(), rpc+1, pc, rpc) == null &&
+                            vm.findRead(cop2.rTo(), pc+1, pc, rpc) == null) {
                             if (cop2.rTo() == cop.rFrom()) {
                                 vm.ops.set(pc, Nop.make(rop.loc()));
                                 System.out.println("DELETE " + pc + " " + op.dump(vm) + " " + op.loc());
@@ -45,12 +39,12 @@ public record UnusedCopy() implements Compiler {
                                 System.out.println("DELETE " + rpc + " " + rop.dump(vm) + " " + rop.loc());
                                 changed = true;
                             } else {
-                                /*final var uop = Copy.make(cop.rFrom(), ((Copy) rop.data()).rTo(), op.loc());
+                                final var uop = Copy.make(cop.rFrom(), ((Copy) rop.data()).rTo(), op.loc());
                                 vm.ops.set(pc, uop);
-                                System.out.println("!UPDATE " + pc + " " + uop.dump(vm) + " " + uop.loc());
+                                System.out.println("UPDATE " + pc + " " + uop.dump(vm) + " " + uop.loc());
                                 vm.ops.set(rpc, Nop.make(rop.loc()));
-                                System.out.println("!DELETE " + rpc + " " + rop.dump(vm) + " " + rop.loc());
-                                changed = true;*/
+                                System.out.println("DELETE " + rpc + " " + rop.dump(vm) + " " + rop.loc());
+                                changed = true;
                             }
                         }
                     }

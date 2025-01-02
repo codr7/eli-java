@@ -313,7 +313,7 @@ public final class VM {
         }
     }
 
-    public Integer findRead(final int rTarget, final int startPc, final Set<Integer> skip) {
+    public Integer findRead(final int rTarget, final int startPc, final HashSet<Integer> skip) {
         final var r = new HashSet<Integer>();
         final var w = new HashSet<Integer>();
 
@@ -350,6 +350,12 @@ public final class VM {
         }
 
         return null;
+    }
+
+    public Integer findRead(final int rTarget, final int startPc, final int...skip) {
+        final var ss = new HashSet<Integer>();
+        for (final var s: skip) { ss.add(s); }
+        return findRead(rTarget, startPc, ss);
     }
 
     public Label label(final int pc) {
