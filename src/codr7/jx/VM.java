@@ -142,25 +142,32 @@ public final class VM {
         if (lop.code() != STOP) {
             stopPc = emit(Stop.make(lop.loc()));
         }
+
+        final var prevPc = pc;
         pc = fromPc;
+
         try {
             eval();
         } finally {
             if (stopPc != -1) {
                 ops.set(stopPc, Nop.make(ops.get(stopPc).loc()));
             }
+
+            pc = prevPc;
         }
     }
 
     public void eval(final int fromPc, final int toPc) {
         var prevOp = ops.get(toPc);
         ops.set(toPc, Stop.make(prevOp.loc()));
+        final var prevPc = pc;
         pc = fromPc;
 
         try {
             eval();
         } finally {
             ops.set(toPc, prevOp);
+            pc = prevPc;
         }
     }
 
