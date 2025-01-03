@@ -25,22 +25,20 @@ public record UnusedCopy() implements Compiler {
                     final var rop = vm.ops.get(rpc);
 
                     if (rop instanceof Copy cop2) {
-                        if (vm.findRead(cop.rTo(), rpc+1, pc, rpc) == null &&
+                        if (cop2.rTo() == cop.rFrom()) {
+                            vm.ops.set(pc, new Nop());
+                            System.out.println("DELETE " + pc + " " + op.dump(vm));
+                            vm.ops.set(rpc, new Nop());
+                            System.out.println("DELETE " + rpc + " " + rop.dump(vm));
+                            changed = true;
+                        } else  if (vm.findRead(cop.rTo(), rpc+1, pc, rpc) == null &&
                             vm.findRead(cop2.rTo(), pc+1, pc, rpc) == null) {
-                            if (cop2.rTo() == cop.rFrom()) {
-                                vm.ops.set(pc, new Nop());
-                                System.out.println("DELETE " + pc + " " + op.dump(vm));
-                                vm.ops.set(rpc, new Nop());
-                                System.out.println("DELETE " + rpc + " " + rop.dump(vm));
-                                changed = true;
-                            } else {
-                                final var uop = new Copy(cop.rFrom(), cop2.rTo(), cop.loc());
-                                vm.ops.set(pc, uop);
-                                System.out.println("UPDATE " + pc + " " + uop.dump(vm));
-                                vm.ops.set(rpc, new Nop());
-                                System.out.println("DELETE " + rpc + " " + rop.dump(vm));
-                                changed = true;
-                            }
+                            final var uop = new Copy(cop.rFrom(), cop2.rTo(), cop.loc());
+                            vm.ops.set(pc, uop);
+                            System.out.println("UPDATE " + pc + " " + uop.dump(vm));
+                            vm.ops.set(rpc, new Nop());
+                            System.out.println("DELETE " + rpc + " " + rop.dump(vm));
+                            changed = true;
                         }
                     }
                 }

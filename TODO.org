@@ -1,8 +1,5 @@
-fact PT0.910086461S
-fib PT0.679725578S
-
-fact PT0.826501294S
-fib PT0.002453173S
+fact PT0.875689072S
+fib PT0.000512353S
 
 * skip binding nil method args
 

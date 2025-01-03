@@ -1,5 +1,4 @@
-(^fib [n a b] Int
-    (say n " " a " " b)
-    (if (> n 1) (recall (dec n) b (+ a b)) (if (is n 0) a b)))
+(^fact [acc n] Int
+  (if (is n 1) acc (recall (* n acc) (dec n))))
 
-(say (fib 10 0 1))
+(say "fact " (bench 10000 (fact 1 900)))
