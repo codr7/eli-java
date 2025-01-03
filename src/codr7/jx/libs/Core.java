@@ -30,6 +30,7 @@ public class Core extends Lib {
     public static final PairType pairType = new PairType("Pair");
     public static final RangeType rangeType = new RangeType("Range");
     public static final StringType stringType = new StringType("String");
+    public static final SymbolType symbolType = new SymbolType("Symbol");
     public static final TimeType timeType = new TimeType("Time");
 
     public static final IValue NIL = new Value<>(nilType, null);
@@ -54,6 +55,7 @@ public class Core extends Lib {
         bind(pairType);
         bind(rangeType);
         bind(stringType);
+        bind(symbolType);
         bind(timeType);
 
         bind("_", NIL);

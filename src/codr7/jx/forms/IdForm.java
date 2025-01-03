@@ -27,6 +27,8 @@ public class IdForm extends BaseForm {
         this.id = id;
     }
 
+    @Override public String dump(final VM vm) { return id; }
+
     @Override public void emit(final VM vm, final int rResult) {
         get(vm.currentLib, id, loc()).emit(vm, rResult, loc());
     }
@@ -37,6 +39,6 @@ public class IdForm extends BaseForm {
     }
 
     @Override public boolean isNil() { return id.equals("_"); }
-    @Override public String dump(final VM vm) { return id; }
+    @Override public IValue quote(final VM vm, final Loc loc) { return new Value<>(Core.symbolType, id); }
     @Override public IValue value(final VM vm) { return get(vm.currentLib, id, loc()); }
 }
