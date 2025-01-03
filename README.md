@@ -24,7 +24,7 @@ fib 0.000284898S
 ```
 
 As to exactly what's going on with the Fibonacci benchmark, your guess is as good as mine.
-The optimized code produces the expected result, but runs quite a bit faster than I would have expected.
+The optimized code produces the expected result, but runs quite a bit faster than I could have wished for.
 
 ## Methods
 Methods may be defined using `^`.
