@@ -3,10 +3,7 @@ fib PT0.000512353S
 
 * skip binding nil method args
 
-* add return macro
-** emit gotos with common label
-
-* add gui tabs
+* add tabs
 ** add top panel
 ** Data / Chart
 
@@ -36,16 +33,10 @@ https://www.investing.com/crypto/bitcoin/historical-data
 ** table with records/chart
 
 * add load macro
-* add swap op
+* add swap macro
+** add swap op
 
 * add range method
 ** add RangeTrait
 ** create range
 ** optional max
-
-* add optional arg types
-** look for startsWith @
-** apply to all preceding args
-** allow @? for missing
-
-n a b @Int

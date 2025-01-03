@@ -22,6 +22,7 @@ public record Method(String id,
 
     public void emitBody(final VM vm, final int rResult, final Loc loc) {
         final var start = vm.label(vm.emitPc());
+        final var end = vm.label(-1);
 
         vm.doLib(lib, () -> {
             for (var i = 0; i < args.length; i++) {
@@ -30,21 +31,29 @@ public record Method(String id,
             }
 
             vm.currentLib.bindMacro("recall", args, null,
-                    (_vm, recallArgs, recallResult, _loc) -> {
-                        final var rRecallArgs = vm.alloc(recallArgs.length);
+                    (_vm, args, _rResult, _loc) -> {
+                        final var rArgs = vm.alloc(args.length);
 
-                        for (var i = 0; i < recallArgs.length; i++) {
-                            recallArgs[i].emit(vm, rRecallArgs + i);
+                        for (var i = 0; i < args.length; i++) {
+                            args[i].emit(vm, rArgs + i);
                         }
 
-                        for (var i = 0; i < recallArgs.length; i++) {
-                            _vm.emit(new Copy(rRecallArgs+i, rArgs+i, loc));
+                        for (var i = 0; i < args.length; i++) {
+                            _vm.emit(new Copy(rArgs+i, this.rArgs +i, loc));
                         }
 
                         _vm.emit(new Goto(start, _loc));
                     });
 
+            vm.currentLib.bindMacro("return", args, null,
+                    (_vm, args, _rResult, _loc) -> {
+                        _vm.emit( new ArrayDeque<>(Arrays.asList(args)), _rResult);
+                        _vm.emit(new Goto(end, _loc));
+                    });
+
             vm.emit(new ArrayDeque<>(Arrays.asList(body)), rResult);
         });
+
+        end.pc = vm.emitPc();
     }
 }
