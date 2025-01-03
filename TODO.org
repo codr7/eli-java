@@ -4,8 +4,7 @@ fib PT0.000512353S
 * skip binding nil method args
 
 * add return macro
-** emit nop and log pc in list
-** go through all & assign same goto when endpc is knowm
+** emit gotos with common label
 
 * add gui tabs
 ** add top panel
