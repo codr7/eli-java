@@ -1,6 +1,18 @@
 ## Intro
 `jx` is a custom Lisp interpreter implemented and designed to be easily embedded in Java.
 
+## REPL
+Launching the `.jar`-file without arguments starts a REPL.
+
+```
+$ java -jar jx.jar
+jx v1
+
+ 1 (say 'hello)
+ 2
+hello
+```
+
 ## Performance
 The core eval loop currently seems to run faster than Python3,
 especially once the byte code has been stripped of redundancies.
