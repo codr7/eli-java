@@ -1,9 +1,6 @@
 package codr7.jx.forms;
 
-import codr7.jx.BaseForm;
-import codr7.jx.IValue;
-import codr7.jx.Loc;
-import codr7.jx.VM;
+import codr7.jx.*;
 import codr7.jx.ops.Put;
 
 public class LiteralForm extends BaseForm {
@@ -18,7 +15,15 @@ public class LiteralForm extends BaseForm {
         vm.emit(new Put(rResult, value, loc()));
     }
 
-    @Override public String dump(final VM vm) { return value.dump(vm); }
+    @Override public boolean eq(final IForm other) {
+        if (other instanceof LiteralForm f) {
+            return f.value.eq(value);
+        }
 
+        return false;
+    }
+
+    @Override public String dump(final VM vm) { return value.dump(vm); }
+    @Override public IValue quote(final VM vm, final Loc loc) { return value; }
     @Override public IValue value(final VM vm) { return value; }
 }

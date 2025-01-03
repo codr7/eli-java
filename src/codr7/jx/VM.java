@@ -41,6 +41,7 @@ public final class VM {
         readers.add(IntReader.instance);
         readers.add(IdReader.instance);
         readers.add(ListReader.instance);
+        readers.add(QuoteReader.instance);
         readers.add(StringReader.instance);
         infixReaders.add(PairReader.instance);
 
@@ -221,7 +222,7 @@ public final class VM {
                     final var expected = registers.get(op.rValues());
                     final var actual = registers.get(op.rValues() + 1);
 
-                    if (!expected.equals(actual)) {
+                    if (!expected.eq(actual)) {
                         throw new EvalError("Check failed; expected " +
                                 expected.dump(this) + ", actual: " + actual.dump(this),
                                 op.loc());

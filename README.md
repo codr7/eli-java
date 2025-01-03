@@ -67,6 +67,14 @@ Methods may be defined using `^`.
 35+7=42
 ```
 
+## Quoting
+Any expression may be quoted using `'`.
+
+```
+'[foo bar baz]
+```
+`['foo 'bar 'baz]`
+
 ## Testing
 `check` may be used to validate that a block of code produces the expected value.
 ```

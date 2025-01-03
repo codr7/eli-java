@@ -21,6 +21,9 @@
 (check 2
   (if F 1 2))
 
+(check ['foo 'bar 'baz]
+  '[foo bar baz])
+
 (check 42
   (^foo [] Int 42)
   (foo))

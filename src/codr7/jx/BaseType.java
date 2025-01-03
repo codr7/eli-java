@@ -27,12 +27,11 @@ public abstract class BaseType<T> implements IDataType<T> {
 
     @Override public String dump(VM vm, IValue value) { return value.cast(this).toString(); }
 
-    @Override public boolean equals(IValue left, IValue right) {
+    @Override public boolean eq(IValue left, IValue right) {
         return left.cast(this).equals(right.cast(this));
     }
 
     @Override final public String id() { return id; }
-
     @Override final public boolean is(IValue left, IValue right) { return left.cast(this) == right.cast(this); }
 }
 

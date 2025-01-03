@@ -5,6 +5,7 @@ import codr7.jx.libs.Core;
 import codr7.jx.ops.AddItem;
 import codr7.jx.ops.CreateList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -33,6 +34,20 @@ public class ListForm extends BaseForm {
         }
     }
 
+    @Override public boolean eq(final IForm other) {
+        if (other instanceof ListForm f) {
+            if (f.items.length != items.length) { return false; }
+
+            for (var i = 0; i < items.length; i++) {
+                if (!f.items[i].eq(items[i])) { return false; }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     @Override public String dump(VM vm) {
         final var result = new StringBuilder();
         result.append('[');
@@ -47,6 +62,12 @@ public class ListForm extends BaseForm {
     }
 
     public Stream<IValue> itemValues(VM vm) {  return Arrays.stream(items).map(it -> it.value(vm)); }
+
+    @Override public IValue quote(final VM vm, final Loc loc) {
+        final var result = new ArrayList<IValue>();
+        for (final var it: items) { result.add(it.quote(vm, loc)); }
+        return new Value<>(Core.listType, result);
+    }
 
     @Override public IValue value(VM vm) {
         final var vs = Arrays.stream(items).map(it -> it.value(vm));

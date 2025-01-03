@@ -23,13 +23,13 @@ public class ListType extends BaseType<List<IValue>> {
         return result.toString();
     }
 
-    @Override public boolean equals(IValue left, IValue right) {
+    @Override public boolean eq(IValue left, IValue right) {
         final var lv = left.cast(this);
         final var rv = right.cast(this);
         if (lv.size() != rv.size()) { return false; }
 
         for (var i = 0; i < lv.size(); i++) {
-            if (!lv.get(i).equals(rv.get(i))) { return false; }
+            if (!lv.get(i).eq(rv.get(i))) { return false; }
         }
 
         return true;

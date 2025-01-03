@@ -17,6 +17,7 @@ import java.util.Deque;
 public class Core extends Lib {
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
+    public static final FormType formType = new FormType("Form");
     public static final IntType intType = new IntType("Int");
     public static final IterType iterType = new IterType("Iter");
     public static final JMacroType jMacroType = new JMacroType("JMacro");
@@ -100,7 +101,7 @@ public class Core extends Lib {
                     var result = true;
 
                     for (var i = 1; i < args.length; i++) {
-                        if (!lhs.equals(args[i])) {
+                        if (!lhs.eq(args[i])) {
                             result = false;
                             break;
                         }

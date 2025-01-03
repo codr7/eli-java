@@ -1,6 +1,10 @@
 fact PT0.875689072S
 fib PT0.000512353S
 
+* add symbols
+** add symbol type
+** implement id quote
+
 * skip binding nil method args
 
 * add tabs

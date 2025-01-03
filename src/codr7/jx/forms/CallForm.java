@@ -55,5 +55,19 @@ public class CallForm extends BaseForm {
         return result.toString();
     }
 
+    @Override public boolean eq(final IForm other) {
+        if (other instanceof CallForm f) {
+            if (f.body.length != body.length) { return false; }
+
+            for (var i = 0; i < body.length; i++) {
+                if (!f.body[i].eq(body[i])) { return false; }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     @Override public IValue value(VM vm) { return null; }
 }

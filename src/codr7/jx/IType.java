@@ -10,7 +10,7 @@ public interface IType {
     default void emit(VM vm, IValue value, int rResult, Loc loc) {
         vm.emit(new Put(rResult, value, loc));
     }
-    boolean equals(IValue left, IValue right);
+    boolean eq(IValue left, IValue right);
     String id();
     boolean is(IValue left, IValue right);
     default boolean toBit(VM vm, IValue value) { return true; }

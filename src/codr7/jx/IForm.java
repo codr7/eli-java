@@ -1,6 +1,7 @@
 package codr7.jx;
 
 import codr7.jx.errors.EmitError;
+import codr7.jx.forms.QuoteForm;
 import codr7.jx.libs.Core;
 import codr7.jx.ops.CallRegister;
 import codr7.jx.ops.CallValue;
@@ -23,6 +24,8 @@ public interface IForm {
             vm.emit(new CallValue(t, rParams, arity, rResult, loc()));
         }
     }
+
+    boolean eq(IForm other);
 
     default IValue eval(final VM vm) {
         final var v = value(vm);
@@ -48,5 +51,10 @@ public interface IForm {
     default boolean isNil() { return false; }
     Loc loc();
     String dump(VM vm);
+
+    default IValue quote(final VM vm, final Loc loc) {
+        return new Value<>(Core.formType, new QuoteForm(this, loc));
+    }
+
     IValue value(VM vm);
 }
