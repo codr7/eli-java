@@ -2,7 +2,7 @@
 `jx` is a custom Lisp interpreter implemented and designed to be easily embedded in Java.
 
 ## Performance
-The core eval loop currently seems to run significantly faster than Python3,
+The core eval loop currently seems to run faster than Python3,
 especially once the byte code has been stripped of redundancies.
 
 ### python
@@ -19,12 +19,12 @@ fib 0.634149815
 $ java -jar jx.jar benchmarks/run.jx
 ```
 ```
-fact 0.893300046S
-fib 0.000284898S
+fact 0.777442805S
+fib 0.000486441S
 ```
 
 As to exactly what's going on with the Fibonacci benchmark, your guess is as good as mine.
-The optimized code produces the expected result, but runs quite a bit faster than I could have wished for.
+The optimized code produces the correct result, but runs quite a bit faster than I expected.
 
 ## Methods
 Methods may be defined using `^`.
