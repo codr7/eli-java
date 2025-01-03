@@ -38,6 +38,15 @@ fib 0.000486441S
 As to exactly what's going on with the Fibonacci benchmark, your guess is as good as mine.
 The optimized code produces the correct result, but runs quite a bit faster than I expected.
 
+## Bindings
+Values may be bound to identifiers at emit time using `var`.
+
+```
+(var foo 42)
+foo
+```
+`42`
+
 ## Methods
 Methods may be defined using `^`.
 
