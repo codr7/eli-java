@@ -64,7 +64,7 @@ Methods may be defined using `^`.
 ```
 (^fib [n a b] Int
   (if (> n 1) 
-    (recall (dec n) b (+ a b)) 
+    (recall (- n 1) b (+ a b)) 
     (if (is n 0) a b)))
 
 (fib 10 0 1)
