@@ -45,8 +45,9 @@ Methods may be defined using `^`.
 (^foo [x] Int 
   x)
   
-(foo)
+(foo 42)
 ```
+`42`
 
 ### Recursion
 `recall` may be used to jump to the start of the current method.
