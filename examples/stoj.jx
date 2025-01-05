@@ -1,3 +1,23 @@
-(var frame (gui/new-frame "stoj" 600:400))
+(var frame (gui/frame "stoj" 600:400))
+
+(var root-panel (gui/panel))
+(gui/add (gui/content frame) root-panel)
+(gui/box-layout root-panel)
+
+(var top-panel (gui/panel))
+(gui/add root-panel top-panel)
+
+(var bottom-panel (gui/panel))
+(gui/add root-panel bottom-panel)
+
+(var tabs (gui/tabs))
+(gui/add bottom-panel tabs)
+
+(var data-panel (gui/panel))
+(gui/add-tab tabs "Data" data-panel)
+
+(var chart-panel (gui/panel))
+(gui/add-tab tabs "Chart" chart-panel)
+
 (gui/pack frame)
 (gui/show frame)

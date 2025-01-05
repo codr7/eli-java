@@ -1,11 +1,15 @@
 fact PT0.777442805S
 fib PT0.000486441S
 
-* skip binding nil method args
+* add load button
 
-* add tabs
-** add top panel
-** Data / Chart
+* add record table
+
+* read examples/stoj.csv
+** https://opencsv.sourceforge.net/
+** https://www.investing.com/crypto/bitcoin/historical-data
+
+* skip binding nil method args
 
 * add gui/chart module
 ** https://www.jfree.org/jfreechart/
@@ -17,11 +21,6 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 * lambda?
 
-* read examples/stoj.csv
-https://opencsv.sourceforge.net/
-https://www.investing.com/crypto/bitcoin/historical-data
-** calculate open/high/low as percentage of price
-** log seq, series name, delta time, percentages & change
 
 * add stoj gui
 ** top panel for selection
@@ -29,8 +28,9 @@ https://www.investing.com/crypto/bitcoin/historical-data
 *** find first log for id > start
 *** find all other logs matching knobs != id
 *** match back in time if as far as possible
+*** calculate open/high/low as percentage of price
+**** log seq, series name, delta time, percentages & change
 *** draw a projection for each found id & one for actual data if any
-** table with records/chart
 
 * add load macro
 * add swap macro
