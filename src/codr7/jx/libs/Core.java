@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Deque;
 
 public class Core extends Lib {
+    public static final AnyType anyType = new AnyType("Any");
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
     public static final FormType formType = new FormType("Form");
@@ -41,6 +42,7 @@ public class Core extends Lib {
     public Core() {
         super("core");
 
+        bind(anyType);
         bind(bindingType);
         bind(bitType);
         bind(intType);

@@ -3,33 +3,51 @@ package codr7.jx.libs;
 import codr7.jx.Arg;
 import codr7.jx.Lib;
 import codr7.jx.Value;
-import codr7.jx.libs.gui.types.ContainerType;
-import codr7.jx.libs.gui.types.FrameType;
-import codr7.jx.libs.gui.types.TabViewType;
-import codr7.jx.libs.gui.types.WidgetType;
+import codr7.jx.libs.gui.shims.TabView;
+import codr7.jx.libs.gui.shims.Table;
+import codr7.jx.libs.gui.types.*;
+import codr7.jx.libs.gui.shims.Container;
 
 import javax.swing.*;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 
+import static javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION;
+
 public class GUI extends Lib {
-    public static final WidgetType widgetType = new WidgetType("Widget");
+    public static final WidgetType widgetType = new WidgetType("Widget", Core.anyType);
+    public static final ColumnType columnType = new ColumnType("Column", Core.anyType);
     public static final ContainerType containerType = new ContainerType("Container", widgetType);
     public static final FrameType frameType = new FrameType("Frame", widgetType);
     public static final TabViewType tabViewType = new TabViewType("TabView", containerType);
+    public static final TableType tableType = new TableType("TableView", containerType);
 
     public GUI() {
         super("gui");
 
+        bind(columnType);
         bind(containerType);
         bind(frameType);
         bind(tabViewType);
+        bind(tableType);
         bind(widgetType);
 
         bindMethod("add", new Arg[]{new Arg("parent", containerType), new Arg("child", widgetType)}, null,
                 (vm, args, rResult, location) -> {
                     final var p = args[0].cast(containerType);
-                    final var w = args[1].cast(widgetType);
-                    p.add(w);
+                    final var c = args[1].cast(widgetType);
+                    p.container.add(c.component());
+                });
+
+        bindMethod("add-column",
+                new Arg[]{new Arg("table", tableType), new Arg("title", Core.stringType)},
+                columnType,
+                (vm, args, rResult, location) -> {
+                    final var table = args[0].cast(tableType).table();
+                    final var title = args[1].cast(Core.stringType);
+                    final var c = new TableColumn();
+                    c.setHeaderValue(title);
+                    table.addColumn(c);
                 });
 
         bindMethod("add-tab",
@@ -39,19 +57,19 @@ public class GUI extends Lib {
                 (vm, args, rResult, location) -> {
                     final var title = args[1].cast(Core.stringType);
                     final var child = args[2].cast(widgetType);
-                    args[0].cast(tabViewType).add(title, child);
+                    args[0].cast(tabViewType).tabbedPane.add(title, child.component());
                 });
 
         bindMethod("box-layout", new Arg[]{new Arg("target", containerType)}, null,
                 (vm, args, rResult, location) -> {
-                    final var t = args[0].cast(containerType);
+                    final var t = args[0].cast(containerType).container;
                     t.setLayout(new BoxLayout(t, BoxLayout.PAGE_AXIS));
                 });
 
         bindMethod("content", new Arg[]{new Arg("frame", frameType)}, containerType,
                 (vm, args, rResult, location) -> {
-                    final var f = args[0].cast(frameType);
-                    vm.registers.set(rResult, new Value<>(containerType, f.getContentPane()));
+                    final var f = args[0].cast(frameType).frame;
+                    vm.registers.set(rResult, new Value<>(containerType, new Container(f.getContentPane())));
                 });
 
         bindMethod("frame",
@@ -64,12 +82,12 @@ public class GUI extends Lib {
                     final var height = size.right().cast(Core.intType).intValue();
                     f.setPreferredSize(new Dimension(width, height));
                     f.setLocationRelativeTo(null);
-                    vm.registers.set(rResult, new Value<>(frameType, f));
+                    vm.registers.set(rResult, new Value<>(frameType, new codr7.jx.libs.gui.shims.Frame(f)));
                 });
 
         bindMethod("pack", new Arg[]{new Arg("frames*")}, null,
                 (vm, args, rResult, location) -> {
-                    for (final var a: args) { a.cast(frameType).pack(); }
+                    for (final var a: args) { a.cast(frameType).frame.pack(); }
                 });
 
         bindMethod("panel",
@@ -77,17 +95,26 @@ public class GUI extends Lib {
                 (vm, args, rResult, location) -> {
                     final var p = new JPanel();
                     p.setLayout(new BorderLayout());
-                    vm.registers.set(rResult, new Value<>(containerType, p));
+                    vm.registers.set(rResult, new Value<>(containerType, new Container(p)));
                 });
 
-        bindMethod("tabs", new Arg[]{}, containerType,
+        bindMethod("table", new Arg[]{}, tableType,
                 (vm, args, rResult, location) -> {
-                    vm.registers.set(rResult, new Value<>(widgetType, new JTabbedPane()));
+                    final var t = new JTable();
+                    t.setFillsViewportHeight(true);
+                    t.setSelectionMode(SINGLE_INTERVAL_SELECTION);
+                    JScrollPane s = new JScrollPane(t);
+                    vm.registers.set(rResult, new Value<>(tableType, new Table(t, s)));
+                });
+
+        bindMethod("tab-view", new Arg[]{}, tabViewType,
+                (vm, args, rResult, location) -> {
+                    vm.registers.set(rResult, new Value<>(tabViewType, new TabView(new JTabbedPane())));
                 });
 
         bindMethod("show", new Arg[]{new Arg("widgets*")}, null,
                 (vm, args, rResult, location) -> {
-                    for (final var a: args) { a.cast(widgetType).setVisible(true); }
+                    for (final var a: args) { a.cast(widgetType).component().setVisible(true); }
                 });
     }
 }

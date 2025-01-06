@@ -2,12 +2,13 @@ fact PT0.777442805S
 fib PT0.000486441S
 
 * add load button
-
-* add record table
-
-* read examples/stoj.csv
+** open file dialog
+** read examples/stoj.csv
 ** https://opencsv.sourceforge.net/
 ** https://www.investing.com/crypto/bitcoin/historical-data
+
+* add db module
+** jdbc / h2
 
 * skip binding nil method args
 
@@ -16,11 +17,7 @@ fib PT0.000486441S
 
 jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-* add db module
-** jdbc / h2
-
 * lambda?
-
 
 * add stoj gui
 ** top panel for selection

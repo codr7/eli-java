@@ -10,11 +10,17 @@
 (var bottom-panel (gui/panel))
 (gui/add root-panel bottom-panel)
 
-(var tabs (gui/tabs))
+(var tabs (gui/tab-view))
 (gui/add bottom-panel tabs)
 
 (var data-panel (gui/panel))
 (gui/add-tab tabs "Data" data-panel)
+
+(var data-table (gui/table))
+(gui/add data-panel data-table)
+(gui/add-column data-table "Series")
+(gui/add-column data-table "Timestamp")
+(gui/add-column data-table "Interval")
 
 (var chart-panel (gui/panel))
 (gui/add-tab tabs "Chart" chart-panel)
