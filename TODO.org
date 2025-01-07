@@ -3,6 +3,7 @@ fib PT0.000486441S
 
 * add load button
 ** open file dialog
+** add padding to column/row-layout
 ** read examples/stoj.csv
 ** https://opencsv.sourceforge.net/
 ** https://www.investing.com/crypto/bitcoin/historical-data

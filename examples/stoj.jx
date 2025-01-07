@@ -2,10 +2,23 @@
 
 (var root-panel (gui/panel))
 (gui/add (gui/content frame) root-panel)
-(gui/box-layout root-panel)
+(gui/column-layout root-panel)
 
 (var top-panel (gui/panel))
 (gui/add root-panel top-panel)
+(gui/row-layout top-panel)
+
+(^on-load [] _
+  (say 'on-load))
+
+(var load-button (gui/button "Load" on-load))
+(gui/add top-panel load-button)
+
+(^on-query [] _
+  (say 'on-query))
+
+(var query-button (gui/button "Query" on-query))
+(gui/add top-panel query-button)
 
 (var bottom-panel (gui/panel))
 (gui/add root-panel bottom-panel)

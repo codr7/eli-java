@@ -3,6 +3,8 @@ package codr7.jx.libs;
 import codr7.jx.Arg;
 import codr7.jx.Lib;
 import codr7.jx.Value;
+import codr7.jx.errors.EvalError;
+import codr7.jx.libs.core.types.CallTrait;
 import codr7.jx.libs.gui.shims.TabView;
 import codr7.jx.libs.gui.shims.Table;
 import codr7.jx.libs.gui.types.*;
@@ -16,8 +18,10 @@ import static javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION;
 
 public class GUI extends Lib {
     public static final WidgetType widgetType = new WidgetType("Widget", Core.anyType);
-    public static final ColumnType columnType = new ColumnType("Column", Core.anyType);
     public static final ContainerType containerType = new ContainerType("Container", widgetType);
+
+    public static final ButtonType buttonType = new ButtonType("Button", containerType);
+    public static final ColumnType columnType = new ColumnType("Column", Core.anyType);
     public static final FrameType frameType = new FrameType("Frame", widgetType);
     public static final TabViewType tabViewType = new TabViewType("TabView", containerType);
     public static final TableType tableType = new TableType("TableView", containerType);
@@ -25,6 +29,7 @@ public class GUI extends Lib {
     public GUI() {
         super("gui");
 
+        bind(buttonType);
         bind(columnType);
         bind(containerType);
         bind(frameType);
@@ -60,7 +65,24 @@ public class GUI extends Lib {
                     args[0].cast(tabViewType).tabbedPane.add(title, child.component());
                 });
 
-        bindMethod("box-layout", new Arg[]{new Arg("target", containerType)}, null,
+        bindMethod("button",
+                new Arg[]{new Arg("title", Core.anyType), new Arg("on-click", Core.anyType)},
+                buttonType,
+                (vm, args, rResult, loc) -> {
+                    final var title = args[0].cast(Core.stringType);
+                    final var b = new codr7.jx.libs.gui.shims.Button(new JButton(title));
+                    final var c = args[1];
+
+                    if (c.type() instanceof CallTrait ct) {
+                        b.button.addActionListener((_) -> ct.call(vm, c, args, rResult, loc));
+                    } else {
+                        throw new EvalError("Not callabale: " + c.dump(vm), loc);
+                    }
+
+                    vm.registers.set(rResult, new Value<>(buttonType, b));
+                });
+
+        bindMethod("column-layout", new Arg[]{new Arg("target", containerType)}, null,
                 (vm, args, rResult, location) -> {
                     final var t = args[0].cast(containerType).container;
                     t.setLayout(new BoxLayout(t, BoxLayout.PAGE_AXIS));
@@ -96,6 +118,12 @@ public class GUI extends Lib {
                     final var p = new JPanel();
                     p.setLayout(new BorderLayout());
                     vm.registers.set(rResult, new Value<>(containerType, new Container(p)));
+                });
+
+        bindMethod("row-layout", new Arg[]{new Arg("target", containerType)}, null,
+                (vm, args, rResult, location) -> {
+                    final var t = args[0].cast(containerType).container;
+                    t.setLayout(new BoxLayout(t, BoxLayout.LINE_AXIS));
                 });
 
         bindMethod("table", new Arg[]{}, tableType,
