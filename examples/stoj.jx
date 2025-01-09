@@ -9,7 +9,7 @@
 (gui/row-layout top-panel)
 
 (^on-load [] _
-  (say 'on-load))
+  (say (gui/open-file frame ['csv:"investing.com Export"])))
 
 (var load-button (gui/button "Load" on-load))
 (gui/add top-panel load-button)

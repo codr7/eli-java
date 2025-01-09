@@ -5,12 +5,14 @@ import codr7.jx.Lib;
 import codr7.jx.Value;
 import codr7.jx.errors.EvalError;
 import codr7.jx.libs.core.types.CallTrait;
+import codr7.jx.libs.gui.shims.OpenDialog;
 import codr7.jx.libs.gui.shims.TabView;
 import codr7.jx.libs.gui.shims.Table;
 import codr7.jx.libs.gui.types.*;
 import codr7.jx.libs.gui.shims.Container;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 
@@ -23,6 +25,7 @@ public class GUI extends Lib {
     public static final ButtonType buttonType = new ButtonType("Button", containerType);
     public static final ColumnType columnType = new ColumnType("Column", Core.anyType);
     public static final FrameType frameType = new FrameType("Frame", widgetType);
+    public static final OpenDialogType openDialogType = new OpenDialogType("OpenDialog", containerType);
     public static final TabViewType tabViewType = new TabViewType("TabView", containerType);
     public static final TableType tableType = new TableType("TableView", containerType);
 
@@ -33,6 +36,7 @@ public class GUI extends Lib {
         bind(columnType);
         bind(containerType);
         bind(frameType);
+        bind(openDialogType);
         bind(tabViewType);
         bind(tableType);
         bind(widgetType);
@@ -83,20 +87,20 @@ public class GUI extends Lib {
                 });
 
         bindMethod("column-layout", new Arg[]{new Arg("target", containerType)}, null,
-                (vm, args, rResult, location) -> {
+                (vm, args, rResult, loc) -> {
                     final var t = args[0].cast(containerType).container;
                     t.setLayout(new BoxLayout(t, BoxLayout.PAGE_AXIS));
                 });
 
         bindMethod("content", new Arg[]{new Arg("frame", frameType)}, containerType,
-                (vm, args, rResult, location) -> {
+                (vm, args, rResult, loc) -> {
                     final var f = args[0].cast(frameType).frame;
                     vm.registers.set(rResult, new Value<>(containerType, new Container(f.getContentPane())));
                 });
 
         bindMethod("frame",
                 new Arg[]{new Arg("title", Core.stringType), new Arg("size", Core.pairType)}, frameType,
-                (vm, args, rResult, location) -> {
+                (vm, args, rResult, loc) -> {
                     final var title = args[0].cast(Core.stringType);
                     final var f = new JFrame(title);
                     final var size = args[1].cast(Core.pairType);
@@ -107,8 +111,34 @@ public class GUI extends Lib {
                     vm.registers.set(rResult, new Value<>(frameType, new codr7.jx.libs.gui.shims.Frame(f)));
                 });
 
+        bindMethod("open-file",
+                new Arg[]{new Arg("parent", widgetType), new Arg("filters", Core.listType)},
+                Core.maybeType,
+                (vm, args, rResult, loc) -> {
+                    final var d = new OpenDialog(new JFileChooser());
+
+                    if (args.length > 1) {
+                        for (final var f: args[1].cast(Core.listType)) {
+                            final var fp = f.cast(Core.pairType);
+                            final var ext = fp.left().cast(Core.symbolType);
+                            final var inf = fp.right().cast(Core.stringType);
+                            d.fileChooser.setFileFilter(new FileNameExtensionFilter(inf, ext));
+                        }
+                    }
+
+                    final var parent = args[0].cast(widgetType);
+
+                    if (d.fileChooser.showOpenDialog(parent.component()) == JFileChooser.APPROVE_OPTION) {
+                        vm.registers.set(rResult,
+                                new Value<>(Core.stringType,
+                                        d.fileChooser.getSelectedFile().getName()));
+                    } else {
+                        vm.registers.set(rResult, Core.NIL);
+                    }
+                });
+
         bindMethod("pack", new Arg[]{new Arg("frames*")}, null,
-                (vm, args, rResult, location) -> {
+                (vm, args, rResult, loc) -> {
                     for (final var a: args) { a.cast(frameType).frame.pack(); }
                 });
 
@@ -121,13 +151,13 @@ public class GUI extends Lib {
                 });
 
         bindMethod("row-layout", new Arg[]{new Arg("target", containerType)}, null,
-                (vm, args, rResult, location) -> {
+                (vm, args, rResult, loc) -> {
                     final var t = args[0].cast(containerType).container;
                     t.setLayout(new BoxLayout(t, BoxLayout.LINE_AXIS));
                 });
 
         bindMethod("table", new Arg[]{}, tableType,
-                (vm, args, rResult, location) -> {
+                (vm, args, rResult, loc) -> {
                     final var t = new JTable();
                     t.setFillsViewportHeight(true);
                     t.setSelectionMode(SINGLE_INTERVAL_SELECTION);
@@ -136,12 +166,12 @@ public class GUI extends Lib {
                 });
 
         bindMethod("tab-view", new Arg[]{}, tabViewType,
-                (vm, args, rResult, location) -> {
+                (vm, args, rResult, loc) -> {
                     vm.registers.set(rResult, new Value<>(tabViewType, new TabView(new JTabbedPane())));
                 });
 
         bindMethod("show", new Arg[]{new Arg("widgets*")}, null,
-                (vm, args, rResult, location) -> {
+                (vm, args, rResult, loc) -> {
                     for (final var a: args) { a.cast(widgetType).component().setVisible(true); }
                 });
     }

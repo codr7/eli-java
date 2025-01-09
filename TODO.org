@@ -1,15 +1,15 @@
 fact PT0.777442805S
 fib PT0.000486441S
 
-* add load button
-** open file dialog
-** add padding to column/row-layout
+* implement csv loading
 ** read examples/stoj.csv
 ** https://opencsv.sourceforge.net/
 ** https://www.investing.com/crypto/bitcoin/historical-data
 
 * add db module
 ** jdbc / h2
+
+** add padding to column/row-layout
 
 * skip binding nil method args
 

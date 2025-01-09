@@ -16,6 +16,9 @@ import java.util.Deque;
 
 public class Core extends Lib {
     public static final AnyType anyType = new AnyType("Any");
+    public static final NilType nilType = new NilType("Nil");
+    public static final MaybeType maybeType = new MaybeType("Maybe", anyType, nilType);
+
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
     public static final FormType formType = new FormType("Form");
@@ -27,7 +30,6 @@ public class Core extends Lib {
     public static final ListType listType = new ListType("List");
     public static final MetaType metaType = new MetaType("Meta");
     public static final MethodType methodType = new MethodType("Method");
-    public static final NilType nilType = new NilType("Nil");
     public static final PairType pairType = new PairType("Pair");
     public static final RangeType rangeType = new RangeType("Range");
     public static final StringType stringType = new StringType("String");
@@ -51,6 +53,7 @@ public class Core extends Lib {
         bind(jMethodType);
         bind(libType);
         bind(listType);
+        bind(maybeType);
         bind(metaType);
         bind(methodType);
         bind(nilType);
