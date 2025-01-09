@@ -4,6 +4,7 @@ import codr7.jx.compilers.ExtendGoto;
 import codr7.jx.compilers.UnusedCopy;
 import codr7.jx.compilers.UnusedPut;
 import codr7.jx.errors.EvalError;
+import codr7.jx.libs.CSV;
 import codr7.jx.libs.Core;
 import codr7.jx.libs.GUI;
 import codr7.jx.libs.core.types.CallTrait;
@@ -30,6 +31,7 @@ public final class VM {
     public final ArrayList<IValue> registers = new ArrayList<>();
 
     public final Core coreLib = new Core();
+    public final CSV csvLib = new CSV();
     public final GUI guiLib = new GUI();
     public final Lib userLib = new Lib("user");
 
@@ -50,6 +52,7 @@ public final class VM {
         compilers.add(UnusedPut.instance);
 
         userLib.bind(coreLib);
+        userLib.bind(csvLib);
         userLib.bind(guiLib);
         currentLib = userLib;
     }

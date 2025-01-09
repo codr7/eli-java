@@ -9,7 +9,11 @@
 (gui/row-layout top-panel)
 
 (^on-load [] _
-  (say (gui/open-file frame ['csv:"investing.com Export"])))
+  (let [path (gui/open-file frame ['csv:"investing.com Export"])
+        file (if path (csv/open-file path) _)]
+    (say "Loading " path " " file)
+    (if file (do
+        (say 'success)))))
 
 (var load-button (gui/button "Load" on-load))
 (gui/add top-panel load-button)

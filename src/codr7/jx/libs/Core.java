@@ -241,14 +241,14 @@ public class Core extends Lib {
                     });
                 });
 
-        bindMacro("if", new Arg[]{new Arg("cond"), new Arg("left"), new Arg("right")}, null,
+        bindMacro("if", new Arg[]{new Arg("cond"), new Arg("left"), new Arg("right?")}, null,
                 (vm, args, rResult, loc) -> {
                     args[0].emit(vm, rResult);
                     final var branchPc = vm.emit(new Nop());
                     args[1].emit(vm, rResult);
                     final var skipElsePc = vm.emit(new Nop());
                     vm.ops.set(branchPc, new Branch(rResult, vm.label(), loc));
-                    args[2].emit(vm, rResult);
+                    if (args.length > 2) { args[2].emit(vm, rResult); }
                     vm.ops.set(skipElsePc, new Goto(vm.label(), loc));
                 });
 

@@ -3,7 +3,15 @@ fib PT0.000486441S
 
 * implement csv loading
 ** read examples/stoj.csv
-** https://opencsv.sourceforge.net/
+*** add let macro
+*** add let? macro
+**** keep assigning while != _
+**** only eval body if all ok
+*** fix csv/open-file
+*** add bindings to readme
+*** commit
+
+* load csv file
 ** https://www.investing.com/crypto/bitcoin/historical-data
 
 * add db module
