@@ -267,6 +267,31 @@ public class Core extends Lib {
                     vm.registers.set(rResult, new Value<>(bitType, result));
                 });
 
+        bindMacro("let", new Arg[]{new Arg("bindings", listType), new Arg("body*")}, null,
+                (vm, _args, rResult, loc) -> {
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+                    final var bsf = args.removeFirst();
+
+                    if (bsf instanceof ListForm f) {
+                        final var bs = f.items;
+
+                        vm.doLib(null, () -> {
+                            for (var i = 0; i < bs.length; i++) {
+                                if (bs[i] instanceof IdForm idf) {
+                                    i++;
+                                    final var rValue = vm.alloc(1);
+                                    bs[i].emit(vm, rValue);
+                                    vm.currentLib.bind(idf.id, new Value<>(bindingType, new Binding(null, rValue)));
+                                }
+                            }
+
+                            vm.emit(args, rResult);
+                        });
+                    } else {
+                        throw new EmitError("Expected list: " + bsf.dump(vm), loc);
+                    }
+            });
+
         bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")}, null,
                 (vm, _args, rResult, location) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));

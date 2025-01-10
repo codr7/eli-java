@@ -2,7 +2,10 @@ package codr7.jx.libs;
 
 import codr7.jx.Arg;
 import codr7.jx.Lib;
-import com.opencsv.CSVReaderHeaderAware;
+import codr7.jx.Value;
+import codr7.jx.libs.csv.iters.RecordReader;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
@@ -14,10 +17,12 @@ public class CSV extends Lib {
         bindMethod("open-file", new Arg[]{new Arg("path", Core.stringType)}, null,
                 (vm, args, rResult, loc) -> {
                     try {
-                        final var p = args[0].cast(Core.stringType);
-                        final var vs = new CSVReaderHeaderAware(new FileReader(p, StandardCharsets.UTF_8)).readMap();
-                        System.out.println(vs);
-                    } catch (final Exception e) {
+                        final var path = args[0].cast(Core.stringType);
+                        final var file = new FileReader(vm.path.resolve(path).toString(), StandardCharsets.UTF_8);
+                        final var parser = new CSVParser(file, CSVFormat.DEFAULT);
+                        vm.registers.set(rResult, new Value<>(Core.iterType, new RecordReader(parser.iterator())));
+                    }
+                    catch (final Exception e) {
                         throw new RuntimeException(e);
                     }
                 });

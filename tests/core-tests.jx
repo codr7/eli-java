@@ -55,3 +55,6 @@
     (if (> n 1) (recall (- n 1) b (+ a b)) (if (is n 0) a b)))
 
   (fib 10 0 1))
+
+(check 42
+  (let [foo 42] foo))

@@ -354,23 +354,29 @@ public final class VM {
         return label(emitPc());
     }
 
-    public void load(final Path path, int rResult) {
+    public void load(final Path path, final int rResult) {
         final var prevPath = this.path;
         final var p = prevPath.resolve(path);
         final var location = new Loc(p.toString());
-        Deque<IForm> out;
+        this.path = p.getParent();
 
         try {
-            out = read(Files.readString(p), location);
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
+            final Deque<IForm> out;
 
-        emit(new SetPath(p.getParent(), location));
-        final var startPc = emitPc();
-        emit(out, rResult);
-        emit(new SetPath(prevPath, location));
-        compile(startPc);
+            try {
+                out = read(Files.readString(p), location);
+            } catch (final IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            final var startPc = emitPc();
+            emit(new SetPath(p.getParent(), location));
+            emit(out, rResult);
+            emit(new SetPath(prevPath, location));
+            compile(startPc);
+        } finally {
+            this.path = prevPath;
+        }
     }
 
     public boolean read(final Input in, final Deque<IForm> out, final Loc loc) {

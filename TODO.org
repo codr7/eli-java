@@ -1,23 +1,37 @@
 fact PT0.777442805S
 fib PT0.000486441S
 
-* implement csv loading
-** read examples/stoj.csv
-*** add let macro
-*** add let? macro
-**** keep assigning while != _
-**** only eval body if all ok
-*** fix csv/open-file
-*** add bindings to readme
-*** commit
+* test csv/open-file
+** add bindings to readme
+** commit
 
-* load csv file
+* add for macro
+** sharpl
+** loop csv in stoj
+
+* handle literals in let macro
+** use value()
+** bind directly
+
+* handle rebinding in let
+** check if binding already exists
+** backup/reuse register
+
+* ---
+
+** add let? macro
+*** use in stoj/on-load
+*** keep assigning while != _
+*** eval clause1 if all ok
+*** else clause2
+
 ** https://www.investing.com/crypto/bitcoin/historical-data
 
 * add db module
 ** jdbc / h2
 
-** add padding to column/row-layout
+* add padding to column/row-layout
+* figure out why csv parser isnt included in jar build
 
 * skip binding nil method args
 

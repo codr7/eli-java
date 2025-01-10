@@ -42,7 +42,7 @@ public class MethodType extends BaseType<Method> implements CallTrait {
     }
 
     @Override public void emitCall(final VM vm,
-                         final IValue target,
+                                    final IValue target,
                          final IForm[] body,
                          final int rResult,
                          final Loc loc) {

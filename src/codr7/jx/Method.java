@@ -2,6 +2,7 @@ package codr7.jx;
 
 import codr7.jx.ops.Copy;
 import codr7.jx.ops.Goto;
+import codr7.jx.ops.SetPath;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -25,6 +26,8 @@ public record Method(String id,
         final var end = vm.label(-1);
 
         vm.doLib(lib, () -> {
+            vm.emit(new SetPath(vm.path, loc));
+
             for (var i = 0; i < args.length; i++) {
                 final var ma = args[i];
                 vm.currentLib.bind(ma.id(), bindingType, new Binding(null, rArgs + i));
