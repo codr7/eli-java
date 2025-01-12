@@ -7,6 +7,6 @@ import codr7.jx.VM;
 import java.util.Set;
 
 public record Stop() implements Op {
-    @Override public String dump(VM vm) { return "STOP"; }
+    @Override public String dump(VM vm) { return "Stop"; }
     @Override public void io(VM vm, Set<Integer> read, Set<Integer> write) {}
 }

@@ -6,15 +6,15 @@ import codr7.jx.VM;
 
 import java.util.Set;
 
-public record AddItem(int rTarget, int rItem, Loc loc) implements Op {
+public record Inc(int rTarget, int rDelta, Loc loc) implements Op {
     public String dump(final VM vm) {
-        return "AddItem rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
-                "rItem: " + rItem + " (" + vm.registers.get(rItem).dump(vm) + ")";
+        return "Inc rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
+                "rDelta: " + rDelta + " (" + vm.registers.get(rDelta).dump(vm) + ")";
     }
 
     public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        read.add(rItem);
         read.add(rTarget);
         write.add(rTarget);
+        if (rDelta != -1) { read.add(rDelta); }
     }
 }

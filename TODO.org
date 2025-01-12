@@ -1,36 +1,24 @@
 fact PT0.777442805S
 fib PT0.000486441S
 
-* test csv/open-file
-** add bindings to readme
-** commit
+* add bindings to readme
 
-* add for macro
-** sharpl
-** loop csv in stoj
-
-** add let? macro
-*** use in stoj/on-load
-*** keep assigning while != _
-*** eval clause1 if all ok
-*** else clause2
+* loop csv in stoj
+** use for loop
+** test csv/open-file
 
 ** https://www.investing.com/crypto/bitcoin/historical-data
 
 * add db module
 ** jdbc / h2
 
-* add padding to column/row-layout
-* figure out why csv parser isnt included in jar build
-
-* skip binding nil method args
-
 * add gui/chart module
 ** https://www.jfree.org/jfreechart/
 
 jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-* lambda?
+* add padding to column/row-layout
+* figure out why csv parser isnt included in jar build
 
 * add stoj gui
 ** top panel for selection
@@ -42,7 +30,18 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 **** log seq, series name, delta time, percentages & change
 *** draw a projection for each found id & one for actual data if any
 
+** add let? macro
+*** use in stoj/on-load
+*** keep assigning while != _
+*** eval clause1 if all ok
+*** else clause2
+
+* skip binding nil method args
+
+* lambda?
+
 * add load macro
+
 * add swap macro
 ** add swap op
 
@@ -50,3 +49,5 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 ** add RangeTrait
 ** create range
 ** optional max
+
+(let [foo 0] (for [i [1 2 3]] (inc foo i)) (foo))

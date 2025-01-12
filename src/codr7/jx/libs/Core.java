@@ -9,10 +9,7 @@ import codr7.jx.libs.core.iters.IntRange;
 import codr7.jx.libs.core.types.*;
 import codr7.jx.ops.*;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Deque;
+import java.util.*;
 
 public class Core extends Lib {
     public static final AnyType anyType = new AnyType("Any");
@@ -217,20 +214,14 @@ public class Core extends Lib {
                     }
 
                     final var rValue = v.cast(bindingType).rValue();
-                    var delta = 1L;
+                    var rDelta = -1;
 
                     if (args.length > 1) {
-                        final var d = args[1];
-                        final var dv = d.value(vm);
-
-                        if (dv == null || dv.type() != intType) {
-                            throw new EmitError("Expected Int: " + d.dump(vm), t.loc());
-                        }
-
-                        delta = dv.cast(intType);
+                        rDelta = vm.alloc(1);
+                        args[1].emit(vm, rDelta);
                     }
 
-                    vm.emit(new Dec(rValue, delta, loc));
+                    vm.emit(new Dec(rValue, rDelta, loc));
                     if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
                 });
 
@@ -238,6 +229,66 @@ public class Core extends Lib {
                 (vm, args, rResult, location) -> {
                     vm.doLib(null, () -> {
                         vm.emit(new ArrayDeque<>(Arrays.asList(args)), rResult);
+                    });
+                });
+
+        bindMacro("for",
+                new Arg[]{new Arg("bindings", listType), new Arg("body*")},
+                null,
+                (vm, _args, rResult, loc) -> {
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+
+                    vm.doLib(null, () -> {
+                        final var brs = new HashMap<Integer, Integer>();
+
+                        var f = args.removeFirst();
+
+                        if (f instanceof ListForm bslf) {
+                            final var bs = new ArrayDeque<>(Arrays.asList(bslf.items));
+
+                            while (!bs.isEmpty()) {
+                                f = bs.removeFirst();
+
+                                if (f instanceof IdForm idf) {
+                                    f = bs.removeFirst();
+                                    final var v = f.value(vm);
+                                    final var rSeq = vm.alloc(1);
+                                    final var rIt = idf.isNil() ? -1 : vm.alloc(1);
+                                    brs.put(rSeq, rIt);
+
+                                    if (v == null) {
+                                        f.emit(vm, rSeq);
+                                        vm.emit(new CreateIter(rSeq, loc));
+                                    } else {
+                                        if (v.type() instanceof SeqTrait st) {
+                                            final var it = st.iter(vm, v, loc);
+                                            vm.emit(new Put(rSeq, new Value<>(iterType, it), loc));
+                                        } else {
+                                            throw new EmitError("Expected seq: " + v.dump(vm), loc);
+                                        }
+                                    }
+
+                                    if (!idf.isNil()) {
+                                        vm.currentLib.bind(idf.id, Core.bindingType, new Binding(null, rIt));
+                                    }
+                                } else {
+                                    throw new EmitError("Expected id: " + f.dump(vm), loc);
+                                }
+                            }
+                        } else {
+                            throw new EmitError("Expected bindings: " + f.dump(vm), loc);
+                        }
+
+                        final var bodyStart = vm.label();
+                        final var bodyEnd = vm.label(-1);
+
+                        for (final var br: brs.entrySet()) {
+                            vm.emit(new Next(br.getKey(), br.getValue(), bodyEnd, loc));
+                        }
+
+                        vm.emit(args, rResult);
+                        vm.emit(new Goto(bodyStart, loc));
+                        bodyEnd.pc = vm.emitPc();
                     });
                 });
 
@@ -250,6 +301,27 @@ public class Core extends Lib {
                     vm.ops.set(branchPc, new Branch(rResult, vm.label(), loc));
                     if (args.length > 2) { args[2].emit(vm, rResult); }
                     vm.ops.set(skipElsePc, new Goto(vm.label(), loc));
+                });
+
+        bindMacro("inc", new Arg[]{new Arg("place"), new Arg("delta?")}, null,
+                (vm, args, rResult, loc) -> {
+                    final var t = args[0];
+                    final var v = t.value(vm);
+
+                    if (v.type() != bindingType) {
+                        throw new EmitError("Expected binding: " + t.dump(vm), t.loc());
+                    }
+
+                    final var rValue = v.cast(bindingType).rValue();
+                    var rDelta = -1;
+
+                    if (args.length > 1) {
+                        rDelta = vm.alloc(1);
+                        args[1].emit(vm, rDelta);
+                    }
+
+                    vm.emit(new Inc(rValue, rDelta, loc));
+                    if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
                 });
 
         bindMethod("is", new Arg[]{new Arg("args*")}, null,
@@ -279,15 +351,9 @@ public class Core extends Lib {
                             for (var i = 0; i < bs.length; i++) {
                                 if (bs[i] instanceof IdForm idf) {
                                     i++;
-                                    final var v = bs[i].value(vm);
-
-                                    if (v == null) {
-                                        final var rValue = vm.alloc(1);
-                                        bs[i].emit(vm, rValue);
-                                        vm.currentLib.bind(idf.id, new Value<>(bindingType, new Binding(null, rValue)));
-                                    } else {
-                                        vm.currentLib.bind(idf.id, v);
-                                    }
+                                    final var rValue = vm.alloc(1);
+                                    bs[i].emit(vm, rValue);
+                                    vm.currentLib.bind(idf.id, new Value<>(bindingType, new Binding(null, rValue)));
                                 }
                             }
 

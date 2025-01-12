@@ -8,7 +8,7 @@ import java.util.Set;
 
 public record Right(int rPair, int rResult, Loc loc) implements Op {
     @Override public String dump(final VM vm) {
-        return "RIGHT rPair: " + rPair + " (" + vm.registers.get(rPair).dump(vm) + ") " +
+        return "Right rPair: " + rPair + " (" + vm.registers.get(rPair).dump(vm) + ") " +
                 "rResult: " + rResult + " (" + vm.registers.get(rResult).dump(vm) + ")";
     }
 

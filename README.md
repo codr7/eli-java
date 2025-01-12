@@ -47,6 +47,17 @@ foo
 ```
 `42`
 
+## Loops
+`for` may be used to repeat a block of code for each item in a sequence.
+
+```
+(let [foo 0]
+  (for [i [1 2 3]
+    (inc foo i))
+  (foo))
+```
+`6`
+
 ## Methods
 Methods may be defined using `^`.
 

@@ -8,7 +8,7 @@ import java.util.Set;
 
 public record Check(int rValues, Loc loc) implements Op {
     public String dump(final VM vm) {
-        return "CHECK rValues: " + rValues +
+        return "Check rValues: " + rValues +
                 " (" + vm.registers.get(rValues).dump(vm) + "/" + vm.registers.get(rValues+1).dump(vm) + ")";
     }
 

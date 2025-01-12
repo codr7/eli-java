@@ -9,7 +9,7 @@ import java.util.Set;
 
 public record CallRegister(int rTarget, int rArguments, int arity, int rResult, Loc loc) implements Op {
     public String dump(final VM vm) {
-        return "CALL_REGISTER rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
+        return "CallRegister rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
                 "rArgs: " + rArguments + " " +
                 "arity: " + arity + " " +
                 "rResult: " + rResult + " (" + vm.registers.get(rResult).dump(vm) + ")";

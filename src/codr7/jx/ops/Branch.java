@@ -7,7 +7,7 @@ import java.util.Set;
 
 public record Branch(int rCondition, Label elseStart, Loc loc) implements Op {
     public String dump(final VM vm) {
-        return "BRANCH rCondition: " + rCondition + " (" + vm.registers.get(rCondition).dump(vm) + ") " +
+        return "Branch rCondition: " + rCondition + " (" + vm.registers.get(rCondition).dump(vm) + ") " +
                 "elseStart: " + elseStart;
     }
 

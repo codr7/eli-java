@@ -8,6 +8,7 @@ import codr7.jx.libs.CSV;
 import codr7.jx.libs.Core;
 import codr7.jx.libs.GUI;
 import codr7.jx.libs.core.types.CallTrait;
+import codr7.jx.libs.core.types.SeqTrait;
 import codr7.jx.ops.*;
 import codr7.jx.readers.*;
 
@@ -239,6 +240,19 @@ public final class VM {
                     pc++;
                     break;
                 }
+                case CreateIter op: {
+                    final var t = registers.get(op.rTarget());
+
+                    if (t.type() instanceof SeqTrait st) {
+                        final var it = st.iter(this, t, op.loc());
+                        registers.set(op.rTarget(), new Value<>(Core.iterType, it));
+                    } else {
+                        throw new EvalError("Expected seq: " + t.dump(this), op.loc());
+                    }
+
+                    pc++;
+                    break;
+                }
                 case CreateList op: {
                     registers.set(op.rTarget(), new Value<>(Core.listType, new ArrayList<>()));
                     pc++;
@@ -246,13 +260,20 @@ public final class VM {
                 }
                 case Dec op: {
                     final var v = registers.get(op.rTarget()).cast(Core.intType);
-                    final var nv = new Value<>(Core.intType, v - 1);
-                    registers.set(op.rTarget(), nv);
+                    final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(Core.intType);
+                    registers.set(op.rTarget(), new Value<>(Core.intType, v - dv));
                     pc++;
                     break;
                 }
                 case Goto op: {
                     pc = op.target().pc;
+                    break;
+                }
+                case Inc op: {
+                    final var v = registers.get(op.rTarget()).cast(Core.intType);
+                    final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(Core.intType);
+                    registers.set(op.rTarget(), new Value<>(Core.intType, v + dv));
+                    pc++;
                     break;
                 }
                 case Left op: {

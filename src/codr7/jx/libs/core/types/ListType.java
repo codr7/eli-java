@@ -1,12 +1,12 @@
 package codr7.jx.libs.core.types;
 
-import codr7.jx.BaseType;
-import codr7.jx.IValue;
-import codr7.jx.VM;
+import codr7.jx.*;
+import codr7.jx.libs.core.iters.ListItems;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ListType extends BaseType<List<IValue>> {
+public class ListType extends BaseType<ArrayList<IValue>> implements SeqTrait {
     public ListType(final String id) { super(id); }
 
     @Override public String dump(final VM vm, final IValue value) {
@@ -34,6 +34,8 @@ public class ListType extends BaseType<List<IValue>> {
 
         return true;
     }
+
+    @Override public Iter iter(VM vm, IValue target, Loc loc) { return new ListItems(target.cast(this)); }
 
     @Override public boolean toBit(final VM vm, final IValue value) { return !value.cast(this).isEmpty(); }
 

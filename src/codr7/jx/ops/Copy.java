@@ -8,7 +8,7 @@ import java.util.Set;
 
 public record Copy(int rFrom, int rTo, Loc loc) implements Op {
     @Override public String dump(final VM vm) {
-        return "COPY rFrom: " + rFrom + " (" + vm.registers.get(rFrom).dump(vm) + ") " +
+        return "Copy rFrom: " + rFrom + " (" + vm.registers.get(rFrom).dump(vm) + ") " +
                 "rTo: " + rTo + " (" + vm.registers.get(rTo).dump(vm) + ")";
     }
 

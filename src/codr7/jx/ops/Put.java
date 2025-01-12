@@ -6,7 +6,7 @@ import java.util.Set;
 
 public record Put(int rTarget, IValue value, Loc loc) implements Op {
     @Override public String dump(final VM vm) {
-        return "PUT rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
+        return "Put rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
                 "value: " + value.dump(vm);
     }
 
