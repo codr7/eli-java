@@ -12,8 +12,9 @@
   (let [path (gui/open-file frame ['csv:"investing.com Export"])
         file (if path (csv/open-file path) _)]
     (say "Loading " path " " file)
-    (if file (do
-        (say 'success)))))
+    (if file
+      (for [rec file]
+        (say rec)))))
 
 (var load-button (gui/button "Load" on-load))
 (gui/add top-panel load-button)

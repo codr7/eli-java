@@ -70,3 +70,10 @@
           j [4 5 6]]
       (inc foo (* i j)))
     (check 32 foo))
+
+  (do
+    (var foo 'foo)
+    (^baz [] _ foo)
+    (check 'foo (baz))
+    (let [foo 'bar]
+      (check 'bar (baz))))

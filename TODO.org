@@ -1,7 +1,18 @@
 fact PT0.777442805S
 fib PT0.000486441S
 
-* add bindings to readme
+* add Fix type
+** sharpl
+** add reader
+** add NumTrait
+*** update +/-/*/ methods
+
+* clean up csv
+** skip first line
+*** add iter method
+*** call next
+** strip comma signs from all values
+** multiply K numbers with 1000.0
 
 * loop csv in stoj
 ** use for loop

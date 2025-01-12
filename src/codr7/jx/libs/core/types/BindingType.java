@@ -7,6 +7,7 @@ public class BindingType extends BaseType<Binding> {
     public BindingType(final String id) { super(id); }
 
     @Override public void emit(VM vm, IValue value, int rResult, Loc loc) {
-        vm.emit(new Copy(value.cast(this).rValue(), rResult, loc));
+        final var rValue = value.cast(this).rValue();
+        if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
     }
 }

@@ -26,11 +26,15 @@ public record UnusedCopy() implements Compiler {
 
                     if (rop instanceof Copy cop2) {
                         if (cop2.rTo() == cop.rFrom()) {
-                            vm.ops.set(pc, new Nop());
-                            System.out.println("DELETE " + pc + " " + op.dump(vm));
-                            vm.ops.set(rpc, new Nop());
-                            System.out.println("DELETE " + rpc + " " + rop.dump(vm));
-                            changed = true;
+                            final var frpc = vm.findWrite(cop.rFrom(), pc+1, pc);
+
+                            if (frpc == null || frpc > rpc) {
+                                vm.ops.set(pc, new Nop());
+                                System.out.println("DELETE " + pc + " " + op.dump(vm));
+                                vm.ops.set(rpc, new Nop());
+                                System.out.println("DELETE " + rpc + " " + rop.dump(vm));
+                                changed = true;
+                            }
                         } else  if (vm.findRead(cop.rTo(), rpc+1, pc, rpc) == null &&
                             vm.findRead(cop2.rTo(), pc+1, pc, rpc) == null) {
                             final var uop = new Copy(cop.rFrom(), cop2.rTo(), cop.loc());

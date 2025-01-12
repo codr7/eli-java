@@ -78,8 +78,6 @@ public final class VM {
 
             if (defragOps(startPc)) { done = false; }
         }
-
-
     }
 
     public boolean defragOps(final int startPc) {
@@ -311,6 +309,10 @@ public final class VM {
                     pc++;
                     return;
                 }
+                case Trace op:
+                    System.out.println(op.text());
+                    pc++;
+                    break;
                 case Zip op: {
                     final var left = registers.get(op.rLeft());
                     final var right = registers.get(op.rRight());
@@ -363,6 +365,46 @@ public final class VM {
         final var ss = new HashSet<Integer>();
         for (final var s: skip) { ss.add(s); }
         return findRead(rTarget, startPc, ss);
+    }
+
+    public Integer findWrite(final int rTarget, final int startPc, final HashSet<Integer> skip) {
+        final var r = new HashSet<Integer>();
+        final var w = new HashSet<Integer>();
+
+        for (var pc = startPc; pc < ops.size();) {
+            while (skip.contains(pc)) { pc++; }
+            if (pc == ops.size()) { break; }
+            skip.add(pc);
+            final var op = ops.get(pc);
+            op.io(this, r, w);
+            if (w.contains(rTarget)) { return pc; }
+
+            switch (op) {
+                case Branch branchOp: {
+                    final var result = findRead(rTarget, branchOp.elseStart().pc, skip);
+                    if (result != null) { return result; }
+                    pc++;
+                    break;
+                }
+                case Goto gotoOp: {
+                    final var result = findRead(rTarget, gotoOp.target().pc, skip);
+                    if (result != null) { return result; }
+                    pc++;
+                    break;
+                }
+                default:
+                    pc++;
+                    break;
+            }
+        }
+
+        return null;
+    }
+
+    public Integer findWrite(final int rTarget, final int startPc, final int...skip) {
+        final var ss = new HashSet<Integer>();
+        for (final var s: skip) { ss.add(s); }
+        return findWrite(rTarget, startPc, ss);
     }
 
     public Label label(final int pc) {

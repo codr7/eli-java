@@ -39,13 +39,42 @@ As to exactly what's going on with the Fibonacci benchmark, your guess is as goo
 The optimized code produces the correct result, but runs quite a bit faster than I expected.
 
 ## Bindings
-Values may be bound to identifiers at emit time using `var`.
+Values may be bound to identifiers at compile time using `var`.
 
 ```
 (var foo 42)
 foo
 ```
 `42`
+
+`let` may be used to create runtime bindings.
+
+```
+(let [foo 'bar]
+  foo)
+```
+`'bar`
+
+When `let` is used to override an outer binding, the value is
+only overridden in the current call stack and restored on exit.
+
+```
+(var foo 'foo)
+foo
+```
+`'foo`
+
+```
+(^baz [] foo)
+  
+(let [foo 'bar] (baz))
+```
+`'bar`
+
+```
+foo
+```
+`'foo`
 
 ## Loops
 `for` may be used to repeat a block of code for each item in a sequence.
