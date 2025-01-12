@@ -279,9 +279,15 @@ public class Core extends Lib {
                             for (var i = 0; i < bs.length; i++) {
                                 if (bs[i] instanceof IdForm idf) {
                                     i++;
-                                    final var rValue = vm.alloc(1);
-                                    bs[i].emit(vm, rValue);
-                                    vm.currentLib.bind(idf.id, new Value<>(bindingType, new Binding(null, rValue)));
+                                    final var v = bs[i].value(vm);
+
+                                    if (v == null) {
+                                        final var rValue = vm.alloc(1);
+                                        bs[i].emit(vm, rValue);
+                                        vm.currentLib.bind(idf.id, new Value<>(bindingType, new Binding(null, rValue)));
+                                    } else {
+                                        vm.currentLib.bind(idf.id, v);
+                                    }
                                 }
                             }
 

@@ -9,10 +9,6 @@ fib PT0.000486441S
 ** sharpl
 ** loop csv in stoj
 
-* handle literals in let macro
-** use value()
-** bind directly
-
 * handle rebinding in let
 ** check if binding already exists
 ** backup/reuse register
