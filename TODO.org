@@ -9,12 +9,6 @@ fib PT0.000486441S
 ** sharpl
 ** loop csv in stoj
 
-* handle rebinding in let
-** check if binding already exists
-** backup/reuse register
-
-* ---
-
 ** add let? macro
 *** use in stoj/on-load
 *** keep assigning while != _
