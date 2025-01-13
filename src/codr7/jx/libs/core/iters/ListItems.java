@@ -1,7 +1,6 @@
 package codr7.jx.libs.core.iters;
 
 import codr7.jx.*;
-import codr7.jx.libs.Core;
 
 import java.util.ArrayList;
 

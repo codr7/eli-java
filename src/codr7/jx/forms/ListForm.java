@@ -1,7 +1,7 @@
 package codr7.jx.forms;
 
 import codr7.jx.*;
-import codr7.jx.libs.Core;
+import codr7.jx.libs.CoreLib;
 import codr7.jx.ops.AddItem;
 import codr7.jx.ops.CreateList;
 
@@ -66,12 +66,12 @@ public class ListForm extends BaseForm {
     @Override public IValue quote(final VM vm, final Loc loc) {
         final var result = new ArrayList<IValue>();
         for (final var it: items) { result.add(it.quote(vm, loc)); }
-        return new Value<>(Core.listType, result);
+        return new Value<>(CoreLib.listType, result);
     }
 
     @Override public IValue value(VM vm) {
         final var vs = Arrays.stream(items).map(it -> it.value(vm));
         if (itemValues(vm).anyMatch(Objects::isNull)) { return null; }
-        return new Value<>(Core.listType, new ArrayList<>(itemValues(vm).toList()));
+        return new Value<>(CoreLib.listType, new ArrayList<>(itemValues(vm).toList()));
     }
 }

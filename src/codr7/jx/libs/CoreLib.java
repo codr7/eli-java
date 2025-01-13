@@ -10,8 +10,9 @@ import codr7.jx.libs.core.types.*;
 import codr7.jx.ops.*;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
-public class Core extends Lib {
+public class CoreLib extends Lib {
     public static final AnyType anyType = new AnyType("Any");
     public static final NilType nilType = new NilType("Nil");
     public static final MaybeType maybeType = new MaybeType("Maybe", anyType, nilType);
@@ -33,12 +34,12 @@ public class Core extends Lib {
     public static final SymbolType symbolType = new SymbolType("Symbol");
     public static final TimeType timeType = new TimeType("Time");
 
-    public static final IValue NIL = new Value<>(nilType, null);
+    public static final IValue NIL = new Value<>(nilType, new Object());
 
     public static final IValue T = new Value<>(bitType, true);
     public static final IValue F = new Value<>(bitType, false);
 
-    public Core() {
+    public CoreLib() {
         super("core");
 
         bind(anyType);
@@ -193,7 +194,7 @@ public class Core extends Lib {
                         if (args.isEmpty()) {
                             actual = new ArrayDeque<>();
                             actual.add(expected);
-                            expected = new LiteralForm(Core.T, expected.loc());
+                            expected = new LiteralForm(CoreLib.T, expected.loc());
                         } else {
                             actual = args;
                         }
@@ -266,7 +267,7 @@ public class Core extends Lib {
                                     }
 
                                     if (!idf.isNil()) {
-                                        vm.currentLib.bind(idf.id, Core.bindingType, new Binding(null, rIt));
+                                        vm.currentLib.bind(idf.id, CoreLib.bindingType, new Binding(null, rIt));
                                     }
                                 } else {
                                     throw new EmitError("Expected id: " + vf.dump(vm), loc);
@@ -377,6 +378,30 @@ public class Core extends Lib {
                     }
             });
 
+        bindMethod("parse-int", new Arg[]{new Arg("in")}, null,
+                (vm, args, rResult, loc) -> {
+            final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
+            final var in = args[0].cast(stringType).substring(start);
+            final var match = Pattern.compile("^\\s*(\\d+).*").matcher(in);
+
+            if (match.find()) {
+                vm.registers.set(rResult, new Value<>(pairType, new Pair(
+                        new Value<>(intType, Long.valueOf(match.group(1))),
+                        new Value<>(intType, (long) match.end(1) + start))));
+            } else {
+                vm.registers.set(rResult, CoreLib.NIL);
+            }
+        });
+
+        bindMethod("say", new Arg[]{new Arg("body*")}, null,
+                (vm, args, rResult, location) -> {
+                    final var buffer = new StringBuilder();
+                    for (final var a : args) {
+                        buffer.append(a.toString(vm));
+                    }
+                    System.out.println(buffer);
+                });
+
         bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")}, null,
                 (vm, _args, rResult, location) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
@@ -394,17 +419,8 @@ public class Core extends Lib {
                         final var value = args.removeFirst().eval(vm);
                         final var rValue = vm.alloc(1);
                         vm.registers.set(rValue, value);
-                        vm.currentLib.bind(((IdForm) id).id, Core.bindingType, new Binding(value.type(), rValue));
+                        vm.currentLib.bind(((IdForm) id).id, CoreLib.bindingType, new Binding(value.type(), rValue));
                     }
-                });
-
-        bindMethod("say", new Arg[]{new Arg("body*")}, null,
-                (vm, args, rResult, location) -> {
-                    final var buffer = new StringBuilder();
-                    for (final var a : args) {
-                        buffer.append(a.toString(vm));
-                    }
-                    System.out.println(buffer);
                 });
     }
 }

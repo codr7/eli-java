@@ -7,7 +7,7 @@ import codr7.jx.ops.SetPath;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 
-import static codr7.jx.libs.Core.bindingType;
+import static codr7.jx.libs.CoreLib.bindingType;
 
 public record Method(String id,
                      Arg[] args, int rArgs,

@@ -4,7 +4,7 @@ import codr7.jx.Iter;
 import codr7.jx.Loc;
 import codr7.jx.VM;
 import codr7.jx.Value;
-import codr7.jx.libs.Core;
+import codr7.jx.libs.CoreLib;
 
 public class IntRange implements Iter {
     private long current;
@@ -25,7 +25,7 @@ public class IntRange implements Iter {
         final var next = current + stride;
         if (next >= end) { return false; }
         current = next;
-        if (rResult != -1) { vm.registers.set(rResult, new Value<>(Core.intType, current)); }
+        if (rResult != -1) { vm.registers.set(rResult, new Value<>(CoreLib.intType, current)); }
         return true;
     }
 }

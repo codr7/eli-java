@@ -3,7 +3,7 @@ package codr7.jx.readers;
 import codr7.jx.*;
 import codr7.jx.errors.ReadError;
 import codr7.jx.forms.LiteralForm;
-import codr7.jx.libs.Core;
+import codr7.jx.libs.CoreLib;
 
 import java.util.Deque;
 
@@ -24,7 +24,7 @@ public class StringReader implements Reader {
             buffer.append(c);
         }
 
-        out.addLast(new LiteralForm(new Value<>(Core.stringType, buffer.toString()), loc));
+        out.addLast(new LiteralForm(new Value<>(CoreLib.stringType, buffer.toString()), loc));
         return true;
     }
 }

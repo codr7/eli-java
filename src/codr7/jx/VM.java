@@ -4,9 +4,10 @@ import codr7.jx.compilers.ExtendGoto;
 import codr7.jx.compilers.UnusedCopy;
 import codr7.jx.compilers.UnusedPut;
 import codr7.jx.errors.EvalError;
-import codr7.jx.libs.CSV;
-import codr7.jx.libs.Core;
-import codr7.jx.libs.GUI;
+import codr7.jx.libs.CSVLib;
+import codr7.jx.libs.CoreLib;
+import codr7.jx.libs.GUILib;
+import codr7.jx.libs.StringLib;
 import codr7.jx.libs.core.types.CallTrait;
 import codr7.jx.libs.core.types.SeqTrait;
 import codr7.jx.ops.*;
@@ -31,9 +32,10 @@ public final class VM {
     public final List<Reader> readers = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
 
-    public final Core coreLib = new Core();
-    public final CSV csvLib = new CSV();
-    public final GUI guiLib = new GUI();
+    public final CoreLib coreLib = new CoreLib();
+    public final CSVLib csvLib = new CSVLib();
+    public final GUILib guiLib = new GUILib();
+    public final StringLib stringLib = new StringLib();
     public final Lib userLib = new Lib("user");
 
     public Lib currentLib = null;
@@ -55,13 +57,14 @@ public final class VM {
         userLib.bind(coreLib);
         userLib.bind(csvLib);
         userLib.bind(guiLib);
+        userLib.bind(stringLib);
         currentLib = userLib;
     }
 
     public int alloc(final int n) {
         final var result = registers.size();
         for (var i = 0; i < n; i++) {
-            registers.add(Core.NIL);
+            registers.add(CoreLib.NIL);
         }
         return result;
     }
@@ -179,7 +182,7 @@ public final class VM {
         for (; ; ) {
             switch (ops.get(pc)) {
                 case AddItem op: {
-                    final var t = registers.get(op.rTarget()).cast(Core.listType);
+                    final var t = registers.get(op.rTarget()).cast(CoreLib.listType);
                     t.add(registers.get(op.rItem()));
                     pc++;
                     break;
@@ -188,7 +191,7 @@ public final class VM {
                     final var started = System.nanoTime();
                     eval(pc+1, op.bodyEnd().pc);
                     final var elapsed = Duration.ofNanos(System.nanoTime() - started);
-                    registers.set(op.rResult(), new Value<>(Core.timeType, elapsed));
+                    registers.set(op.rResult(), new Value<>(CoreLib.timeType, elapsed));
                     pc = op.bodyEnd().pc;
                     break;
                 }
@@ -243,7 +246,7 @@ public final class VM {
 
                     if (t.type() instanceof SeqTrait st) {
                         final var it = st.iter(this, t, op.loc());
-                        registers.set(op.rTarget(), new Value<>(Core.iterType, it));
+                        registers.set(op.rTarget(), new Value<>(CoreLib.iterType, it));
                     } else {
                         throw new EvalError("Expected seq: " + t.dump(this), op.loc());
                     }
@@ -252,14 +255,14 @@ public final class VM {
                     break;
                 }
                 case CreateList op: {
-                    registers.set(op.rTarget(), new Value<>(Core.listType, new ArrayList<>()));
+                    registers.set(op.rTarget(), new Value<>(CoreLib.listType, new ArrayList<>()));
                     pc++;
                     break;
                 }
                 case Dec op: {
-                    final var v = registers.get(op.rTarget()).cast(Core.intType);
-                    final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(Core.intType);
-                    registers.set(op.rTarget(), new Value<>(Core.intType, v - dv));
+                    final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
+                    final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(CoreLib.intType);
+                    registers.set(op.rTarget(), new Value<>(CoreLib.intType, v - dv));
                     pc++;
                     break;
                 }
@@ -268,19 +271,19 @@ public final class VM {
                     break;
                 }
                 case Inc op: {
-                    final var v = registers.get(op.rTarget()).cast(Core.intType);
-                    final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(Core.intType);
-                    registers.set(op.rTarget(), new Value<>(Core.intType, v + dv));
+                    final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
+                    final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(CoreLib.intType);
+                    registers.set(op.rTarget(), new Value<>(CoreLib.intType, v + dv));
                     pc++;
                     break;
                 }
                 case Left op: {
-                    registers.set(op.rResult(), registers.get(op.rPair()).cast(Core.pairType).left());
+                    registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).left());
                     pc++;
                     break;
                 }
                 case Next op: {
-                    final var iter = registers.get(op.rIter()).cast(Core.iterType);
+                    final var iter = registers.get(op.rIter()).cast(CoreLib.iterType);
                     pc = (iter.next(this, op.rItem(), op.loc()))
                         ? pc + 1
                         : op.bodyEnd().pc;
@@ -296,7 +299,7 @@ public final class VM {
                     break;
                 }
                 case Right op: {
-                    registers.set(op.rResult(), registers.get(op.rPair()).cast(Core.pairType).left());
+                    registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).left());
                     pc++;
                     break;
                 }
@@ -316,7 +319,7 @@ public final class VM {
                 case Zip op: {
                     final var left = registers.get(op.rLeft());
                     final var right = registers.get(op.rRight());
-                    registers.set(op.rResult(), new Value<>(Core.pairType, new Pair(left, right)));
+                    registers.set(op.rResult(), new Value<>(CoreLib.pairType, new Pair(left, right)));
                     pc++;
                     break;
                 }

@@ -2,6 +2,7 @@ package codr7.jx;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class BaseType<T> implements IDataType<T> {
     public final String id;
@@ -28,10 +29,14 @@ public abstract class BaseType<T> implements IDataType<T> {
     @Override public String dump(VM vm, IValue value) { return value.cast(this).toString(); }
 
     @Override public boolean eq(IValue left, IValue right) {
-        return left.cast(this).equals(right.cast(this));
+        final var lv = left.cast(this);
+        final var rv = right.cast(this);
+        return Objects.equals(lv, rv);
     }
 
     @Override final public String id() { return id; }
-    @Override final public boolean is(IValue left, IValue right) { return left.cast(this) == right.cast(this); }
+    @Override final public boolean is(IValue left, IValue right) {
+        return left.cast(this) == right.cast(this);
+    }
 }
 

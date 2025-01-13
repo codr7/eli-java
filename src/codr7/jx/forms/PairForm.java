@@ -1,10 +1,8 @@
 package codr7.jx.forms;
 
 import codr7.jx.*;
-import codr7.jx.libs.Core;
+import codr7.jx.libs.CoreLib;
 import codr7.jx.ops.Zip;
-
-import java.util.ArrayList;
 
 public final class PairForm extends BaseForm {
     public final IForm left, right;
@@ -41,7 +39,7 @@ public final class PairForm extends BaseForm {
     }
 
     @Override public IValue quote(final VM vm, final Loc loc) {
-        return new Value<>(Core.pairType, new Pair(left.quote(vm, loc), right.value(vm)));
+        return new Value<>(CoreLib.pairType, new Pair(left.quote(vm, loc), right.value(vm)));
     }
 
     @Override public IValue value(final VM vm) {
@@ -49,7 +47,7 @@ public final class PairForm extends BaseForm {
 
         if (lv != null) {
             final var rv = right.value(vm);
-            if (rv != null) { return new Value<>(Core.pairType, new Pair(lv, rv)); }
+            if (rv != null) { return new Value<>(CoreLib.pairType, new Pair(lv, rv)); }
         }
 
         return null;

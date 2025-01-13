@@ -11,8 +11,7 @@ fib PT0.000486441S
 ** skip first line
 *** add iter method
 *** call next
-** strip comma signs from all values
-** multiply K numbers with 1000.0
+** multiply K number with 1000.0
 
 * loop csv in stoj
 ** use for loop

@@ -3,7 +3,7 @@ package codr7.jx.ops;
 import codr7.jx.Loc;
 import codr7.jx.Op;
 import codr7.jx.VM;
-import codr7.jx.libs.Core;
+import codr7.jx.libs.CoreLib;
 
 import java.util.Set;
 
@@ -22,8 +22,8 @@ public record CallRegister(int rTarget, int rArguments, int arity, int rResult, 
 
         final var t = vm.registers.get(rTarget);
 
-        if (t.type() == Core.methodType) {
-            final var m = t.cast(Core.methodType);
+        if (t.type() == CoreLib.methodType) {
+            final var m = t.cast(CoreLib.methodType);
             for (var i = 0; i < m.args().length; i++) { read.add(m.rArgs()+i); }
             write.add(m.rResult());
         }

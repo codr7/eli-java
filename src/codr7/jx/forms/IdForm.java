@@ -2,7 +2,7 @@ package codr7.jx.forms;
 
 import codr7.jx.*;
 import codr7.jx.errors.EmitError;
-import codr7.jx.libs.Core;
+import codr7.jx.libs.CoreLib;
 
 public class IdForm extends BaseForm {
     public static IValue get(final Lib lib, final String id, final Loc loc) {
@@ -10,7 +10,7 @@ public class IdForm extends BaseForm {
 
         if (i != -1) {
             final var lid = id.substring(0, i);
-            final var l = lib.find(lid).cast(Core.libType);
+            final var l = lib.find(lid).cast(CoreLib.libType);
             if (l == null) { throw new EmitError("Unknown id: " + l + "/" + lid, loc); }
             return get(l, id.substring(i+1), loc);
         }
@@ -39,6 +39,6 @@ public class IdForm extends BaseForm {
     }
 
     @Override public boolean isNil() { return id.equals("_"); }
-    @Override public IValue quote(final VM vm, final Loc loc) { return new Value<>(Core.symbolType, id); }
+    @Override public IValue quote(final VM vm, final Loc loc) { return new Value<>(CoreLib.symbolType, id); }
     @Override public IValue value(final VM vm) { return get(vm.currentLib, id, loc()); }
 }

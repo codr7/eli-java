@@ -18,18 +18,18 @@ import java.awt.*;
 
 import static javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION;
 
-public class GUI extends Lib {
-    public static final WidgetType widgetType = new WidgetType("Widget", Core.anyType);
+public class GUILib extends Lib {
+    public static final WidgetType widgetType = new WidgetType("Widget", CoreLib.anyType);
     public static final ContainerType containerType = new ContainerType("Container", widgetType);
 
     public static final ButtonType buttonType = new ButtonType("Button", containerType);
-    public static final ColumnType columnType = new ColumnType("Column", Core.anyType);
+    public static final ColumnType columnType = new ColumnType("Column", CoreLib.anyType);
     public static final FrameType frameType = new FrameType("Frame", widgetType);
     public static final OpenDialogType openDialogType = new OpenDialogType("OpenDialog", containerType);
     public static final TabViewType tabViewType = new TabViewType("TabView", containerType);
     public static final TableType tableType = new TableType("TableView", containerType);
 
-    public GUI() {
+    public GUILib() {
         super("gui");
 
         bind(buttonType);
@@ -49,11 +49,11 @@ public class GUI extends Lib {
                 });
 
         bindMethod("add-column",
-                new Arg[]{new Arg("table", tableType), new Arg("title", Core.stringType)},
+                new Arg[]{new Arg("table", tableType), new Arg("title", CoreLib.stringType)},
                 columnType,
                 (vm, args, rResult, location) -> {
                     final var table = args[0].cast(tableType).table();
-                    final var title = args[1].cast(Core.stringType);
+                    final var title = args[1].cast(CoreLib.stringType);
                     final var c = new TableColumn();
                     c.setHeaderValue(title);
                     table.addColumn(c);
@@ -61,19 +61,19 @@ public class GUI extends Lib {
 
         bindMethod("add-tab",
                 new Arg[]{new Arg("parent", tabViewType),
-                        new Arg("title", Core.stringType),
+                        new Arg("title", CoreLib.stringType),
                 new Arg("child", widgetType)}, null,
                 (vm, args, rResult, location) -> {
-                    final var title = args[1].cast(Core.stringType);
+                    final var title = args[1].cast(CoreLib.stringType);
                     final var child = args[2].cast(widgetType);
                     args[0].cast(tabViewType).tabbedPane.add(title, child.component());
                 });
 
         bindMethod("button",
-                new Arg[]{new Arg("title", Core.anyType), new Arg("on-click", Core.anyType)},
+                new Arg[]{new Arg("title", CoreLib.anyType), new Arg("on-click", CoreLib.anyType)},
                 buttonType,
                 (vm, args, rResult, loc) -> {
-                    final var title = args[0].cast(Core.stringType);
+                    final var title = args[0].cast(CoreLib.stringType);
                     final var b = new codr7.jx.libs.gui.shims.Button(new JButton(title));
                     final var c = args[1];
 
@@ -99,29 +99,29 @@ public class GUI extends Lib {
                 });
 
         bindMethod("frame",
-                new Arg[]{new Arg("title", Core.stringType), new Arg("size", Core.pairType)}, frameType,
+                new Arg[]{new Arg("title", CoreLib.stringType), new Arg("size", CoreLib.pairType)}, frameType,
                 (vm, args, rResult, loc) -> {
-                    final var title = args[0].cast(Core.stringType);
+                    final var title = args[0].cast(CoreLib.stringType);
                     final var f = new JFrame(title);
-                    final var size = args[1].cast(Core.pairType);
-                    final var width = size.left().cast(Core.intType).intValue();
-                    final var height = size.right().cast(Core.intType).intValue();
+                    final var size = args[1].cast(CoreLib.pairType);
+                    final var width = size.left().cast(CoreLib.intType).intValue();
+                    final var height = size.right().cast(CoreLib.intType).intValue();
                     f.setPreferredSize(new Dimension(width, height));
                     f.setLocationRelativeTo(null);
                     vm.registers.set(rResult, new Value<>(frameType, new codr7.jx.libs.gui.shims.Frame(f)));
                 });
 
         bindMethod("open-file",
-                new Arg[]{new Arg("parent", widgetType), new Arg("filters", Core.listType)},
-                Core.maybeType,
+                new Arg[]{new Arg("parent", widgetType), new Arg("filters", CoreLib.listType)},
+                CoreLib.maybeType,
                 (vm, args, rResult, loc) -> {
                     final var d = new OpenDialog(new JFileChooser());
 
                     if (args.length > 1) {
-                        for (final var f: args[1].cast(Core.listType)) {
-                            final var fp = f.cast(Core.pairType);
-                            final var ext = fp.left().cast(Core.symbolType);
-                            final var inf = fp.right().cast(Core.stringType);
+                        for (final var f: args[1].cast(CoreLib.listType)) {
+                            final var fp = f.cast(CoreLib.pairType);
+                            final var ext = fp.left().cast(CoreLib.symbolType);
+                            final var inf = fp.right().cast(CoreLib.stringType);
                             d.fileChooser.setFileFilter(new FileNameExtensionFilter(inf, ext));
                         }
                     }
@@ -130,10 +130,10 @@ public class GUI extends Lib {
 
                     if (d.fileChooser.showOpenDialog(parent.component()) == JFileChooser.APPROVE_OPTION) {
                         vm.registers.set(rResult,
-                                new Value<>(Core.stringType,
+                                new Value<>(CoreLib.stringType,
                                         d.fileChooser.getSelectedFile().getName()));
                     } else {
-                        vm.registers.set(rResult, Core.NIL);
+                        vm.registers.set(rResult, CoreLib.NIL);
                     }
                 });
 

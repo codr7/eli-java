@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import codr7.jx.libs.Core;
+import codr7.jx.libs.CoreLib;
 
 public class Lib {
     public final String id;
@@ -35,11 +35,11 @@ public class Lib {
         bind(new JMethod(id, arguments, result, body));
     }
 
-    public void bind(final IType value) { bind(value.id(), Core.metaType, value); }
-    public void bind(final JMacro value) { bind(value.id(), Core.jMacroType, value); }
-    public void bind(final JMethod value) { bind(value.id(), Core.jMethodType, value); }
-    public void bind(final Lib value) { bind(value.id, Core.libType, value); }
-    public void bind(final Method value) { bind(value.id(), Core.methodType, value); }
+    public void bind(final IType value) { bind(value.id(), CoreLib.metaType, value); }
+    public void bind(final JMacro value) { bind(value.id(), CoreLib.jMacroType, value); }
+    public void bind(final JMethod value) { bind(value.id(), CoreLib.jMethodType, value); }
+    public void bind(final Lib value) { bind(value.id, CoreLib.libType, value); }
+    public void bind(final Method value) { bind(value.id(), CoreLib.methodType, value); }
 
     public IValue find(final String id) {
         final var v = bindings.get(id);

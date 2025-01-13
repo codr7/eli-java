@@ -2,7 +2,7 @@ package codr7.jx.readers;
 
 import codr7.jx.*;
 import codr7.jx.forms.LiteralForm;
-import codr7.jx.libs.Core;
+import codr7.jx.libs.CoreLib;
 
 import java.util.Deque;
 
@@ -23,7 +23,7 @@ public class IntReader implements Reader {
             location.update(c);
         }
 
-        out.addLast(new LiteralForm(new Value<>(Core.intType, v), loc));
+        out.addLast(new LiteralForm(new Value<>(CoreLib.intType, v), loc));
         return true;
     }
 }
