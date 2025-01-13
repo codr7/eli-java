@@ -43,9 +43,9 @@ public class MethodType extends BaseType<Method> implements CallTrait {
 
     @Override public void emitCall(final VM vm,
                                     final IValue target,
-                         final IForm[] body,
-                         final int rResult,
-                         final Loc loc) {
+                                    final IForm[] body,
+                                    final int rResult,
+                                    final Loc loc) {
         final var m = target.cast(this);
         final var arity = body.length - 1;
         for (var i = 0; i < arity; i++) { body[i + 1].emit(vm, m.rArgs() + i); }

@@ -92,7 +92,6 @@ public class CoreLib extends Lib {
                             margs.toArray(new Arg[0]), rArgs,
                             resultType, rResult,
                             args.toArray(new IForm[0]),
-                            vm.currentLib,
                             vm.label(vm.emitPc()), vm.label(-1));
                     m.emitBody(vm, rResult, loc);
                     m.end().pc = vm.emitPc();
@@ -342,7 +341,6 @@ public class CoreLib extends Lib {
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var bsf = args.removeFirst();
-                    final var rrs = new HashMap<Integer, Integer>();
 
                     if (bsf instanceof ListForm f) {
                         final var bs = f.items;
@@ -352,28 +350,14 @@ public class CoreLib extends Lib {
                             for (var i = 0; i < bs.length; i++) {
                                 if (bs[i] instanceof IdForm idf) {
                                     i++;
-                                    final var prev = parentLib.find(idf.id);
-
-                                    if (prev != null && prev.type() == bindingType) {
-                                        final var rValue = prev.cast(bindingType).rValue();
-                                        final var rPrev = vm.alloc(1);
-                                        vm.emit(new Copy(rValue, rPrev, loc));
-                                        bs[i].emit(vm, rValue);
-                                        rrs.put(rPrev, rValue);
-                                    } else {
-                                        final var rValue = vm.alloc(1);
-                                        bs[i].emit(vm, rValue);
-                                        vm.currentLib.bind(idf.id, new Value<>(bindingType, new Binding(null, rValue)));
-                                    }
+                                    final var rValue = vm.alloc(1);
+                                    bs[i].emit(vm, rValue);
+                                    vm.currentLib.bind(idf.id, new Value<>(bindingType, new Binding(null, rValue)));
                                 }
                             }
 
                             vm.emit(args, rResult);
                         });
-
-                        for (final var rr: rrs.entrySet()) {
-                            vm.emit(new Copy(rr.getKey(), rr.getValue(), loc));
-                        }
                     } else {
                         throw new EmitError("Expected bindings: " + bsf.dump(vm), loc);
                     }

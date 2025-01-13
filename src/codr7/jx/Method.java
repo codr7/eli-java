@@ -13,7 +13,6 @@ public record Method(String id,
                      Arg[] args, int rArgs,
                      IType resultType, int rResult,
                      IForm[] body,
-                     Lib lib,
                      Label start, Label end) {
     public int arity() {
         var result = args.length;
@@ -25,7 +24,7 @@ public record Method(String id,
         final var start = vm.label(vm.emitPc());
         final var end = vm.label(-1);
 
-        vm.doLib(lib, () -> {
+        vm.doLib(null, () -> {
             vm.emit(new SetPath(vm.path, loc));
 
             for (var i = 0; i < args.length; i++) {
