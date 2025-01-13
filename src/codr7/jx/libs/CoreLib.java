@@ -98,6 +98,7 @@ public class CoreLib extends Lib {
                     m.end().pc = vm.emitPc();
                     vm.ops.set(skipPc, new Goto(m.end(), loc));
                     vm.currentLib.bind(m);
+                    vm.registers.set(rResult, new Value<>(methodType, m));
                 });
 
         bindMethod("=", new Arg[]{new Arg("args*")}, null,
