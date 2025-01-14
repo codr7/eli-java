@@ -40,10 +40,10 @@ public final class Fix {
     public static String dump(final long it, final boolean forceZero) {
         final var result = new StringBuilder();
         if (isNeg(it)) { result.append('-'); }
-        final var t = Math.abs(trunc(it));
+        final var t = it;
         if (t > 0 || forceZero) { result.append(t); }
         result.append('.');
-        result.append(Math.abs(frac(it)));
+        result.append(frac(it));
         return result.toString();
     }
 
@@ -60,9 +60,9 @@ public final class Fix {
     }
 
     public static long make(final int exp, final long value) {
-        return exp & ((1 << EXP_BITS) - 1) +
+        return (exp & ((1 << EXP_BITS) - 1)) +
                 ((value < 0) ? (1 << EXP_BITS) : 0) +
-                ((value < 0) ? -value : value) << HEADER_BITS;
+                (Math.abs(value) << HEADER_BITS);
     }
 
     public static long mul(final long lhs, final long rhs) {
