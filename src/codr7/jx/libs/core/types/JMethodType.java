@@ -1,6 +1,7 @@
 package codr7.jx.libs.core.types;
 
 import codr7.jx.*;
+import codr7.jx.libs.core.traits.CallTrait;
 import codr7.jx.ops.CallValue;
 
 public class JMethodType extends BaseType<JMethod> implements CallTrait {

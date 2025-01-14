@@ -2,9 +2,9 @@ package codr7.jx.libs.core.types;
 
 import codr7.jx.*;
 import codr7.jx.libs.core.iters.ListItems;
+import codr7.jx.libs.core.traits.SeqTrait;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ListType extends BaseType<ArrayList<IValue>> implements SeqTrait {
     public ListType(final String id) { super(id); }

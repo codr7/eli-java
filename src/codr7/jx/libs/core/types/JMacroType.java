@@ -1,6 +1,7 @@
 package codr7.jx.libs.core.types;
 
 import codr7.jx.*;
+import codr7.jx.libs.core.traits.CallTrait;
 
 public class JMacroType extends BaseType<JMacro> implements CallTrait {
     public JMacroType(final String id) { super(id); }

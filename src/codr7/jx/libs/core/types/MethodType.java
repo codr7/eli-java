@@ -2,10 +2,7 @@ package codr7.jx.libs.core.types;
 
 import codr7.jx.*;
 import codr7.jx.errors.EvalError;
-import codr7.jx.ops.Copy;
-
-import java.util.ArrayDeque;
-import java.util.Arrays;
+import codr7.jx.libs.core.traits.CallTrait;
 
 public class MethodType extends BaseType<Method> implements CallTrait {
     public MethodType(final String id) {

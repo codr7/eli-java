@@ -6,6 +6,7 @@ import codr7.jx.forms.IdForm;
 import codr7.jx.forms.ListForm;
 import codr7.jx.forms.LiteralForm;
 import codr7.jx.libs.core.iters.IntRange;
+import codr7.jx.libs.core.traits.SeqTrait;
 import codr7.jx.libs.core.types.*;
 import codr7.jx.ops.*;
 
@@ -19,6 +20,7 @@ public class CoreLib extends Lib {
 
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
+    public static final FixType fixType = new FixType("Fix");
     public static final FormType formType = new FormType("Form");
     public static final IntType intType = new IntType("Int");
     public static final IterType iterType = new IterType("Iter");
@@ -45,6 +47,7 @@ public class CoreLib extends Lib {
         bind(anyType);
         bind(bindingType);
         bind(bitType);
+        bind(fixType);
         bind(intType);
         bind(iterType);
         bind(jMacroType);

@@ -1,17 +1,22 @@
 fact PT0.777442805S
 fib PT0.000486441S
 
-* add Fix type
-** sharpl
+fact PT1.709214295S
+fib PT0.0008288S
+
+* add Fix support
+*** update +/-/*/ methods to use num trait
+*** bench
 ** add reader
-** add NumTrait
-*** update +/-/*/ methods
+** readme
+** commit
 
 * clean up csv
+** add iter method
 ** skip first line
-*** add iter method
 *** call next
 ** multiply K number with 1000.0
+** divide % number with 100.0
 
 * loop csv in stoj
 ** use for loop

@@ -1,6 +1,7 @@
 package codr7.jx.libs.core.types;
 
 import codr7.jx.*;
+import codr7.jx.libs.core.traits.SeqTrait;
 
 public class IterType extends BaseType<Iter> implements SeqTrait {
     public IterType(final String id) { super(id); }

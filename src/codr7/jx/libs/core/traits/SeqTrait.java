@@ -1,4 +1,4 @@
-package codr7.jx.libs.core.types;
+package codr7.jx.libs.core.traits;
 
 import codr7.jx.IValue;
 import codr7.jx.Iter;

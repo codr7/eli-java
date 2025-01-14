@@ -4,7 +4,7 @@ import codr7.jx.Arg;
 import codr7.jx.Lib;
 import codr7.jx.Value;
 import codr7.jx.errors.EvalError;
-import codr7.jx.libs.core.types.CallTrait;
+import codr7.jx.libs.core.traits.CallTrait;
 import codr7.jx.libs.gui.shims.OpenDialog;
 import codr7.jx.libs.gui.shims.TabView;
 import codr7.jx.libs.gui.shims.Table;

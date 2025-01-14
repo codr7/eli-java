@@ -8,8 +8,8 @@ import codr7.jx.libs.CSVLib;
 import codr7.jx.libs.CoreLib;
 import codr7.jx.libs.GUILib;
 import codr7.jx.libs.StringLib;
-import codr7.jx.libs.core.types.CallTrait;
-import codr7.jx.libs.core.types.SeqTrait;
+import codr7.jx.libs.core.traits.CallTrait;
+import codr7.jx.libs.core.traits.SeqTrait;
 import codr7.jx.ops.*;
 import codr7.jx.readers.*;
 
