@@ -5,7 +5,6 @@ fact PT1.709214295S
 fib PT0.0008288S
 
 * add Fix support
-** add reader
 *** debug trunc part
 *** update +/-/*/ methods to use num trait
 *** bench

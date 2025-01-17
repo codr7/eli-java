@@ -25,7 +25,6 @@ public class FixReader implements Reader {
             e++;
         }
 
-        System.out.println("FIX " + e + " " + v + " " + Fix.make(e, v));
         out.addLast(new LiteralForm(new Value<>(CoreLib.fixType, Fix.make(e, v)), floc));
         return true;
     }
