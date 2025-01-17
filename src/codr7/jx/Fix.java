@@ -2,6 +2,7 @@ package codr7.jx;
 
 public final class Fix {
     public static final int EXP_BITS = 4;
+    public static final int HEAD_BITS = 5;
 
     private static final long[] scaleTable = new long[]
             {
@@ -39,10 +40,11 @@ public final class Fix {
     public static String dump(final long it, final boolean forceZero) {
         final var result = new StringBuilder();
         final var t = trunc(it);
-        if (t < 0) { result.append('-'); }
+        final var f = frac(it);
+        if (isNeg(it)) { result.append('-'); }
         if (t > 0 || forceZero) { result.append(t); }
         result.append('.');
-        result.append(frac(it));
+        result.append(f);
         return result.toString();
     }
 
@@ -54,8 +56,18 @@ public final class Fix {
         return value(it) % scale(exp(it));
     }
 
+    public static boolean isNeg(final long it) {
+        return (it >> EXP_BITS & 1) == 1;
+    }
+
     public static long make(final int exp, final long value) {
-        return (exp & ((1 << EXP_BITS) - 1)) + (value << EXP_BITS);
+        return (exp & ((1 << EXP_BITS) - 1)) +
+                (((value < 0) ? 1 : 0) << EXP_BITS) +
+                (Math.abs(value) << HEAD_BITS);
+    }
+
+    public static long neg(final long it) {
+        return make(exp(it), -value(it));
     }
 
     public static long mul(final long lhs, final long rhs) {
@@ -80,6 +92,6 @@ public final class Fix {
     }
 
     public static long value(final long it) {
-        return it >> EXP_BITS;
+        return it >> HEAD_BITS;
     }
 }

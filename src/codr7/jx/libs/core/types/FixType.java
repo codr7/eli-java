@@ -27,5 +27,7 @@ public class FixType extends BaseType<Long> implements NumTrait {
         return new Value<>(this, Fix.sub(lhs.cast(this), rhs.cast(this)));
     }
 
-    @Override public IValue zero() { return CoreLib.FIX_ZERO; }
+    @Override public IValue sub(final IValue v) {
+        return new Value<>(this, Fix.neg(v.cast(this)));
+    }
 }

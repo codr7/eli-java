@@ -165,7 +165,8 @@ public class CoreLib extends Lib {
 
                     if (args.length == 1) {
                         final var v = args[0];
-                        if (v.type() instanceof NumTrait nt) { result = nt.zero(); }
+                        if (v.type() instanceof NumTrait nt) { result = nt.sub(v); }
+                        else { throw new EvalError("Expected num: " + v.dump(vm), loc); }
                     } else {
                         result = args[0];
 

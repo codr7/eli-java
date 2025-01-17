@@ -34,8 +34,9 @@ public abstract class BaseType<T> implements IDataType<T> {
         return Objects.equals(lv, rv);
     }
 
-    @Override final public String id() { return id; }
-    @Override final public boolean is(IValue left, IValue right) {
+    @Override public String id() { return id; }
+
+    @Override public boolean is(IValue left, IValue right) {
         return left.cast(this) == right.cast(this);
     }
 }
