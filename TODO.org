@@ -5,11 +5,10 @@ fact PT1.709214295S
 fib PT0.0008288S
 
 * clean up csv
-** add parse-fix
-*** like parse-int
-** add iter method
-** skip first line
-*** call next
+** skip first line (next)
+*** add parse-value
+** check trailing char if any
+*** add len method/LenTrait
 ** multiply K number with 1000.0
 ** divide % number with 100.0
 
