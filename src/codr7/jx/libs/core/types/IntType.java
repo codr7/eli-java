@@ -24,4 +24,6 @@ public class IntType extends BaseType<Long> implements NumTrait {
     @Override public IValue sub(final IValue lhs, final IValue rhs) {
         return new Value<>(this, lhs.cast(this) - rhs.cast(this));
     }
+
+    @Override public IValue zero() { return CoreLib.INT_ZERO; }
 }

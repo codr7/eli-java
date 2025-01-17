@@ -7,4 +7,5 @@ public interface NumTrait {
     IValue div(IValue lhs, IValue rhs);
     IValue mul(IValue lhs, IValue rhs);
     IValue sub(IValue lhs, IValue rhs);
+    IValue zero();
 }

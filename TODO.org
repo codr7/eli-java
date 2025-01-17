@@ -4,14 +4,9 @@ fib PT0.000486441S
 fact PT1.709214295S
 fib PT0.0008288S
 
-* add Fix support
-*** debug trunc part
-*** update +/-/*/ methods to use num trait
-*** bench
-** readme
-** commit
-
 * clean up csv
+** add parse-fix
+*** like parse-int
 ** add iter method
 ** skip first line
 *** call next

@@ -2,10 +2,12 @@ package codr7.jx.libs;
 
 import codr7.jx.*;
 import codr7.jx.errors.EmitError;
+import codr7.jx.errors.EvalError;
 import codr7.jx.forms.IdForm;
 import codr7.jx.forms.ListForm;
 import codr7.jx.forms.LiteralForm;
 import codr7.jx.libs.core.iters.IntRange;
+import codr7.jx.libs.core.traits.NumTrait;
 import codr7.jx.libs.core.traits.SeqTrait;
 import codr7.jx.libs.core.types.*;
 import codr7.jx.ops.*;
@@ -40,6 +42,9 @@ public class CoreLib extends Lib {
 
     public static final IValue T = new Value<>(bitType, true);
     public static final IValue F = new Value<>(bitType, false);
+
+    public static final IValue FIX_ZERO = new Value<>(fixType, Fix.make(0, 0));
+    public static final IValue INT_ZERO = new Value<>(intType, 0L);
 
     public CoreLib() {
         super("core");
@@ -138,36 +143,78 @@ public class CoreLib extends Lib {
                 });
 
         bindMethod("+", new Arg[]{new Arg("args*")}, null,
-                (vm, args, rResult, location) -> {
-                    var result = 0L;
-                    for (final var a: args) { result += a.cast(intType); }
-                    vm.registers.set(rResult, new Value<>(intType, result));
-                });
+                (vm, args, rResult, loc) -> {
+                    var result = args[0];
 
-        bindMethod("-", new Arg[]{new Arg("args*")}, null,
-                (vm, args, rResult, location) -> {
-                    var result = args[0].cast(intType);
+                    for (var i = 1; i < args.length; i++) {
+                        final var a = args[i];
 
-                    if (args.length == 1) {
-                        result = -result;
-                    } else {
-                        for (var i = 1; i < args.length; i++) {
-                            result -= args[i].cast(intType);
+                        if (a.type() instanceof NumTrait nt) {
+                            result = nt.add(result, a);
+                        } else {
+                            throw new EvalError("Expected num: " + a.dump(vm), loc);
                         }
                     }
 
-                    vm.registers.set(rResult, new Value<>(intType, result));
+                    vm.registers.set(rResult, result);
+                });
+
+        bindMethod("-", new Arg[]{new Arg("args*")}, null,
+                (vm, args, rResult, loc) -> {
+                    IValue result = null;
+
+                    if (args.length == 1) {
+                        final var v = args[0];
+                        if (v.type() instanceof NumTrait nt) { result = nt.zero(); }
+                    } else {
+                        result = args[0];
+
+                        for (var i = 1; i < args.length; i++) {
+                            final var a = args[i];
+
+                            if (a.type() instanceof NumTrait nt) {
+                                result = nt.sub(result, a);
+                            } else {
+                                throw new EvalError("Expected num: " + a.dump(vm), loc);
+                            }
+                        }
+                    }
+
+                    vm.registers.set(rResult, result);
                 });
 
         bindMethod("*", new Arg[]{new Arg("args*")}, null,
                 (vm, args, rResult, loc) -> {
-                    var result = 1L;
+                    var result = args[0];
 
-                    for (final var a : args) {
-                        result *= a.cast(intType);
+                    for (var i = 1; i < args.length; i++) {
+                        final var a = args[i];
+
+                        if (a.type() instanceof NumTrait nt) {
+                            result = nt.mul(result, a);
+                        } else {
+                            throw new EvalError("Expected num: " + a.dump(vm), loc);
+                        }
                     }
 
-                    vm.registers.set(rResult, new Value<>(intType, result));
+                    vm.registers.set(rResult, result);
+                });
+
+        bindMethod("/", new Arg[]{new Arg("args*")}, null,
+                (vm, args, rResult, loc) -> {
+                    var result = args[0];
+
+                    for (var i = 1; i < args.length; i++) {
+                        final var a = args[i];
+
+                        if (a.type() instanceof NumTrait nt) {
+                            result = nt.div(result, a);
+                        } else {
+                            throw new EvalError("Expected num: " + a.dump(vm), loc);
+                        }
+                    }
+
+                    vm.registers.set(rResult, result);
                 });
 
         bindMacro("bench", new Arg[]{new Arg("reps", intType), new Arg("body*", intType)}, null,

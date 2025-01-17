@@ -1,6 +1,7 @@
 package codr7.jx.libs.core.types;
 
 import codr7.jx.*;
+import codr7.jx.libs.CoreLib;
 import codr7.jx.libs.core.traits.NumTrait;
 
 public class FixType extends BaseType<Long> implements NumTrait {
@@ -25,4 +26,6 @@ public class FixType extends BaseType<Long> implements NumTrait {
     @Override public IValue sub(final IValue lhs, final IValue rhs) {
         return new Value<>(this, Fix.sub(lhs.cast(this), rhs.cast(this)));
     }
+
+    @Override public IValue zero() { return CoreLib.FIX_ZERO; }
 }

@@ -8,7 +8,7 @@ public class IdForm extends BaseForm {
     public static IValue get(final Lib lib, final String id, final Loc loc) {
         final var i = id.indexOf('/');
 
-        if (i != -1) {
+        if (i > 0) {
             final var lid = id.substring(0, i);
             final var l = lib.find(lid).cast(CoreLib.libType);
             if (l == null) { throw new EmitError("Unknown id: " + l + "/" + lid, loc); }
