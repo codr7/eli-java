@@ -102,3 +102,6 @@
 
 (check 123:6
     (parse-int "abc123def" 3))
+
+(check 1.234:5
+  (parse-fix "1.234"))

@@ -55,8 +55,7 @@ public final class Fix {
     }
 
     public static long make(final int exp, final long value) {
-        return (exp & ((1 << EXP_BITS) - 1)) +
-                (Math.abs(value) << EXP_BITS);
+        return (exp & ((1 << EXP_BITS) - 1)) + (value << EXP_BITS);
     }
 
     public static long mul(final long lhs, final long rhs) {

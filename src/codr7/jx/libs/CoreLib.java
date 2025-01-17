@@ -413,6 +413,26 @@ public class CoreLib extends Lib {
                     }
             });
 
+        bindMethod("parse-fix", new Arg[]{new Arg("in")}, null,
+                (vm, args, rResult, loc) -> {
+                    final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
+                    final var in = args[0].cast(stringType).substring(start);
+                    final var match = Pattern.compile("^\\s*(\\d*)[.](\\d+).*").matcher(in);
+
+                    if (match.find()) {
+                        final var fv = match.group(2);
+                        final var e = fv.length();
+                        final var s = Fix.scale(e);
+                        final var v = Fix.make(e, Long.parseLong(match.group(1)) * s + Long.parseLong(fv) );
+
+                        vm.registers.set(rResult, new Value<>(pairType, new Pair(
+                                new Value<>(fixType, v),
+                                new Value<>(intType, (long) match.end(2) + start))));
+                    } else {
+                        vm.registers.set(rResult, CoreLib.NIL);
+                    }
+                });
+
         bindMethod("parse-int", new Arg[]{new Arg("in")}, null,
                 (vm, args, rResult, loc) -> {
             final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
