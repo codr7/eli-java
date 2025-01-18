@@ -48,8 +48,8 @@
 
 (var data-table (gui/table))
 (gui/add data-panel data-table)
-(gui/add-column data-table "Series")
-(gui/add-column data-table "Timestamp")
+(gui/add-column data-table "Name")
+(gui/add-column data-table "Date")
 (gui/add-column data-table "Interval")
 
 (var chart-panel (gui/panel))
