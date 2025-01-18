@@ -23,6 +23,7 @@ public class CoreLib extends Lib {
 
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
+    public static final CharType charType = new CharType("Char");
     public static final FixType fixType = new FixType("Fix");
     public static final FormType formType = new FormType("Form");
     public static final IntType intType = new IntType("Int");

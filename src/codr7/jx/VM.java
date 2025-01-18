@@ -43,6 +43,7 @@ public final class VM {
     public VM() {
         readers.add(WhitespaceReader.instance);
         readers.add(CallReader.instance);
+        readers.add(CharReader.instance);
         readers.add(FixReader.instance);
         readers.add(IntReader.instance);
         readers.add(IdReader.instance);

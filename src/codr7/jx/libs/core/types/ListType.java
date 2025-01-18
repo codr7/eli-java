@@ -1,13 +1,35 @@
 package codr7.jx.libs.core.types;
 
 import codr7.jx.*;
+import codr7.jx.errors.EvalError;
+import codr7.jx.libs.CoreLib;
 import codr7.jx.libs.core.iters.ListItems;
+import codr7.jx.libs.core.traits.CallTrait;
 import codr7.jx.libs.core.traits.SeqTrait;
 
 import java.util.ArrayList;
 
-public class ListType extends BaseType<ArrayList<IValue>> implements SeqTrait {
+public class ListType extends BaseType<ArrayList<IValue>> implements CallTrait, SeqTrait {
     public ListType(final String id) { super(id); }
+
+    @Override public void call(final VM vm,
+                               final IValue target,
+                               final int rArgs,
+                               final int arity,
+                               final int rResult,
+                               final Loc loc) {
+        final var t = target.cast(this);
+
+        switch (arity) {
+            case 1: {
+                final var i = vm.registers.get(rArgs).cast(CoreLib.intType).intValue();
+                vm.registers.set(rResult, t.get(i));
+                break;
+            }
+            default:
+                throw new EvalError("Invalid arguments", loc);
+        }
+    }
 
     @Override public String dump(final VM vm, final IValue value) {
         final var result = new StringBuilder();

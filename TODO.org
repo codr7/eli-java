@@ -2,14 +2,17 @@ fact PT1.059064643S
 fib PT0.002758256S
 
 * clean up csv
-** add list type indexing support
-*** implement call on ListType
 ** add support for pair id's in let
 ** finish parse-value
 *** check trailing char if any
 **** add len method/LenTrait
 *** multiply K number with 1000.0
 *** divide % number with 100.0
+
+* add List/String set index support
+
+* add slice/splice support to ListString
+** handle pair index with/without value
 
 * add parse-date
 ** add Date type?
