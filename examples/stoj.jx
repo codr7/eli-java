@@ -8,6 +8,10 @@
 (gui/add root-panel top-panel)
 (gui/row-layout top-panel)
 
+(^parse-value [in] Fix
+  (let [v:i (parse-fix:_ in)]
+    v))
+
 (^on-load [] _
   (let [path (gui/open-file frame ['csv:"investing.com Export"])
         file (if path (csv/open-file path) _)]
@@ -16,7 +20,13 @@
         (say "Loading " path "...")
         (next file)
         (for [rec file]
-          (say rec))))))
+          (say (rec 0) " "
+               (parse-value (rec 1)) " "
+               (parse-value (rec 2)) " "
+               (parse-value (rec 3)) " "
+               (parse-value (rec 4)) " "
+               (parse-value (rec 5)) " "
+               (parse-value (rec 5)) " "))))))
 
 (var load-button (gui/button "Load" on-load))
 (gui/add top-panel load-button)
