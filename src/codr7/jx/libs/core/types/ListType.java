@@ -5,11 +5,14 @@ import codr7.jx.errors.EvalError;
 import codr7.jx.libs.CoreLib;
 import codr7.jx.libs.core.iters.ListItems;
 import codr7.jx.libs.core.traits.CallTrait;
+import codr7.jx.libs.core.traits.LenTrait;
 import codr7.jx.libs.core.traits.SeqTrait;
 
 import java.util.ArrayList;
 
-public class ListType extends BaseType<ArrayList<IValue>> implements CallTrait, SeqTrait {
+public class ListType
+        extends BaseType<ArrayList<IValue>>
+        implements CallTrait, LenTrait, SeqTrait {
     public ListType(final String id) { super(id); }
 
     @Override public void call(final VM vm,
@@ -58,6 +61,8 @@ public class ListType extends BaseType<ArrayList<IValue>> implements CallTrait, 
     }
 
     @Override public Iter iter(VM vm, IValue target, Loc loc) { return new ListItems(target.cast(this)); }
+
+    @Override public int len(final IValue target) { return target.cast(this).size(); }
 
     @Override public boolean toBit(final VM vm, final IValue value) { return !value.cast(this).isEmpty(); }
 

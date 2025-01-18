@@ -7,6 +7,7 @@ import codr7.jx.forms.IdForm;
 import codr7.jx.forms.ListForm;
 import codr7.jx.forms.LiteralForm;
 import codr7.jx.libs.core.iters.IntRange;
+import codr7.jx.libs.core.traits.LenTrait;
 import codr7.jx.libs.core.traits.NumTrait;
 import codr7.jx.libs.core.traits.SeqTrait;
 import codr7.jx.libs.core.types.*;
@@ -387,6 +388,17 @@ public class CoreLib extends Lib {
 
                     vm.registers.set(rResult, new Value<>(bitType, result));
                 });
+
+        bindMethod("len", new Arg[]{new Arg("it")}, bitType,
+                (vm, args, rResult, loc) -> {
+            final var it = args[0];
+
+            if (it.type() instanceof LenTrait lt) {
+                vm.registers.set(rResult, new Value<>(intType, (long) lt.len(it)));
+            } else {
+                throw new EvalError("Len not supported: " + it.dump(vm), loc);
+            }
+        });
 
         bindMacro("let", new Arg[]{new Arg("bindings", listType), new Arg("body*")}, null,
                 (vm, _args, rResult, loc) -> {

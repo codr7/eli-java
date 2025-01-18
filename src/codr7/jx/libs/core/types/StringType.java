@@ -4,8 +4,9 @@ import codr7.jx.*;
 import codr7.jx.errors.EvalError;
 import codr7.jx.libs.CoreLib;
 import codr7.jx.libs.core.traits.CallTrait;
+import codr7.jx.libs.core.traits.LenTrait;
 
-public class StringType extends BaseType<String> implements CallTrait {
+public class StringType extends BaseType<String> implements CallTrait, LenTrait {
     public StringType(final String id) {
         super(id);
     }
@@ -32,6 +33,8 @@ public class StringType extends BaseType<String> implements CallTrait {
     @Override public String dump(final VM vm, final IValue value) {
         return '"' + value.cast(this) + '"';
     }
+
+    @Override public int len(final IValue target) { return target.cast(this).length(); }
 
     @Override public boolean toBit(final VM vm, final IValue value) {
         return !value.cast(this).isEmpty();

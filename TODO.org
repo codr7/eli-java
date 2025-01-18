@@ -5,9 +5,9 @@ fib PT0.002758256S
 ** add support for pair id's in let
 ** finish parse-value
 *** check trailing char if any
-**** add len method/LenTrait
 *** multiply K number with 1000.0
 *** divide % number with 100.0
+** test stoj
 
 * add List/String set index support
 

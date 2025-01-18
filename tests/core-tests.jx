@@ -117,3 +117,9 @@
 
 (check \b
   ("abc" 1))
+
+(check 3
+  #[1 2 3])
+
+(check 3
+  #"abc")
