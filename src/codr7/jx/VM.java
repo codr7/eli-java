@@ -302,7 +302,7 @@ public final class VM {
                     break;
                 }
                 case Right op: {
-                    registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).left());
+                    registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).right());
                     pc++;
                     break;
                 }
@@ -319,10 +319,17 @@ public final class VM {
                     System.out.println(op.text());
                     pc++;
                     break;
+                case Unzip op: {
+                    final var p = registers.get(op.rPair()).cast(CoreLib.pairType);
+                    registers.set(op.rLeft(), p.left());
+                    registers.set(op.rRight(), p.right());
+                    pc++;
+                    break;
+                }
                 case Zip op: {
-                    final var left = registers.get(op.rLeft());
-                    final var right = registers.get(op.rRight());
-                    registers.set(op.rResult(), new Value<>(CoreLib.pairType, new Pair(left, right)));
+                    final var l = registers.get(op.rLeft());
+                    final var r = registers.get(op.rRight());
+                    registers.set(op.rResult(), new Value<>(CoreLib.pairType, new Pair(l, r)));
                     pc++;
                     break;
                 }

@@ -2,6 +2,9 @@ package codr7.jx.forms;
 
 import codr7.jx.*;
 import codr7.jx.libs.CoreLib;
+import codr7.jx.ops.Left;
+import codr7.jx.ops.Right;
+import codr7.jx.ops.Unzip;
 import codr7.jx.ops.Zip;
 
 public final class PairForm extends BaseForm {
@@ -12,6 +15,23 @@ public final class PairForm extends BaseForm {
         this.left = left;
         this.right = right;
     }
+
+    @Override public void bind(final VM vm, final int rValue, final Loc loc) {
+        if (left.isNil()) {
+            vm.emit(new Right(rValue, rValue, loc));
+            right.bind(vm, rValue, loc);
+        } else if (right.isNil()) {
+            vm.emit(new Left(rValue, rValue, loc));
+            left.bind(vm, rValue, loc);
+        } else {
+            final var rRight = vm.alloc(1);
+            vm.emit(new Unzip(rValue, rValue, rRight, loc));
+            left.bind(vm, rValue, loc);
+            right.bind(vm, rRight, loc);
+        }
+    }
+
+    @Override public String dump(final VM vm) { return left.dump(vm) + ":" + right.dump(vm); }
 
     @Override public void emit(final VM vm, final int rResult) {
         final var v = value(vm);
@@ -32,10 +52,6 @@ public final class PairForm extends BaseForm {
         }
 
         return false;
-    }
-
-    @Override public String dump(final VM vm) {
-        return left.toString() + ":" + right.toString();
     }
 
     @Override public IValue quote(final VM vm, final Loc loc) {

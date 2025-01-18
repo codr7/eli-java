@@ -71,6 +71,10 @@
 (check 42
   (let [foo 42] foo))
 
+(check 1:2
+  (let [i:j 1:2]
+    i:j))
+
 (do
   (var foo 'foo)
   (let [foo 'bar]

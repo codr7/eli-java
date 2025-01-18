@@ -2,7 +2,6 @@ fact PT1.059064643S
 fib PT0.002758256S
 
 * clean up csv
-** add support for pair id's in let
 ** finish parse-value
 *** check trailing char if any
 *** multiply K number with 1000.0

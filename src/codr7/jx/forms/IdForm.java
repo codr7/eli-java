@@ -27,6 +27,10 @@ public class IdForm extends BaseForm {
         this.id = id;
     }
 
+    @Override public void bind(final VM vm, final int rValue, final Loc loc) {
+        vm.currentLib.bind(id, new Value<>(CoreLib.bindingType, new Binding(null, rValue)));
+    }
+
     @Override public String dump(final VM vm) { return id; }
 
     @Override public void emit(final VM vm, final int rResult) {
@@ -40,5 +44,9 @@ public class IdForm extends BaseForm {
 
     @Override public boolean isNil() { return id.equals("_"); }
     @Override public IValue quote(final VM vm, final Loc loc) { return new Value<>(CoreLib.symbolType, id); }
-    @Override public IValue value(final VM vm) { return get(vm.currentLib, id, loc()); }
+
+    @Override public IValue value(final VM vm) {
+        final var v = get(vm.currentLib, id, loc());
+        return (v.type() == CoreLib.bindingType) ? null : v;
+    }
 }

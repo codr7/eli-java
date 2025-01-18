@@ -6,6 +6,7 @@ import codr7.jx.errors.EvalError;
 import codr7.jx.forms.IdForm;
 import codr7.jx.forms.ListForm;
 import codr7.jx.forms.LiteralForm;
+import codr7.jx.forms.PairForm;
 import codr7.jx.libs.core.iters.IntRange;
 import codr7.jx.libs.core.traits.LenTrait;
 import codr7.jx.libs.core.traits.NumTrait;
@@ -259,8 +260,8 @@ public class CoreLib extends Lib {
 
         bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")}, null,
                 (vm, args, rResult, loc) -> {
-                    final var t = args[0];
-                    final var v = t.value(vm);
+                    final var t = (IdForm)args[0];
+                    final var v = vm.currentLib.find(t.id);
 
                     if (v.type() != bindingType) {
                         throw new EmitError("Expected binding: " + t.dump(vm), t.loc());
@@ -355,8 +356,8 @@ public class CoreLib extends Lib {
 
         bindMacro("inc", new Arg[]{new Arg("place"), new Arg("delta?")}, null,
                 (vm, args, rResult, loc) -> {
-                    final var t = args[0];
-                    final var v = t.value(vm);
+                    final var t = (IdForm)args[0];
+                    final var v = vm.currentLib.find(t.id);
 
                     if (v.type() != bindingType) {
                         throw new EmitError("Expected binding: " + t.dump(vm), t.loc());
@@ -407,16 +408,14 @@ public class CoreLib extends Lib {
 
                     if (bsf instanceof ListForm f) {
                         final var bs = f.items;
-                        final var parentLib = vm.currentLib;
 
                         vm.doLib(null, () -> {
                             for (var i = 0; i < bs.length; i++) {
-                                if (bs[i] instanceof IdForm idf) {
-                                    i++;
-                                    final var rValue = vm.alloc(1);
-                                    bs[i].emit(vm, rValue);
-                                    vm.currentLib.bind(idf.id, new Value<>(bindingType, new Binding(null, rValue)));
-                                }
+                                final var bf = bs[i];
+                                i++;
+                                final var rValue = vm.alloc(1);
+                                bs[i].emit(vm, rValue);
+                                bf.bind(vm, rValue, loc);
                             }
 
                             vm.emit(args, rResult);

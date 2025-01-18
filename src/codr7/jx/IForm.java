@@ -9,6 +9,10 @@ import codr7.jx.ops.Goto;
 import codr7.jx.ops.Nop;
 
 public interface IForm {
+    default void bind(VM vm, int rValue, Loc loc) {
+        throw new EmitError("Invalid bind target: " + dump(vm), loc);
+    }
+
     void emit(VM vm, int rResult);
 
     default void emitCall(final VM vm, final IForm[] body, final int rResult) {
