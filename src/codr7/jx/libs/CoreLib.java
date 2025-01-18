@@ -16,9 +16,10 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class CoreLib extends Lib {
-    public static final AnyType anyType = new AnyType("Any");
+    public static final TraitType anyType = new TraitType("Any");
     public static final NilType nilType = new NilType("Nil");
     public static final MaybeType maybeType = new MaybeType("Maybe", anyType, nilType);
+    public static final TraitType numType = new TraitType("Num", anyType);
 
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
@@ -39,12 +40,10 @@ public class CoreLib extends Lib {
     public static final TimeType timeType = new TimeType("Time");
 
     public static final IValue NIL = new Value<>(nilType, new Object());
-
     public static final IValue T = new Value<>(bitType, true);
     public static final IValue F = new Value<>(bitType, false);
 
-    public static final IValue FIX_ZERO = new Value<>(fixType, Fix.make(0, 0));
-    public static final IValue INT_ZERO = new Value<>(intType, 0L);
+    public static final IValue ZERO = new Value<>(intType, 0L);
 
     public CoreLib() {
         super("core");
@@ -63,6 +62,7 @@ public class CoreLib extends Lib {
         bind(metaType);
         bind(methodType);
         bind(nilType);
+        bind(numType);
         bind(pairType);
         bind(rangeType);
         bind(stringType);
@@ -70,7 +70,6 @@ public class CoreLib extends Lib {
         bind(timeType);
 
         bind("_", NIL);
-
         bind("T", T);
         bind("F", F);
 
@@ -108,7 +107,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(methodType, m));
                 });
 
-        bindMethod("=", new Arg[]{new Arg("args*")}, null,
+        bindMethod("=", new Arg[]{new Arg("args*")}, bitType,
                 (vm, args, rResult, location) -> {
                     final var lhs = args[0];
                     var result = true;
@@ -123,7 +122,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(bitType, result));
                 });
 
-        bindMethod(">", new Arg[]{new Arg("args*")}, null,
+        bindMethod(">", new Arg[]{new Arg("args*")}, bitType,
                 (vm, args, rResult, location) -> {
                     var lhs = args[0].cast(intType);
                     var result = true;
@@ -142,7 +141,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(bitType, result));
                 });
 
-        bindMethod("+", new Arg[]{new Arg("args*")}, null,
+        bindMethod("+", new Arg[]{new Arg("args*")}, numType,
                 (vm, args, rResult, loc) -> {
                     var result = args[0];
 
@@ -159,7 +158,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, result);
                 });
 
-        bindMethod("-", new Arg[]{new Arg("args*")}, null,
+        bindMethod("-", new Arg[]{new Arg("args*")}, numType,
                 (vm, args, rResult, loc) -> {
                     IValue result = null;
 
@@ -414,7 +413,14 @@ public class CoreLib extends Lib {
                     }
             });
 
-        bindMethod("parse-fix", new Arg[]{new Arg("in")}, null,
+        bindMethod("next", new Arg[]{new Arg("in", iterType)}, anyType,
+                (vm, args, rResult, loc) -> {
+                    if (!args[0].cast(iterType).next(vm, rResult, loc)) {
+                        vm.registers.set(rResult, CoreLib.NIL);
+                    }
+                });
+
+        bindMethod("parse-fix", new Arg[]{new Arg("in")}, pairType,
                 (vm, args, rResult, loc) -> {
                     final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
                     final var in = args[0].cast(stringType).substring(start);
@@ -434,7 +440,7 @@ public class CoreLib extends Lib {
                     }
                 });
 
-        bindMethod("parse-int", new Arg[]{new Arg("in")}, null,
+        bindMethod("parse-int", new Arg[]{new Arg("in")}, pairType,
                 (vm, args, rResult, loc) -> {
             final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
             final var in = args[0].cast(stringType).substring(start);

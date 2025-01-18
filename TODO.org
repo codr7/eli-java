@@ -1,22 +1,16 @@
-fact PT0.777442805S
-fib PT0.000486441S
-
-fact PT1.709214295S
-fib PT0.0008288S
+fact PT1.059064643S
+fib PT0.002758256S
 
 * clean up csv
-** skip first line (next)
 *** add parse-value
 ** check trailing char if any
 *** add len method/LenTrait
 ** multiply K number with 1000.0
 ** divide % number with 100.0
 
-* loop csv in stoj
-** use for loop
-** test csv/open-file
+* add parse-date
 
-** https://www.investing.com/crypto/bitcoin/historical-data
+* add data to JTable
 
 * add db module
 ** jdbc / h2
@@ -38,6 +32,8 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 *** calculate open/high/low as percentage of price
 **** log seq, series name, delta time, percentages & change
 *** draw a projection for each found id & one for actual data if any
+
+** https://www.investing.com/crypto/bitcoin/historical-data
 
 ** add let? macro
 *** use in stoj/on-load
