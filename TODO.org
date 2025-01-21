@@ -2,19 +2,24 @@ fact PT1.059064643S
 fib PT0.002758256S
 
 * clean up csv
-** finish parse-value
-*** check trailing char if any
-*** multiply K number with 1000.0
-*** divide % number with 100.0
-** test stoj
+** test parse-value
 
 * add List/String set index support
 
-* add slice/splice support to ListString
-** handle pair index with/without value
-
 * add parse-date
 ** add Date type?
+
+* add nested if/else macro
+** like return/recall
+** update code
+
+* add support for TypeSets
+** Int | Nil
+** add Int? shortcut for Maybe
+** switch string/find result tupe to intType.maybe
+
+* add slice/splice support to ListString
+** handle pair index with/without value
 
 * add data to JTable
 ** use filename as name

@@ -127,3 +127,6 @@
 
 (check 3
   #"abc")
+
+(check "ac"
+  (string/strip "abc" \b))

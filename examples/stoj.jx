@@ -9,8 +9,16 @@
 (gui/row-layout top-panel)
 
 (^parse-value [in] Fix
-  (let [v:i (parse-fix:_ in)]
-    v))
+  (let [s   (string/strip in \,)
+        v:i (parse-fix:_ in)]
+    (if (< i #s)
+      (let [c (s i)]
+        (if (= c \K)
+          (* v 1000.0)
+          (if (= c \%)
+            (/ v 100.0)
+            v)))
+      v)))
 
 (^on-load [] _
   (let [path (gui/open-file frame ['csv:"investing.com Export"])
