@@ -8,26 +8,15 @@ import codr7.jx.ops.CallValue;
 import codr7.jx.ops.Goto;
 import codr7.jx.ops.Nop;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface IForm {
-    default void bind(VM vm, int rValue, Loc loc) {
+    default void bind(final VM vm, final int rValue, final Loc loc) {
         throw new EmitError("Invalid bind target: " + dump(vm), loc);
     }
 
     void emit(VM vm, int rResult);
-
-    default void emitCall(final VM vm, final IForm[] body, final int rResult) {
-        final var arity = body.length;
-        final var rParams = vm.alloc(arity);
-        final var t = value(vm);
-
-        if (t == null) {
-            final var rTarget = vm.alloc(1);
-            emit(vm, rTarget);
-            vm.emit(new CallRegister(rTarget, rParams, arity, rResult, loc()));
-        } else {
-            vm.emit(new CallValue(t, rParams, arity, rResult, loc()));
-        }
-    }
 
     boolean eq(IForm other);
 
@@ -60,5 +49,10 @@ public interface IForm {
         return new Value<>(CoreLib.formType, new QuoteForm(this, loc));
     }
 
-    IValue value(VM vm);
+    IValue rawValue(VM vm);
+
+    default IValue value(final VM vm) {
+        final var v = rawValue(vm);
+        return (v == null || v.type() == CoreLib.bindingType) ? null : v;
+    }
 }

@@ -25,5 +25,5 @@ public class LiteralForm extends BaseForm {
 
     @Override public String dump(final VM vm) { return value.dump(vm); }
     @Override public IValue quote(final VM vm, final Loc loc) { return value; }
-    @Override public IValue value(final VM vm) { return value; }
+    @Override public IValue rawValue(final VM vm) { return value; }
 }

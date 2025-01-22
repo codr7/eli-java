@@ -14,6 +14,7 @@ import codr7.jx.libs.core.traits.SeqTrait;
 import codr7.jx.libs.core.types.*;
 import codr7.jx.ops.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -26,7 +27,7 @@ public class CoreLib extends Lib {
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
     public static final CharType charType = new CharType("Char");
-    public static final FixType fixType = new FixType("Fix");
+    public static final DecType decType = new DecType("Dec");
     public static final FormType formType = new FormType("Form");
     public static final IntType intType = new IntType("Int");
     public static final IterType iterType = new IterType("Iter");
@@ -54,7 +55,7 @@ public class CoreLib extends Lib {
         bind(anyType);
         bind(bindingType);
         bind(bitType);
-        bind(fixType);
+        bind(decType);
         bind(intType);
         bind(iterType);
         bind(jMacroType);
@@ -433,12 +434,10 @@ public class CoreLib extends Lib {
                         final var bs = f.items;
 
                         vm.doLib(null, () -> {
-                            for (var i = 0; i < bs.length; i++) {
-                                final var bf = bs[i];
-                                i++;
+                            for (var i = 0; i < bs.length; i += 2) {
                                 final var rValue = vm.alloc(1);
-                                bs[i].emit(vm, rValue);
-                                bf.bind(vm, rValue, loc);
+                                bs[i+1].emit(vm, rValue);
+                                bs[i].bind(vm, rValue, loc);
                             }
 
                             vm.emit(args, rResult);
@@ -455,23 +454,18 @@ public class CoreLib extends Lib {
                     }
                 });
 
-        bindMethod("parse-fix", new Arg[]{new Arg("in")}, pairType,
+        bindMethod("parse-dec", new Arg[]{new Arg("in")}, pairType,
                 (vm, args, rResult, loc) -> {
                     final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
                     final var in = args[0].cast(stringType).substring(start);
-                    final var match = Pattern.compile("^\\s*(\\d*)[.](\\d+).*").matcher(in);
+                    final var match = Pattern.compile("^\\s*(-?\\d*[.]\\d+).*").matcher(in);
 
                     if (match.find()) {
-                        final var fv = match.group(2);
-                        final var e = fv.length();
-                        final var s = Fix.scale(e);
-                        final var v = Fix.make(e, Long.parseLong(match.group(1)) * s + Long.parseLong(fv) );
-
                         vm.registers.set(rResult, new Value<>(pairType, new Pair(
-                                new Value<>(fixType, v),
-                                new Value<>(intType, (long) match.end(2) + start))));
+                                new Value<>(decType, new BigDecimal(match.group(1))),
+                                new Value<>(intType, (long) match.end(1) + start))));
                     } else {
-                        vm.registers.set(rResult, CoreLib.NIL);
+                        vm.registers.set(rResult, new Value<>(pairType, new Pair(CoreLib.NIL, CoreLib.NIL)));
                     }
                 });
 
@@ -479,14 +473,14 @@ public class CoreLib extends Lib {
                 (vm, args, rResult, loc) -> {
             final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
             final var in = args[0].cast(stringType).substring(start);
-            final var match = Pattern.compile("^\\s*(\\d+).*").matcher(in);
+            final var match = Pattern.compile("^\\s*(-?\\d+).*").matcher(in);
 
             if (match.find()) {
                 vm.registers.set(rResult, new Value<>(pairType, new Pair(
                         new Value<>(intType, Long.valueOf(match.group(1))),
                         new Value<>(intType, (long) match.end(1) + start))));
             } else {
-                vm.registers.set(rResult, CoreLib.NIL);
+                vm.registers.set(rResult, new Value<>(pairType, new Pair(CoreLib.NIL, CoreLib.NIL)));
             }
         });
 

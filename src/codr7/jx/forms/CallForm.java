@@ -35,9 +35,10 @@ public class CallForm extends BaseForm {
             throw new EmitError("Invalid target: %s" + tf, loc());
         }
 
-        var t = tf.value(vm);
+        var t = tf.rawValue(vm);
         if (t == null) { throw new EmitError("Unknown target: " + tf, loc()); }
         if (t.type() instanceof CallTrait ct) { ct.emitCall(vm, t, body, rResult, loc()); }
+        else { throw new EmitError("Not callable: " + t.dump(vm), loc()); }
         if (getLeft) { vm.emit(new Left(rResult, rResult, tf.loc())); }
         else for (; rightCount > 0; rightCount--) { vm.emit(new Right(rResult, rResult, tf.loc())); }
     }
@@ -69,5 +70,5 @@ public class CallForm extends BaseForm {
         return false;
     }
 
-    @Override public IValue value(VM vm) { return null; }
+    @Override public IValue rawValue(VM vm) { return null; }
 }

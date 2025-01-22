@@ -101,20 +101,26 @@
 (check 123:4
   (parse-int " 123def"))
 
-(check _
+(check _:_
   (parse-int "abc123"))
 
 (check 123:6
     (parse-int "abc123def" 3))
 
 (check 1.234:5
-  (parse-fix "1.234"))
+  (parse-dec "1.234"))
 
 (check 1.0
   (- 2.0 1.0))
 
 (check (- 1.0)
   (- 1.0 2.0))
+
+(check 15.00
+  (* 1.5 10.0))
+
+(check 1.5
+  (/ 15.0 10.0))
 
 (check 2
   ([1 2 3] 1))

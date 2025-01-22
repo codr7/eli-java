@@ -44,7 +44,7 @@ public final class VM {
         readers.add(WhitespaceReader.instance);
         readers.add(CallReader.instance);
         readers.add(CharReader.instance);
-        readers.add(FixReader.instance);
+        readers.add(DecReader.instance);
         readers.add(IntReader.instance);
         readers.add(IdReader.instance);
         readers.add(LenReader.instance);

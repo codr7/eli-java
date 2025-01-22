@@ -44,9 +44,5 @@ public class IdForm extends BaseForm {
 
     @Override public boolean isNil() { return id.equals("_"); }
     @Override public IValue quote(final VM vm, final Loc loc) { return new Value<>(CoreLib.symbolType, id); }
-
-    @Override public IValue value(final VM vm) {
-        final var v = get(vm.currentLib, id, loc());
-        return (v.type() == CoreLib.bindingType) ? null : v;
-    }
+    @Override public IValue rawValue(final VM vm) { return get(vm.currentLib, id, loc()); }
 }

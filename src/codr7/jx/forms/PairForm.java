@@ -58,6 +58,17 @@ public final class PairForm extends BaseForm {
         return new Value<>(CoreLib.pairType, new Pair(left.quote(vm, loc), right.value(vm)));
     }
 
+    @Override public IValue rawValue(final VM vm) {
+        final var lv = left.rawValue(vm);
+
+        if (lv != null) {
+            final var rv = right.rawValue(vm);
+            if (rv != null) { return new Value<>(CoreLib.pairType, new Pair(lv, rv)); }
+        }
+
+        return null;
+    }
+
     @Override public IValue value(final VM vm) {
         final var lv = left.value(vm);
 

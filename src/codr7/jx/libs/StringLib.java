@@ -4,6 +4,8 @@ import codr7.jx.Arg;
 import codr7.jx.Lib;
 import codr7.jx.Value;
 
+import java.util.Arrays;
+
 public class StringLib extends Lib {
     public StringLib() {
         super("string");
@@ -18,8 +20,8 @@ public class StringLib extends Lib {
 
         bindMethod("strip", new Arg[]{new Arg("in", CoreLib.stringType), new Arg("it", CoreLib.anyType)}, CoreLib.stringType,
                 (vm, args, rResult, loc) -> {
-                    final var set = args[1].cast(CoreLib.charType);
                     final var in = args[0].cast(CoreLib.stringType);
+                    final var set = args[1].cast(CoreLib.charType);
                     final var out = in.replaceAll("[" + set + "]", "");
                     vm.registers.set(rResult, new Value<>(CoreLib.stringType, out));
                 });

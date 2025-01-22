@@ -69,6 +69,12 @@ public class ListForm extends BaseForm {
         return new Value<>(CoreLib.listType, result);
     }
 
+    @Override public IValue rawValue(VM vm) {
+        final var vs = Arrays.stream(items).map(it -> it.rawValue(vm));
+        if (itemValues(vm).anyMatch(Objects::isNull)) { return null; }
+        return new Value<>(CoreLib.listType, new ArrayList<>(itemValues(vm).toList()));
+    }
+
     @Override public IValue value(VM vm) {
         final var vs = Arrays.stream(items).map(it -> it.value(vm));
         if (itemValues(vm).anyMatch(Objects::isNull)) { return null; }

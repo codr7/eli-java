@@ -22,11 +22,11 @@ public class QuoteForm extends BaseForm {
         return false;
     }
 
-    @Override public String dump(VM vm) {
+    @Override public String dump(final VM vm) {
         return "'" + target.dump(vm);
     }
 
-    @Override public IValue value(VM vm) {
+    @Override public IValue rawValue(final VM vm) {
         return target.quote(vm, loc());
     }
 }

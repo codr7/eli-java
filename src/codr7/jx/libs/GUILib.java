@@ -78,9 +78,9 @@ public class GUILib extends Lib {
                     final var c = args[1];
 
                     if (c.type() instanceof CallTrait ct) {
-                        b.button.addActionListener((_) -> ct.call(vm, c, args, rResult, loc));
+                        b.button.addActionListener((_) -> ct.call(vm, c, args, vm.alloc(1), loc));
                     } else {
-                        throw new EvalError("Not callabale: " + c.dump(vm), loc);
+                        throw new EvalError("Not callable: " + c.dump(vm), loc);
                     }
 
                     vm.registers.set(rResult, new Value<>(buttonType, b));

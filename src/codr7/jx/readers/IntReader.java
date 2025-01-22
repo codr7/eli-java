@@ -11,7 +11,19 @@ public class IntReader implements Reader {
 
     public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc loc) {
         var c = in.peek();
-        if (!Character.isDigit(c)) { return false; }
+        var isNeg = false;
+
+        if (c == '-') {
+            isNeg = true;
+            in.pop();
+            c = in.peek();
+        }
+
+        if (!Character.isDigit(c)) {
+            if (isNeg) { in.push('-'); }
+            return false;
+        }
+
         final var floc = loc.dup();
         var v = 0L;
 
@@ -19,7 +31,7 @@ public class IntReader implements Reader {
             c = in.peek();
 
             if (c == '.') {
-                return FixReader.instance.read(vm, in, v, out, loc);
+                return DecReader.instance.read(vm, in, isNeg ? -v : v, out, loc);
             }
 
             if (!Character.isDigit(c)) { break; }
@@ -28,7 +40,7 @@ public class IntReader implements Reader {
             loc.update(c);
         }
 
-        out.addLast(new LiteralForm(new Value<>(CoreLib.intType, v), loc));
+        out.addLast(new LiteralForm(new Value<>(CoreLib.intType, isNeg ? -v : v), loc));
         return true;
     }
 }
