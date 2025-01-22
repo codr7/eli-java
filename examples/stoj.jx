@@ -10,7 +10,7 @@
 
 (^parse-value [in] Fix
   (let [s   (string/strip in \,)
-        v:i (parse-fix:_ in)]
+        v:i (parse-fix s)]
     (if (< i #s)
       (let [c (s i)]
         (if (= c \K)

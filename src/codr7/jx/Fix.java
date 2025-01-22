@@ -33,6 +33,10 @@ public final class Fix {
                : make(le, value(lhs) + value(rhs) * scale(le) / scale(re));
     }
 
+    public static int cmp(final long lhs, final long rhs) {
+        return Long.compare(value(lhs) * scale(exp(lhs)), value(rhs) * scale(exp(rhs)));
+    }
+
     public static long div(final long lhs, final long rhs) {
         return make(exp(lhs), value(lhs) / value(rhs) / scale(exp(rhs)));
     }

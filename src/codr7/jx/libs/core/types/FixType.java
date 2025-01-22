@@ -2,13 +2,18 @@ package codr7.jx.libs.core.types;
 
 import codr7.jx.*;
 import codr7.jx.libs.CoreLib;
+import codr7.jx.libs.core.traits.CmpTrait;
 import codr7.jx.libs.core.traits.NumTrait;
 
-public class FixType extends BaseType<Long> implements NumTrait {
+public class FixType extends BaseType<Long> implements CmpTrait, NumTrait {
     public FixType(final String id) { super(id); }
 
     @Override public IValue add(final IValue lhs, final IValue rhs) {
         return new Value<>(this, Fix.add(lhs.cast(this), rhs.cast(this)));
+    }
+
+    @Override public int cmp(final VM vm, final IValue lhs, final IValue rhs, final Loc loc) {
+        return Fix.cmp(lhs.cast(this), rhs.cast(this));
     }
 
     @Override public IValue div(final IValue lhs, final IValue rhs) {

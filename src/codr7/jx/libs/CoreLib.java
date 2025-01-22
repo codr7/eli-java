@@ -6,8 +6,8 @@ import codr7.jx.errors.EvalError;
 import codr7.jx.forms.IdForm;
 import codr7.jx.forms.ListForm;
 import codr7.jx.forms.LiteralForm;
-import codr7.jx.forms.PairForm;
 import codr7.jx.libs.core.iters.IntRange;
+import codr7.jx.libs.core.traits.CmpTrait;
 import codr7.jx.libs.core.traits.LenTrait;
 import codr7.jx.libs.core.traits.NumTrait;
 import codr7.jx.libs.core.traits.SeqTrait;
@@ -120,6 +120,29 @@ public class CoreLib extends Lib {
                             result = false;
                             break;
                         }
+                    }
+
+                    vm.registers.set(rResult, new Value<>(bitType, result));
+                });
+
+        bindMethod("<", new Arg[]{new Arg("args*")}, bitType,
+                (vm, args, rResult, loc) -> {
+                    var lhs = args[0];
+                    var result = true;
+
+                    for (var i = 1; i < args.length; i++) {
+                        final var rhs = args[i];
+
+                        if (lhs.type() instanceof CmpTrait ct) {
+                            if (ct.cmp(vm, lhs, rhs, loc) >= 0) {
+                                result = false;
+                                break;
+                            }
+                        } else {
+                            throw new EvalError("Expected comparable: " + lhs.dump(vm), loc);
+                        }
+
+                        lhs = rhs;
                     }
 
                     vm.registers.set(rResult, new Value<>(bitType, result));

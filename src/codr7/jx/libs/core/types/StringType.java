@@ -4,9 +4,10 @@ import codr7.jx.*;
 import codr7.jx.errors.EvalError;
 import codr7.jx.libs.CoreLib;
 import codr7.jx.libs.core.traits.CallTrait;
+import codr7.jx.libs.core.traits.CmpTrait;
 import codr7.jx.libs.core.traits.LenTrait;
 
-public class StringType extends BaseType<String> implements CallTrait, LenTrait {
+public class StringType extends BaseType<String> implements CallTrait, CmpTrait, LenTrait {
     public StringType(final String id) {
         super(id);
     }
@@ -28,6 +29,10 @@ public class StringType extends BaseType<String> implements CallTrait, LenTrait 
             default:
                 throw new EvalError("Invalid arguments", loc);
         }
+    }
+
+    @Override public int cmp(final VM vm, final IValue lhs, final IValue rhs, final Loc loc) {
+        return lhs.cast(this).compareTo(rhs.cast(this));
     }
 
     @Override public String dump(final VM vm, final IValue value) {
