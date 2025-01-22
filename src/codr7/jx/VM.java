@@ -23,6 +23,8 @@ import java.util.*;
 public final class VM {
     public final static int VERSION = 1;
 
+
+    public boolean debug = false;
     public final List<Compiler> compilers = new ArrayList<>();
     public final List<Reader> infixReaders = new ArrayList<>();
     public final List<Label> labels = new ArrayList<>();
@@ -449,7 +451,7 @@ public final class VM {
             emit(new SetPath(p.getParent(), location));
             emit(out, rResult);
             emit(new SetPath(prevPath, location));
-            compile(startPc);
+            if (!debug) { compile(startPc); }
         } finally {
             this.path = prevPath;
         }

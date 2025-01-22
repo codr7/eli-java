@@ -33,6 +33,7 @@ public class REPL {
                     vm.eval(inputBuffer.toString(), rResult, location);
                     out.println(vm.registers.get(rResult).dump(vm));
                 } catch (final Exception e) {
+                    if (vm.debug) { throw e; }
                     out.println(e.getMessage());
                 } finally {
                     inputBuffer.setLength(0);

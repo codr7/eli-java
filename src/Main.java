@@ -17,13 +17,32 @@ public class Main {
             final var rResult = vm.alloc(1);
             final var startPc = vm.emitPc();
             final var as = new ArrayDeque<>(Arrays.asList(args));
-            if (as.getFirst().equals("--list")) {
-                as.removeFirst();
-                for (final var a: as) { vm.load(Paths.get(a), rResult); }
-                vm.dumpOps(startPc);
-            } else {
-                for (final var a: as) { vm.load(Paths.get(a), rResult); }
+
+            while (!as.isEmpty()) {
+                if (as.getFirst().equals("--debug")) {
+                    as.removeFirst();
+                    vm.debug = true;
+                    continue;
+                }
+
+                if (as.getFirst().equals("--list")) {
+                    as.removeFirst();
+
+                    for (final var a : as) {
+                        vm.load(Paths.get(a), rResult);
+                    }
+
+                    vm.dumpOps(startPc);
+                    as.clear();
+                    continue;
+                }
+
+                for (final var a : as) {
+                    vm.load(Paths.get(a), rResult);
+                }
+
                 vm.eval(startPc);
+                break;
             }
         }
     }
