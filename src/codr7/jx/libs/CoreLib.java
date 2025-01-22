@@ -27,7 +27,7 @@ public class CoreLib extends Lib {
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
     public static final CharType charType = new CharType("Char");
-    public static final DecType decType = new DecType("Dec");
+    public static final DecimalType decimalType = new DecimalType("Decimal");
     public static final FormType formType = new FormType("Form");
     public static final IntType intType = new IntType("Int");
     public static final IterType iterType = new IterType("Iter");
@@ -55,7 +55,7 @@ public class CoreLib extends Lib {
         bind(anyType);
         bind(bindingType);
         bind(bitType);
-        bind(decType);
+        bind(decimalType);
         bind(intType);
         bind(iterType);
         bind(jMacroType);
@@ -454,7 +454,7 @@ public class CoreLib extends Lib {
                     }
                 });
 
-        bindMethod("parse-dec", new Arg[]{new Arg("in")}, pairType,
+        bindMethod("parse-decimal", new Arg[]{new Arg("in")}, pairType,
                 (vm, args, rResult, loc) -> {
                     final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
                     final var in = args[0].cast(stringType).substring(start);
@@ -462,7 +462,7 @@ public class CoreLib extends Lib {
 
                     if (match.find()) {
                         vm.registers.set(rResult, new Value<>(pairType, new Pair(
-                                new Value<>(decType, new BigDecimal(match.group(1))),
+                                new Value<>(decimalType, new BigDecimal(match.group(1))),
                                 new Value<>(intType, (long) match.end(1) + start))));
                     } else {
                         vm.registers.set(rResult, new Value<>(pairType, new Pair(CoreLib.NIL, CoreLib.NIL)));

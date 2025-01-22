@@ -41,7 +41,7 @@ public class DecReader implements Reader {
             e++;
         }
 
-        out.addLast(new LiteralForm(new Value<>(CoreLib.decType, new BigDecimal(v.toString())), floc));
+        out.addLast(new LiteralForm(new Value<>(CoreLib.decimalType, new BigDecimal(v.toString())), floc));
         return true;
     }
 
