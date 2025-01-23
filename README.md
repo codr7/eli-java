@@ -76,8 +76,7 @@ foo
 ```
 `'bar`
 
-When `let` is used to override an outer binding, the value is
-only overridden in the current call stack and restored on exit.
+`let` may be used to locally override an existing binding.
 
 ```
 (var foo 'foo)
