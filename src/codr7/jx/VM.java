@@ -143,6 +143,16 @@ public final class VM {
         return start.pc;
     }
 
+    public int emit(final IForm[] in, final int rResult) {
+        final var start = label();
+
+        for (final var f : in) {
+            f.emit(this, rResult);
+        }
+
+        return start.pc;
+    }
+
     public int emitPc() {
         return ops.size();
     }

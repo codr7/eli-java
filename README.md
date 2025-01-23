@@ -31,12 +31,33 @@ fib 0.634149815
 $ java -jar jx.jar benchmarks/run.jx
 ```
 ```
-fact 0.777442805S
-fib 0.000486441S
+fact 1.116342355S
+fib 1.061968751S
 ```
 
-As to exactly what's going on with the Fibonacci benchmark, your guess is as good as mine.
-The optimized code produces the correct result, but runs quite a bit faster than I expected.
+## Branches
+`if` may be used to conditionally evaluate a block of code.
+```
+(if T 1)
+```
+`1`
+
+```
+(if F 1)
+```
+`_`
+
+`else` may be used to provide an alternative branch.
+```
+(if F 1 (else 2))
+```
+`2`
+
+`else-if` may be used to reduce nesting.
+```
+(if F 1 (else-if F 2 3))
+```
+`3`
 
 ## Bindings
 Values may be bound to identifiers at compile time using `var`.
@@ -75,6 +96,28 @@ foo
 foo
 ```
 `'foo`
+
+## Branches
+`if` may be used to conditionally evaluate a block of code.
+
+```
+(if T 1)
+```
+`1`
+
+`else` may be used to specify an alternative branch.
+
+```
+(if F 1 (else 2))
+```
+`2`
+
+`else-if` may be used to reduce nesting.
+
+```
+(if F 1 (else-if F 2 (else 3)))
+```
+`3`
 
 ## Loops
 `for` may be used to repeat a block of code for each item in a sequence.

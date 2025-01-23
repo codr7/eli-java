@@ -28,10 +28,25 @@
   (/ 18 2 3))
 
 (check 1
-  (if T 1 2))
+  (if T 1))
 
 (check 2
+  (if T 1 2))
+
+(check _
+  (if F 1))
+
+(check _
   (if F 1 2))
+
+(check 2
+  (if F 1 (else 2)))
+
+(check _
+  (if F 1 (else-if F 2 3)))
+
+(check 4
+  (if F 1 2 (else-if T 3 4)))
 
 (check ['foo 'bar 'baz]
   '[foo bar baz])
@@ -58,13 +73,17 @@
 
 (check 3628800
   (^fact [acc n] Int
-    (if (is n 1) acc (recall (* n acc) (dec n))))
+    (if (is n 1) acc (else (recall (* n acc) (dec n)))))
 
   (fact 1 10))
 
 (check 55
   (^fib [n a b] Int
-    (if (> n 1) (recall (- n 1) b (+ a b)) (if (is n 0) a b)))
+    (if (> n 1)
+      (recall (- n 1) b (+ a b))
+      (else (if (is n 0)
+              a
+              (else b)))))
 
   (fib 10 0 1))
 

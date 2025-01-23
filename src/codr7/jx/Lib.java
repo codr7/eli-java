@@ -41,6 +41,8 @@ public class Lib {
     public void bind(final Lib value) { bind(value.id, CoreLib.libType, value); }
     public void bind(final Method value) { bind(value.id(), CoreLib.methodType, value); }
 
+    public boolean drop(final String id) { return bindings.remove(id) != null; }
+
     public IValue find(final String id) {
         final var v = bindings.get(id);
         return (v == null && parentLib != null) ? parentLib.find(id) : v;

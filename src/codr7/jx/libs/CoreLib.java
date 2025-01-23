@@ -3,6 +3,7 @@ package codr7.jx.libs;
 import codr7.jx.*;
 import codr7.jx.errors.EmitError;
 import codr7.jx.errors.EvalError;
+import codr7.jx.forms.CallForm;
 import codr7.jx.forms.IdForm;
 import codr7.jx.forms.ListForm;
 import codr7.jx.forms.LiteralForm;
@@ -368,14 +369,42 @@ public class CoreLib extends Lib {
                 });
 
         bindMacro("if", new Arg[]{new Arg("cond"), new Arg("left"), new Arg("right?")}, null,
-                (vm, args, rResult, loc) -> {
-                    args[0].emit(vm, rResult);
-                    final var branchPc = vm.emit(new Nop());
-                    args[1].emit(vm, rResult);
-                    final var skipElsePc = vm.emit(new Nop());
-                    vm.ops.set(branchPc, new Branch(rResult, vm.label(), loc));
-                    if (args.length > 2) { args[2].emit(vm, rResult); }
-                    vm.ops.set(skipElsePc, new Goto(vm.label(), loc));
+                (vm, _args, rResult, loc) -> {
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+                    final var rCond = vm.alloc(1);
+                    args.removeFirst().emit(vm, rCond);
+                    final var elseStart = vm.label(-1);
+                    vm.emit(new Branch(rCond, elseStart, loc));
+
+                    vm.doLib(null, () -> {
+                        final var bodyLib = vm.currentLib;
+
+                        vm.currentLib.bindMacro("else", new Arg[]{new Arg("body*")}, null,
+                            (_vm, _body, _rResult, _loc) -> {
+                                final var skipElse = vm.label(-1);
+                                vm.emit(new Goto(skipElse, _loc));
+                                elseStart.pc = vm.emitPc();
+                                bodyLib.drop("else");
+                                vm.emit(_body, _rResult);
+                                skipElse.pc = vm.emitPc();
+                            });
+
+                        vm.currentLib.bindMacro("else-if",
+                                new Arg[]{new Arg("cond"), new Arg("body*")},
+                                null,
+                                (_vm, _body, _rResult, _loc) -> {
+                                    final var fs = new ArrayDeque<IForm>();
+                                    fs.add(new IdForm("else", _loc));
+                                    final var ifs = new ArrayDeque<IForm>();
+                                    ifs.add(new IdForm("if", _loc));
+                                    ifs.addAll(Arrays.asList(_body));
+                                    fs.add(new CallForm(ifs.toArray(new IForm[0]), _loc));
+                                    new CallForm(fs.toArray(new IForm[0]), _loc).emit(vm, _rResult);
+                                });
+
+                        vm.emit(args, rResult);
+                        if (elseStart.pc == -1) { elseStart.pc = vm.emitPc(); }
+                    });
                 });
 
         bindMacro("inc", new Arg[]{new Arg("place"), new Arg("delta?")}, null,

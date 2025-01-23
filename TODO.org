@@ -4,9 +4,8 @@ fib PT0.002758256S
 * add parse-date
 ** add Date type?
 
-* add nested if/else macro
-** like return/recall
-** update code
+* add macro support
+** convert else-if to jx macro
 
 * add support for TypeSets
 ** Int | Nil
