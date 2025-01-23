@@ -14,8 +14,7 @@ hello
 ```
 
 ## Performance
-The core eval loop currently seems to run faster than Python3,
-especially once the byte code has been stripped of redundancies.
+The core eval loop currently seems to run about as fast/slow as Python3.
 
 ### python
 ```
