@@ -68,7 +68,7 @@ foo
 ```
 `42`
 
-`let` may be used to create runtime bindings.
+`let` may be used to create runtime bindings,
 
 ```
 (let [foo 'bar]
@@ -76,7 +76,7 @@ foo
 ```
 `'bar`
 
-`let` may be used to locally override an existing binding.
+and locally override existing bindings.
 
 ```
 (var foo 'foo)
