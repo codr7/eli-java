@@ -15,7 +15,7 @@ public class Main {
             new REPL(vm, System.in, System.out).run();
         } else {
             final var rResult = vm.alloc(1);
-            final var startPc = vm.emitPc();
+            final var start = vm.label();
             final var as = new ArrayDeque<>(Arrays.asList(args));
 
             while (!as.isEmpty()) {
@@ -32,7 +32,7 @@ public class Main {
                         vm.load(Paths.get(a), rResult);
                     }
 
-                    vm.dumpOps(startPc);
+                    vm.dumpOps(start.pc);
                     as.clear();
                     continue;
                 }
@@ -41,7 +41,7 @@ public class Main {
                     vm.load(Paths.get(a), rResult);
                 }
 
-                vm.eval(startPc);
+                vm.eval(start.pc);
                 break;
             }
         }

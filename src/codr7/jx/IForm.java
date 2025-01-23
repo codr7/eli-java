@@ -25,10 +25,10 @@ public interface IForm {
         if (v != null) { return v; }
         final var rResult = vm.alloc(1);
         final var skipPc = vm.emit(new Nop());
-        final var startPc = vm.emitPc();
+        final var start = vm.label();
         emit(vm, rResult);
         vm.ops.set(skipPc, new Goto(vm.label(), loc()));
-        vm.eval(startPc);
+        vm.eval(start.pc);
         return vm.registers.get(rResult);
     }
 

@@ -134,11 +134,13 @@ public final class VM {
     }
 
     public int emit(final Deque<IForm> in, final int rResult) {
-        final var startPc = emitPc();
+        final var start = label();
+
         for (final var f : in) {
             f.emit(this, rResult);
         }
-        return startPc;
+
+        return start.pc;
     }
 
     public int emitPc() {
@@ -146,45 +148,45 @@ public final class VM {
     }
 
     public void eval(final int fromPc) {
-        final var lop = ops.getLast();
-        var stopPc = (lop instanceof Stop) ? ops.size()-1 : emit(new Stop());
-        final var prevPc = pc;
+        var stop = label((ops.getLast() instanceof Stop) ? ops.size()-1 : emit(new Stop()));
+        final var prev = label(pc);
         pc = fromPc;
 
         try {
             eval();
         } finally {
-            if (stopPc != -1) {
-                ops.set(stopPc, new Nop());
-            }
-
-            pc = prevPc;
+            ops.set(stop.pc, new Nop());
+            pc = prev.pc;
         }
     }
 
     public void eval(final int fromPc, final int toPc) {
-        var prevOp = ops.get(toPc);
-        ops.set(toPc, new Stop());
-        final var prevPc = pc;
+        final var to = label(toPc);
+        var prevOp = ops.get(to.pc);
+        ops.set(to.pc, new Stop());
+        final var prev = label(pc);
         pc = fromPc;
 
         try {
             eval();
         } finally {
-            ops.set(toPc, prevOp);
-            pc = prevPc;
+            ops.set(to.pc, prevOp);
+            pc = prev.pc;
         }
     }
 
     public void eval(final String in, final int rResult, final Loc loc) {
-        final var skipPc = emit(new Nop());
-        final var startPc = emit(read(in, loc), rResult);
-        ops.set(skipPc, new Goto(label(), loc));
-        eval(startPc);
+        final var skip = label();
+        emit(new Goto(skip, loc));
+        final var start = label();
+        emit(read(in, loc), rResult);
+        eval(start.pc);
     }
 
     public void eval() {
         for (; ; ) {
+            //System.out.println(pc + " " + ops.get(pc).dump(this));
+
             switch (ops.get(pc)) {
                 case AddItem op: {
                     final var t = registers.get(op.rTarget()).cast(CoreLib.listType);
@@ -447,11 +449,11 @@ public final class VM {
                 throw new RuntimeException(e);
             }
 
-            final var startPc = emitPc();
+            final var start = label();
             emit(new SetPath(p.getParent(), location));
             emit(out, rResult);
             emit(new SetPath(prevPath, location));
-            if (!debug) { compile(startPc); }
+            if (!debug) { compile(start.pc); }
         } finally {
             this.path = prevPath;
         }

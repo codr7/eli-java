@@ -1,12 +1,6 @@
 fact PT1.059064643S
 fib PT0.002758256S
 
-* debug compilers on percentage values in stoj
-** add --debug flag
-*** add vm.debug
-*** skip compilers
-** check --list with/without debug
-
 * add parse-date
 ** add Date type?
 

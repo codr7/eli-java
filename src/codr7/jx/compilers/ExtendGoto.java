@@ -22,21 +22,14 @@ public record ExtendGoto() implements Compiler {
                     final var op2 = vm.ops.get(tpc);
                     if (op2 instanceof Nop) { tpc++; }
                     else if (op2 instanceof Goto gop2) {
-                        System.out.println("DELETE " + tpc + " " + op2.dump(vm));
-                        vm.ops.set(tpc, new Nop());
+                        System.out.println("SKIP " + tpc + " " + op2.dump(vm));
                         tpc = gop2.target().pc;
-                        changed = true;
                     } else { break; }
                 }
 
-                if (tpc == pc+1) {
-                    System.out.println("DELETE " + pc + " " + op.dump(vm));
-                    vm.ops.set(pc, new Nop());
-                    changed = true;
-                } else if (tpc != firstTarget.pc) {
-                    final var uop = new Goto(vm.label(tpc), gop.loc());
-                    vm.ops.set(pc, uop);
-                    System.out.println("UPDATE " + pc + " " + uop.dump(vm));
+                if (tpc != firstTarget.pc) {
+                    gop.target().pc = tpc;
+                    System.out.println("UPDATE " + pc + " " + gop.dump(vm));
                     changed = true;
                 }
             }
