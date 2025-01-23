@@ -368,7 +368,7 @@ public class CoreLib extends Lib {
                     });
                 });
 
-        bindMacro("if", new Arg[]{new Arg("cond"), new Arg("left"), new Arg("right?")}, null,
+        bindMacro("if", new Arg[]{new Arg("cond"), new Arg("body*")}, null,
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var rCond = vm.alloc(1);

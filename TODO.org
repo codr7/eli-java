@@ -10,7 +10,7 @@ fib PT0.002758256S
 * add support for TypeSets
 ** Int | Nil
 ** add Int? shortcut for Maybe
-** switch string/find result tupe to intType.maybe
+** switch string/find result type to intType.maybe
 
 * add slice/splice support to list/string
 ** handle pair index with/without value
