@@ -97,28 +97,6 @@ foo
 ```
 `'foo`
 
-## Branches
-`if` may be used to conditionally evaluate a block of code.
-
-```
-(if T 1)
-```
-`1`
-
-`else` may be used to specify an alternative branch.
-
-```
-(if F 1 (else 2))
-```
-`2`
-
-`else-if` may be used to reduce nesting.
-
-```
-(if F 1 (else-if F 2 (else 3)))
-```
-`3`
-
 ## Loops
 `for` may be used to repeat a block of code for each item in a sequence.
 
