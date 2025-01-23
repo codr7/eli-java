@@ -4,6 +4,33 @@ fib PT0.002758256S
 * add parse-date
 ** add Date type?
 
+* add data to JTable
+** use filename as name
+** set interval to 1 day (time)
+
+* add db module
+** jdbc / h2
+
+* add gui/chart module
+** https://www.jfree.org/jfreechart/
+
+* stoj
+** top panel for selection
+*** id, start/end date and knobs for percentages/change
+*** find first log for id > start
+*** find all other logs matching knobs != id
+*** match back in time if as far as possible
+*** calculate open/high/low as percentage of price
+**** log seq, series name, delta time, percentages & change
+*** draw a projection for each found id & one for actual data if any
+
+* add padding to column/row-layout
+* figure out why csv parser isnt included in jar build
+
+jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+** https://www.investing.com/crypto/bitcoin/historical-data
+
 * add macro support
 ** convert else-if to jx macro
 
@@ -17,33 +44,6 @@ fib PT0.002758256S
 
 * add update support to list/string
 ** handle second arg
-
-* add data to JTable
-** use filename as name
-** set interval to 1 day (time)
-
-* add db module
-** jdbc / h2
-
-* add gui/chart module
-** https://www.jfree.org/jfreechart/
-
-jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-* add padding to column/row-layout
-* figure out why csv parser isnt included in jar build
-
-* add stoj gui
-** top panel for selection
-*** id, start/end date and knobs for percentages/change
-*** find first log for id > start
-*** find all other logs matching knobs != id
-*** match back in time if as far as possible
-*** calculate open/high/low as percentage of price
-**** log seq, series name, delta time, percentages & change
-*** draw a projection for each found id & one for actual data if any
-
-** https://www.investing.com/crypto/bitcoin/historical-data
 
 ** add let? macro
 *** use in stoj/on-load
