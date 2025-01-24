@@ -34,14 +34,14 @@ public record Method(String id,
 
             vm.currentLib.bindMacro("recall", args, null,
                     (_vm, args, _rResult, _loc) -> {
-                        final var rArgs = vm.alloc(args.length);
+                        final var rArgsCopy = vm.alloc(args.length);
 
                         for (var i = 0; i < args.length; i++) {
-                            args[i].emit(vm, rArgs + i);
+                            args[i].emit(vm, rArgsCopy+i);
                         }
 
                         for (var i = 0; i < args.length; i++) {
-                            _vm.emit(new Copy(rArgs+i, this.rArgs +i, loc));
+                            _vm.emit(new Copy(rArgsCopy+i, rArgs+i, loc));
                         }
 
                         _vm.emit(new Goto(start, _loc));
