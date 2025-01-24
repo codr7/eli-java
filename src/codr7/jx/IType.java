@@ -15,4 +15,8 @@ public interface IType {
     boolean is(IValue left, IValue right);
     default boolean toBit(VM vm, IValue value) { return true; }
     default String toString(VM vm, IValue value) { return dump(vm, value); }
+
+    default void unquote(VM vm, IValue value, int rResult, Loc loc) {
+        value.emit(vm, rResult, loc);
+    }
 }

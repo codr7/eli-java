@@ -19,4 +19,6 @@ public record Value<T>(IDataType<T> type, T data) implements IValue {
 
     public boolean toBit(final VM vm) { return type.toBit(vm, this); }
     public String toString(final VM vm) { return type.toString(vm, this); }
+
+    public void unquote(VM vm, int rResult, Loc loc) { type.unquote(vm, this, rResult, loc); }
 }

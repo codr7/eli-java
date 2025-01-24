@@ -10,4 +10,5 @@ public sealed interface IValue permits Value {
     boolean toBit(VM vm);
     String toString(VM vm);
     IType type();
+    void unquote(VM vm, int rResult, Loc loc);
 }

@@ -3,10 +3,7 @@ package codr7.jx;
 import codr7.jx.errors.EmitError;
 import codr7.jx.forms.QuoteForm;
 import codr7.jx.libs.CoreLib;
-import codr7.jx.ops.CallRegister;
-import codr7.jx.ops.CallValue;
-import codr7.jx.ops.Goto;
-import codr7.jx.ops.Nop;
+import codr7.jx.ops.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +43,16 @@ public interface IForm {
     String dump(VM vm);
 
     default IValue quote(final VM vm, final Loc loc) {
-        return new Value<>(CoreLib.formType, new QuoteForm(this, loc));
+        return new Value<>(CoreLib.exprType, new QuoteForm(this, loc));
     }
 
     IValue rawValue(VM vm);
+
+    default void unquote(VM vm, int rResult, Loc loc) {
+        var v = value(vm);
+        if (v == null) { v = eval(vm); }
+        v.unquote(vm, rResult, loc);
+    }
 
     default IValue value(final VM vm) {
         final var v = rawValue(vm);

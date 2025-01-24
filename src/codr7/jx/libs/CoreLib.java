@@ -29,7 +29,7 @@ public class CoreLib extends Lib {
     public static final BitType bitType = new BitType("Bit");
     public static final CharType charType = new CharType("Char");
     public static final DecimalType decimalType = new DecimalType("Decimal");
-    public static final FormType formType = new FormType("Form");
+    public static final ExprType exprType = new ExprType("Expr");
     public static final IntType intType = new IntType("Int");
     public static final IterType iterType = new IterType("Iter");
     public static final JMacroType jMacroType = new JMacroType("JMacro");
@@ -57,6 +57,7 @@ public class CoreLib extends Lib {
         bind(bindingType);
         bind(bitType);
         bind(decimalType);
+        bind(exprType);
         bind(intType);
         bind(iterType);
         bind(jMacroType);
@@ -521,6 +522,13 @@ public class CoreLib extends Lib {
                     }
                     System.out.println(buffer);
                 });
+
+        bindMacro("unquote", new Arg[]{new Arg("forms*")}, null,
+                (vm, args, rResult, loc) -> {
+                    for (final var a: args) {
+                        a.unquote(vm, rResult, loc);
+                    }
+        });
 
         bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")}, null,
                 (vm, _args, rResult, location) -> {

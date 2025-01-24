@@ -1,13 +1,14 @@
 fact PT1.100314039S
 fib PT0.880710983S
 
-* add parse-date
-** add Date type?
-
 * add support for quote args
 ** pass form as expr
-** bind quote args at emit time
-** use unquote to insert at emit time
+** bind quote args directly in body emit
+** add ,-reader
+*** forward to unquote macro
+
+* add parse-date
+** add Date type?
 
 * add vararg support
 ** add support for arg*
