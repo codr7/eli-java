@@ -7,15 +7,12 @@ import codr7.jx.forms.IdForm;
 
 import java.util.Deque;
 
-public class LenReader implements Reader {
+public class LenReader extends PrefixReader {
     public static final LenReader instance = new LenReader();
 
-    public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc loc) {
-        if (in.peek() != '#') { return false; }
-        final var floc = loc.dup();
-        loc.update(in.pop());
-        if (!vm.read(in, out, loc)) { throw new ReadError("Invalid len", loc); }
-        out.addLast(new CallForm(new IForm[]{new IdForm("len", floc), out.removeLast()}, floc));
-        return true;
+    public LenReader() { super('#'); }
+
+    @Override public IForm boxTarget(final IForm target, final Loc loc) {
+        return new CallForm(new IForm[]{new IdForm("len", loc), target}, loc);
     }
 }

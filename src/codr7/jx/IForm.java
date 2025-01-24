@@ -49,7 +49,7 @@ public interface IForm {
     IValue rawValue(VM vm);
 
     default void unquote(VM vm, int rResult, Loc loc) {
-        var v = value(vm);
+        var v = rawValue(vm);
         if (v == null) { v = eval(vm); }
         v.unquote(vm, rResult, loc);
     }

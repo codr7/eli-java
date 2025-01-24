@@ -23,7 +23,6 @@ import java.util.*;
 public final class VM {
     public final static int VERSION = 1;
 
-
     public boolean debug = false;
     public final List<Compiler> compilers = new ArrayList<>();
     public final List<Reader> infixReaders = new ArrayList<>();
@@ -53,6 +52,7 @@ public final class VM {
         readers.add(ListReader.instance);
         readers.add(QuoteReader.instance);
         readers.add(StringReader.instance);
+        readers.add(UnquoteReader.instance);
         infixReaders.add(PairReader.instance);
 
         compilers.add(ExtendGoto.instance);

@@ -6,15 +6,12 @@ import codr7.jx.forms.QuoteForm;
 
 import java.util.Deque;
 
-public class QuoteReader implements Reader {
+public class QuoteReader extends PrefixReader {
     public static final QuoteReader instance = new QuoteReader();
 
-    public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc loc) {
-        if (in.peek() != '\'') { return false; }
-        final var floc = loc.dup();
-        loc.update(in.pop());
-        if (!vm.read(in, out, loc)) { throw new ReadError("Invalid quote", loc); }
-        out.addLast(new QuoteForm(out.removeLast(), floc));
-        return true;
+    public QuoteReader() { super('\''); }
+
+    @Override public IForm boxTarget(final IForm target, final Loc loc) {
+        return new QuoteForm(target, loc);
     }
 }

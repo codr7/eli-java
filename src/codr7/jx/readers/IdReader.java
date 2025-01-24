@@ -19,7 +19,12 @@ public class IdReader implements Reader {
                     c == '(' || c == ')' ||
                     c == '[' || c == ']' ||
                     c == '{' || c == '}' ||
-                    c == '.' || c == ':' || c == '\'' || c == '"' || c == '#') { break; }
+                    c == '.' ||
+                    c == ':' ||
+                    c == ',' ||
+                    c == '\'' ||
+                    c == '"' ||
+                    c == '#') { break; }
 
             in.pop();
             buffer.append(c);

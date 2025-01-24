@@ -117,7 +117,7 @@ Methods may be defined using `^`.
 ```
 `42`
 
-### Recursing
+### Recalling
 `recall` may be used to jump to the start of the current method.
 
 ```
@@ -150,11 +150,23 @@ Methods may be defined using `^`.
 
 ## Quoting
 Any expression may be quoted using `'`.
+```
+'(+ 1 2)
+```
+`'(+ 1 2)`
 
+A quoted list becomes a list of quoted items.
 ```
 '[foo bar baz]
 ```
 `['foo 'bar 'baz]`
+
+`,` may be used to unquote an expression.
+```
+(let [foo '(+ 1 2)]
+  ,foo)
+```
+`3`
 
 ## Tests
 `check` may be used to validate that a block of code produces the expected value.

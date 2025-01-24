@@ -23,4 +23,8 @@ public class BindingType extends BaseType<Binding> implements CallTrait {
         final var rValue = value.cast(this).rValue();
         if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
     }
+
+    @Override public void unquote(VM vm, IValue value, int rResult, Loc loc) {
+        emit(vm, value, rResult, loc);
+    }
 }

@@ -9,8 +9,6 @@ fib PT0.880710983S
 * add support for quote args
 ** pass form as expr
 ** bind quote args directly in body emit
-** add ,-reader
-*** forward to unquote macro
 
 * add vararg support
 ** add support for arg*
