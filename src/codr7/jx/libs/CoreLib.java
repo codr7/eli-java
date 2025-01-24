@@ -105,7 +105,7 @@ public class CoreLib extends Lib {
                             resultType, rResult,
                             args.toArray(new IForm[0]),
                             vm.label(vm.emitPc()), vm.label(-1));
-                    m.emitBody(vm, rResult, loc);
+                    m.emitBody(vm, rArgs, rResult, loc);
                     m.end().pc = vm.emitPc();
                     vm.ops.set(skipPc, new Goto(m.end(), loc));
                     vm.currentLib.bind(m);

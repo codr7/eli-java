@@ -20,7 +20,7 @@ public record Method(String id,
         return result;
     }
 
-    public void emitBody(final VM vm, final int rResult, final Loc loc) {
+    public void emitBody(final VM vm, final int rArgs, final int rResult, final Loc loc) {
         final var start = vm.label(vm.emitPc());
         final var end = vm.label(-1);
 
