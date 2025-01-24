@@ -4,6 +4,11 @@ fib PT0.880710983S
 * add parse-date
 ** add Date type?
 
+* add vararg support
+** add support for arg*
+** add slurp form/reader
+*** collect remaining args in list and bind
+
 * add data to JTable
 ** use filename as name
 ** set interval to 1 day (time)
