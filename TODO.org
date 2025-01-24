@@ -56,9 +56,6 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 ** https://www.investing.com/crypto/bitcoin/historical-data
 
-(* add macro support
- )
-
 * add support for TypeSets
 ** Int | Nil
 ** add Int? shortcut for Maybe

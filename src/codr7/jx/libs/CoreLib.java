@@ -48,8 +48,6 @@ public class CoreLib extends Lib {
     public static final IValue T = new Value<>(bitType, true);
     public static final IValue F = new Value<>(bitType, false);
 
-    public static final IValue ZERO = new Value<>(intType, 0L);
-
     public CoreLib() {
         super("core");
 
@@ -528,7 +526,7 @@ public class CoreLib extends Lib {
                     for (final var a: args) {
                         a.unquote(vm, rResult, loc);
                     }
-        });
+                });
 
         bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")}, null,
                 (vm, _args, rResult, location) -> {
