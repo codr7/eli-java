@@ -30,8 +30,8 @@ fib 0.634149815
 $ java -jar jx.jar benchmarks/run.jx
 ```
 ```
-fact 1.116342355S
-fib 1.061968751S
+fact 1.100314039S
+fib 0.880710983S
 ```
 
 ## Branches
@@ -117,7 +117,7 @@ Methods may be defined using `^`.
 ```
 `42`
 
-### Recursion
+### Recursing
 `recall` may be used to jump to the start of the current method.
 
 ```
@@ -130,7 +130,7 @@ Methods may be defined using `^`.
 ```
 `55`
 
-### Return
+### Returning
 `return` exits the current method after evaluating its arguments.
 
 ```
@@ -156,7 +156,7 @@ Any expression may be quoted using `'`.
 ```
 `['foo 'bar 'baz]`
 
-## Testing
+## Tests
 `check` may be used to validate that a block of code produces the expected value.
 ```
 (check 1 2)

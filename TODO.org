@@ -1,5 +1,5 @@
-fact PT1.059064643S
-fib PT0.002758256S
+fact PT1.100314039S
+fib PT0.880710983S
 
 * add parse-date
 ** add Date type?
@@ -25,7 +25,7 @@ fib PT0.002758256S
 *** draw a projection for each found id & one for actual data if any
 
 * add padding to column/row-layout
-* figure out why csv parser isnt included in jar build
+* figure out why csv parser isn't included in jar build
 
 jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -64,5 +64,3 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 ** add RangeTrait
 ** create range
 ** optional max
-
-(let [foo 0] (for [i [1 2 3]] (inc foo i)) (foo))
