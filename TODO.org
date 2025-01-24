@@ -4,10 +4,20 @@ fib PT0.880710983S
 * add parse-date
 ** add Date type?
 
+* add support for quote args
+** pass form as expr
+** bind quote args at emit time
+** use unquote to insert at emit time
+
 * add vararg support
 ** add support for arg*
+*** must be last
 ** add slurp form/reader
 *** collect remaining args in list and bind
+
+* add optional arg support
+** set to nil if not provided
+** optional args must come after regular
 
 * add data to JTable
 ** use filename as name
@@ -36,8 +46,8 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 ** https://www.investing.com/crypto/bitcoin/historical-data
 
-* add macro support
-** convert else-if to jx macro
+(* add macro support
+ ** convert else-if to jx macro)
 
 * add support for TypeSets
 ** Int | Nil
