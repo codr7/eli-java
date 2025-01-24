@@ -1,3 +1,4 @@
-(var foo '(+ 1 2))
-(say foo)
-(say ,foo)
+(^else-if ['cond 'body] Any
+  (else (if ,cond ,body)))
+
+(say (if F (else-if T 42)))

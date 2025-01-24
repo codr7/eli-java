@@ -1,22 +1,20 @@
 fact PT1.100314039S
 fib PT0.880710983S
 
-* convert else-if to jx
-
-(^else-if ['cond 'body*]
-  (else (if ,cond ,body*)))
-
-* add support for quote args
-** pass form as expr
-** bind quote args directly in body emit
+* convert else-if to jx:
 
 * add vararg support
 ** add support for arg*
 *** must be last
 ** add slurp form/reader
 *** collect remaining args in list and bind
+** add splat support
 
-* add splat support
+(^else-if ['cond 'body*]
+  (else (if ,cond ,body*)))
+
+(^else-if ['cond 'body]
+  (else (if ,cond ,body)))
 
 * --
 

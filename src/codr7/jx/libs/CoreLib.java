@@ -3,10 +3,7 @@ package codr7.jx.libs;
 import codr7.jx.*;
 import codr7.jx.errors.EmitError;
 import codr7.jx.errors.EvalError;
-import codr7.jx.forms.CallForm;
-import codr7.jx.forms.IdForm;
-import codr7.jx.forms.ListForm;
-import codr7.jx.forms.LiteralForm;
+import codr7.jx.forms.*;
 import codr7.jx.libs.core.iters.IntRange;
 import codr7.jx.libs.core.traits.CmpTrait;
 import codr7.jx.libs.core.traits.LenTrait;
@@ -89,24 +86,30 @@ public class CoreLib extends Lib {
                     for (var i = 0; i < argList.length; i++) {
                         final var af = argList[i];
 
-                        if (af instanceof IdForm aid) {
-                            margs.add(new Arg(aid.id));
-                        } else {
-                            throw new EmitError("Invalid arg: " + af.dump(vm), af.loc());
+                        switch (af) {
+                            case IdForm aid:
+                                margs.add(new Arg(aid.id));
+                                break;
+                            case QuoteForm aq:
+                                if (aq.target instanceof IdForm tf) { margs.add(new Arg("'" + tf.id)); }
+                                else { throw new EmitError("Invalid arg; " + aq.target.dump(vm), loc); }
+                                break;
+                            default:
+                                throw new EmitError("Invalid arg: " + af.dump(vm), af.loc());
                         }
                     }
 
                     final var rArgs = vm.alloc(margs.size());
-                    final var skipPc = vm.emit(new Nop());
+                    //final var skipPc = vm.emit(new Nop());
                     final var m = new Method(
                             mid,
                             margs.toArray(new Arg[0]), rArgs,
                             resultType, rResult,
                             args.toArray(new IForm[0]),
-                            vm.label(vm.emitPc()), vm.label(-1));
-                    m.emitBody(vm, rArgs, rResult, loc);
-                    m.end().pc = vm.emitPc();
-                    vm.ops.set(skipPc, new Goto(m.end(), loc));
+                            vm.label(-1), vm.label(-1));
+                    //m.emitBody(vm, rArgs, rResult, loc);
+                    //m.end().pc = vm.emitPc();
+                    //vm.ops.set(skipPc, new Goto(m.end(), loc));
                     vm.currentLib.bind(m);
                     vm.registers.set(rResult, new Value<>(methodType, m));
                 });
@@ -387,7 +390,7 @@ public class CoreLib extends Lib {
                                 vm.emit(_body, _rResult);
                                 skipElse.pc = vm.emitPc();
                             });
-
+/*
                         vm.currentLib.bindMacro("else-if",
                                 new Arg[]{new Arg("cond"), new Arg("body*")},
                                 null,
@@ -400,7 +403,7 @@ public class CoreLib extends Lib {
                                     fs.add(new CallForm(ifs.toArray(new IForm[0]), _loc));
                                     new CallForm(fs.toArray(new IForm[0]), _loc).emit(vm, _rResult);
                                 });
-
+*/
                         vm.emit(args, rResult);
                         if (elseStart.pc == -1) { elseStart.pc = vm.emitPc(); }
                     });

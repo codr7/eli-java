@@ -1,10 +1,16 @@
 package codr7.jx;
 
+import codr7.jx.errors.EvalError;
+import codr7.jx.forms.CallForm;
+import codr7.jx.forms.IdForm;
+import codr7.jx.forms.LiteralForm;
+import codr7.jx.libs.CoreLib;
 import codr7.jx.ops.Copy;
 import codr7.jx.ops.Goto;
 import codr7.jx.ops.SetPath;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static codr7.jx.libs.CoreLib.bindingType;
@@ -25,13 +31,6 @@ public record Method(String id,
         final var end = vm.label(-1);
 
         vm.doLib(null, () -> {
-            vm.emit(new SetPath(vm.path, loc));
-
-            for (var i = 0; i < args.length; i++) {
-                final var ma = args[i];
-                vm.currentLib.bind(ma.id(), bindingType, new Binding(null, rArgs + i));
-            }
-
             vm.currentLib.bindMacro("recall", args, null,
                     (_vm, args, _rResult, _loc) -> {
                         final var rArgsCopy = vm.alloc(args.length);
@@ -53,9 +52,55 @@ public record Method(String id,
                         _vm.emit(new Goto(end, _loc));
                     });
 
-            vm.emit(new ArrayDeque<>(Arrays.asList(body)), rResult);
+            vm.emit(new SetPath(vm.path, loc));
+
+            for (var i = 0; i < args.length; i++) {
+                final var ma = args[i];
+                var aid = ma.id();
+
+                if (aid.charAt(0) != '\'') {
+                    vm.currentLib.bind(aid, bindingType, new Binding(null, rArgs + i));
+                }
+            }
+
+            vm.emit(body, rResult);
         });
 
         end.pc = vm.emitPc();
+    }
+
+    public void call(final VM vm,
+                     final int rArgs,
+                     final int arity,
+                     final int rResult,
+                     final Loc loc) {
+        if (start.pc == -1) {
+            final var skip = vm.label(-1);
+            vm.emit(new Goto(skip, loc));
+            start.pc = vm.emitPc();
+            emitBody(vm, rArgs(), rResult(), loc);
+            end().pc = vm.emitPc();
+            skip.pc = end().pc;
+        }
+
+        if (arity() != -1 && arity < arity()) {
+            throw new EvalError("Not enough args: " + dump(vm), loc);
+        }
+
+        if (rArgs != rArgs()) {
+            for (var i = 0; i < arity; i++) {
+                vm.registers.set(rArgs() + i, vm.registers.get(rArgs + i));
+            }
+        }
+
+        vm.eval(start().pc, end().pc);
+
+        if (resultType() != null && rResult != rResult()) {
+            vm.registers.set(rResult, vm.registers.get(rResult()));
+        }
+    }
+
+    public String dump(final VM vm) {
+        return "(Method " + id + ")";
     }
 }
