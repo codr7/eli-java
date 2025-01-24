@@ -1,20 +1,29 @@
 fact PT1.100314039S
 fib PT0.880710983S
 
+* convert else-if to jx
+
+(^else-if ['cond 'body*]
+  (else (if ,cond ,body*)))
+
 * add support for quote args
 ** pass form as expr
 ** bind quote args directly in body emit
 ** add ,-reader
 *** forward to unquote macro
 
-* add parse-date
-** add Date type?
-
 * add vararg support
 ** add support for arg*
 *** must be last
 ** add slurp form/reader
 *** collect remaining args in list and bind
+
+* add splat support
+
+* --
+
+* add parse-date
+** add Date type?
 
 * add optional arg support
 ** set to nil if not provided
@@ -48,7 +57,7 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 ** https://www.investing.com/crypto/bitcoin/historical-data
 
 (* add macro support
- ** convert else-if to jx macro)
+ )
 
 * add support for TypeSets
 ** Int | Nil
