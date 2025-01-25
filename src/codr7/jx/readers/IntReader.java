@@ -31,7 +31,7 @@ public class IntReader implements Reader {
             c = in.peek();
 
             if (c == '.') {
-                return DecReader.instance.read(vm, in, isNeg ? -v : v, out, loc);
+                return DecimalReader.instance.read(vm, in, isNeg ? -v : v, out, loc);
             }
 
             if (!Character.isDigit(c)) { break; }

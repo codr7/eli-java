@@ -32,14 +32,12 @@ public class MethodType extends BaseType<Method> implements CallTrait {
         final var arity = body.length - 1;
 
         vm.doLib(null, () -> {
-            for (var i = 0; i < arity; i++) {
-                final var ma = m.args()[i];
+            var i = 1;
+            var rArg = m.rArgs();
 
-                if (ma.id().charAt(0) == '\'') {
-                    vm.currentLib.bind(ma.id().substring(1), new Value<>(CoreLib.exprType, body[i + 1]));
-                } else {
-                    body[i + 1].emit(vm, m.rArgs() + i);
-                }
+            for (final var a: m.args()) {
+                i = a.bind(vm, body, i, rArg, loc);
+                rArg++;
             }
 
             m.emitBody(vm, m.rArgs(), rResult, loc);

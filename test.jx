@@ -1,4 +1,4 @@
-(^else-if ['cond 'body] Any
-  (else (if ,cond ,body)))
+(^foo [x*] Int
+  (+ x*))
 
-(say (if F (else-if T 42)))
+(say (foo 35 7))

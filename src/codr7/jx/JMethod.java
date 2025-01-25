@@ -9,7 +9,7 @@ public record JMethod(String id, Arg[] args, IType result, Body body) {
 
     public int arity() {
         var result = args.length;
-        if (result > 0 && args[result-1].id().endsWith("*")) { return -1; }
+        if (result > 0 && args[result-1].splat) { return -1; }
         return result;
     }
 

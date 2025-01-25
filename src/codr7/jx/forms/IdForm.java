@@ -4,6 +4,8 @@ import codr7.jx.*;
 import codr7.jx.errors.EmitError;
 import codr7.jx.libs.CoreLib;
 
+import java.util.ArrayList;
+
 public class IdForm extends BaseForm {
     public static IValue get(final Lib lib, final String id, final Loc loc) {
         final var i = id.indexOf('/');
@@ -26,6 +28,8 @@ public class IdForm extends BaseForm {
         super(loc);
         this.id = id;
     }
+
+    @Override public String argId(final VM vm, final Loc loc) { return id; }
 
     @Override public void bind(final VM vm, final int rValue, final Loc loc) {
         vm.currentLib.bind(id, new Value<>(CoreLib.bindingType, new Binding(null, rValue)));

@@ -7,8 +7,8 @@ import codr7.jx.libs.CoreLib;
 import java.math.BigDecimal;
 import java.util.Deque;
 
-public class DecReader implements Reader {
-    public static final DecReader instance = new DecReader();
+public class DecimalReader implements Reader {
+    public static final DecimalReader instance = new DecimalReader();
 
     public boolean read(final VM vm, final Input in, final long value, final Deque<IForm> out, final Loc loc) {
         var c = in.peek();

@@ -8,11 +8,11 @@ public record JMacro(String id, Arg[] args, IType result, Body body) {
     }
 
     public int arity() {
-        if (args.length > 0 && args[args.length-1].id().endsWith("*")) { return -1; }
+        if (args.length > 0 && args[args.length-1].splat) { return -1; }
         var result = 0;
 
         for (final var a: args) {
-            if (!a.id().endsWith("?")) { result++; }
+            if (!a.opt) { result++; }
         }
 
         return result;

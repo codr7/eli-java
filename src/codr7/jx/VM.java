@@ -21,16 +21,16 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 1;
+    public final static int VERSION = 2;
 
     public boolean debug = false;
     public final List<Compiler> compilers = new ArrayList<>();
-    public final List<Reader> infixReaders = new ArrayList<>();
+    public final List<Reader> suffixReaders = new ArrayList<>();
     public final List<Label> labels = new ArrayList<>();
     public final ArrayList<Op> ops = new ArrayList<>();
     public Path path = Paths.get("");
     public int pc = 0;
-    public final List<Reader> readers = new ArrayList<>();
+    public final List<Reader> prefixReaders = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
 
     public final CoreLib coreLib = new CoreLib();
@@ -42,18 +42,20 @@ public final class VM {
     public Lib currentLib = null;
 
     public VM() {
-        readers.add(WhitespaceReader.instance);
-        readers.add(CallReader.instance);
-        readers.add(CharReader.instance);
-        readers.add(DecReader.instance);
-        readers.add(IntReader.instance);
-        readers.add(IdReader.instance);
-        readers.add(LenReader.instance);
-        readers.add(ListReader.instance);
-        readers.add(QuoteReader.instance);
-        readers.add(StringReader.instance);
-        readers.add(UnquoteReader.instance);
-        infixReaders.add(PairReader.instance);
+        prefixReaders.add(WhitespaceReader.instance);
+        prefixReaders.add(CallReader.instance);
+        prefixReaders.add(CharReader.instance);
+        prefixReaders.add(DecimalReader.instance);
+        prefixReaders.add(IntReader.instance);
+        prefixReaders.add(IdReader.instance);
+        prefixReaders.add(LenReader.instance);
+        prefixReaders.add(ListReader.instance);
+        prefixReaders.add(QuoteReader.instance);
+        prefixReaders.add(StringReader.instance);
+        prefixReaders.add(UnquoteReader.instance);
+
+        suffixReaders.add(PairReader.instance);
+        suffixReaders.add(SplatReader.instance);
 
         compilers.add(ExtendGoto.instance);
         compilers.add(UnusedCopy.instance);
@@ -470,8 +472,8 @@ public final class VM {
     }
 
     public boolean read(final Input in, final Deque<IForm> out, final Loc loc) {
-        final var result = readers.stream().anyMatch(r -> r.read(this, in, out, loc));
-        var _ = infixReaders.stream().anyMatch(r -> r.read(this, in, out, loc));
+        final var result = prefixReaders.stream().anyMatch(r -> r.read(this, in, out, loc));
+        var _ = suffixReaders.stream().anyMatch(r -> r.read(this, in, out, loc));
         return result;
     }
 

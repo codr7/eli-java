@@ -5,20 +5,20 @@ import codr7.jx.errors.ReadError;
 
 import java.util.Deque;
 
-public abstract class PrefixReader implements Reader {
-    public final char prefix;
+public abstract class SuffixReader implements Reader {
+    public final char suffix;
 
     public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc loc) {
-        if (in.peek() != prefix) { return false; }
+        if (in.peek() != suffix) { return false; }
         final var floc = loc.dup();
         loc.update(in.pop());
-        if (!vm.read(in, out, loc)) { throw new ReadError("Missing target", loc); }
+        if (out.isEmpty()) { throw new ReadError("Missing target", loc); }
         out.addLast(boxTarget(out.removeLast(), floc));
         return true;
     }
 
-    protected PrefixReader(final char prefix) {
-        this.prefix = prefix;
+    protected SuffixReader(final char suffix) {
+        this.suffix = suffix;
     }
 
     protected abstract IForm boxTarget(IForm target, Loc loc);

@@ -78,38 +78,20 @@ public class CoreLib extends Lib {
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var mid = ((IdForm) args.removeFirst()).id;
-                    final var margs = new ArrayList<Arg>();
                     final var argList = ((ListForm) args.removeFirst()).items;
                     final var rf = args.removeFirst();
                     final IType resultType = rf.getType(vm, rf.loc());
-
-                    for (var i = 0; i < argList.length; i++) {
-                        final var af = argList[i];
-
-                        switch (af) {
-                            case IdForm aid:
-                                margs.add(new Arg(aid.id));
-                                break;
-                            case QuoteForm aq:
-                                if (aq.target instanceof IdForm tf) { margs.add(new Arg("'" + tf.id)); }
-                                else { throw new EmitError("Invalid arg; " + aq.target.dump(vm), loc); }
-                                break;
-                            default:
-                                throw new EmitError("Invalid arg: " + af.dump(vm), af.loc());
-                        }
-                    }
-
+                    final var margs = new ArrayList<Arg>();
+                    for (IForm iForm : argList) { margs.add(new Arg(iForm.argId(vm, loc))); }
                     final var rArgs = vm.alloc(margs.size());
-                    //final var skipPc = vm.emit(new Nop());
+
                     final var m = new Method(
                             mid,
                             margs.toArray(new Arg[0]), rArgs,
                             resultType, rResult,
                             args.toArray(new IForm[0]),
                             vm.label(-1), vm.label(-1));
-                    //m.emitBody(vm, rArgs, rResult, loc);
-                    //m.end().pc = vm.emitPc();
-                    //vm.ops.set(skipPc, new Goto(m.end(), loc));
+
                     vm.currentLib.bind(m);
                     vm.registers.set(rResult, new Value<>(methodType, m));
                 });
@@ -390,7 +372,7 @@ public class CoreLib extends Lib {
                                 vm.emit(_body, _rResult);
                                 skipElse.pc = vm.emitPc();
                             });
-/*
+
                         vm.currentLib.bindMacro("else-if",
                                 new Arg[]{new Arg("cond"), new Arg("body*")},
                                 null,
@@ -403,7 +385,7 @@ public class CoreLib extends Lib {
                                     fs.add(new CallForm(ifs.toArray(new IForm[0]), _loc));
                                     new CallForm(fs.toArray(new IForm[0]), _loc).emit(vm, _rResult);
                                 });
-*/
+
                         vm.emit(args, rResult);
                         if (elseStart.pc == -1) { elseStart.pc = vm.emitPc(); }
                     });
@@ -526,9 +508,7 @@ public class CoreLib extends Lib {
 
         bindMacro("unquote", new Arg[]{new Arg("forms*")}, null,
                 (vm, args, rResult, loc) -> {
-                    for (final var a: args) {
-                        a.unquote(vm, rResult, loc);
-                    }
+                    for (final var a: args) { a.unquote(vm, rResult, loc); }
                 });
 
         bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")}, null,

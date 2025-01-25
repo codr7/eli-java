@@ -22,7 +22,7 @@ public record Method(String id,
                      Label start, Label end) {
     public int arity() {
         var result = args.length;
-        if (result > 0 && args[result-1].id().endsWith("*")) { return -1; }
+        if (result > 0 && args[result-1].splat) { return -1; }
         return result;
     }
 
@@ -56,11 +56,7 @@ public record Method(String id,
 
             for (var i = 0; i < args.length; i++) {
                 final var ma = args[i];
-                var aid = ma.id();
-
-                if (aid.charAt(0) != '\'') {
-                    vm.currentLib.bind(aid, bindingType, new Binding(null, rArgs + i));
-                }
+                if (!ma.quote) { vm.currentLib.bind(ma.id, bindingType, new Binding(null, rArgs + i)); }
             }
 
             vm.emit(body, rResult);

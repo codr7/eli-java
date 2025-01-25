@@ -117,9 +117,55 @@ Methods may be defined using `^`.
 ```
 `42`
 
+### Arguments
+Methods may be made to accept a variable number of arguments by suffixing the final argument with `*`.
+```
+(^foo [x*] Int 
+  (+ x*))
+  
+(foo 35 7)
+```
+
+Prefixing arguments with `'`, automatically quotes and passes the expression without evaluating at compile time.
+
+```
+(^foo [x] Int 
+  x)
+  
+(foo (+ 35 7))
+```
+`42`
+
+```
+(^foo ['x] Expr 
+  x)
+  
+(foo (+ 35 7))
+```
+`(+ 35 7)`
+
+`,` may be used to unquote.
+Note that this results in `(+ 35 7)` being spliced into `foo`'s body at compile time.
+```
+(^foo ['x] Expr ,x)
+
+(foo (+ 35 7))
+```
+`42`
+
+### Result
+When a result type is specified, the value of the last evaluated form is returned;
+otherwise ´_`.
+```
+(^foo [x] _ 
+  x)
+  
+(foo 42)
+```
+`_`
+
 ### Recalling
 `recall` may be used to jump to the start of the current method.
-
 ```
 (^fib [n a b] Int
   (if (> n 1) 
@@ -130,7 +176,7 @@ Methods may be defined using `^`.
 ```
 `55`
 
-### Returning
+### Exiting
 `return` exits the current method after evaluating its arguments.
 
 ```

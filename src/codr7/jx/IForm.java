@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface IForm {
+    default String argId(final VM vm, final Loc loc) {
+        throw new EmitError("Invalid arg: " + dump(vm), loc);
+    }
+
     default void bind(final VM vm, final int rValue, final Loc loc) {
         throw new EmitError("Invalid bind target: " + dump(vm), loc);
     }

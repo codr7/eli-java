@@ -9,7 +9,7 @@ import java.util.Set;
 public record Dec(int rTarget, int rDelta, Loc loc) implements Op {
     public String dump(final VM vm) {
         return "Dec rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
-                "rDelta: " + rDelta + " (" + vm.registers.get(rDelta).dump(vm) + ")";
+                "rDelta: " + rDelta + " (" + ((rDelta == -1) ? "?" : vm.registers.get(rDelta).dump(vm)) + ")";
     }
 
     public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {

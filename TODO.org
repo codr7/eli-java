@@ -1,22 +1,13 @@
 fact PT1.100314039S
 fib PT0.880710983S
 
-* convert else-if to jx:
+* add my-else-if from core-tests to README
 
-* add vararg support
-** add support for arg*
-*** must be last
-** add slurp form/reader
-*** collect remaining args in list and bind
-** add splat support
+* handle method call arg splat
 
-(^else-if ['cond 'body*]
-  (else (if ,cond ,body*)))
-
-(^else-if ['cond 'body]
-  (else (if ,cond ,body)))
-
-* --
+* return 1/x for one arg div
+** add one arg div to num trait
+*** add support in / method
 
 * add parse-date
 ** add Date type?

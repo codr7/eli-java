@@ -1,7 +1,13 @@
 package codr7.jx.libs.core.types;
 
 import codr7.jx.*;
+import codr7.jx.errors.EmitError;
+import codr7.jx.forms.SplatForm;
+import codr7.jx.libs.CoreLib;
 import codr7.jx.libs.core.traits.CallTrait;
+import codr7.jx.libs.core.traits.SeqTrait;
+
+import java.util.ArrayList;
 
 public class JMacroType extends BaseType<JMacro> implements CallTrait {
     public JMacroType(final String id) { super(id); }
@@ -24,8 +30,29 @@ public class JMacroType extends BaseType<JMacro> implements CallTrait {
                          final IForm[] body,
                          final int rResult,
                          final Loc loc) {
-        final IForm[] args = new IForm[body.length - 1];
-        System.arraycopy(body, 1, args, 0, args.length);
-        target.cast(this).emit(vm, args, rResult, loc);
+        final var args = new ArrayList<IForm>();
+        final var rIt = vm.alloc(1);
+
+        for (var i = 1; i < body.length; i++) {
+            final var f = body[i];
+
+            if (f instanceof SplatForm sf) {
+                final var t = sf.target.value(vm);
+                if (t == null) { throw new EmitError("Invalid splat: " + sf.target.dump(vm), loc); }
+
+                if (t.type() instanceof SeqTrait st) {
+                    final var it = st.iter(vm, t, loc);
+
+                    while (it.next(vm, rIt, sf.target.loc())) {
+                        final var v = vm.registers.get(rIt);
+                        args.add(v.cast(CoreLib.exprType));
+                    }
+                }
+            } else {
+                args.add(f);
+            }
+        }
+
+        target.cast(this).emit(vm, args.toArray(new IForm[0]), rResult, loc);
     }
 }

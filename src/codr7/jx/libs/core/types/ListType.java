@@ -81,7 +81,9 @@ public class ListType
         return true;
     }
 
-    @Override public Iter iter(VM vm, IValue target, Loc loc) { return new ListItems(target.cast(this)); }
+    @Override public Iter iter(VM vm, IValue target, Loc loc) {
+        return new ListItems(target.cast(this));
+    }
 
     @Override public int len(final IValue target) { return target.cast(this).size(); }
 

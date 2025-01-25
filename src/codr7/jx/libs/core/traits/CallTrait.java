@@ -5,6 +5,7 @@ import codr7.jx.IValue;
 import codr7.jx.Loc;
 import codr7.jx.VM;
 import codr7.jx.ops.CallValue;
+import codr7.jx.ops.Trace;
 
 public interface CallTrait {
     void call(VM vm, IValue target, int rArgs, int arity, int rResult, Loc loc);
