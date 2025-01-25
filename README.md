@@ -108,7 +108,7 @@ foo
 `6`
 
 ## Quoting
-Any expression may be quoted using `'`.
+Any expression may be quoted by prefixing with `'`.
 ```
 '(+ 1 2)
 ```
@@ -120,7 +120,7 @@ A quoted list becomes a list of quoted items.
 ```
 `['foo 'bar 'baz]`
 
-`,` may be used to unquote an expression.
+`,` may be used to unquote.
 ```
 (let [foo '(+ 1 2)]
   ,foo)
