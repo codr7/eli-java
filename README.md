@@ -107,6 +107,26 @@ foo
 ```
 `6`
 
+## Quoting
+Any expression may be quoted using `'`.
+```
+'(+ 1 2)
+```
+`'(+ 1 2)`
+
+A quoted list becomes a list of quoted items.
+```
+'[foo bar baz]
+```
+`['foo 'bar 'baz]`
+
+`,` may be used to unquote an expression.
+```
+(let [foo '(+ 1 2)]
+  ,foo)
+```
+`3`
+
 ## Methods
 Methods may be defined using `^`.
 
@@ -209,26 +229,6 @@ since `else` is only defined inside `if`'s body.
 ```
 35+7=42
 ```
-
-## Quoting
-Any expression may be quoted using `'`.
-```
-'(+ 1 2)
-```
-`'(+ 1 2)`
-
-A quoted list becomes a list of quoted items.
-```
-'[foo bar baz]
-```
-`['foo 'bar 'baz]`
-
-`,` may be used to unquote an expression.
-```
-(let [foo '(+ 1 2)]
-  ,foo)
-```
-`3`
 
 ## Tests
 `check` may be used to validate that a block of code produces the expected value.
