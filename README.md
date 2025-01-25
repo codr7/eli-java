@@ -185,6 +185,21 @@ otherwise ´_`.
 ```
 `3`
 
+### Macros
+There is no special support for macros, quoted arguments + inlined direct calls = macros.
+
+The following example implements `else-if` in user code.
+
+Note that this would result in a compile error without quoted arguments,
+since `else` is only defined inside `if`'s body.
+```
+(^my-else-if ['cond 'body*] Any
+    (else (if ,cond ,body*)))
+
+(if F (my-else-if T 42))
+```
+`42`
+
 ## IO
 `say` prints its arguments followed by newline to standard output.
 ```
