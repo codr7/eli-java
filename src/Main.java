@@ -11,8 +11,6 @@ public class Main {
         vm.userLib.importFrom(vm.coreLib);
 
         if (args.length == 0) {
-            System.out.print("jx v" + VM.VERSION + "\n\n");
-            new REPL(vm, System.in, System.out).run();
         } else {
             final var rResult = vm.alloc(1);
             final var start = vm.label();
@@ -42,8 +40,11 @@ public class Main {
                 }
 
                 vm.eval(start.pc);
-                break;
+                return;
             }
+
+            System.out.print("jx v" + VM.VERSION + "\n\n");
+            new REPL(vm, System.in, System.out).run();
         }
     }
 }

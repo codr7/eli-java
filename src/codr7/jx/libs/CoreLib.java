@@ -74,7 +74,9 @@ public class CoreLib extends Lib {
         bind("T", T);
         bind("F", F);
 
-        bindMacro("^", new Arg[]{new Arg("id"), new Arg("args"), new Arg("result"), new Arg("body*")}, null,
+        bindMacro("^",
+                new Arg[]{new Arg("id"), new Arg("args"), new Arg("result"), new Arg("body*")},
+                methodType,
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var mid = ((IdForm) args.removeFirst()).id;
@@ -92,7 +94,7 @@ public class CoreLib extends Lib {
                             args.toArray(new IForm[0]),
                             vm.label(-1), vm.label(-1));
 
-                    vm.currentLib.bind(m);
+                    if (!m.id().equals("_")) { vm.currentLib.bind(m); }
                     vm.registers.set(rResult, new Value<>(methodType, m));
                 });
 

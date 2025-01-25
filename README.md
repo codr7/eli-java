@@ -177,6 +177,14 @@ otherwise ´_`.
 ```
 `3`
 
+### Lambdas
+Method definitions return the defined method, leaving out the name avoids binding.
+
+```
+(^_ [] Int 42)
+```
+`(Method _)`
+
 ### Macros
 There is no special support for macros, [quoted arguments](https://github.com/codr7/jx#arguments) + inlined direct calls = macros.
 
@@ -184,6 +192,7 @@ The following example implements `else-if` in user code.
 
 Note that this would result in a compile error without quoted arguments,
 since `else` is only defined inside `if`'s body.
+
 ```
 (^my-else-if ['cond 'body*] Any
     (else (if ,cond ,body*)))
