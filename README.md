@@ -1,5 +1,6 @@
 ## Intro
-`jx` is a custom Lisp interpreter implemented and designed to be easily embedded in Java.
+`jx` is a custom Lisp interpreter implemented and designed to be easily embedded in Java,
+as well as allow convenient access to Java's vast portable library ecosystem.
 
 ## REPL
 Launching the `.jar`-file without arguments starts a REPL.
@@ -126,7 +127,7 @@ Methods may be made to accept a variable number of arguments by suffixing the fi
 (foo 35 7)
 ```
 
-Prefixing arguments with `'`, automatically quotes and passes the expression without evaluating at compile time.
+Prefixing arguments with `'` automatically quotes and passes the expression without evaluating at compile time.
 
 ```
 (^foo [x] Int 
@@ -144,8 +145,8 @@ Prefixing arguments with `'`, automatically quotes and passes the expression wit
 ```
 `(+ 35 7)`
 
-`,` may be used to unquote.
-Note that this results in `(+ 35 7)` being spliced into `foo`'s body at compile time.
+`,` may be used to unquote,
+note that this results in `(+ 35 7)` being spliced into `foo`'s body at compile time.
 ```
 (^foo ['x] Expr ,x)
 
@@ -154,7 +155,7 @@ Note that this results in `(+ 35 7)` being spliced into `foo`'s body at compile 
 `42`
 
 ### Result
-When a result type is specified, the value of the last evaluated form is returned;
+When a result type is specified; the value of the last evaluated form is returned,
 otherwise ´_`.
 ```
 (^foo [x] _ 
@@ -186,7 +187,7 @@ otherwise ´_`.
 `3`
 
 ### Macros
-There is no special support for macros, quoted arguments + inlined direct calls = macros.
+There is no special support for macros, [quoted arguments](https://github.com/codr7/jx#arguments) + inlined direct calls = macros.
 
 The following example implements `else-if` in user code.
 
