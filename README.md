@@ -128,15 +128,6 @@ Methods may be made to accept a variable number of arguments by suffixing the fi
 ```
 
 Prefixing arguments with `'` automatically quotes and passes the expression without evaluating at compile time.
-
-```
-(^foo [x] Int 
-  x)
-  
-(foo (+ 35 7))
-```
-`42`
-
 ```
 (^foo ['x] Expr 
   x)
