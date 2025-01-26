@@ -12,10 +12,6 @@ fib PT0.880710983S
 * add parse-date
 ** add Date type?
 
-* add optional arg support
-** set to nil if not provided
-** optional args must come after regular
-
 * add data to JTable
 ** use filename as name
 ** set interval to 1 day (time)
@@ -42,6 +38,9 @@ fib PT0.880710983S
 jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 ** https://www.investing.com/crypto/bitcoin/historical-data
+
+* add range syntax
+** 0..10:2
 
 * add support for TypeSets
 ** Int | Nil
