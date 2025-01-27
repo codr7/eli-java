@@ -18,7 +18,7 @@ public class IntRange implements Iter {
     }
 
     @Override public String dump(VM vm) {
-        return "(IntRange " + current + ":" + end + ":" + stride + ")";
+        return "(IntRange " + current + ".." + end + ":" + stride + ")";
     }
 
     @Override public boolean next(final VM vm, final int rResult, final Loc loc) {

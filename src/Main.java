@@ -31,8 +31,7 @@ public class Main {
                     }
 
                     vm.dumpOps(start.pc);
-                    as.clear();
-                    continue;
+                    return;
                 }
 
                 for (final var a : as) {
