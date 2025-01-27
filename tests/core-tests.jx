@@ -73,17 +73,15 @@
 
 (check 3628800
   (^fact [acc n] Int
-    (if (= n 1) acc (else (recall (* n acc) (dec n)))))
+    (if (= n 1) acc
+      (else (recall (* n acc) (dec n)))))
 
   (fact 1 10))
 
 (check 55
   (^fib [n a b] Int
-    (if (> n 1)
-      (recall (- n 1) b (+ a b))
-      (else (if (= n 0)
-              a
-              (else b)))))
+    (if (> n 1) (recall (- n 1) b (+ a b))
+      (else (if (= n 0) a (else b)))))
 
   (fib 10 0 1))
 
