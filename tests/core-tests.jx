@@ -74,7 +74,7 @@
 (check 3628800
   (^fact [acc n] Int
     (if (= n 1) acc
-      (else (recall (* n acc) (dec n)))))
+      (else (recall (* n acc) (- n 1)))))
 
   (fact 1 10))
 
