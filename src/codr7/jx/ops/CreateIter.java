@@ -7,6 +7,10 @@ import codr7.jx.VM;
 import java.util.Set;
 
 public record CreateIter(int rTarget, Loc loc) implements Op {
+    public Code code() {
+        return Code.CreateIter;
+    }
+
     public String dump(final VM vm) {
         return "CreateIter rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ")";
     }

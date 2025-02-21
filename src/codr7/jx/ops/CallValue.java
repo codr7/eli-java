@@ -6,6 +6,10 @@ import codr7.jx.libs.CoreLib;
 import java.util.Set;
 
 public record CallValue(IValue target, int rArgs, int arity, int rResult, Loc loc) implements Op {
+    public Code code() {
+        return Code.CallValue;
+    }
+
     public String dump(final VM vm) {
         return "CallValue target: " + target.dump(vm) + " " +
                 "rArgs: " + rArgs + " " +

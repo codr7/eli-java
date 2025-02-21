@@ -43,13 +43,13 @@ public record Method(String id,
                             _vm.emit(new Copy(rArgsCopy+i, rArgs+i, loc));
                         }
 
-                        _vm.emit(new Goto(start, _loc));
+                        _vm.emit(new Goto(start));
                     });
 
             vm.currentLib.bindMacro("return", args, null,
                     (_vm, args, _rResult, _loc) -> {
                         _vm.emit( new ArrayDeque<>(Arrays.asList(args)), _rResult);
-                        _vm.emit(new Goto(end, _loc));
+                        _vm.emit(new Goto(end));
                     });
 
             for (var i = 0; i < args.length; i++) {
@@ -70,7 +70,7 @@ public record Method(String id,
                      final Loc loc) {
         if (start.pc == -1) {
             final var skip = vm.label(-1);
-            vm.emit(new Goto(skip, loc));
+            vm.emit(new Goto(skip));
             start.pc = vm.emitPc();
             emitBody(vm, rArgs(), rResult(), loc);
             end().pc = vm.emitPc();

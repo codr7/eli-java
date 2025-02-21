@@ -7,6 +7,10 @@ import codr7.jx.VM;
 import java.util.Set;
 
 public record Unzip(int rPair, int rLeft, int rRight, Loc loc) implements Op {
+    public Code code() {
+        return Code.Unzip;
+    }
+
     public String dump(final VM vm) {
         return "Unzip rPair: " + rPair + " (" + vm.registers.get(rPair).dump(vm) + ") " +
                 "rLeft: " + rLeft + " (" + vm.registers.get(rLeft).dump(vm) + ") " +

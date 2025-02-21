@@ -8,6 +8,10 @@ import codr7.jx.libs.CoreLib;
 import java.util.Set;
 
 public record CallRegister(int rTarget, int rArguments, int arity, int rResult, Loc loc) implements Op {
+    public Code code() {
+        return Code.CallRegister;
+    }
+
     public String dump(final VM vm) {
         return "CallRegister rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
                 "rArgs: " + rArguments + " " +

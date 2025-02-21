@@ -5,6 +5,10 @@ import codr7.jx.*;
 import java.util.Set;
 
 public record Next(int rIter, int rItem, Label bodyEnd, Loc loc) implements Op {
+    public Code code() {
+        return Code.Next;
+    }
+
     public String dump(final VM vm) {
         return "Next rIter: " + rIter + " (" + vm.registers.get(rIter).dump(vm) + ") " +
                 "rItem: " + rItem + " (" + ((rItem == -1) ? "n/a" : vm.registers.get(rItem).dump(vm)) + ") " +

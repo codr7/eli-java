@@ -241,7 +241,7 @@ public class CoreLib extends Lib {
                     final var bodyEnd = vm.label(-1);
                     final var iterPc = vm.emit(new Next(rIter, -1, bodyEnd, loc));
                     vm.emit(args, rResult);
-                    vm.emit(new Goto(vm.label(iterPc), loc));
+                    vm.emit(new Goto(vm.label(iterPc)));
                     bodyEnd.pc = vm.emitPc();
                     vm.ops.set(benchPc, new Bench(vm.label(), rResult, loc));
                 });
@@ -349,7 +349,7 @@ public class CoreLib extends Lib {
                         }
 
                         vm.emit(args, rResult);
-                        vm.emit(new Goto(bodyStart, loc));
+                        vm.emit(new Goto(bodyStart));
                         bodyEnd.pc = vm.emitPc();
                     });
                 });
@@ -368,7 +368,7 @@ public class CoreLib extends Lib {
                         vm.currentLib.bindMacro("else", new Arg[]{new Arg("body*")}, null,
                             (_vm, _body, _rResult, _loc) -> {
                                 final var skipElse = vm.label(-1);
-                                vm.emit(new Goto(skipElse, _loc));
+                                vm.emit(new Goto(skipElse));
                                 elseStart.pc = vm.emitPc();
                                 bodyLib.drop("else");
                                 vm.emit(_body, _rResult);

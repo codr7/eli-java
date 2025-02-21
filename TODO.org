@@ -1,13 +1,14 @@
 fact PT1.100314039S
 fib PT0.880710983S
+--
+fact PT1.84434624S
+fib PT1.543740756S
 
-* split vm ops into one collection per op type
-** arrays
-*** rebuild if opCodes.length != ops.length
+fact PT1.727332886S
+fib PT1.539643289S
+
+* try replacing op arrays with single Object[] opValues
 ** bench
-** ecs
-** only store enum in main ops
-** no type casting
 
 * add my-else-if from core-tests to README
 

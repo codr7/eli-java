@@ -7,6 +7,10 @@ import codr7.jx.VM;
 import java.util.Set;
 
 public record Inc(int rTarget, int rDelta, Loc loc) implements Op {
+    public Code code() {
+        return Code.Inc;
+    }
+
     public String dump(final VM vm) {
         return "Inc rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
                 "rDelta: " + rDelta + " (" + ((rDelta == -1) ? "?" : vm.registers.get(rDelta).dump(vm)) + ")";

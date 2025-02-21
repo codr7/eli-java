@@ -189,24 +189,28 @@ public final class VM {
 
     public void eval(final String in, final int rResult, final Loc loc) {
         final var skip = label();
-        emit(new Goto(skip, loc));
+        emit(new Goto(skip));
         final var start = label();
         emit(read(in, loc), rResult);
         eval(start.pc);
     }
 
     public void eval() {
+        freezeOps();
+
         for (; ; ) {
             //System.out.println(pc + " " + ops.get(pc).dump(this));
 
-            switch (ops.get(pc)) {
-                case AddItem op: {
+            switch (opCodes[pc]) {
+                case AddItem: {
+                    final var op = addItemOps[pc];
                     final var t = registers.get(op.rTarget()).cast(CoreLib.listType);
                     t.add(registers.get(op.rItem()));
                     pc++;
                     break;
                 }
-                case Bench op: {
+                case Bench: {
+                    final var op = benchOps[pc];
                     final var started = System.nanoTime();
                     eval(pc+1, op.bodyEnd().pc);
                     final var elapsed = Duration.ofNanos(System.nanoTime() - started);
@@ -214,11 +218,13 @@ public final class VM {
                     pc = op.bodyEnd().pc;
                     break;
                 }
-                case Branch op: {
+                case Branch: {
+                    final var op = branchOps[pc];
                     pc = registers.get(op.rCondition()).toBit(this) ? pc + 1 : op.elseStart().pc;
                     break;
                 }
-                case CallRegister op: {
+                case CallRegister: {
+                    final var op = callRegisterOps[pc];
                     final var t = registers.get(op.rTarget());
 
                     if (t.type() instanceof CallTrait ct) {
@@ -230,7 +236,8 @@ public final class VM {
 
                     break;
                 }
-                case CallValue op: {
+                case CallValue: {
+                    final var op = callValueOps[pc];
                     final var t = op.target();
 
                     if (t.type() instanceof CallTrait ct) {
@@ -242,7 +249,8 @@ public final class VM {
 
                     break;
                 }
-                case Check op: {
+                case Check: {
+                    final var op = checkOps[pc];
                     final var expected = registers.get(op.rValues());
                     final var actual = registers.get(op.rValues() + 1);
 
@@ -255,12 +263,14 @@ public final class VM {
                     pc++;
                     break;
                 }
-                case Copy op: {
+                case Copy: {
+                    final var op = copyOps[pc];
                     registers.set(op.rTo(), registers.get(op.rFrom()));
                     pc++;
                     break;
                 }
-                case CreateIter op: {
+                case CreateIter: {
+                    final var op = createIterOps[pc];
                     final var t = registers.get(op.rTarget());
 
                     if (t.type() instanceof SeqTrait st) {
@@ -273,84 +283,87 @@ public final class VM {
                     pc++;
                     break;
                 }
-                case CreateList op: {
+                case CreateList: {
+                    final var op = createListOps[pc];
                     registers.set(op.rTarget(), new Value<>(CoreLib.listType, new ArrayList<>()));
                     pc++;
                     break;
                 }
-                case Dec op: {
+                case Dec: {
+                    final var op = decOps[pc];
                     final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
                     final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(CoreLib.intType);
                     registers.set(op.rTarget(), new Value<>(CoreLib.intType, v - dv));
                     pc++;
                     break;
                 }
-                case Goto op: {
-                    pc = op.target().pc;
+                case Goto:
+                    pc = gotoOps[pc].pc;
                     break;
-                }
-                case Inc op: {
+                case Inc: {
+                    final var op = incOps[pc];
                     final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
                     final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(CoreLib.intType);
                     registers.set(op.rTarget(), new Value<>(CoreLib.intType, v + dv));
                     pc++;
                     break;
                 }
-                case Left op: {
+                case Left: {
+                    final var op = leftOps[pc];
                     registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).left());
                     pc++;
                     break;
                 }
-                case Next op: {
+                case Next: {
+                    final var op = nextOps[pc];
                     final var iter = registers.get(op.rIter()).cast(CoreLib.iterType);
                     pc = (iter.next(this, op.rItem(), op.loc()))
                         ? pc + 1
                         : op.bodyEnd().pc;
                     break;
                 }
-                case Nop _: {
+                case Nop:
                     pc++;
                     break;
-                }
-                case Put op: {
+                case Put: {
+                    final var op = putOps[pc];
                     registers.set(op.rTarget(), op.value().dup(this));
                     pc++;
                     break;
                 }
-                case Right op: {
+                case Right: {
+                    final var op = rightOps[pc];
                     registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).right());
                     pc++;
                     break;
                 }
-                case SetPath op: {
-                    path = op.path();
+                case SetPath:
+                    path = setPathOps[pc];
                     pc++;
                     break;
-                }
-                case Stop _: {
+                case Stop:
                     pc++;
                     return;
-                }
-                case Trace op:
-                    System.out.println(op.text());
+                case Trace:
+                    System.out.println(traceOps[pc]);
                     pc++;
                     break;
-                case Unzip op: {
+                case Unzip: {
+                    final var op = unzipOps[pc];
                     final var p = registers.get(op.rPair()).cast(CoreLib.pairType);
                     registers.set(op.rLeft(), p.left());
                     registers.set(op.rRight(), p.right());
                     pc++;
                     break;
                 }
-                case Zip op: {
+                case Zip: {
+                    final var op = zipOps[pc];
                     final var l = registers.get(op.rLeft());
                     final var r = registers.get(op.rRight());
                     registers.set(op.rResult(), new Value<>(CoreLib.pairType, new Pair(l, r)));
                     pc++;
                     break;
                 }
-                case Op op:
-                    throw new RuntimeException("Invalid op: " + op.dump(this));
             }
         }
     }
@@ -462,9 +475,9 @@ public final class VM {
             }
 
             final var start = label();
-            emit(new SetPath(p.getParent(), location));
+            emit(new SetPath(p.getParent()));
             emit(out, rResult);
-            emit(new SetPath(prevPath, location));
+            emit(new SetPath(prevPath));
             if (!debug) { compile(start.pc); }
         } finally {
             this.path = prevPath;
@@ -487,4 +500,82 @@ public final class VM {
     public interface DoLibBody {
         void call();
     }
+
+    private void freezeOps() {
+        final var n = opCodes.length;
+        final var m = ops.size();
+
+        if (n != m) {
+            opCodes = Arrays.copyOf(opCodes, m);
+            addItemOps = Arrays.copyOf(addItemOps, m);
+            benchOps = Arrays.copyOf(benchOps, m);
+            branchOps = Arrays.copyOf(branchOps, m);
+            callRegisterOps = Arrays.copyOf(callRegisterOps, m);
+            callValueOps = Arrays.copyOf(callValueOps, m);
+            checkOps = Arrays.copyOf(checkOps, m);
+            copyOps = Arrays.copyOf(copyOps, m);
+            createIterOps = Arrays.copyOf(createIterOps, m);
+            createListOps = Arrays.copyOf(createListOps, m);
+            decOps = Arrays.copyOf(decOps, m);
+            gotoOps = Arrays.copyOf(gotoOps, m);
+            incOps = Arrays.copyOf(incOps, m);
+            leftOps = Arrays.copyOf(leftOps, m);
+            nextOps = Arrays.copyOf(nextOps, m);
+            putOps = Arrays.copyOf(putOps, m);
+            rightOps = Arrays.copyOf(rightOps, m);
+            nextOps = Arrays.copyOf(nextOps, m);
+            setPathOps = Arrays.copyOf(setPathOps, m);
+            traceOps = Arrays.copyOf(traceOps, m);
+            unzipOps = Arrays.copyOf(unzipOps, m);
+            zipOps = Arrays.copyOf(zipOps, m);
+
+            for (var i = n; i < m; i++) {
+                final var o = ops.get(i);
+                opCodes[i] = o.code();
+                addItemOps[i] = (o instanceof AddItem op) ? op : null;
+                benchOps[i] = (o instanceof Bench op) ? op : null;
+                branchOps[i] = (o instanceof Branch op) ? op : null;
+                callRegisterOps[i] = (o instanceof CallRegister op) ? op : null;
+                callValueOps[i] = (o instanceof CallValue op) ? op : null;
+                checkOps[i] = (o instanceof Check op) ? op : null;
+                copyOps[i] = (o instanceof Copy op) ? op : null;
+                createIterOps[i] = (o instanceof CreateIter op) ? op : null;
+                createListOps[i] = (o instanceof CreateList op) ? op : null;
+                decOps[i] = (o instanceof Dec op) ? op : null;
+                gotoOps[i] = (o instanceof Goto(Label target)) ? target : null;
+                incOps[i] = (o instanceof Inc op) ? op : null;
+                leftOps[i] = (o instanceof Left op) ? op : null;
+                nextOps[i] = (o instanceof Next op) ? op : null;
+                putOps[i] = (o instanceof Put op) ? op : null;
+                rightOps[i] = (o instanceof Right op) ? op : null;
+                nextOps[i] = (o instanceof Next op) ? op : null;
+                setPathOps[i] = (o instanceof SetPath(Path path1)) ? path1 : null;
+                traceOps[i] = (o instanceof Trace(String text)) ? text : null;
+                unzipOps[i] = (o instanceof Unzip op) ? op : null;
+                zipOps[i] = (o instanceof Zip op) ? op : null;
+            }
+        }
+    }
+
+    private Op.Code[] opCodes = new Op.Code[0];
+    private AddItem[] addItemOps = new AddItem[0];
+    private Bench[] benchOps = new Bench[0];
+    private Branch[] branchOps = new Branch[0];
+    private CallRegister[] callRegisterOps = new CallRegister[0];
+    private CallValue[] callValueOps = new CallValue[0];
+    private Check[] checkOps = new Check[0];
+    private Copy[] copyOps = new Copy[0];
+    private CreateIter[] createIterOps = new CreateIter[0];
+    private CreateList[] createListOps = new CreateList[0];
+    private Dec[] decOps = new Dec[0];
+    private Label[] gotoOps = new Label[0];
+    private Inc[] incOps = new Inc[0];
+    private Left[] leftOps = new Left[0];
+    private Next[] nextOps = new Next[0];
+    private Put[] putOps = new Put[0];
+    private Right[] rightOps = new Right[0];
+    private Path[] setPathOps = new Path[0];
+    private String[] traceOps = new String[0];
+    private Unzip[] unzipOps = new Unzip[0];
+    private Zip[] zipOps = new Zip[0];
 }
