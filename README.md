@@ -21,6 +21,6 @@ hello
 $ java -jar eli.jar ../eli/benchmarks/run.eli
 ```
 ```
-fact 1.100314039S
-fib 0.880710983S
+fact PT0.852045564S
+fib PT0.761190763S
 ```
