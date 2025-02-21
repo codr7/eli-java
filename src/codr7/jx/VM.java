@@ -203,14 +203,14 @@ public final class VM {
 
             switch (opCodes[pc]) {
                 case AddItem: {
-                    final var op = addItemOps[pc];
+                    final var op = (AddItem)opValues[pc];
                     final var t = registers.get(op.rTarget()).cast(CoreLib.listType);
                     t.add(registers.get(op.rItem()));
                     pc++;
                     break;
                 }
                 case Bench: {
-                    final var op = benchOps[pc];
+                    final var op = (Bench)opValues[pc];
                     final var started = System.nanoTime();
                     eval(pc+1, op.bodyEnd().pc);
                     final var elapsed = Duration.ofNanos(System.nanoTime() - started);
@@ -219,12 +219,12 @@ public final class VM {
                     break;
                 }
                 case Branch: {
-                    final var op = branchOps[pc];
+                    final var op = (Branch)opValues[pc];
                     pc = registers.get(op.rCondition()).toBit(this) ? pc + 1 : op.elseStart().pc;
                     break;
                 }
                 case CallRegister: {
-                    final var op = callRegisterOps[pc];
+                    final var op = (CallRegister)opValues[pc];
                     final var t = registers.get(op.rTarget());
 
                     if (t.type() instanceof CallTrait ct) {
@@ -237,7 +237,7 @@ public final class VM {
                     break;
                 }
                 case CallValue: {
-                    final var op = callValueOps[pc];
+                    final var op = (CallValue)opValues[pc];
                     final var t = op.target();
 
                     if (t.type() instanceof CallTrait ct) {
@@ -250,7 +250,7 @@ public final class VM {
                     break;
                 }
                 case Check: {
-                    final var op = checkOps[pc];
+                    final var op = (Check)opValues[pc];
                     final var expected = registers.get(op.rValues());
                     final var actual = registers.get(op.rValues() + 1);
 
@@ -264,13 +264,13 @@ public final class VM {
                     break;
                 }
                 case Copy: {
-                    final var op = copyOps[pc];
+                    final var op = (Copy)opValues[pc];
                     registers.set(op.rTo(), registers.get(op.rFrom()));
                     pc++;
                     break;
                 }
                 case CreateIter: {
-                    final var op = createIterOps[pc];
+                    final var op = (CreateIter)opValues[pc];
                     final var t = registers.get(op.rTarget());
 
                     if (t.type() instanceof SeqTrait st) {
@@ -284,13 +284,13 @@ public final class VM {
                     break;
                 }
                 case CreateList: {
-                    final var op = createListOps[pc];
+                    final var op = (CreateList)opValues[pc];
                     registers.set(op.rTarget(), new Value<>(CoreLib.listType, new ArrayList<>()));
                     pc++;
                     break;
                 }
                 case Dec: {
-                    final var op = decOps[pc];
+                    final var op = (Dec)opValues[pc];
                     final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
                     final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(CoreLib.intType);
                     registers.set(op.rTarget(), new Value<>(CoreLib.intType, v - dv));
@@ -298,10 +298,10 @@ public final class VM {
                     break;
                 }
                 case Goto:
-                    pc = gotoOps[pc].pc;
+                    pc = ((Integer)opValues[pc]);
                     break;
                 case Inc: {
-                    final var op = incOps[pc];
+                    final var op = (Inc)opValues[pc];
                     final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
                     final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(CoreLib.intType);
                     registers.set(op.rTarget(), new Value<>(CoreLib.intType, v + dv));
@@ -309,13 +309,13 @@ public final class VM {
                     break;
                 }
                 case Left: {
-                    final var op = leftOps[pc];
+                    final var op = (Left)opValues[pc];
                     registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).left());
                     pc++;
                     break;
                 }
                 case Next: {
-                    final var op = nextOps[pc];
+                    final var op = (Next)opValues[pc];
                     final var iter = registers.get(op.rIter()).cast(CoreLib.iterType);
                     pc = (iter.next(this, op.rItem(), op.loc()))
                         ? pc + 1
@@ -326,30 +326,30 @@ public final class VM {
                     pc++;
                     break;
                 case Put: {
-                    final var op = putOps[pc];
+                    final var op = (Put)opValues[pc];
                     registers.set(op.rTarget(), op.value().dup(this));
                     pc++;
                     break;
                 }
                 case Right: {
-                    final var op = rightOps[pc];
+                    final var op = (Right)opValues[pc];
                     registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).right());
                     pc++;
                     break;
                 }
                 case SetPath:
-                    path = setPathOps[pc];
+                    path = (Path)opValues[pc];
                     pc++;
                     break;
                 case Stop:
                     pc++;
                     return;
                 case Trace:
-                    System.out.println(traceOps[pc]);
+                    System.out.println((String)opValues[pc]);
                     pc++;
                     break;
                 case Unzip: {
-                    final var op = unzipOps[pc];
+                    final var op = (Unzip)opValues[pc];
                     final var p = registers.get(op.rPair()).cast(CoreLib.pairType);
                     registers.set(op.rLeft(), p.left());
                     registers.set(op.rRight(), p.right());
@@ -357,7 +357,7 @@ public final class VM {
                     break;
                 }
                 case Zip: {
-                    final var op = zipOps[pc];
+                    final var op = (Zip)opValues[pc];
                     final var l = registers.get(op.rLeft());
                     final var r = registers.get(op.rRight());
                     registers.set(op.rResult(), new Value<>(CoreLib.pairType, new Pair(l, r)));
@@ -507,75 +507,39 @@ public final class VM {
 
         if (n != m) {
             opCodes = Arrays.copyOf(opCodes, m);
-            addItemOps = Arrays.copyOf(addItemOps, m);
-            benchOps = Arrays.copyOf(benchOps, m);
-            branchOps = Arrays.copyOf(branchOps, m);
-            callRegisterOps = Arrays.copyOf(callRegisterOps, m);
-            callValueOps = Arrays.copyOf(callValueOps, m);
-            checkOps = Arrays.copyOf(checkOps, m);
-            copyOps = Arrays.copyOf(copyOps, m);
-            createIterOps = Arrays.copyOf(createIterOps, m);
-            createListOps = Arrays.copyOf(createListOps, m);
-            decOps = Arrays.copyOf(decOps, m);
-            gotoOps = Arrays.copyOf(gotoOps, m);
-            incOps = Arrays.copyOf(incOps, m);
-            leftOps = Arrays.copyOf(leftOps, m);
-            nextOps = Arrays.copyOf(nextOps, m);
-            putOps = Arrays.copyOf(putOps, m);
-            rightOps = Arrays.copyOf(rightOps, m);
-            nextOps = Arrays.copyOf(nextOps, m);
-            setPathOps = Arrays.copyOf(setPathOps, m);
-            traceOps = Arrays.copyOf(traceOps, m);
-            unzipOps = Arrays.copyOf(unzipOps, m);
-            zipOps = Arrays.copyOf(zipOps, m);
+            opValues = Arrays.copyOf(opValues, m);
 
             for (var i = n; i < m; i++) {
                 final var o = ops.get(i);
                 opCodes[i] = o.code();
-                addItemOps[i] = (o instanceof AddItem op) ? op : null;
-                benchOps[i] = (o instanceof Bench op) ? op : null;
-                branchOps[i] = (o instanceof Branch op) ? op : null;
-                callRegisterOps[i] = (o instanceof CallRegister op) ? op : null;
-                callValueOps[i] = (o instanceof CallValue op) ? op : null;
-                checkOps[i] = (o instanceof Check op) ? op : null;
-                copyOps[i] = (o instanceof Copy op) ? op : null;
-                createIterOps[i] = (o instanceof CreateIter op) ? op : null;
-                createListOps[i] = (o instanceof CreateList op) ? op : null;
-                decOps[i] = (o instanceof Dec op) ? op : null;
-                gotoOps[i] = (o instanceof Goto(Label target)) ? target : null;
-                incOps[i] = (o instanceof Inc op) ? op : null;
-                leftOps[i] = (o instanceof Left op) ? op : null;
-                nextOps[i] = (o instanceof Next op) ? op : null;
-                putOps[i] = (o instanceof Put op) ? op : null;
-                rightOps[i] = (o instanceof Right op) ? op : null;
-                nextOps[i] = (o instanceof Next op) ? op : null;
-                setPathOps[i] = (o instanceof SetPath(Path path1)) ? path1 : null;
-                traceOps[i] = (o instanceof Trace(String text)) ? text : null;
-                unzipOps[i] = (o instanceof Unzip op) ? op : null;
-                zipOps[i] = (o instanceof Zip op) ? op : null;
+
+                opValues[i] = switch (o) {
+                    case AddItem op -> op;
+                    case Bench op -> op;
+                    case Branch op -> op;
+                    case CallRegister op -> op;
+                    case CallValue op -> op;
+                    case Check op -> op;
+                    case Copy op -> op;
+                    case CreateIter op -> op;
+                    case CreateList op -> op;
+                    case Dec op -> op;
+                    case Goto op -> op.target();
+                    case Inc op -> op;
+                    case Left op -> op;
+                    case Next op -> op;
+                    case Put op -> op;
+                    case Right op -> op;
+                    case SetPath op -> op.path();
+                    case Trace op -> op.text();
+                    case Unzip op -> op;
+                    case Zip op -> op;
+                    default -> null;
+                };
             }
         }
     }
 
     private Op.Code[] opCodes = new Op.Code[0];
-    private AddItem[] addItemOps = new AddItem[0];
-    private Bench[] benchOps = new Bench[0];
-    private Branch[] branchOps = new Branch[0];
-    private CallRegister[] callRegisterOps = new CallRegister[0];
-    private CallValue[] callValueOps = new CallValue[0];
-    private Check[] checkOps = new Check[0];
-    private Copy[] copyOps = new Copy[0];
-    private CreateIter[] createIterOps = new CreateIter[0];
-    private CreateList[] createListOps = new CreateList[0];
-    private Dec[] decOps = new Dec[0];
-    private Label[] gotoOps = new Label[0];
-    private Inc[] incOps = new Inc[0];
-    private Left[] leftOps = new Left[0];
-    private Next[] nextOps = new Next[0];
-    private Put[] putOps = new Put[0];
-    private Right[] rightOps = new Right[0];
-    private Path[] setPathOps = new Path[0];
-    private String[] traceOps = new String[0];
-    private Unzip[] unzipOps = new Unzip[0];
-    private Zip[] zipOps = new Zip[0];
+    private Object[] opValues = new Op[0];
 }
