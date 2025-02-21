@@ -2,6 +2,8 @@ fact PT1.100314039S
 fib PT0.880710983S
 
 * split vm ops into one collection per op type
+** arrays
+*** rebuild if opCodes.length != ops.length
 ** bench
 ** ecs
 ** only store enum in main ops
@@ -10,8 +12,9 @@ fib PT0.880710983S
 * add my-else-if from core-tests to README
 
 * handle method call arg splat
-** handle int MethodType.emitCall
+** handle in MethodType.emitCall
 ** collect in List
+** handle in MethodType.call
 ** test.jx
 
 * return 1/x for one arg div
