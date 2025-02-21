@@ -1,5 +1,5 @@
-import codr7.jx.REPL;
-import codr7.jx.VM;
+import codr7.eli.REPL;
+import codr7.eli.VM;
 
 import java.nio.file.Paths;
 import java.util.ArrayDeque;
@@ -42,7 +42,7 @@ public class Main {
                 return;
             }
 
-            System.out.print("jx v" + VM.VERSION + "\n\n");
+            System.out.print("eli v" + VM.VERSION + "\n\n");
             new REPL(vm, System.in, System.out).run();
         }
     }

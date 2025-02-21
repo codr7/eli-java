@@ -1,0 +1,21 @@
+package codr7.eli.ops;
+
+import codr7.eli.Op;
+import codr7.eli.*;
+
+import java.util.Set;
+
+public record Branch(int rCondition, Label elseStart, Loc loc) implements Op {
+    public Code code() {
+        return Code.Branch;
+    }
+
+    public String dump(final VM vm) {
+        return "Branch rCondition: " + rCondition + " (" + vm.registers.get(rCondition).dump(vm) + ") " +
+                "elseStart: " + elseStart;
+    }
+
+    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
+        read.add(rCondition);
+    }
+}
