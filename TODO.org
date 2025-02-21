@@ -7,9 +7,8 @@ fib PT1.543740756S
 fact PT1.516044702S
 fib PT1.27367975S
 
-* add freezeRegisters
-** like freezeOps
-** bench
+* block dynamic Method calls
+** throw exception in call()
 
 * add my-else-if from core-tests to README
 
