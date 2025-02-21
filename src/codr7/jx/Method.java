@@ -51,9 +51,7 @@ public record Method(String id,
                         _vm.emit( new ArrayDeque<>(Arrays.asList(args)), _rResult);
                         _vm.emit(new Goto(end, _loc));
                     });
-
-            vm.emit(new SetPath(vm.path, loc));
-
+            
             for (var i = 0; i < args.length; i++) {
                 final var ma = args[i];
                 if (!ma.quote) { vm.currentLib.bind(ma.id, bindingType, new Binding(null, rArgs + i)); }

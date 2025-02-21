@@ -1,6 +1,12 @@
 fact PT1.100314039S
 fib PT0.880710983S
 
+* split vm ops into one collection per op type
+** bench
+** ecs
+** only store enum in main ops
+** no type casting
+
 * add my-else-if from core-tests to README
 
 * handle method call arg splat
@@ -64,6 +70,7 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 * lambda?
 
 * add load macro
+** emit setpath
 
 * add swap macro
 ** add swap op
