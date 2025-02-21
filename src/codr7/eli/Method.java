@@ -42,7 +42,10 @@ public record Method(String id,
 
             vm.currentLib.bindMacro("return", args, null,
                     (_vm, args, _rResult, _loc) -> {
-                        _vm.emit( new ArrayDeque<>(Arrays.asList(args)), _rResult);
+                        _vm.doLib(null, () -> {
+                            _vm.emit( new ArrayDeque<>(Arrays.asList(args)), _rResult);
+                        });
+                        
                         _vm.emit(new Goto(end));
                     });
 
