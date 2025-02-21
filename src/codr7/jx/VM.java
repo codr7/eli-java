@@ -160,29 +160,30 @@ public final class VM {
     }
 
     public void eval(final int fromPc) {
-        var stop = label((ops.getLast() instanceof Stop) ? ops.size()-1 : emit(new Stop()));
+        final var i = opCodes.length-1;
+        var stop = label((i > -1 && opCodes[i] == Op.Code.Stop) ? i : emit(new Stop()));
         final var prev = label(pc);
         pc = fromPc;
 
         try {
             eval();
         } finally {
-            ops.set(stop.pc, new Nop());
+            opCodes[stop.pc] = Op.Code.Nop;
             pc = prev.pc;
         }
     }
 
     public void eval(final int fromPc, final int toPc) {
         final var to = label(toPc);
-        var prevOp = ops.get(to.pc);
-        ops.set(to.pc, new Stop());
+        var prevOp = opCodes[to.pc];
+        opCodes[to.pc] = Op.Code.Stop;
         final var prev = label(pc);
         pc = fromPc;
 
         try {
             eval();
         } finally {
-            ops.set(to.pc, prevOp);
+            opCodes[to.pc] = prevOp;
             pc = prev.pc;
         }
     }
@@ -298,7 +299,7 @@ public final class VM {
                     break;
                 }
                 case Goto:
-                    pc = ((Integer)opValues[pc]);
+                    pc = ((Label)opValues[pc]).pc;
                     break;
                 case Inc: {
                     final var op = (Inc)opValues[pc];
@@ -541,5 +542,5 @@ public final class VM {
     }
 
     private Op.Code[] opCodes = new Op.Code[0];
-    private Object[] opValues = new Op[0];
+    private Object[] opValues = new Object[0];
 }

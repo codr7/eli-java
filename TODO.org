@@ -4,10 +4,11 @@ fib PT0.880710983S
 fact PT1.84434624S
 fib PT1.543740756S
 
-fact PT1.727332886S
-fib PT1.539643289S
+fact PT1.516044702S
+fib PT1.27367975S
 
-* try replacing op arrays with single Object[] opValues
+* add freezeRegisters
+** like freezeOps
 ** bench
 
 * add my-else-if from core-tests to README

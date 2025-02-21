@@ -1,6 +1,5 @@
 package codr7.jx.ops;
 
-import codr7.jx.Loc;
 import codr7.jx.Op;
 import codr7.jx.VM;
 

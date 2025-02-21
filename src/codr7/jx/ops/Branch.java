@@ -7,7 +7,7 @@ import java.util.Set;
 
 public record Branch(int rCondition, Label elseStart, Loc loc) implements Op {
     public Code code() {
-        return Code.AddItem;
+        return Code.Branch;
     }
 
     public String dump(final VM vm) {
