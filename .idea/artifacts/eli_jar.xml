@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="eli:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/eli_jar</output-path>
+    <root id="archive" name="eli.jar">
+      <element id="module-output" name="eli" />
+      <element id="library" level="project" name="github.davidmoten.commons.csv" />
+    </root>
+  </artifact>
+</component>

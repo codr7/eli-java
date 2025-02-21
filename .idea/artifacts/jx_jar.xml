@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="jx:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/jx_jar</output-path>
-    <root id="archive" name="jx.jar">
-      <element id="module-output" name="jx" />
-      <element id="library" level="project" name="github.davidmoten.commons.csv" />
-    </root>
-  </artifact>
-</component>
