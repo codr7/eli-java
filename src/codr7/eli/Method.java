@@ -45,7 +45,7 @@ public record Method(String id,
                         _vm.doLib(null, () -> {
                             _vm.emit( new ArrayDeque<>(Arrays.asList(args)), _rResult);
                         });
-                        
+
                         _vm.emit(new Goto(end));
                     });
 

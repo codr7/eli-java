@@ -11,6 +11,7 @@ fib PT1.27367975S
 ** handle in MethodType.emitCall
 ** collect in List
 ** handle in MethodType.call
+** handle in Method recall macro
 ** test.jx
 
 * return 1/x for one arg div
