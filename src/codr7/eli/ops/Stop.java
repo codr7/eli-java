@@ -6,13 +6,16 @@ import codr7.eli.VM;
 import java.util.Set;
 
 public record Stop() implements Op {
+    @Override
     public Code code() {
         return Code.Stop;
     }
 
-    @Override public String dump(VM vm) {
+    @Override
+    public String dump(VM vm) {
         return "Stop";
     }
 
-    @Override public void io(VM vm, Set<Integer> read, Set<Integer> write) {}
+    @Override
+    public void io(VM vm, Set<Integer> read, Set<Integer> write) {}
 }

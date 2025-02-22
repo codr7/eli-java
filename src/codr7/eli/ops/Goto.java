@@ -5,13 +5,16 @@ import codr7.eli.*;
 import java.util.Set;
 
 public record Goto(Label target) implements Op {
+    @Override
     public Code code() {
         return Code.Goto;
     }
 
-    @Override public String dump(final VM vm) {
+    @Override
+    public String dump(final VM vm) {
         return "Goto target: " + target;
     }
 
-    @Override public void io(VM vm, Set<Integer> read, Set<Integer> write) {}
+    @Override
+    public void io(VM vm, Set<Integer> read, Set<Integer> write) {}
 }

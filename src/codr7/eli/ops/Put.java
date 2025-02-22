@@ -5,6 +5,7 @@ import codr7.eli.*;
 import java.util.Set;
 
 public record Put(int rTarget, IValue value, Loc loc) implements Op {
+    @Override
     public Code code() {
         return Code.Put;
     }

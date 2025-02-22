@@ -7,15 +7,18 @@ import codr7.eli.VM;
 import java.util.Set;
 
 public record Dec(int rTarget, int rDelta, Loc loc) implements Op {
+    @Override
     public Code code() {
         return Code.Dec;
     }
 
+    @Override
     public String dump(final VM vm) {
         return "Dec rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
                 "rDelta: " + rDelta + " (" + ((rDelta == -1) ? "?" : vm.registers.get(rDelta).dump(vm)) + ")";
     }
 
+    @Override
     public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
         read.add(rTarget);
         write.add(rTarget);

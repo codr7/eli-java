@@ -6,6 +6,7 @@ import codr7.eli.VM;
 import java.util.Set;
 
 public record Nop() implements Op {
+    @Override
     public Code code() {
         return Code.Nop;
     }
