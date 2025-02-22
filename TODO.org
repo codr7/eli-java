@@ -4,9 +4,6 @@ fib PT0.761190763S
 fact PT1.478221932S
 fib PT1.291441769S
 
-* drop result type
-** benchmarks, stoj
-
 * pair readme before methods
 ** SnakeTrait/head/tail
 *** list, string, pair
