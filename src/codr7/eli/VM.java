@@ -232,27 +232,15 @@ public final class VM {
                 case CallRegister: {
                     final var op = (CallRegister)opValues[pc];
                     final var t = registers.get(op.rTarget());
-
-                    if (t.type() instanceof CallTrait ct) {
-                        pc++;
-                        ct.call(this, t, op.rArguments(), op.arity(), op.rResult(), op.loc());
-                    } else {
-                        throw new EvalError("Call not supported: " + t.dump(this), op.loc());
-                    }
-
+                    pc++;
+                    ((CallTrait)t.type()).call(this, t, op.rArguments(), op.arity(), op.rResult(), op.loc());
                     break;
                 }
                 case CallValue: {
                     final var op = (CallValue)opValues[pc];
                     final var t = op.target();
-
-                    if (t.type() instanceof CallTrait ct) {
-                        pc++;
-                        ct.call(this, t, op.rArgs(), op.arity(), op.rResult(), op.loc());
-                    } else {
-                        throw new EvalError("Call not supported: " + t.dump(this), op.loc());
-                    }
-
+                    pc++;
+                    ((CallTrait)t.type()).call(this, t, op.rArgs(), op.arity(), op.rResult(), op.loc());
                     break;
                 }
                 case Check: {
@@ -316,9 +304,7 @@ public final class VM {
                 case Next: {
                     final var op = (Next)opValues[pc];
                     final var iter = registers.get(op.rIter()).cast(CoreLib.iterType);
-                    pc = (iter.next(this, op.rItem(), op.loc()))
-                        ? pc + 1
-                        : op.bodyEnd().pc;
+                    pc = (iter.next(this, op.rItem(), op.loc())) ? pc + 1 : op.bodyEnd().pc;
                     break;
                 }
                 case Nop:
