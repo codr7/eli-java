@@ -3,7 +3,6 @@ package codr7.eli.forms;
 import codr7.eli.*;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.traits.SeqTrait;
-import codr7.eli.ops.CreateIter;
 import codr7.eli.ops.Splat;
 
 public class SplatForm extends BaseForm {

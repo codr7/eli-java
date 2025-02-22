@@ -2,7 +2,7 @@ package codr7.eli;
 
 import codr7.eli.libs.CoreLib;
 import codr7.eli.ops.AddItem;
-import codr7.eli.ops.CreateList;
+import codr7.eli.ops.List;
 
 import java.util.ArrayList;
 
@@ -64,7 +64,7 @@ public final class Arg {
         }
 
         if (splat) {
-            vm.emit(new CreateList(rResult, loc));
+            vm.emit(new List(rResult, loc));
             final var rItem = vm.alloc(1);
 
             for (var j = i; j < args.length; j++) {

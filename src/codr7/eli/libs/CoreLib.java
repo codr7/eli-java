@@ -11,6 +11,7 @@ import codr7.eli.libs.core.traits.NumTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 import codr7.eli.libs.core.types.*;
 import codr7.eli.ops.*;
+import codr7.eli.ops.Iter;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -324,7 +325,7 @@ public class CoreLib extends Lib {
 
                                     if (v == null || v.type() == bindingType) {
                                         sf.emit(vm, rSeq);
-                                        vm.emit(new CreateIter(rSeq, loc));
+                                        vm.emit(new Iter(rSeq, loc));
                                     } else if (v.type() instanceof SeqTrait st) {
                                         final var it = st.iter(vm, v, loc);
                                         vm.emit(new Put(rSeq, new Value<>(iterType, it), loc));

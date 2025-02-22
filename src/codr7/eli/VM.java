@@ -11,6 +11,8 @@ import codr7.eli.libs.StringLib;
 import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 import codr7.eli.ops.*;
+import codr7.eli.ops.Iter;
+import codr7.eli.ops.List;
 import codr7.eli.readers.*;
 
 import java.io.IOException;
@@ -24,13 +26,13 @@ public final class VM {
     public final static int VERSION = 2;
 
     public boolean debug = false;
-    public final List<Compiler> compilers = new ArrayList<>();
-    public final List<Reader> suffixReaders = new ArrayList<>();
-    public final List<Label> labels = new ArrayList<>();
+    public final java.util.List<Compiler> compilers = new ArrayList<>();
+    public final java.util.List<Reader> suffixReaders = new ArrayList<>();
+    public final java.util.List<Label> labels = new ArrayList<>();
     public final ArrayList<Op> ops = new ArrayList<>();
     public Path path = Paths.get("");
     public int pc = 0;
-    public final List<Reader> prefixReaders = new ArrayList<>();
+    public final java.util.List<Reader> prefixReaders = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
     public final int rScratch;
 
@@ -273,26 +275,6 @@ public final class VM {
                     pc++;
                     break;
                 }
-                case CreateIter: {
-                    final var op = (CreateIter)opValues[pc];
-                    final var t = registers.get(op.rTarget());
-
-                    if (t.type() instanceof SeqTrait st) {
-                        final var it = st.iter(this, t, op.loc());
-                        registers.set(op.rTarget(), new Value<>(CoreLib.iterType, it));
-                    } else {
-                        throw new EvalError("Expected seq: " + t.dump(this), op.loc());
-                    }
-
-                    pc++;
-                    break;
-                }
-                case CreateList: {
-                    final var op = (CreateList)opValues[pc];
-                    registers.set(op.rTarget(), new Value<>(CoreLib.listType, new ArrayList<>()));
-                    pc++;
-                    break;
-                }
                 case Dec: {
                     final var op = (Dec)opValues[pc];
                     final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
@@ -312,9 +294,29 @@ public final class VM {
                     pc++;
                     break;
                 }
+                case Iter: {
+                    final var op = (Iter)opValues[pc];
+                    final var t = registers.get(op.rTarget());
+
+                    if (t.type() instanceof SeqTrait st) {
+                        final var it = st.iter(this, t, op.loc());
+                        registers.set(op.rTarget(), new Value<>(CoreLib.iterType, it));
+                    } else {
+                        throw new EvalError("Expected seq: " + t.dump(this), op.loc());
+                    }
+
+                    pc++;
+                    break;
+                }
                 case Left: {
                     final var op = (Left)opValues[pc];
                     registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).left());
+                    pc++;
+                    break;
+                }
+                case List: {
+                    final var op = (List)opValues[pc];
+                    registers.set(op.rTarget(), new Value<>(CoreLib.listType, new ArrayList<>()));
                     pc++;
                     break;
                 }
@@ -539,8 +541,8 @@ public final class VM {
                     case CallValue op -> op;
                     case Check op -> op;
                     case Copy op -> op;
-                    case CreateIter op -> op;
-                    case CreateList op -> op;
+                    case Iter op -> op;
+                    case List op -> op;
                     case Dec op -> op;
                     case Goto op -> op.target();
                     case Inc op -> op;

@@ -6,10 +6,10 @@ import codr7.eli.VM;
 
 import java.util.Set;
 
-public record CreateList(int rTarget, Loc loc) implements Op {
+public record List(int rTarget, Loc loc) implements Op {
     @Override
     public Code code() {
-        return Code.CreateList;
+        return Code.List;
     }
 
     @Override

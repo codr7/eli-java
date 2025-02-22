@@ -6,10 +6,10 @@ import codr7.eli.VM;
 
 import java.util.Set;
 
-public record CreateIter(int rTarget, Loc loc) implements Op {
+public record Iter(int rTarget, Loc loc) implements Op {
     @Override
     public Code code() {
-        return Code.CreateIter;
+        return Code.Iter;
     }
 
     @Override
