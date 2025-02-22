@@ -32,6 +32,7 @@ public final class VM {
     public int pc = 0;
     public final List<Reader> prefixReaders = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
+    public final int rScratch;
 
     public final CoreLib coreLib = new CoreLib();
     public final CSVLib csvLib = new CSVLib();
@@ -66,6 +67,8 @@ public final class VM {
         userLib.bind(guiLib);
         userLib.bind(stringLib);
         currentLib = userLib;
+
+        rScratch = alloc(1);
     }
 
     public int alloc(final int n) {
@@ -200,7 +203,7 @@ public final class VM {
         freezeOps();
 
         for (; ; ) {
-            System.out.println(pc + " " + ops.get(pc).dump(this));
+            //System.out.println(pc + " " + ops.get(pc).dump(this));
 
             switch (opCodes[pc]) {
                 case AddItem: {
@@ -342,6 +345,20 @@ public final class VM {
                     path = (Path)opValues[pc];
                     pc++;
                     break;
+                case Splat: {
+                    final var op = (Splat)opValues[pc];
+                    final var t = registers.get(op.rTarget());
+
+                    if (t.type() instanceof SeqTrait st) {
+                        final var it = st.iter(this, t, op.loc());
+                        registers.set(op.rTarget(), new Value<>(CoreLib.splatType, it));
+                    } else {
+                        throw new EvalError("Expected seq: " + t.dump(this), op.loc());
+                    }
+
+                    pc++;
+                    break;
+                }
                 case Stop:
                     pc++;
                     return;
@@ -532,6 +549,7 @@ public final class VM {
                     case Put op -> op;
                     case Right op -> op;
                     case SetPath op -> op.path();
+                    case Splat op -> op;
                     case Trace op -> op.text();
                     case Unzip op -> op;
                     case Zip op -> op;

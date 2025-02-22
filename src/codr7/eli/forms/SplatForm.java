@@ -4,6 +4,7 @@ import codr7.eli.*;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.traits.SeqTrait;
 import codr7.eli.ops.CreateIter;
+import codr7.eli.ops.Splat;
 
 public class SplatForm extends BaseForm {
     public final IForm target;
@@ -23,7 +24,7 @@ public class SplatForm extends BaseForm {
 
         if (v == null) {
             target.emit(vm, rResult);
-            vm.emit(new CreateIter(rResult, loc()));
+            vm.emit(new Splat(rResult, loc()));
         } else {
             v.emit(vm, rResult, loc());
         }
@@ -49,7 +50,7 @@ public class SplatForm extends BaseForm {
 
         if (v != null && v.type() instanceof SeqTrait st) {
             final var it = st.iter(vm, v, loc());
-            return new Value<>(CoreLib.iterType, it);
+            return new Value<>(CoreLib.splatType, it);
         }
 
         return null;

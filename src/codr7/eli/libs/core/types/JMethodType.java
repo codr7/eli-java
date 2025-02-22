@@ -2,6 +2,7 @@ package codr7.eli.libs.core.types;
 
 import codr7.eli.*;
 import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.ops.CallValue;
 
 public class JMethodType extends BaseType<JMethod> implements CallTrait {
     public JMethodType(final String id) { super(id); }
@@ -15,7 +16,8 @@ public class JMethodType extends BaseType<JMethod> implements CallTrait {
         target.cast(this).call(vm, rArgs, arity, rResult, loc);
     }
 
-    @Override public String dump(final VM vm, final IValue value) {
+    @Override
+    public String dump(final VM vm, final IValue value) {
         return "(JMethod " + value.cast(this).id() + ")";
     }
 }

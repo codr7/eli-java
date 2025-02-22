@@ -7,26 +7,30 @@ fib PT1.543740756S
 fact PT1.516044702S
 fib PT1.27367975S
 
-* handle method call arg splat
-** handle in MethodType.emitCall
-** collect in List
-** handle in MethodType.call
-** handle in Method recall macro
-** test.jx
-
 * return 1/x for one arg div
 ** add one arg div to num trait
 *** add support in / method
 
+* add slice/splice support to list/string
+** handle pair index with/without value
+
+* add update support to list/string
+** handle second arg
+
+* skip binding nil method args
+
+* simplify lambda
+** allow missing method id
+
+* add load macro
+** emit setpath
+
 * add parse-date
-** add Date type?
+** add Timestamp type?
 
 * add data to JTable
 ** use filename as name
 ** set interval to 1 day (time)
-
-* add db module
-** jdbc / h2
 
 * add gui/chart module
 ** https://www.jfree.org/jfreechart/
@@ -56,24 +60,11 @@ jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 ** add Int? shortcut for Maybe
 ** switch string/find result type to intType.maybe
 
-* add slice/splice support to list/string
-** handle pair index with/without value
-
-* add update support to list/string
-** handle second arg
-
 ** add let? macro
 *** use in stoj/on-load
 *** keep assigning while != _
 *** eval clause1 if all ok
 *** else clause2
-
-* skip binding nil method args
-
-* lambda?
-
-* add load macro
-** emit setpath
 
 * add swap macro
 ** add swap op

@@ -2,6 +2,7 @@ package codr7.eli.libs.core.types;
 
 import codr7.eli.*;
 import codr7.eli.errors.EmitError;
+import codr7.eli.forms.LiteralForm;
 import codr7.eli.forms.SplatForm;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.traits.CallTrait;
@@ -45,7 +46,12 @@ public class JMacroType extends BaseType<JMacro> implements CallTrait {
 
                     while (it.next(vm, rIt, sf.target.loc())) {
                         final var v = vm.registers.get(rIt);
-                        args.add(v.cast(CoreLib.exprType));
+
+                        if (v.type() == CoreLib.exprType) {
+                            args.add(v.cast(CoreLib.exprType));
+                        } else {
+                            args.add(new LiteralForm(v, loc));
+                        }
                     }
                 }
             } else {

@@ -38,6 +38,7 @@ public class CoreLib extends Lib {
     public static final PairType pairType = new PairType("Pair");
     public static final RangeType rangeType = new RangeType("Range");
     public static final StringType stringType = new StringType("String");
+    public static final SplatType splatType = new SplatType("Splat");
     public static final SymbolType symbolType = new SymbolType("Symbol");
     public static final TimeType timeType = new TimeType("Time");
 
@@ -66,6 +67,7 @@ public class CoreLib extends Lib {
         bind(numType);
         bind(pairType);
         bind(rangeType);
+        bind(splatType);
         bind(stringType);
         bind(symbolType);
         bind(timeType);

@@ -14,7 +14,7 @@ public interface Op {
         Next, Nop,
         Put,
         Right,
-        SetPath,  Stop,
+        SetPath, Splat, Stop,
         Trace,
         Unzip,
         Zip
