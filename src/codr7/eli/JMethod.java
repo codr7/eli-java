@@ -5,6 +5,7 @@ import codr7.eli.libs.CoreLib;
 import codr7.eli.ops.CallValue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public record JMethod(String id, Arg[] args, IType result, Body body) {
     public interface Body {
@@ -22,26 +23,35 @@ public record JMethod(String id, Arg[] args, IType result, Body body) {
                      final int arity,
                      final int rResult,
                      final Loc loc) {
-        final var args = new ArrayList<IValue>();
+        var args = new IValue[arity];
+        var ai = 0;
 
-        for (var i = 0; i < arity ; i++) {
-            final var v = vm.registers.get(rArgs + i);
+        for (var i = 0; i < arity; ai++, i++) {
+            final var v = vm.registers.get(rArgs + ai);
 
             if (v.type() == CoreLib.splatType) {
+                final var svs = new ArrayList<IValue>();
                 final var it = v.cast(CoreLib.splatType);
 
                 while (it.next(vm, vm.rScratch, loc)) {
-                    args.add(vm.registers.get(vm.rScratch));
+                    svs.add(vm.registers.get(vm.rScratch));
+                }
+
+                args = Arrays.copyOf(args, args.length + svs.size() - 1);
+
+                for (final var av: svs) {
+                    args[i] = av;
+                    i++;
                 }
             } else {
-                args.add(v);
+                args[i] = v;
             }
         }
 
-        if (arity() != -1 && args.size() < arity()) {
+        if (arity() != -1 && args.length < arity()) {
             throw new EmitError("Not enough args: " + this, loc);
         }
 
-        body.call(vm, args.toArray(new IValue[0]), rResult, loc);
+        body.call(vm, args, rResult, loc);
     }
 }
