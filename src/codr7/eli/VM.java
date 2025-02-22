@@ -295,16 +295,10 @@ public final class VM {
                     break;
                 }
                 case Iter: {
-                    final var op = (Iter)opValues[pc];
-                    final var t = registers.get(op.rTarget());
-
-                    if (t.type() instanceof SeqTrait st) {
-                        final var it = st.iter(this, t, op.loc());
-                        registers.set(op.rTarget(), new Value<>(CoreLib.iterType, it));
-                    } else {
-                        throw new EvalError("Expected seq: " + t.dump(this), op.loc());
-                    }
-
+                    final var rt = (Integer)opValues[pc];
+                    final var t = registers.get(rt);
+                    final var it = ((SeqTrait)t.type()).iter(this, t);
+                    registers.set(rt, new Value<>(CoreLib.iterType, it));
                     pc++;
                     break;
                 }
@@ -315,8 +309,7 @@ public final class VM {
                     break;
                 }
                 case List: {
-                    final var op = (List)opValues[pc];
-                    registers.set(op.rTarget(), new Value<>(CoreLib.listType, new ArrayList<>()));
+                    registers.set((Integer)opValues[pc], new Value<>(CoreLib.listType, new ArrayList<>()));
                     pc++;
                     break;
                 }
@@ -348,10 +341,10 @@ public final class VM {
                     pc++;
                     break;
                 case Splat: {
-                    final var op = (Splat)opValues[pc];
-                    final var t = registers.get(op.rTarget());
-                    final var it = ((SeqTrait)t.type()).iter(this, t, op.loc());
-                    registers.set(op.rTarget(), new Value<>(CoreLib.splatType, it));
+                    final var rt = (Integer)opValues[pc];
+                    final var t = registers.get(rt);
+                    final var it = ((SeqTrait)t.type()).iter(this, t);
+                    registers.set(rt, new Value<>(CoreLib.splatType, it));
                     pc++;
                     break;
                 }
@@ -535,17 +528,17 @@ public final class VM {
                     case CallValue op -> op;
                     case Check op -> op;
                     case Copy op -> op;
-                    case Iter op -> op;
-                    case List op -> op;
                     case Dec op -> op;
                     case Goto op -> op.target();
                     case Inc op -> op;
+                    case Iter op -> op.rTarget();
                     case Left op -> op;
+                    case List op -> op.rTarget();
                     case Next op -> op;
                     case Put op -> op;
                     case Right op -> op;
                     case SetPath op -> op.path();
-                    case Splat op -> op;
+                    case Splat op -> op.rTarget();
                     case Trace op -> op.text();
                     case Unzip op -> op;
                     case Zip op -> op;

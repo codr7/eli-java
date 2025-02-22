@@ -325,9 +325,9 @@ public class CoreLib extends Lib {
 
                                     if (v == null || v.type() == bindingType) {
                                         sf.emit(vm, rSeq);
-                                        vm.emit(new Iter(rSeq, loc));
+                                        vm.emit(new Iter(rSeq));
                                     } else if (v.type() instanceof SeqTrait st) {
-                                        final var it = st.iter(vm, v, loc);
+                                        final var it = st.iter(vm, v);
                                         vm.emit(new Put(rSeq, new Value<>(iterType, it), loc));
                                     } else {
                                         throw new EmitError("Expected seq: " + v.dump(vm), loc);

@@ -22,7 +22,7 @@ public class ListForm extends BaseForm {
         final var v = value(vm);
 
         if (v == null) {
-            vm.emit(new List(rResult, loc()));
+            vm.emit(new List(rResult));
             final var rItem = vm.alloc(1);
 
             for (final var it: items) {

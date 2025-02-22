@@ -40,18 +40,15 @@ public class JMacroType extends BaseType<JMacro> implements CallTrait {
             if (f instanceof SplatForm sf) {
                 final var t = sf.target.value(vm);
                 if (t == null) { throw new EmitError("Invalid splat: " + sf.target.dump(vm), loc); }
+                final var it = ((SeqTrait)t.type()).iter(vm, t);
 
-                if (t.type() instanceof SeqTrait st) {
-                    final var it = st.iter(vm, t, loc);
+                while (it.next(vm, rIt, sf.target.loc())) {
+                    final var v = vm.registers.get(rIt);
 
-                    while (it.next(vm, rIt, sf.target.loc())) {
-                        final var v = vm.registers.get(rIt);
-
-                        if (v.type() == CoreLib.exprType) {
-                            args.add(v.cast(CoreLib.exprType));
-                        } else {
-                            args.add(new LiteralForm(v, loc));
-                        }
+                    if (v.type() == CoreLib.exprType) {
+                        args.add(v.cast(CoreLib.exprType));
+                    } else {
+                        args.add(new LiteralForm(v, loc));
                     }
                 }
             } else {

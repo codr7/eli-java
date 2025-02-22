@@ -6,5 +6,5 @@ import codr7.eli.Loc;
 import codr7.eli.VM;
 
 public interface SeqTrait {
-    Iter iter(VM vm, IValue target, Loc loc);
+    Iter iter(VM vm, IValue target);
 }

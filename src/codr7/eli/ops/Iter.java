@@ -6,7 +6,7 @@ import codr7.eli.VM;
 
 import java.util.Set;
 
-public record Iter(int rTarget, Loc loc) implements Op {
+public record Iter(int rTarget) implements Op {
     @Override
     public Code code() {
         return Code.Iter;
@@ -14,7 +14,7 @@ public record Iter(int rTarget, Loc loc) implements Op {
 
     @Override
     public String dump(final VM vm) {
-        return "CreateIter rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ")";
+        return "Iter rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ")";
     }
 
     @Override

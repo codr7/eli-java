@@ -23,7 +23,7 @@ public class SplatForm extends BaseForm {
 
         if (v == null) {
             target.emit(vm, rResult);
-            vm.emit(new Splat(rResult, loc()));
+            vm.emit(new Splat(rResult));
         } else {
             v.emit(vm, rResult, loc());
         }
@@ -48,7 +48,7 @@ public class SplatForm extends BaseForm {
         final var v = target.value(vm);
 
         if (v != null && v.type() instanceof SeqTrait st) {
-            final var it = st.iter(vm, v, loc());
+            final var it = st.iter(vm, v);
             return new Value<>(CoreLib.splatType, it);
         }
 

@@ -64,7 +64,7 @@ public final class Arg {
         }
 
         if (splat) {
-            vm.emit(new List(rResult, loc));
+            vm.emit(new List(rResult));
             final var rItem = vm.alloc(1);
 
             for (var j = i; j < args.length; j++) {
