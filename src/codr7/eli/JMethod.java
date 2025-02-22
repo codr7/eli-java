@@ -2,7 +2,6 @@ package codr7.eli;
 
 import codr7.eli.errors.EmitError;
 import codr7.eli.libs.CoreLib;
-import codr7.eli.ops.CallValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;

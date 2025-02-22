@@ -350,14 +350,8 @@ public final class VM {
                 case Splat: {
                     final var op = (Splat)opValues[pc];
                     final var t = registers.get(op.rTarget());
-
-                    if (t.type() instanceof SeqTrait st) {
-                        final var it = st.iter(this, t, op.loc());
-                        registers.set(op.rTarget(), new Value<>(CoreLib.splatType, it));
-                    } else {
-                        throw new EvalError("Expected seq: " + t.dump(this), op.loc());
-                    }
-
+                    final var it = ((SeqTrait)t.type()).iter(this, t, op.loc());
+                    registers.set(op.rTarget(), new Value<>(CoreLib.splatType, it));
                     pc++;
                     break;
                 }
