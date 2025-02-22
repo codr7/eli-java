@@ -4,6 +4,11 @@ fib PT0.761190763S
 fact PT1.478221932S
 fib PT1.291441769S
 
+* result punning readme
+** pair readme
+** ListTrait/head/tail
+*** list, string, pair
+
 * return 1/x for one arg div
 ** add one arg div to num trait
 *** add support in / method
