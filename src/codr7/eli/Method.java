@@ -11,7 +11,7 @@ import static codr7.eli.libs.CoreLib.bindingType;
 
 public record Method(String id,
                      Arg[] args, int rArgs,
-                     IType resultType, int rResult,
+                     int rResult,
                      IForm[] body,
                      Label start, Label end) {
     public int arity() {
@@ -86,7 +86,7 @@ public record Method(String id,
 
         vm.eval(start().pc, end().pc);
 
-        if (resultType() != null && rResult != rResult()) {
+        if (rResult != rResult()) {
             vm.registers.set(rResult, vm.registers.get(rResult()));
         }
     }

@@ -84,8 +84,6 @@ public class CoreLib extends Lib {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var mid = ((IdForm) args.removeFirst()).id;
                     final var argList = ((ListForm) args.removeFirst()).items;
-                    final var rf = args.removeFirst();
-                    final IType resultType = rf.getType(vm, rf.loc());
                     final var margs = new ArrayList<Arg>();
                     for (IForm iForm : argList) { margs.add(new Arg(iForm.argId(vm, loc))); }
                     final var rArgs = vm.alloc(margs.size());
@@ -93,7 +91,7 @@ public class CoreLib extends Lib {
                     final var m = new Method(
                             mid,
                             margs.toArray(new Arg[0]), rArgs,
-                            resultType, rResult,
+                            rResult,
                             args.toArray(new IForm[0]),
                             vm.label(-1), vm.label(-1));
 

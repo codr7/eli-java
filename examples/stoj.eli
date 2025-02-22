@@ -8,7 +8,7 @@
 (gui/add root-panel top-panel)
 (gui/row-layout top-panel)
 
-(^parse-value [in] Decimal
+(^parse-value [in]
   (let [s   (string/strip in \,)
         v:i (parse-decimal s)]
     (if (< i #s)
@@ -20,7 +20,7 @@
             (else v))))
       (else v))))
 
-(^on-load [] _
+(^on-load []
   (let [path (gui/open-file frame ['csv:"investing.com Export"])
         file (if path (csv/open-file path))]
     (if file
@@ -38,7 +38,7 @@
 (var load-button (gui/button "Load" on-load))
 (gui/add top-panel load-button)
 
-(^on-query [] _
+(^on-query []
   (say 'on-query))
 
 (var query-button (gui/button "Query" on-query))
