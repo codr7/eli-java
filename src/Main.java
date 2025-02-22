@@ -36,12 +36,14 @@ public class Main {
                     return;
                 }
 
-                for (final var a : as) {
-                    vm.load(Paths.get(a), rResult);
-                }
-
-                vm.eval(start.pc);
+                break;
             }
+
+            for (final var a : as) {
+                vm.load(Paths.get(a), rResult);
+            }
+
+            vm.eval(start.pc);
         }
     }
 }

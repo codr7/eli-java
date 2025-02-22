@@ -200,7 +200,7 @@ public final class VM {
         freezeOps();
 
         for (; ; ) {
-            //System.out.println(pc + " " + ops.get(pc).dump(this));
+            System.out.println(pc + " " + ops.get(pc).dump(this));
 
             switch (opCodes[pc]) {
                 case AddItem: {
