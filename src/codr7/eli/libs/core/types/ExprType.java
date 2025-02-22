@@ -4,7 +4,7 @@ import codr7.eli.*;
 
 public class ExprType extends BaseType<IForm> {
     public ExprType(final String id) { super(id); }
-    @Override public String dump(final VM vm, final IValue value) { return value.cast(this).dump(vm); }
+    @Override public String dump(final VM vm, final IValue value) { return '\'' + value.cast(this).dump(vm); }
 
     @Override public boolean eq(IValue left, IValue right) {
         return left.cast(this).eq(right.cast(this));
