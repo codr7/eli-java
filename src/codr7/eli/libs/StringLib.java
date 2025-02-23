@@ -4,7 +4,7 @@ import codr7.eli.Arg;
 import codr7.eli.Lib;
 import codr7.eli.Value;
 
-public class StringLib extends Lib {
+public final class StringLib extends Lib {
     public StringLib() {
         super("string");
 

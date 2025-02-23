@@ -5,7 +5,7 @@ import codr7.eli.IValue;
 import codr7.eli.VM;
 import codr7.eli.Range;
 
-public class RangeType extends BaseType<Range> {
+public final class RangeType extends BaseType<Range> {
     public RangeType(final String id) { super(id); }
 
     @Override public String dump(final VM vm, final IValue value) {

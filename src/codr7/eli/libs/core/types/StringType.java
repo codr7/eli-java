@@ -3,13 +3,14 @@ package codr7.eli.libs.core.types;
 import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
+import codr7.eli.libs.core.iters.StringChars;
 import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.LenTrait;
+import codr7.eli.libs.core.traits.SeqTrait;
 
-public class StringType extends BaseType<String> implements CallTrait, CmpTrait, LenTrait {
-    public StringType(final String id) {
-        super(id);
+public class StringType extends BaseType<String> implements CallTrait, CmpTrait, SeqTrait {
+    public StringType(final String id, final IType...parents) {
+        super(id, parents);
     }
 
     @Override public void call(final VM vm,
@@ -39,7 +40,27 @@ public class StringType extends BaseType<String> implements CallTrait, CmpTrait,
         return '"' + value.cast(this) + '"';
     }
 
+    @Override
+    public Iter iter(final VM vm, final IValue target) {
+        return new StringChars(target.cast(this));
+    }
+
+    @Override
+    public IValue head(final IValue target) {
+        final var t = target.cast(this);
+        return t.isEmpty() ? CoreLib.NIL : new Value<>(CoreLib.charType, t.charAt(0));
+    }
+
     @Override public int len(final IValue target) { return target.cast(this).length(); }
+
+    @Override
+    public IValue tail(final IValue target) {
+        final var t = target.cast(this);
+
+        return t.isEmpty()
+                ? CoreLib.NIL
+                : new Value<>(CoreLib.charType, t.charAt(t.length()-1));
+    }
 
     @Override public boolean toBit(final VM vm, final IValue value) {
         return !value.cast(this).isEmpty();

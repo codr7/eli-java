@@ -6,7 +6,7 @@ import codr7.eli.VM;
 
 import java.time.Duration;
 
-public class TimeType extends BaseType<Duration> {
+public final class TimeType extends BaseType<Duration> {
     public TimeType(final String id) { super(id); }
 
     @Override public boolean toBit(final VM vm, final IValue value) {

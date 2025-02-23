@@ -1,6 +1,6 @@
 package codr7.eli;
 
-public class Loc {
+public final class Loc {
     public final String source;
     private int line, column;
 

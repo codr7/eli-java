@@ -8,7 +8,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class RecordReader implements Iter {
+public final class RecordReader implements Iter {
     final Iterator<CSVRecord> csv;
 
     public RecordReader(final Iterator<CSVRecord> csv) {

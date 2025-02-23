@@ -4,10 +4,11 @@ import codr7.eli.*;
 import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.ops.CallValue;
 
-public class JMethodType extends BaseType<JMethod> implements CallTrait {
+public final class JMethodType extends BaseType<JMethod> implements CallTrait {
     public JMethodType(final String id) { super(id); }
 
-    @Override public void call(final VM vm,
+    @Override
+    public void call(final VM vm,
                      final IValue target,
                      final int rArgs,
                      final int arity,

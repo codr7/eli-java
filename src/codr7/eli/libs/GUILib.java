@@ -18,7 +18,7 @@ import java.awt.*;
 
 import static javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION;
 
-public class GUILib extends Lib {
+public final class GUILib extends Lib {
     public static final WidgetType widgetType = new WidgetType("Widget", CoreLib.anyType);
     public static final ContainerType containerType = new ContainerType("Container", widgetType);
 

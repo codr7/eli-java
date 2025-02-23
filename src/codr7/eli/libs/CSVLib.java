@@ -10,7 +10,7 @@ import org.apache.commons.csv.CSVParser;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 
-public class CSVLib extends Lib {
+public final class CSVLib extends Lib {
     public CSVLib() {
         super("csv");
 

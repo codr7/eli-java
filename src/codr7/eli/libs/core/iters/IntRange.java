@@ -6,7 +6,7 @@ import codr7.eli.VM;
 import codr7.eli.Value;
 import codr7.eli.libs.CoreLib;
 
-public class IntRange implements Iter {
+public final class IntRange implements Iter {
     private long current;
     private long end;
     private long stride;
@@ -17,11 +17,13 @@ public class IntRange implements Iter {
         this.stride = stride;
     }
 
-    @Override public String dump(VM vm) {
+    @Override
+    public String dump(final VM vm) {
         return "(IntRange " + current + ".." + end + ":" + stride + ")";
     }
 
-    @Override public boolean next(final VM vm, final int rResult, final Loc loc) {
+    @Override
+    public boolean next(final VM vm, final int rResult, final Loc loc) {
         final var next = current + stride;
         if (next >= end) { return false; }
         current = next;

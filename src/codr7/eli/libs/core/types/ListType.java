@@ -6,15 +6,14 @@ import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.iters.ListItems;
 import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.LenTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 
 import java.util.ArrayList;
 
 public class ListType
         extends BaseType<ArrayList<IValue>>
-        implements CallTrait, CmpTrait, LenTrait, SeqTrait {
-    public ListType(final String id) { super(id); }
+        implements CallTrait, CmpTrait, SeqTrait {
+    public ListType(final String id, IType...parents) { super(id, parents); }
 
     @Override public void call(final VM vm,
                                final IValue target,
@@ -81,11 +80,26 @@ public class ListType
         return true;
     }
 
-    @Override public Iter iter(VM vm, IValue target) {
+    @Override public Iter iter(final VM vm, final IValue target) {
         return new ListItems(target.cast(this));
     }
 
+    @Override
+    public IValue head(final IValue target) {
+        final var t = target.cast(this);
+        return t.isEmpty() ? CoreLib.NIL : t.getFirst();
+    }
+
     @Override public int len(final IValue target) { return target.cast(this).size(); }
+
+    @Override
+    public IValue tail(IValue target) {
+        final var t = target.cast(this);
+
+        return t.isEmpty()
+                ? CoreLib.NIL
+                : new Value<>(this, new ArrayList<>(t.subList(1, t.size())));
+    }
 
     @Override public boolean toBit(final VM vm, final IValue value) { return !value.cast(this).isEmpty(); }
 

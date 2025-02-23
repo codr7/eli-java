@@ -10,10 +10,11 @@ import codr7.eli.libs.core.traits.SeqTrait;
 
 import java.util.ArrayList;
 
-public class JMacroType extends BaseType<JMacro> implements CallTrait {
+public final class JMacroType extends BaseType<JMacro> implements CallTrait {
     public JMacroType(final String id) { super(id); }
 
-    @Override public void call(final VM vm,
+    @Override
+    public void call(final VM vm,
                      final IValue target,
                      final int rArgs,
                      final int arity,
@@ -22,11 +23,13 @@ public class JMacroType extends BaseType<JMacro> implements CallTrait {
         throw new RuntimeException("Not implemented");
     }
 
-    @Override public String dump(final VM vm, final IValue value) {
+    @Override
+    public String dump(final VM vm, final IValue value) {
         return "(JMacro " + value.cast(this).id() + ")";
     }
 
-    @Override public void emitCall(final VM vm,
+    @Override
+    public void emitCall(final VM vm,
                          final IValue target,
                          final IForm[] body,
                          final int rResult,

@@ -6,7 +6,6 @@ import codr7.eli.errors.EvalError;
 import codr7.eli.forms.*;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.LenTrait;
 import codr7.eli.libs.core.traits.NumTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 import codr7.eli.libs.core.types.*;
@@ -20,7 +19,8 @@ import java.util.regex.Pattern;
 
 public class CoreLib extends Lib {
     public static final TraitType anyType = new TraitType("Any");
-    public static final TraitType callType = new TraitType("Call");
+    public static final TraitType callTrait = new TraitType("Call");
+    public static final TraitType seqTrait = new TraitType("Seq");
     public static final NilType nilType = new NilType("Nil");
     public static final MaybeType maybeType = new MaybeType("Maybe", anyType, nilType);
     public static final TraitType numType = new TraitType("Num", anyType);
@@ -35,12 +35,12 @@ public class CoreLib extends Lib {
     public static final JMacroType jMacroType = new JMacroType("JMacro");
     public static final JMethodType jMethodType = new JMethodType("JMethod");
     public static final LibType libType = new LibType("Lib");
-    public static final ListType listType = new ListType("List");
+    public static final ListType listType = new ListType("List", seqTrait);
     public static final MetaType metaType = new MetaType("Meta");
     public static final MethodType methodType = new MethodType("Method");
-    public static final PairType pairType = new PairType("Pair");
+    public static final PairType pairType = new PairType("Pair", seqTrait);
     public static final RangeType rangeType = new RangeType("Range");
-    public static final StringType stringType = new StringType("String");
+    public static final StringType stringType = new StringType("String", seqTrait);
     public static final SplatType splatType = new SplatType("Splat");
     public static final SymType symType = new SymType("Sym");
     public static final TimeType timeType = new TimeType("Time");
@@ -419,6 +419,17 @@ public class CoreLib extends Lib {
                     if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
                 });
 
+        bindMethod("iter", new Arg[]{new Arg("seq", seqTrait)}, bitType,
+                (vm, args, rResult, loc) -> {
+                    final var it = args[0];
+
+                    if (it.type() instanceof SeqTrait lt) {
+                        vm.registers.set(rResult, new Value<>(intType, (long) lt.len(it)));
+                    } else {
+                        throw new EvalError("Expected seq: " + it.dump(vm), loc);
+                    }
+                });
+
         bindMethod("is", new Arg[]{new Arg("args*")}, null,
                 (vm, args, rResult, loc) -> {
                     final var lhs = args[0];
@@ -438,10 +449,10 @@ public class CoreLib extends Lib {
                 (vm, args, rResult, loc) -> {
             final var it = args[0];
 
-            if (it.type() instanceof LenTrait lt) {
+            if (it.type() instanceof SeqTrait lt) {
                 vm.registers.set(rResult, new Value<>(intType, (long) lt.len(it)));
             } else {
-                throw new EvalError("Len not supported: " + it.dump(vm), loc);
+                throw new EvalError("Expected seq: " + it.dump(vm), loc);
             }
         });
 
