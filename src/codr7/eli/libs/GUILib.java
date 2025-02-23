@@ -120,7 +120,7 @@ public class GUILib extends Lib {
                     if (args.length > 1) {
                         for (final var f: args[1].cast(CoreLib.listType)) {
                             final var fp = f.cast(CoreLib.pairType);
-                            final var ext = fp.left().cast(CoreLib.symbolType);
+                            final var ext = fp.left().cast(CoreLib.symType);
                             final var inf = fp.right().cast(CoreLib.stringType);
                             d.fileChooser.setFileFilter(new FileNameExtensionFilter(inf, ext));
                         }

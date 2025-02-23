@@ -6,8 +6,8 @@ import codr7.eli.Loc;
 import codr7.eli.VM;
 import codr7.eli.libs.core.traits.CmpTrait;
 
-public class SymbolType extends BaseType<String> implements CmpTrait {
-    public SymbolType(final String id) {
+public class SymType extends BaseType<String> implements CmpTrait {
+    public SymType(final String id) {
         super(id);
     }
 

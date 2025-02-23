@@ -6,8 +6,8 @@ import codr7.eli.libs.core.traits.NumTrait;
 
 import java.math.BigDecimal;
 
-public class DecimalType extends BaseType<BigDecimal> implements CmpTrait, NumTrait {
-    public DecimalType(final String id) { super(id); }
+public class FloatType extends BaseType<BigDecimal> implements CmpTrait, NumTrait {
+    public FloatType(final String id) { super(id); }
 
     @Override public IValue add(final IValue lhs, final IValue rhs) {
         return new Value<>(this, lhs.cast(this).add(rhs.cast(this)));

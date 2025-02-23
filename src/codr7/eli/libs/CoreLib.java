@@ -14,11 +14,13 @@ import codr7.eli.ops.*;
 import codr7.eli.ops.Iter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class CoreLib extends Lib {
     public static final TraitType anyType = new TraitType("Any");
+    public static final TraitType callType = new TraitType("Call");
     public static final NilType nilType = new NilType("Nil");
     public static final MaybeType maybeType = new MaybeType("Maybe", anyType, nilType);
     public static final TraitType numType = new TraitType("Num", anyType);
@@ -26,8 +28,8 @@ public class CoreLib extends Lib {
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
     public static final CharType charType = new CharType("Char");
-    public static final DecimalType decimalType = new DecimalType("Decimal");
     public static final ExprType exprType = new ExprType("Expr");
+    public static final FloatType floatType = new FloatType("Float");
     public static final IntType intType = new IntType("Int");
     public static final IterType iterType = new IterType("Iter");
     public static final JMacroType jMacroType = new JMacroType("JMacro");
@@ -40,8 +42,9 @@ public class CoreLib extends Lib {
     public static final RangeType rangeType = new RangeType("Range");
     public static final StringType stringType = new StringType("String");
     public static final SplatType splatType = new SplatType("Splat");
-    public static final SymbolType symbolType = new SymbolType("Symbol");
+    public static final SymType symType = new SymType("Sym");
     public static final TimeType timeType = new TimeType("Time");
+    public static final TimestampType timestampType = new TimestampType("Timestamp");
 
     public static final IValue NIL = new Value<>(nilType, new Object());
     public static final IValue T = new Value<>(bitType, true);
@@ -53,7 +56,7 @@ public class CoreLib extends Lib {
         bind(anyType);
         bind(bindingType);
         bind(bitType);
-        bind(decimalType);
+        bind(floatType);
         bind(exprType);
         bind(intType);
         bind(iterType);
@@ -70,8 +73,9 @@ public class CoreLib extends Lib {
         bind(rangeType);
         bind(splatType);
         bind(stringType);
-        bind(symbolType);
+        bind(symType);
         bind(timeType);
+        bind(timestampType);
 
         bind("_", NIL);
         bind("T", T);
@@ -470,7 +474,12 @@ public class CoreLib extends Lib {
                     }
                 });
 
-        bindMethod("parse-decimal", new Arg[]{new Arg("in")}, pairType,
+        bindMethod("now", new Arg[]{}, anyType,
+                (vm, args, rResult, loc) -> {
+                    vm.registers.set(rResult, new Value<>(timestampType, LocalDateTime.now()));
+                });
+
+        bindMethod("parse-float", new Arg[]{new Arg("in")}, pairType,
                 (vm, args, rResult, loc) -> {
                     final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
                     final var in = args[0].cast(stringType).substring(start);
@@ -478,7 +487,7 @@ public class CoreLib extends Lib {
 
                     if (match.find()) {
                         vm.registers.set(rResult, new Value<>(pairType, new Pair(
-                                new Value<>(decimalType, new BigDecimal(match.group(1))),
+                                new Value<>(floatType, new BigDecimal(match.group(1))),
                                 new Value<>(intType, (long) match.end(1) + start))));
                     } else {
                         vm.registers.set(rResult, new Value<>(pairType, new Pair(CoreLib.NIL, CoreLib.NIL)));
