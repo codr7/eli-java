@@ -23,7 +23,7 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 2;
+    public final static int VERSION = 3;
 
     public boolean debug = false;
     public final java.util.List<Compiler> compilers = new ArrayList<>();
