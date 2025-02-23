@@ -4,6 +4,8 @@ fib PT0.761190763S
 fact PT1.478221932S
 fib PT1.291441769S
 
+FEATURES
+
 * add SnakeTrait/head/tail
 *** list, string, pair
 
@@ -20,8 +22,25 @@ fib PT1.291441769S
 * add load macro
 ** emit setpath
 
-* add parse-date
+* add parse-timestamp
 ** add Timestamp type?
+
+CORE
+
+* add range method
+** add RangeTrait
+** create range
+** optional max
+
+* add range syntax
+** 0..10:2
+
+* add support for TypeSets
+** Int | Nil
+** add Int? shortcut for Maybe
+** switch string/find result type to intType.maybe
+
+STOJ
 
 * add data to JTable
 ** use filename as name
@@ -30,7 +49,6 @@ fib PT1.291441769S
 * add gui/chart module
 ** https://www.jfree.org/jfreechart/
 
-* stoj
 ** top panel for selection
 *** id, start/end date and knobs for percentages/change
 *** find first log for id > start
@@ -46,25 +64,3 @@ fib PT1.291441769S
 jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 ** https://www.investing.com/crypto/bitcoin/historical-data
-
-* add range syntax
-** 0..10:2
-
-* add support for TypeSets
-** Int | Nil
-** add Int? shortcut for Maybe
-** switch string/find result type to intType.maybe
-
-** add let? macro
-*** use in stoj/on-load
-*** keep assigning while != _
-*** eval clause1 if all ok
-*** else clause2
-
-* add swap macro
-** add swap op
-
-* add range method
-** add RangeTrait
-** create range
-** optional max
