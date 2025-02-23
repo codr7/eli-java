@@ -3,15 +3,14 @@ package codr7.eli.libs.csv.iters;
 import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
-import org.apache.commons.csv.CSVRecord;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public final class RecordReader implements Iter {
-    final Iterator<CSVRecord> csv;
+    final Iterator<String[]> csv;
 
-    public RecordReader(final Iterator<CSVRecord> csv) {
+    public RecordReader(final Iterator<String[]> csv) {
         this.csv = csv;
     }
 
