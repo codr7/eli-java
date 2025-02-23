@@ -14,7 +14,7 @@ public final class CSVLib extends Lib {
     public CSVLib() {
         super("csv");
 
-        bindMethod("open-file", new Arg[]{new Arg("path", CoreLib.stringType)}, null,
+        bindMethod("open-file", new Arg[]{new Arg("path", CoreLib.stringType)},
                 (vm, args, rResult, loc) -> {
                     try {
                         final var path = args[0].cast(CoreLib.stringType);

@@ -27,12 +27,12 @@ public class Lib {
         bind(id, new Value<>(type, data));
     }
 
-    public void bindMacro(final String id, final Arg[] arguments, final IType result, final JMacro.Body body) {
-        bind(new JMacro(id, arguments, result, body));
+    public void bindMacro(final String id, final Arg[] arguments, final JMacro.Body body) {
+        bind(new JMacro(id, arguments, body));
     }
 
-    public void bindMethod(final String id, final Arg[] arguments, final IType result, final JMethod.Body body) {
-        bind(new JMethod(id, arguments, result, body));
+    public void bindMethod(final String id, final Arg[] arguments, final JMethod.Body body) {
+        bind(new JMethod(id, arguments, body));
     }
 
     public void bind(final IType value) { bind(value.id(), CoreLib.metaType, value); }

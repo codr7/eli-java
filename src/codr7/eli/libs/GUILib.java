@@ -41,7 +41,7 @@ public final class GUILib extends Lib {
         bind(tableType);
         bind(widgetType);
 
-        bindMethod("add", new Arg[]{new Arg("parent", containerType), new Arg("child", widgetType)}, null,
+        bindMethod("add", new Arg[]{new Arg("parent", containerType), new Arg("child", widgetType)},
                 (vm, args, rResult, location) -> {
                     final var p = args[0].cast(containerType);
                     final var c = args[1].cast(widgetType);
@@ -50,7 +50,6 @@ public final class GUILib extends Lib {
 
         bindMethod("add-column",
                 new Arg[]{new Arg("table", tableType), new Arg("title", CoreLib.stringType)},
-                columnType,
                 (vm, args, rResult, location) -> {
                     final var table = args[0].cast(tableType).table();
                     final var title = args[1].cast(CoreLib.stringType);
@@ -62,7 +61,7 @@ public final class GUILib extends Lib {
         bindMethod("add-tab",
                 new Arg[]{new Arg("parent", tabViewType),
                         new Arg("title", CoreLib.stringType),
-                new Arg("child", widgetType)}, null,
+                new Arg("child", widgetType)},
                 (vm, args, rResult, location) -> {
                     final var title = args[1].cast(CoreLib.stringType);
                     final var child = args[2].cast(widgetType);
@@ -71,7 +70,6 @@ public final class GUILib extends Lib {
 
         bindMethod("button",
                 new Arg[]{new Arg("title", CoreLib.anyType), new Arg("on-click", CoreLib.anyType)},
-                buttonType,
                 (vm, args, rResult, loc) -> {
                     final var title = args[0].cast(CoreLib.stringType);
                     final var b = new codr7.eli.libs.gui.shims.Button(new JButton(title));
@@ -86,20 +84,20 @@ public final class GUILib extends Lib {
                     vm.registers.set(rResult, new Value<>(buttonType, b));
                 });
 
-        bindMethod("column-layout", new Arg[]{new Arg("target", containerType)}, null,
+        bindMethod("column-layout", new Arg[]{new Arg("target", containerType)},
                 (vm, args, rResult, loc) -> {
                     final var t = args[0].cast(containerType).container;
                     t.setLayout(new BoxLayout(t, BoxLayout.PAGE_AXIS));
                 });
 
-        bindMethod("content", new Arg[]{new Arg("frame", frameType)}, containerType,
+        bindMethod("content", new Arg[]{new Arg("frame", frameType)},
                 (vm, args, rResult, loc) -> {
                     final var f = args[0].cast(frameType).frame;
                     vm.registers.set(rResult, new Value<>(containerType, new Container(f.getContentPane())));
                 });
 
         bindMethod("frame",
-                new Arg[]{new Arg("title", CoreLib.stringType), new Arg("size", CoreLib.pairType)}, frameType,
+                new Arg[]{new Arg("title", CoreLib.stringType), new Arg("size", CoreLib.pairType)},
                 (vm, args, rResult, loc) -> {
                     final var title = args[0].cast(CoreLib.stringType);
                     final var f = new JFrame(title);
@@ -113,7 +111,6 @@ public final class GUILib extends Lib {
 
         bindMethod("open-file",
                 new Arg[]{new Arg("parent", widgetType), new Arg("filters", CoreLib.listType)},
-                CoreLib.maybeType,
                 (vm, args, rResult, loc) -> {
                     final var d = new OpenDialog(new JFileChooser());
 
@@ -137,26 +134,25 @@ public final class GUILib extends Lib {
                     }
                 });
 
-        bindMethod("pack", new Arg[]{new Arg("frames*")}, null,
+        bindMethod("pack", new Arg[]{new Arg("frames*")},
                 (vm, args, rResult, loc) -> {
                     for (final var a: args) { a.cast(frameType).frame.pack(); }
                 });
 
-        bindMethod("panel",
-                new Arg[]{}, null,
+        bindMethod("panel", new Arg[]{},
                 (vm, args, rResult, location) -> {
                     final var p = new JPanel();
                     p.setLayout(new BorderLayout());
                     vm.registers.set(rResult, new Value<>(containerType, new Container(p)));
                 });
 
-        bindMethod("row-layout", new Arg[]{new Arg("target", containerType)}, null,
+        bindMethod("row-layout", new Arg[]{new Arg("target", containerType)},
                 (vm, args, rResult, loc) -> {
                     final var t = args[0].cast(containerType).container;
                     t.setLayout(new BoxLayout(t, BoxLayout.LINE_AXIS));
                 });
 
-        bindMethod("table", new Arg[]{}, tableType,
+        bindMethod("table", new Arg[]{},
                 (vm, args, rResult, loc) -> {
                     final var t = new JTable();
                     t.setFillsViewportHeight(true);
@@ -165,12 +161,12 @@ public final class GUILib extends Lib {
                     vm.registers.set(rResult, new Value<>(tableType, new Table(t, s)));
                 });
 
-        bindMethod("tab-view", new Arg[]{}, tabViewType,
+        bindMethod("tab-view", new Arg[]{},
                 (vm, args, rResult, loc) -> {
                     vm.registers.set(rResult, new Value<>(tabViewType, new TabView(new JTabbedPane())));
                 });
 
-        bindMethod("show", new Arg[]{new Arg("widgets*")}, null,
+        bindMethod("show", new Arg[]{new Arg("widgets*")},
                 (vm, args, rResult, loc) -> {
                     for (final var a: args) { a.cast(widgetType).component().setVisible(true); }
                 });

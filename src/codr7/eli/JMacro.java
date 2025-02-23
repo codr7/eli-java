@@ -2,7 +2,7 @@ package codr7.eli;
 
 import codr7.eli.errors.EmitError;
 
-public record JMacro(String id, Arg[] args, IType result, Body body) {
+public record JMacro(String id, Arg[] args, Body body) {
     public interface Body {
         void call(VM vm, IForm[] args, int rResult, Loc loc);
     }

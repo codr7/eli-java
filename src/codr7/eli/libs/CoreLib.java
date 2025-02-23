@@ -83,7 +83,6 @@ public class CoreLib extends Lib {
 
         bindMacro("^",
                 new Arg[]{new Arg("id"), new Arg("args"), new Arg("result"), new Arg("body*")},
-                methodType,
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var mid = ((IdForm) args.removeFirst()).id;
@@ -103,7 +102,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(methodType, m));
                 });
 
-        bindMethod("=", new Arg[]{new Arg("args*")}, bitType,
+        bindMethod("=", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, location) -> {
                     final var lhs = args[0];
                     var result = true;
@@ -118,7 +117,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(bitType, result));
                 });
 
-        bindMethod("<", new Arg[]{new Arg("args*")}, bitType,
+        bindMethod("<", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, loc) -> {
                     var lhs = args[0];
                     var result = true;
@@ -141,7 +140,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(bitType, result));
                 });
 
-        bindMethod(">", new Arg[]{new Arg("args*")}, bitType,
+        bindMethod(">", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, location) -> {
                     var lhs = args[0].cast(intType);
                     var result = true;
@@ -160,7 +159,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(bitType, result));
                 });
 
-        bindMethod("+", new Arg[]{new Arg("args*")}, numType,
+        bindMethod("+", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, loc) -> {
                     var result = args[0];
 
@@ -177,7 +176,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, result);
                 });
 
-        bindMethod("-", new Arg[]{new Arg("args*")}, numType,
+        bindMethod("-", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, loc) -> {
                     IValue result = null;
 
@@ -202,7 +201,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, result);
                 });
 
-        bindMethod("*", new Arg[]{new Arg("args*")}, null,
+        bindMethod("*", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, loc) -> {
                     var result = args[0];
 
@@ -219,7 +218,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, result);
                 });
 
-        bindMethod("/", new Arg[]{new Arg("args*")}, null,
+        bindMethod("/", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, loc) -> {
                     var result = args[0];
 
@@ -236,7 +235,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, result);
                 });
 
-        bindMacro("bench", new Arg[]{new Arg("reps", intType), new Arg("body*", intType)}, null,
+        bindMacro("bench", new Arg[]{new Arg("reps", intType), new Arg("body*", intType)},
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var reps = args.removeFirst().eval(vm).cast(intType);
@@ -251,7 +250,7 @@ public class CoreLib extends Lib {
                     vm.ops.set(benchPc, new Bench(vm.label(), rResult, loc));
                 });
 
-        bindMacro("check", new Arg[]{new Arg("expected"), new Arg("body*")}, null,
+        bindMacro("check", new Arg[]{new Arg("expected"), new Arg("body*")},
                 (vm, _args, rResult, location) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var rValues = vm.alloc(2);
@@ -274,7 +273,7 @@ public class CoreLib extends Lib {
                     });
                 });
 
-        bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")}, null,
+        bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")},
                 (vm, args, rResult, loc) -> {
                     final var t = (IdForm)args[0];
                     final var v = vm.currentLib.find(t.id);
@@ -295,7 +294,7 @@ public class CoreLib extends Lib {
                     if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
                 });
 
-        bindMacro("do", new Arg[]{new Arg("body*")}, null,
+        bindMacro("do", new Arg[]{new Arg("body*")},
                 (vm, args, rResult, location) -> {
                     vm.doLib(null, () -> {
                         vm.emit(new ArrayDeque<>(Arrays.asList(args)), rResult);
@@ -304,7 +303,6 @@ public class CoreLib extends Lib {
 
         bindMacro("for",
                 new Arg[]{new Arg("bindings", listType), new Arg("body*")},
-                null,
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
 
@@ -359,7 +357,7 @@ public class CoreLib extends Lib {
                     });
                 });
 
-        bindMacro("if", new Arg[]{new Arg("cond"), new Arg("body*")}, null,
+        bindMacro("if", new Arg[]{new Arg("cond"), new Arg("body*")},
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var rCond = vm.alloc(1);
@@ -370,7 +368,7 @@ public class CoreLib extends Lib {
                     vm.doLib(null, () -> {
                         final var bodyLib = vm.currentLib;
 
-                        vm.currentLib.bindMacro("else", new Arg[]{new Arg("body*")}, null,
+                        vm.currentLib.bindMacro("else", new Arg[]{new Arg("body*")},
                             (_vm, _body, _rResult, _loc) -> {
                                 final var skipElse = vm.label(-1);
                                 vm.emit(new Goto(skipElse));
@@ -382,7 +380,6 @@ public class CoreLib extends Lib {
 
                         vm.currentLib.bindMacro("else-if",
                                 new Arg[]{new Arg("cond"), new Arg("body*")},
-                                null,
                                 (_vm, _body, _rResult, _loc) -> {
                                     final var fs = new ArrayDeque<IForm>();
                                     fs.add(new IdForm("else", _loc));
@@ -398,7 +395,7 @@ public class CoreLib extends Lib {
                     });
                 });
 
-        bindMacro("inc", new Arg[]{new Arg("place"), new Arg("delta?")}, null,
+        bindMacro("inc", new Arg[]{new Arg("place"), new Arg("delta?")},
                 (vm, args, rResult, loc) -> {
                     final var t = (IdForm)args[0];
                     final var v = vm.currentLib.find(t.id);
@@ -419,7 +416,7 @@ public class CoreLib extends Lib {
                     if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
                 });
 
-        bindMethod("iter", new Arg[]{new Arg("seq", seqTrait)}, bitType,
+        bindMethod("iter", new Arg[]{new Arg("seq", seqTrait)},
                 (vm, args, rResult, loc) -> {
                     final var it = args[0];
 
@@ -430,7 +427,7 @@ public class CoreLib extends Lib {
                     }
                 });
 
-        bindMethod("is", new Arg[]{new Arg("args*")}, null,
+        bindMethod("is", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, loc) -> {
                     final var lhs = args[0];
                     var result = true;
@@ -445,7 +442,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(bitType, result));
                 });
 
-        bindMethod("len", new Arg[]{new Arg("it")}, bitType,
+        bindMethod("len", new Arg[]{new Arg("it")},
                 (vm, args, rResult, loc) -> {
             final var it = args[0];
 
@@ -456,7 +453,7 @@ public class CoreLib extends Lib {
             }
         });
 
-        bindMacro("let", new Arg[]{new Arg("bindings", listType), new Arg("body*")}, null,
+        bindMacro("let", new Arg[]{new Arg("bindings", listType), new Arg("body*")},
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var bsf = args.removeFirst();
@@ -478,19 +475,26 @@ public class CoreLib extends Lib {
                     }
             });
 
-        bindMethod("next", new Arg[]{new Arg("in", iterType)}, anyType,
+        bindMethod("nbits", new Arg[]{new Arg("value", intType)},
+                (vm, args, rResult, loc) -> {
+                    vm.registers.set(rResult,
+                            new Value<>(intType,
+                                    (long)Utils.log2(args[0].cast(intType).intValue())));
+                });
+
+        bindMethod("next", new Arg[]{new Arg("in", iterType)},
                 (vm, args, rResult, loc) -> {
                     if (!args[0].cast(iterType).next(vm, rResult, loc)) {
                         vm.registers.set(rResult, CoreLib.NIL);
                     }
                 });
 
-        bindMethod("now", new Arg[]{}, anyType,
+        bindMethod("now", new Arg[]{},
                 (vm, args, rResult, loc) -> {
                     vm.registers.set(rResult, new Value<>(timestampType, LocalDateTime.now()));
                 });
 
-        bindMethod("parse-float", new Arg[]{new Arg("in")}, pairType,
+        bindMethod("parse-float", new Arg[]{new Arg("in")},
                 (vm, args, rResult, loc) -> {
                     final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
                     final var in = args[0].cast(stringType).substring(start);
@@ -505,7 +509,7 @@ public class CoreLib extends Lib {
                     }
                 });
 
-        bindMethod("parse-int", new Arg[]{new Arg("in")}, pairType,
+        bindMethod("parse-int", new Arg[]{new Arg("in")},
                 (vm, args, rResult, loc) -> {
             final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
             final var in = args[0].cast(stringType).substring(start);
@@ -520,7 +524,14 @@ public class CoreLib extends Lib {
             }
         });
 
-        bindMethod("say", new Arg[]{new Arg("body*")}, null,
+        bindMethod("pow", new Arg[]{new Arg("base", intType), new Arg("exp", intType)},
+                (vm, args, rResult, loc) -> {
+                    final var b = args[0].cast(intType);
+                    final var e = args[1].cast(intType);
+                    vm.registers.set(rResult, new Value<>(intType, (long)Math.pow(b, e)));
+                });
+
+        bindMethod("say", new Arg[]{new Arg("body*")},
                 (vm, args, rResult, location) -> {
                     final var buffer = new StringBuilder();
                     for (final var a : args) {
@@ -529,12 +540,12 @@ public class CoreLib extends Lib {
                     System.out.println(buffer);
                 });
 
-        bindMacro("unquote", new Arg[]{new Arg("forms*")}, null,
+        bindMacro("unquote", new Arg[]{new Arg("forms*")},
                 (vm, args, rResult, loc) -> {
                     for (final var a: args) { a.unquote(vm, rResult, loc); }
                 });
 
-        bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")}, null,
+        bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")},
                 (vm, _args, rResult, location) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
 

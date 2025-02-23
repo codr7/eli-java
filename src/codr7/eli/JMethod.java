@@ -6,7 +6,7 @@ import codr7.eli.libs.CoreLib;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public record JMethod(String id, Arg[] args, IType result, Body body) {
+public record JMethod(String id, Arg[] args, Body body) {
     public interface Body {
         void call(VM vm, IValue[] args, int rResult, Loc loc);
     }

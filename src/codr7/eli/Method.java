@@ -25,7 +25,7 @@ public record Method(String id,
         final var end = vm.label(-1);
 
         vm.doLib(null, () -> {
-            vm.currentLib.bindMacro("recall", args, null,
+            vm.currentLib.bindMacro("recall", args,
                     (_vm, args, _rResult, _loc) -> {
                         final var rArgsCopy = vm.alloc(args.length);
 
@@ -40,7 +40,7 @@ public record Method(String id,
                         _vm.emit(new Goto(start));
                     });
 
-            vm.currentLib.bindMacro("return", args, null,
+            vm.currentLib.bindMacro("return", args,
                     (_vm, args, _rResult, _loc) -> {
                         _vm.doLib(null, () -> {
                             _vm.emit( new ArrayDeque<>(Arrays.asList(args)), _rResult);

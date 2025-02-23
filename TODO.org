@@ -8,6 +8,9 @@ FEATURES
 
 * add head/tail methods + tests + readme
 
+* add Method support for optional args
+** look for ? in arg assignment
+
 * add slice/splice support to list/string
 ** handle pair index with/without value
 
