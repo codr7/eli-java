@@ -6,11 +6,7 @@ fib PT1.266693325S
 
 FEATURES
 
-* add iter/head/tail methods
-
-* return 1/x for one arg div
-** add one arg div to num trait
-*** add support in / method
+* add head/tail methods + tests + readme
 
 * add slice/splice support to list/string
 ** handle pair index with/without value
@@ -20,6 +16,10 @@ FEATURES
 
 * add load macro
 ** emit setpath
+
+* return 1/x for one arg div
+** add one arg div to num trait
+*** add support in / method
 
 * add parse-timestamp
 ** add Timestamp type?
