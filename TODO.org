@@ -4,6 +4,19 @@ fib PT0.761190763S
 fact PT1.485536154S
 fib PT1.266693325S
 
+AC
+
+* build table from 0 to max-value
+** multiply by base
+*** add while loop
+
+* add alloc method
+** list with n * _
+
+* apply ops for all n-ops permutations
+** add perms metod from AoC
+** add if missing
+
 FEATURES
 
 * add head/tail methods + tests + readme

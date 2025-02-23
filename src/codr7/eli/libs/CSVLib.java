@@ -2,8 +2,6 @@ package codr7.eli.libs;
 
 import codr7.eli.Arg;
 import codr7.eli.Lib;
-import codr7.eli.Value;
-import codr7.eli.libs.csv.iters.RecordReader;
 
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
