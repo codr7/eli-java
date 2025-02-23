@@ -5,3 +5,6 @@
   max-value (pow base data-bits))
 
 (say data-bits " " max-value)
+
+  (var i:j 1:2)
+   (say i:j)

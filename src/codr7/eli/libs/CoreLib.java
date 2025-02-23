@@ -256,19 +256,8 @@ public class CoreLib extends Lib {
                     final var rValues = vm.alloc(2);
 
                     vm.doLib(null, () -> {
-                        var expected = args.removeFirst();
-                        Deque<IForm> actual;
-
-                        if (args.isEmpty()) {
-                            actual = new ArrayDeque<>();
-                            actual.add(expected);
-                            expected = new LiteralForm(CoreLib.T, expected.loc());
-                        } else {
-                            actual = args;
-                        }
-
-                        expected.emit(vm, rValues);
-                        vm.emit(actual, rValues + 1);
+                        args.removeFirst().emit(vm, rValues);
+                        vm.emit(args, rValues + 1);
                         vm.emit(new Check(rValues, location));
                     });
                 });
@@ -546,23 +535,20 @@ public class CoreLib extends Lib {
                 });
 
         bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")},
-                (vm, _args, rResult, location) -> {
+                (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
 
                     while (!args.isEmpty()) {
                         final var id = args.removeFirst();
 
-                        if (!(id instanceof IdForm)) {
-                            throw new EmitError("Expected id: " + id.dump(vm), location);
+                        if (args.isEmpty()) {
+                            throw new EmitError("Missing value", loc);
                         }
 
-                        if (args.isEmpty()) {
-                            throw new EmitError("Missing value", location);
-                        }
                         final var value = args.removeFirst().eval(vm);
                         final var rValue = vm.alloc(1);
                         vm.registers.set(rValue, value);
-                        vm.currentLib.bind(((IdForm) id).id, CoreLib.bindingType, new Binding(value.type(), rValue));
+                        id.bind(vm, rValue, loc);
                     }
                 });
     }
