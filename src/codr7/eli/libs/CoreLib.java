@@ -529,6 +529,25 @@ public class CoreLib extends Lib {
                     System.out.println(buffer);
                 });
 
+        bindMacro("set", new Arg[]{new Arg("args*")},
+                (vm, args, rResult, loc) -> {
+                    for (var i = 0; i < args.length; i += 2) {
+                        final var id = args[i];
+                        if (id instanceof IdForm f) {
+                            final var b = f.rawValue(vm);
+
+                            if (b.type() == bindingType) {
+                                final var v = args[i + 1];
+                                v.emit(vm, b.cast(bindingType).rValue());
+                            } else {
+                                throw new EmitError("Expected binding", f.loc());
+                            }
+                        } else {
+                            throw new EmitError("Expected id", id.loc());
+                        }
+                    }
+                });
+
         bindMacro("unquote", new Arg[]{new Arg("forms*")},
                 (vm, args, rResult, loc) -> {
                     for (final var a: args) { a.unquote(vm, rResult, loc); }
