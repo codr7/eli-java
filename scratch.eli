@@ -1,10 +1,17 @@
 (var
   ops '[+ -]
-  data-bits (- 8 (nbits (len ops)))
+  op-bits (nbits (len ops))
+  data-bits (- 8 op-bits)
   base 8
-  max-value (pow base data-bits))
+  max-value (pow base data-bits)
+  values (list/alloc max-value))
 
-(say data-bits " " max-value)
+(values 0 0)
+(values 1 1)
 
-  (var i:j 1:2)
-   (say i:j)
+(let [v base]
+  (while (< v max-value)
+    (values i (bsr v op-bits))
+    (set v (* v base))))
+
+(say values)

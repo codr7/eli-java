@@ -6,12 +6,13 @@ fib PT1.266693325S
 
 AC
 
-* build table from 0 to max-value
-** multiply by base
-*** add while loop
-
-* add alloc method
-** list with n * _
+* build table
+** add list type set support
+** add set method
+*** add to bindings readme
+** add bsr/l method
+** add while loop
+** commit
 
 * apply ops for all n-ops permutations
 ** add perms metod from AoC
