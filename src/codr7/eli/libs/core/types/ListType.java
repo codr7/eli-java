@@ -29,8 +29,16 @@ public class ListType
                 vm.registers.set(rResult, t.get(i));
                 break;
             }
+
+            case 2: {
+                final var i = vm.registers.get(rArgs).cast(CoreLib.intType).intValue();
+                final var v = vm.registers.get(rArgs+1);
+                t.set(i, v);
+                break;
+            }
+
             default:
-                throw new EvalError("Invalid arguments", loc);
+                throw new EvalError("Invalid args", loc);
         }
     }
 
