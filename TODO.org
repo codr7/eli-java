@@ -4,6 +4,15 @@ fib PT0.761190763S
 fact PT1.485536154S
 fib PT1.266693325S
 
+* extract freezeOp
+** use in eval
+
+* drop vm.labels
+** remove vm.label()
+*** create manually
+*** use pc outside of ops
+**** eval etc
+
 AC
 
 * build table

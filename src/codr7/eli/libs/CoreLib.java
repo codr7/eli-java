@@ -85,8 +85,24 @@ public class CoreLib extends Lib {
                 new Arg[]{new Arg("id"), new Arg("args"), new Arg("result"), new Arg("body*")},
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
-                    final var mid = ((IdForm) args.removeFirst()).id;
-                    final var argList = ((ListForm) args.removeFirst()).items;
+                    var f = args.removeFirst();
+                    String mid = loc.toString();
+                    var lambda = true;
+
+                    if (f instanceof IdForm idf) {
+                        mid = idf.id;
+                        f = args.removeFirst();
+                        lambda = false;
+                    }
+
+                    IForm[] argList;
+
+                    if (f instanceof ListForm lf) {
+                        argList = lf.items;
+                    } else {
+                        throw new EmitError("Missing arg list", f.loc());
+                    }
+
                     final var margs = new ArrayList<Arg>();
                     for (IForm iForm : argList) { margs.add(new Arg(iForm.argId(vm, loc))); }
                     final var rArgs = vm.alloc(margs.size());
@@ -95,10 +111,9 @@ public class CoreLib extends Lib {
                             mid,
                             margs.toArray(new Arg[0]), rArgs,
                             rResult,
-                            args.toArray(new IForm[0]),
-                            vm.label(-1), vm.label(-1));
+                            args.toArray(new IForm[0]));
 
-                    if (!m.id().equals("_")) { vm.currentLib.bind(m); }
+                    if (!lambda) { vm.currentLib.bind(m); }
                     vm.registers.set(rResult, new Value<>(methodType, m));
                 });
 
@@ -565,9 +580,7 @@ public class CoreLib extends Lib {
                         }
 
                         final var value = args.removeFirst().eval(vm);
-                        final var rValue = vm.alloc(1);
-                        vm.registers.set(rValue, value);
-                        id.bind(vm, rValue, loc);
+                        id.bindVar(vm, value, loc);
                     }
                 });
     }

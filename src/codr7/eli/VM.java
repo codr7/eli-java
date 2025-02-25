@@ -1,8 +1,5 @@
 package codr7.eli;
 
-import codr7.eli.compilers.ExtendGoto;
-import codr7.eli.compilers.UnusedCopy;
-import codr7.eli.compilers.UnusedPut;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.*;
 import codr7.eli.libs.core.traits.CallTrait;
@@ -20,7 +17,7 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 3;
+    public final static int VERSION = 4;
 
     public boolean debug = false;
     public final java.util.List<Compiler> compilers = new ArrayList<>();
@@ -58,10 +55,6 @@ public final class VM {
         suffixReaders.add(PairReader.instance);
         suffixReaders.add(SplatReader.instance);
 
-        compilers.add(ExtendGoto.instance);
-        compilers.add(UnusedCopy.instance);
-        compilers.add(UnusedPut.instance);
-
         userLib.bind(coreLib);
         userLib.bind(csvLib);
         userLib.bind(guiLib);
@@ -78,44 +71,6 @@ public final class VM {
             registers.add(CoreLib.NIL);
         }
         return result;
-    }
-
-    public void compile(final int startPc) {
-        var done = false;
-
-        while (!done) {
-            done = true;
-
-            for (final var c: compilers) {
-                if (c.compile(this, startPc)) { done = false; }
-            }
-
-            if (defragOps(startPc)) { done = false; }
-        }
-    }
-
-    public boolean defragOps(final int startPc) {
-        var changed = false;
-
-        for (var i = startPc; i < ops.size();) {
-            final var op = ops.get(i);
-
-            if (op instanceof Nop) {
-                ops.remove(i);
-
-                for (final var l: labels) {
-                    if (l.pc > i) {
-                        l.pc--;
-                    }
-                }
-
-                changed = true;
-            } else {
-                i++;
-            }
-        }
-
-        return changed;
     }
 
     public void doLib(final Lib lib, final DoLibBody body) {
@@ -164,30 +119,30 @@ public final class VM {
     }
 
     public void eval(final int fromPc) {
-        final var i = opCodes.length-1;
-        var stop = label((i > -1 && opCodes[i] == Op.Code.Stop) ? i : emit(new Stop()));
-        final var prev = label(pc);
-        pc = fromPc;
-
-        try {
-            eval();
-        } finally {
-            opCodes[stop.pc] = Op.Code.Nop;
-            pc = prev.pc;
-        }
+        eval(fromPc, emitPc());
     }
 
     public void eval(final int fromPc, final int toPc) {
         final var to = label(toPc);
-        var prevOp = opCodes[to.pc];
-        opCodes[to.pc] = Op.Code.Stop;
+        Op prevOp;
+
+        if (toPc == emitPc()) {
+            emit(new Stop());
+            prevOp = new Nop();
+        } else {
+            prevOp = ops.get(toPc);
+            ops.set(toPc, new Stop());
+            freezeOps();
+        }
+
         final var prev = label(pc);
         pc = fromPc;
 
         try {
             eval();
         } finally {
-            opCodes[to.pc] = prevOp;
+            ops.set(to.pc, prevOp);
+            freezeOps();
             pc = prev.pc;
         }
     }
@@ -195,17 +150,15 @@ public final class VM {
     public void eval(final String in, final int rResult, final Loc loc) {
         final var skip = label();
         emit(new Goto(skip));
-        final var start = label();
+        final var startPc = emitPc();
         emit(read(in, loc), rResult);
-        eval(start.pc);
+        eval(startPc);
     }
 
-    public void eval() {
+    private void eval() {
         freezeOps();
 
         for (; ; ) {
-            //System.out.println(pc + " " + ops.get(pc).dump(this));
-
             switch (opCodes[pc]) {
                 case AddItem: {
                     final var op = (AddItem)opValues[pc];
@@ -360,87 +313,6 @@ public final class VM {
         }
     }
 
-    public Integer findRead(final int rTarget, final int startPc, final HashSet<Integer> skip) {
-        final var r = new HashSet<Integer>();
-        final var w = new HashSet<Integer>();
-
-        for (var pc = startPc; pc < ops.size();) {
-            while (skip.contains(pc)) { pc++; }
-            if (pc == ops.size()) { break; }
-            skip.add(pc);
-            final var op = ops.get(pc);
-            op.io(this, r, w);
-            if (r.contains(rTarget)) { return pc; }
-            if (w.contains(rTarget)) { break; }
-
-                switch (op) {
-                    case Branch branchOp: {
-                        final var result = findRead(rTarget, branchOp.elseStart().pc, skip);
-                        if (result != null) { return result; }
-                        pc++;
-                        break;
-                    }
-                    case Goto gotoOp: {
-                        final var result = findRead(rTarget, gotoOp.target().pc, skip);
-                        if (result != null) { return result; }
-                        pc++;
-                        break;
-                    }
-                    default:
-                        pc++;
-                        break;
-                }
-            }
-
-        return null;
-    }
-
-    public Integer findRead(final int rTarget, final int startPc, final int...skip) {
-        final var ss = new HashSet<Integer>();
-        for (final var s: skip) { ss.add(s); }
-        return findRead(rTarget, startPc, ss);
-    }
-
-    public Integer findWrite(final int rTarget, final int startPc, final HashSet<Integer> skip) {
-        final var r = new HashSet<Integer>();
-        final var w = new HashSet<Integer>();
-
-        for (var pc = startPc; pc < ops.size();) {
-            while (skip.contains(pc)) { pc++; }
-            if (pc == ops.size()) { break; }
-            skip.add(pc);
-            final var op = ops.get(pc);
-            op.io(this, r, w);
-            if (w.contains(rTarget)) { return pc; }
-
-            switch (op) {
-                case Branch branchOp: {
-                    final var result = findRead(rTarget, branchOp.elseStart().pc, skip);
-                    if (result != null) { return result; }
-                    pc++;
-                    break;
-                }
-                case Goto gotoOp: {
-                    final var result = findRead(rTarget, gotoOp.target().pc, skip);
-                    if (result != null) { return result; }
-                    pc++;
-                    break;
-                }
-                default:
-                    pc++;
-                    break;
-            }
-        }
-
-        return null;
-    }
-
-    public Integer findWrite(final int rTarget, final int startPc, final int...skip) {
-        final var ss = new HashSet<Integer>();
-        for (final var s: skip) { ss.add(s); }
-        return findWrite(rTarget, startPc, ss);
-    }
-
     public Label label(final int pc) {
         final var l = new Label(pc);
         labels.add(l);
@@ -466,11 +338,10 @@ public final class VM {
                 throw new RuntimeException(e);
             }
 
-            final var start = label();
+            final var startPc = emitPc();
             emit(new SetPath(p.getParent()));
             emit(out, rResult);
             emit(new SetPath(prevPath));
-            if (!debug) { compile(start.pc); }
         } finally {
             this.path = prevPath;
         }
@@ -501,7 +372,7 @@ public final class VM {
             opCodes = Arrays.copyOf(opCodes, m);
             opValues = Arrays.copyOf(opValues, m);
 
-            for (var i = n; i < m; i++) {
+            for (var i = 0; i < m; i++) {
                 final var o = ops.get(i);
                 opCodes[i] = o.code();
 

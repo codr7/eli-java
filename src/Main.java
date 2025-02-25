@@ -14,8 +14,8 @@ public class Main {
             System.out.print("eli v" + VM.VERSION + "\n\n");
             new REPL(vm, System.in, System.out).run();
         } else {
+            final var startPc = vm.emitPc();
             final var rResult = vm.alloc(1);
-            final var start = vm.label();
             final var as = new ArrayDeque<>(Arrays.asList(args));
 
             while (!as.isEmpty()) {
@@ -32,7 +32,7 @@ public class Main {
                         vm.load(Paths.get(a), rResult);
                     }
 
-                    vm.dumpOps(start.pc);
+                    vm.dumpOps(startPc);
                     return;
                 }
 
@@ -43,7 +43,7 @@ public class Main {
                 vm.load(Paths.get(a), rResult);
             }
 
-            vm.eval(start.pc);
+            vm.eval(startPc);
         }
     }
 }

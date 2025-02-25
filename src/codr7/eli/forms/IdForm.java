@@ -33,6 +33,13 @@ public class IdForm extends BaseForm {
         vm.currentLib.bind(id, new Value<>(CoreLib.bindingType, new Binding(null, rValue)));
     }
 
+    @Override
+    public void bindVar(final VM vm, final IValue value, final Loc loc) {
+        final var rValue = vm.alloc(1);
+        vm.registers.set(rValue, value);
+        vm.currentLib.bind(id, new Value<>(CoreLib.bindingType, new Binding(value.type(), rValue)));
+    }
+
     @Override public String dump(final VM vm) { return id; }
 
     @Override public void emit(final VM vm, final int rResult) {

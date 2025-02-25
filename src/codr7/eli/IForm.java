@@ -14,19 +14,22 @@ public interface IForm {
         throw new EmitError("Invalid bind target: " + dump(vm), loc);
     }
 
+    default void bindVar(final VM vm, final IValue value, final Loc loc) {
+        throw new EmitError("Invalid bind target: " + dump(vm), loc);
+    }
+
     void emit(VM vm, int rResult);
 
     boolean eq(IForm other);
 
     default IValue eval(final VM vm) {
-        final var v = value(vm);
-        if (v != null) { return v; }
         final var rResult = vm.alloc(1);
-        final var skipPc = vm.emit(new Nop());
+        final var skip = new Label(-1);
+        vm.emit(new Goto(skip));
         final var start = vm.label();
         emit(vm, rResult);
-        vm.ops.set(skipPc, new Goto(vm.label()));
-        vm.eval(start.pc);
+        skip.pc = vm.emitPc();
+        vm.eval(start.pc, skip.pc);
         return vm.registers.get(rResult);
     }
 

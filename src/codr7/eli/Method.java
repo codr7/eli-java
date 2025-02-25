@@ -12,8 +12,7 @@ import static codr7.eli.libs.CoreLib.bindingType;
 public record Method(String id,
                      Arg[] args, int rArgs,
                      int rResult,
-                     IForm[] body,
-                     Label start, Label end) {
+                     IForm[] body) {
     public int arity() {
         var result = args.length;
         if (result > 0 && args[result-1].splat) { return -1; }
@@ -58,37 +57,6 @@ public record Method(String id,
         });
 
         end.pc = vm.emitPc();
-    }
-
-    public void call(final VM vm,
-                     final int rArgs,
-                     final int arity,
-                     final int rResult,
-                     final Loc loc) {
-        if (start.pc == -1) {
-            final var skip = vm.label(-1);
-            vm.emit(new Goto(skip));
-            start.pc = vm.emitPc();
-            emitBody(vm, rArgs(), rResult(), loc);
-            end().pc = vm.emitPc();
-            skip.pc = end().pc;
-        }
-
-        if (arity() != -1 && arity < arity()) {
-            throw new EvalError("Not enough args: " + dump(vm), loc);
-        }
-
-        if (rArgs != rArgs()) {
-            for (var i = 0; i < arity; i++) {
-                vm.registers.set(rArgs() + i, vm.registers.get(rArgs + i));
-            }
-        }
-
-        vm.eval(start().pc, end().pc);
-
-        if (rResult != rResult()) {
-            vm.registers.set(rResult, vm.registers.get(rResult()));
-        }
     }
 
     public String dump(final VM vm) {

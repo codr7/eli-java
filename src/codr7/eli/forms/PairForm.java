@@ -16,17 +16,34 @@ public final class PairForm extends BaseForm {
         this.right = right;
     }
 
+    @Override
+    public void bindVar(final VM vm, final IValue value, final Loc loc) {
+        final var p = value.cast(CoreLib.pairType);
+
+        if (left.isNil()) {
+            right.bindVar(vm, p.right(), loc);
+        } else if (right.isNil()) {
+            left.bindVar(vm, p.left(), loc);
+        } else {
+            left.bindVar(vm, p.left(), loc);
+            right.bindVar(vm, p.right(), loc);
+        }
+    }
+
     @Override public void bind(final VM vm, final int rValue, final Loc loc) {
         if (left.isNil()) {
-            vm.emit(new Right(rValue, rValue, loc));
-            right.bind(vm, rValue, loc);
-        } else if (right.isNil()) {
-            vm.emit(new Left(rValue, rValue, loc));
-            left.bind(vm, rValue, loc);
-        } else {
             final var rRight = vm.alloc(1);
-            vm.emit(new Unzip(rValue, rValue, rRight, loc));
-            left.bind(vm, rValue, loc);
+            vm.emit(new Right(rValue, rRight, loc));
+            right.bind(vm, rRight, loc);
+        } else if (right.isNil()) {
+            final var rLeft = vm.alloc(1);
+            vm.emit(new Left(rValue, rLeft, loc));
+            left.bind(vm, rLeft, loc);
+        } else {
+            final var rLeft = vm.alloc(1);
+            final var rRight = vm.alloc(1);
+            vm.emit(new Unzip(rValue, rLeft, rRight, loc));
+            left.bind(vm, rLeft, loc);
             right.bind(vm, rRight, loc);
         }
     }
