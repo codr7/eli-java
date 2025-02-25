@@ -1,6 +1,7 @@
 package codr7.eli.libs.core.types;
 
 import codr7.eli.*;
+import codr7.eli.errors.EvalError;
 import codr7.eli.libs.core.traits.CallTrait;
 
 public final class MethodType extends BaseType<Method> implements CallTrait {
@@ -15,7 +16,7 @@ public final class MethodType extends BaseType<Method> implements CallTrait {
                      final int arity,
                      final int rResult,
                      final Loc loc) {
-        target.cast(this).call(vm, rArgs, arity, rResult, loc);
+        throw new EvalError("Indirect call", loc);
     }
 
     @Override
