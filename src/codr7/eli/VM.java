@@ -20,9 +20,7 @@ public final class VM {
     public final static int VERSION = 4;
 
     public boolean debug = false;
-    public final java.util.List<Compiler> compilers = new ArrayList<>();
     public final java.util.List<Reader> suffixReaders = new ArrayList<>();
-    public final java.util.List<Label> labels = new ArrayList<>();
     public final ArrayList<Op> ops = new ArrayList<>();
     public Path path = Paths.get("");
     public int pc = 0;
@@ -85,33 +83,35 @@ public final class VM {
     }
 
     public void dumpOps(final int startPc) {
-        for (var i = startPc; i < ops.size(); i++) { System.out.printf("% 4d %s\n", i, ops.get(i).dump(this)); }
+        for (var i = startPc; i < ops.size(); i++) {
+            System.out.printf("% 4d %s\n", i, ops.get(i).dump(this));
+        }
     }
 
     public int emit(final Op op) {
-        final var pc = emitPc();
+        final var startPc = emitPc();
         ops.add(op);
-        return pc;
+        return startPc;
     }
 
     public int emit(final Deque<IForm> in, final int rResult) {
-        final var start = label();
+        final var startPc = emitPc();
 
         for (final var f : in) {
             f.emit(this, rResult);
         }
 
-        return start.pc;
+        return startPc;
     }
 
     public int emit(final IForm[] in, final int rResult) {
-        final var start = label();
+        final var startPc = emitPc();
 
         for (final var f : in) {
             f.emit(this, rResult);
         }
 
-        return start.pc;
+        return startPc;
     }
 
     public int emitPc() {
@@ -123,7 +123,6 @@ public final class VM {
     }
 
     public void eval(final int fromPc, final int toPc) {
-        final var to = label(toPc);
         Op prevOp;
 
         if (toPc == emitPc()) {
@@ -132,26 +131,27 @@ public final class VM {
         } else {
             prevOp = ops.get(toPc);
             ops.set(toPc, new Stop());
-            freezeOps();
+            opCodes[toPc] = Op.Code.Stop;
         }
 
-        final var prev = label(pc);
+        final var prevPc = pc;
         pc = fromPc;
 
         try {
             eval();
         } finally {
-            ops.set(to.pc, prevOp);
-            freezeOps();
-            pc = prev.pc;
+            ops.set(toPc, prevOp);
+            opCodes[toPc] = prevOp.code();
+            pc = prevPc;
         }
     }
 
     public void eval(final String in, final int rResult, final Loc loc) {
-        final var skip = label();
+        final var skip = new Label();
         emit(new Goto(skip));
         final var startPc = emitPc();
         emit(read(in, loc), rResult);
+        skip.pc = emitPc();
         eval(startPc);
     }
 
@@ -170,7 +170,12 @@ public final class VM {
                 case Bench: {
                     final var op = (Bench)opValues[pc];
                     final var started = System.nanoTime();
-                    eval(pc+1, op.bodyEnd().pc);
+                    final var startPc = pc+1;
+
+                    for (var i = 0; i < op.reps(); i++) {
+                        eval(startPc, op.bodyEnd().pc);
+                    }
+
                     final var elapsed = Duration.ofNanos(System.nanoTime() - started);
                     registers.set(op.rResult(), new Value<>(CoreLib.timeType, elapsed));
                     pc = op.bodyEnd().pc;
@@ -313,16 +318,6 @@ public final class VM {
         }
     }
 
-    public Label label(final int pc) {
-        final var l = new Label(pc);
-        labels.add(l);
-        return l;
-    }
-
-    public Label label() {
-        return label(emitPc());
-    }
-
     public void load(final Path path, final int rResult) {
         final var prevPath = this.path;
         final var p = prevPath.resolve(path);
@@ -338,7 +333,6 @@ public final class VM {
                 throw new RuntimeException(e);
             }
 
-            final var startPc = emitPc();
             emit(new SetPath(p.getParent()));
             emit(out, rResult);
             emit(new SetPath(prevPath));

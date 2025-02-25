@@ -24,12 +24,12 @@ public interface IForm {
 
     default IValue eval(final VM vm) {
         final var rResult = vm.alloc(1);
-        final var skip = new Label(-1);
+        final var skip = new Label();
         vm.emit(new Goto(skip));
-        final var start = vm.label();
+        final var start = new Label(vm.emitPc());
         emit(vm, rResult);
         skip.pc = vm.emitPc();
-        vm.eval(start.pc, skip.pc);
+        vm.eval(start.pc);
         return vm.registers.get(rResult);
     }
 

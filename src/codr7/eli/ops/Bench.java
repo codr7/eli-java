@@ -4,7 +4,7 @@ import codr7.eli.*;
 
 import java.util.Set;
 
-public record Bench(Label bodyEnd, int rResult, Loc loc) implements Op {
+public record Bench(long reps, Label bodyEnd, int rResult, Loc loc) implements Op {
     @Override
     public Code code() {
         return Code.Bench;
@@ -12,7 +12,7 @@ public record Bench(Label bodyEnd, int rResult, Loc loc) implements Op {
 
     @Override
     public String dump(final VM vm) {
-        return "Bench bodyEnd: " + bodyEnd + " rResult: " + rResult;
+        return "Bench reps: " + reps + " bodyEnd: " + bodyEnd + " rResult: " + rResult;
     }
 
     @Override

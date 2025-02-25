@@ -20,8 +20,8 @@ public record Method(String id,
     }
 
     public void emitBody(final VM vm, final int rArgs, final int rResult, final Loc loc) {
-        final var start = vm.label(vm.emitPc());
-        final var end = vm.label(-1);
+        final var start = new Label(vm.emitPc());
+        final var end = new Label();
 
         vm.doLib(null, () -> {
             vm.currentLib.bindMacro("recall", args,

@@ -254,15 +254,10 @@ public class CoreLib extends Lib {
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var reps = args.removeFirst().eval(vm).cast(intType);
-                    final var benchPc = vm.emit(new Nop());
-                    final var rIter = vm.alloc(1);
-                    vm.emit(new Put(rIter, new Value<>(iterType, new IntRange(0, reps, 1)), loc));
-                    final var bodyEnd = vm.label(-1);
-                    final var iterPc = vm.emit(new Next(rIter, -1, bodyEnd, loc));
+                    final var bodyEnd = new Label();
+                    vm.emit(new Bench(reps, bodyEnd, rResult, loc));
                     vm.emit(args, rResult);
-                    vm.emit(new Goto(vm.label(iterPc)));
                     bodyEnd.pc = vm.emitPc();
-                    vm.ops.set(benchPc, new Bench(vm.label(), rResult, loc));
                 });
 
         bindMacro("check", new Arg[]{new Arg("expected"), new Arg("body*")},
@@ -348,8 +343,8 @@ public class CoreLib extends Lib {
                             throw new EmitError("Expected bindings: " + bsf.dump(vm), loc);
                         }
 
-                        final var bodyStart = vm.label();
-                        final var bodyEnd = vm.label(-1);
+                        final var bodyStart = new Label(vm.emitPc());
+                        final var bodyEnd = new Label();
 
                         for (final var br: brs.entrySet()) {
                             vm.emit(new Next(br.getKey(), br.getValue(), bodyEnd, loc));
@@ -366,7 +361,7 @@ public class CoreLib extends Lib {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var rCond = vm.alloc(1);
                     args.removeFirst().emit(vm, rCond);
-                    final var elseStart = vm.label(-1);
+                    final var elseStart = new Label();
                     vm.emit(new Branch(rCond, elseStart, loc));
 
                     vm.doLib(null, () -> {
@@ -374,7 +369,7 @@ public class CoreLib extends Lib {
 
                         vm.currentLib.bindMacro("else", new Arg[]{new Arg("body*")},
                             (_vm, _body, _rResult, _loc) -> {
-                                final var skipElse = vm.label(-1);
+                                final var skipElse = new Label();
                                 vm.emit(new Goto(skipElse));
                                 elseStart.pc = vm.emitPc();
                                 bodyLib.drop("else");
@@ -538,9 +533,11 @@ public class CoreLib extends Lib {
         bindMethod("say", new Arg[]{new Arg("body*")},
                 (vm, args, rResult, location) -> {
                     final var buffer = new StringBuilder();
+
                     for (final var a : args) {
                         buffer.append(a.toString(vm));
                     }
+
                     System.out.println(buffer);
                 });
 
