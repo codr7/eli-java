@@ -22,6 +22,19 @@ n 1 2 3 4, 2 3 4, 3 4, 4
 z 0,    1,     2,   3, 4
 o  ,    0,     1,   2, 3
 
+(for [k (range 0 op-count 1)]
+  (for [i (range 1 max-op-value 1)]
+    (for [j (range 1 max-op-value 1)]
+       (let [op (ops k)
+            v  (op i j)]
+        (if (< v 2)
+          (break))
+
+        (if (= (values v) _)
+          (say v " = " i " " op " " j)
+          (values v (+ k 1 (bit/>> i op-bits) (bit/>> j (+ op-bits op-value-bits)))))))))
+
+(say values)
 
 (^factorize [i]
     (for [k (range 0 op-count 1)]

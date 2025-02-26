@@ -4,7 +4,6 @@ import codr7.eli.errors.EvalError;
 import codr7.eli.libs.*;
 import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.IterTrait;
-import codr7.eli.libs.core.traits.SeqTrait;
 import codr7.eli.ops.*;
 import codr7.eli.ops.Iter;
 import codr7.eli.ops.List;
@@ -33,6 +32,7 @@ public final class VM {
     public final CoreLib coreLib = new CoreLib();
     //public final CSVLib csvLib = new CSVLib();
     public final GUILib guiLib = new GUILib();
+    public final IntLib intLib = new IntLib();
     public final ListLib listLib = new ListLib();
     public final StringLib stringLib = new StringLib();
     public final Lib userLib = new Lib("user");
@@ -59,6 +59,7 @@ public final class VM {
         userLib.bind(coreLib);
         //userLib.bind(csvLib);
         userLib.bind(guiLib);
+        userLib.bind(intLib);
         userLib.bind(listLib);
         userLib.bind(stringLib);
         currentLib = userLib;

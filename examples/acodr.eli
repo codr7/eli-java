@@ -3,30 +3,19 @@
   op-count      (len ops)
   op-bits       (bit/len op-count)
   value-bits    (- 8 op-bits)
-  op-value-bits (/ value-bits 2)
   base          8
-  max-value     (pow base value-bits)
-  max-op-value  (pow base op-value-bits)
-  values        (list/alloc max-value))
+  max-value     (pow base (- value-bits 1))
+  values        (list/alloc (+ max-value 1)))
 
 (values 0 0)
 (values 1 1)
 
-(let [v base]
-  (while (< v max-value)
-    (values v (bit/>> v op-bits))
-    (set v (* v base))))
+(say max-value)
 
-(for [k (range 0 op-count 1)]
-  (for [i (range 1 max-op-value 1)]
-    (for [j (range 1 max-op-value 1)]
-       (let [op (ops k)
-            v  (op i j)]
-        (if (< v 2)
-          (break))
-
-        (if (= (values v) _)
-          (say v " = " i " " op " " j)
-          (values v (+ k 1 (bit/>> i op-bits) (bit/>> j (+ op-bits op-value-bits)))))))))
-
-(say values)
+(let [v 1
+      i 1]
+  (for [_ (range 0 value-bits 1)]
+    (say i " " v)
+    (values v (bit/>> i op-bits))
+    (set v (* v base)
+         i (* i 2))))
