@@ -14,13 +14,3 @@ eli v4
  2
 hello
 ```
-
-## Performance
-
-```
-$ java -jar eli.jar ../eli/benchmarks/run.eli
-```
-```
-fact PT0.853468321S
-fib PT0.68878869S
-```
