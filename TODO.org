@@ -5,17 +5,15 @@ fib PT0.68878869S
 
 AC
 
-* debug for loops
-** add nested loop test
-
 * add break macro to for/while loop
 ** break when valid op found
+
+* debug for loops
+** add nested loop test
 
 FEATURES
 
 * add head/tail methods + tests + readme
-
-* add var pair destructuring support like let
 
 * add Method support for optional args
 ** look for ? in arg assignment
