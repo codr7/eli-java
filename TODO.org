@@ -3,13 +3,10 @@ fib PT0.68878869S
 
 * final method/macro imp args
 
-AC
+ACO
 
 * add break macro to for/while loop
 ** break when valid op found
-
-* debug for loops
-** add nested loop test
 
 FEATURES
 

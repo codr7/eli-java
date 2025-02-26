@@ -322,16 +322,8 @@ public class CoreLib extends Lib {
                                     final var rSeq = vm.alloc(1);
                                     final var rIt = idf.isNil() ? -1 : vm.alloc(1);
                                     brs.put(rSeq, rIt);
-
-                                    if (v == null || v.type() == bindingType) {
-                                        sf.emit(vm, rSeq);
-                                        vm.emit(new Iter(rSeq));
-                                    } else if (v.type() instanceof IterTrait t) {
-                                        final var it = t.iter(vm, v);
-                                        vm.emit(new Put(rSeq, new Value<>(iterType, it), loc));
-                                    } else {
-                                        throw new EmitError("Expected seq: " + v.dump(vm), loc);
-                                    }
+                                    sf.emit(vm, rSeq);
+                                    vm.emit(new Iter(rSeq));
 
                                     if (!idf.isNil()) {
                                         vm.currentLib.bind(idf.id, CoreLib.bindingType, new Binding(null, rIt));
