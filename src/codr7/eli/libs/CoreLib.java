@@ -6,7 +6,6 @@ import codr7.eli.errors.EvalError;
 import codr7.eli.forms.*;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.IterTrait;
 import codr7.eli.libs.core.traits.NumTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 import codr7.eli.libs.core.types.*;

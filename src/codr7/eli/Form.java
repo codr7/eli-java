@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.stream.Stream;
 
-public final class Form {
+public enum Form {
+    ;
+
     public static String dump(final VM vm, final Stream<IForm> forms) {
         return '<' + String.join(" ", forms.map(f -> f.dump(vm)).toList()) + '>';
     }

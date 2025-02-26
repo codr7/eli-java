@@ -8,8 +8,8 @@ import codr7.eli.libs.CoreLib;
 
 public final class IntRange implements Iter {
     private long current;
-    private long end;
-    private long stride;
+    private final long end;
+    private final long stride;
 
     public IntRange(final long start, final long end, final long stride) {
         this.current = start;

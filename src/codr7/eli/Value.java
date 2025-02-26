@@ -6,7 +6,7 @@ public record Value<T>(IDataType<T> type, T data) implements IValue {
     public String dump(final VM vm) { return type.dump(vm, this); }
 
     public boolean eq(final IValue other) {
-        return other instanceof IValue v && v.type() == type && type.eq(this, (Value<T>)other);
+        return other instanceof IValue v && v.type() == type && type.eq(this, other);
     }
 
     public void emit(final VM vm, final int rResult, final Loc loc) {

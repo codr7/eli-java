@@ -17,7 +17,7 @@ public class PairType extends BaseType<Pair> implements CmpTrait, SeqTrait {
             final var lr = ct.cmp(vm, lp.left(), rp.left(), loc);
             if (lr != 0) { return lr; }
             final var rr = ct.cmp(vm, lp.right(), rp.right(), loc);
-            if (rr != 0) { return rr; }
+            return rr;
         }
 
         return 0;
