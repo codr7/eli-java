@@ -22,6 +22,42 @@ n 1 2 3 4, 2 3 4, 3 4, 4
 z 0,    1,     2,   3, 4
 o  ,    0,     1,   2, 3
 
+
+(^factorize [i]
+    (for [k (range 0 op-count 1)]
+      (let [op (ops k)
+            v  (op i j)]
+
+    (for [xi (range 1 max-value 1)]
+      (let [xv (pow base xi)]
+        (for [yi (range 1 max-value 1)]
+          (if (> yi i)
+            (break))
+
+          (let [yv (pow base yi)
+                v  (op xx yv)]
+            (if (= v i)
+              (say "FOUND " i " " xi " " op " " yi)
+              (values i )
+              (break))))))))
+
+(for [i (range 2 max-value 1)]
+  (if (= (values i) _)
+    (factorize i)))
+
+    (for [op ops]
+      (for [xi (range 1 max-value 1)]
+        (let [xv (pow base xi)]
+          (for [yi (range 1 max-value 1)]
+            (if (> y i)
+              (break))
+
+            (let [v (op x y)]
+              (if (= v i)
+                (say "FOUND " i " " x " " op " " y)
+                (values i )
+                (break)))))))))
+
 FEATURES
 
 * add head/tail methods + tests + readme
