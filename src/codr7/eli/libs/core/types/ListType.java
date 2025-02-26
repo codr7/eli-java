@@ -15,12 +15,13 @@ public class ListType
         implements CallTrait, CmpTrait, SeqTrait {
     public ListType(final String id, IType...parents) { super(id, parents); }
 
-    @Override public void call(final VM vm,
-                               final IValue target,
-                               final int rArgs,
-                               final int arity,
-                               final int rResult,
-                               final Loc loc) {
+    @Override
+    public void call(final VM vm,
+                     final IValue target,
+                     final int rArgs,
+                     final int arity,
+                     final int rResult,
+                     final Loc loc) {
         final var t = target.cast(this);
 
         switch (arity) {
@@ -42,7 +43,8 @@ public class ListType
         }
     }
 
-    @Override public int cmp(final VM vm, final IValue lhs, final IValue rhs, final Loc loc) {
+    @Override
+    public int cmp(final VM vm, final IValue lhs, final IValue rhs, final Loc loc) {
         final var ll = lhs.cast(this);
         final var rl = rhs.cast(this);
         if (ll.size() != rl.size()) { return Integer.compare(ll.size(), rl.size()); }
@@ -62,7 +64,8 @@ public class ListType
         return 0;
     }
 
-    @Override public String dump(final VM vm, final IValue value) {
+    @Override
+    public String dump(final VM vm, final IValue value) {
         final var result = new StringBuilder();
         result.append('[');
         final var v = value.cast(this);
@@ -76,7 +79,8 @@ public class ListType
         return result.toString();
     }
 
-    @Override public boolean eq(IValue left, IValue right) {
+    @Override
+    public boolean eq(IValue left, IValue right) {
         final var lv = left.cast(this);
         final var rv = right.cast(this);
         if (lv.size() != rv.size()) { return false; }
@@ -88,7 +92,8 @@ public class ListType
         return true;
     }
 
-    @Override public Iter iter(final VM vm, final IValue target) {
+    @Override
+    public Iter iter(final VM vm, final IValue target) {
         return new ListItems(target.cast(this));
     }
 
@@ -98,7 +103,8 @@ public class ListType
         return t.isEmpty() ? CoreLib.NIL : t.getFirst();
     }
 
-    @Override public int len(final IValue target) { return target.cast(this).size(); }
+    @Override
+    public int len(final IValue target) { return target.cast(this).size(); }
 
     @Override
     public IValue tail(IValue target) {

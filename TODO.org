@@ -1,15 +1,15 @@
 fact PT0.853468321S
 fib PT0.68878869S
 
+* final method/macro imp args
+
 AC
 
-* build table
-** add bsr/l method
-** add while loop
+* debug for loop
+** add nested loop test
 
-* apply ops for all n-ops permutations
-** add perms metod from AoC
-** add if missing
+* add break macro to for/while loop
+** break when valid op found
 
 FEATURES
 

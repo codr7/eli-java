@@ -6,6 +6,7 @@ import codr7.eli.errors.EvalError;
 import codr7.eli.forms.*;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.CmpTrait;
+import codr7.eli.libs.core.traits.IterTrait;
 import codr7.eli.libs.core.traits.NumTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 import codr7.eli.libs.core.types.*;
@@ -317,7 +318,7 @@ public class CoreLib extends Lib {
                                 final var sf = bs.removeFirst();
 
                                 if (vf instanceof IdForm idf) {
-                                    final var v = sf.value(vm);
+                                    final var v = sf.rawValue(vm);
                                     final var rSeq = vm.alloc(1);
                                     final var rIt = idf.isNil() ? -1 : vm.alloc(1);
                                     brs.put(rSeq, rIt);
@@ -325,8 +326,8 @@ public class CoreLib extends Lib {
                                     if (v == null || v.type() == bindingType) {
                                         sf.emit(vm, rSeq);
                                         vm.emit(new Iter(rSeq));
-                                    } else if (v.type() instanceof SeqTrait st) {
-                                        final var it = st.iter(vm, v);
+                                    } else if (v.type() instanceof IterTrait t) {
+                                        final var it = t.iter(vm, v);
                                         vm.emit(new Put(rSeq, new Value<>(iterType, it), loc));
                                     } else {
                                         throw new EmitError("Expected seq: " + v.dump(vm), loc);
@@ -474,13 +475,6 @@ public class CoreLib extends Lib {
                     }
             });
 
-        bindMethod("nbits", new Arg[]{new Arg("value", intType)},
-                (vm, args, rResult, loc) -> {
-                    vm.registers.set(rResult,
-                            new Value<>(intType,
-                                    (long)Utils.log2(args[0].cast(intType).intValue())));
-                });
-
         bindMethod("next", new Arg[]{new Arg("in", iterType)},
                 (vm, args, rResult, loc) -> {
                     if (!args[0].cast(iterType).next(vm, rResult, loc)) {
@@ -528,6 +522,15 @@ public class CoreLib extends Lib {
                     final var b = args[0].cast(intType);
                     final var e = args[1].cast(intType);
                     vm.registers.set(rResult, new Value<>(intType, (long)Math.pow(b, e)));
+                });
+
+        bindMethod("range",
+                new Arg[]{new Arg("start", intType), new Arg("end", intType), new Arg("stride", intType)},
+                (vm, args, rResult, loc) -> {
+                    final var start = args[0].cast(intType);
+                    final var end = args[1].cast(intType);
+                    final var stride = args[2].cast(intType);
+                    vm.registers.set(rResult, new Value<>(iterType, new IntRange(start, end, stride)));
                 });
 
         bindMethod("say", new Arg[]{new Arg("body*")},
@@ -579,6 +582,20 @@ public class CoreLib extends Lib {
                         final var value = args.removeFirst().eval(vm);
                         id.bindVar(vm, value, loc);
                     }
+                });
+
+        bindMacro("while",
+                new Arg[]{new Arg("cond", anyType), new Arg("body*")},
+                (vm, _args, rResult, loc) -> {
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+                    final var start = new Label(vm.emitPc());
+                    final var end = new Label(vm.emitPc());
+                    final var rCond = vm.alloc(1);
+                    args.removeFirst().emit(vm, rCond);
+                    vm.emit(new Branch(rCond, end, loc));
+                    vm.emit(args, rResult);
+                    vm.emit(new Goto(start));
+                    end.pc = vm.emitPc();
                 });
     }
 }

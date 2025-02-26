@@ -1,6 +1,6 @@
 (var
-  ops '[+ -]
-  op-bits (nbits (len ops))
+  ops [+ -]
+  op-bits (bit/len (len ops))
   data-bits (- 8 op-bits)
   base 8
   max-value (pow base data-bits)
@@ -11,7 +11,16 @@
 
 (let [v base]
   (while (< v max-value)
-    (values i (bsr v op-bits))
+    (values v (bit/>> v op-bits))
     (set v (* v base))))
 
-(say values)
+(for [i (range 2 max-value 1)]
+  (if (= (values i) _)
+    (for [op ops]
+      (for [x (range 1 max-value 1)]
+        (for [y (range 1 max-value 1)]
+          (let [v (op x y)]
+            (say x " " y " " v)
+            (if (= v i)
+              (say i " " x op y))))))))
+

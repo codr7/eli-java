@@ -24,10 +24,9 @@ public final class IntRange implements Iter {
 
     @Override
     public boolean next(final VM vm, final int rResult, final Loc loc) {
-        final var next = current + stride;
-        if (next >= end) { return false; }
-        current = next;
+        if (current >= end) { return false; }
         if (rResult != -1) { vm.registers.set(rResult, new Value<>(CoreLib.intType, current)); }
+        current += stride;
         return true;
     }
 }

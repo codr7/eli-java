@@ -3,6 +3,7 @@ package codr7.eli;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.*;
 import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.IterTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 import codr7.eli.ops.*;
 import codr7.eli.ops.Iter;
@@ -28,8 +29,9 @@ public final class VM {
     public final ArrayList<IValue> registers = new ArrayList<>();
     public final int rScratch;
 
+    public final BitLib bitLib = new BitLib();
     public final CoreLib coreLib = new CoreLib();
-    public final CSVLib csvLib = new CSVLib();
+    //public final CSVLib csvLib = new CSVLib();
     public final GUILib guiLib = new GUILib();
     public final ListLib listLib = new ListLib();
     public final StringLib stringLib = new StringLib();
@@ -53,8 +55,9 @@ public final class VM {
         suffixReaders.add(PairReader.instance);
         suffixReaders.add(SplatReader.instance);
 
+        userLib.bind(bitLib);
         userLib.bind(coreLib);
-        userLib.bind(csvLib);
+        //userLib.bind(csvLib);
         userLib.bind(guiLib);
         userLib.bind(listLib);
         userLib.bind(stringLib);
@@ -159,6 +162,8 @@ public final class VM {
         freezeOps();
 
         for (; ; ) {
+            //System.out.println(pc + " " + ops.get(pc).dump(this));
+
             switch (opCodes[pc]) {
                 case AddItem: {
                     final var op = (AddItem)opValues[pc];
@@ -195,7 +200,12 @@ public final class VM {
                 }
                 case CallValue: {
                     final var op = (CallValue)opValues[pc];
-                    final var t = op.target();
+                    var t = op.target();
+
+                    if (t.type() == CoreLib.bindingType) {
+                        t = registers.get(t.cast(CoreLib.bindingType).rValue());
+                    }
+
                     pc++;
                     ((CallTrait)t.type()).call(this, t, op.rArgs(), op.arity(), op.rResult(), op.loc());
                     break;
@@ -242,7 +252,7 @@ public final class VM {
                 case Iter: {
                     final var rt = (Integer)opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((SeqTrait)t.type()).iter(this, t);
+                    final var it = ((IterTrait)t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.iterType, it));
                     pc++;
                     break;
@@ -286,7 +296,7 @@ public final class VM {
                 case Splat: {
                     final var rt = (Integer)opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((SeqTrait)t.type()).iter(this, t);
+                    final var it = ((IterTrait)t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.splatType, it));
                     pc++;
                     break;
