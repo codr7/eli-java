@@ -5,5 +5,5 @@ import codr7.eli.Loc;
 import codr7.eli.VM;
 
 public interface CmpTrait {
-    int cmp(VM vm, IValue lhs, IValue rhs, Loc loc);
+    int cmp(IValue lhs, IValue rhs);
 }

@@ -10,7 +10,7 @@ public final class NilType extends BaseType<Object> implements CmpTrait {
     public NilType(final String id) { super(id); }
 
     @Override
-    public int cmp(final VM vm, final IValue lhs, final IValue rhs, final Loc loc) {
+    public int cmp(final IValue lhs, final IValue rhs) {
         return lhs.type().id().compareTo(rhs.type().id());
     }
 

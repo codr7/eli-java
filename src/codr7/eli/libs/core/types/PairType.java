@@ -9,14 +9,14 @@ public class PairType extends BaseType<Pair> implements CmpTrait, SeqTrait {
     public PairType(final String id, final IType...parents) { super(id, parents); }
 
     @Override
-    public int cmp(final VM vm, final IValue lhs, final IValue rhs, final Loc loc) {
+    public int cmp(final IValue lhs, final IValue rhs) {
         final var lp = lhs.cast(this);
         final var rp = rhs.cast(this);
 
         if (lhs.type() instanceof CmpTrait ct) {
-            final var lr = ct.cmp(vm, lp.left(), rp.left(), loc);
+            final var lr = ct.cmp(lp.left(), rp.left());
             if (lr != 0) { return lr; }
-            final var rr = ct.cmp(vm, lp.right(), rp.right(), loc);
+            final var rr = ct.cmp(lp.right(), rp.right());
             return rr;
         }
 

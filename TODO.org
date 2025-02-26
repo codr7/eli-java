@@ -7,11 +7,12 @@ fib PT1.155167071S
 * add next to loop bodies
 ** goto body start
 
-ACO
+ACODR
 
-** break when valid op found
-** break when x > (* i 2)
-** break when y > i
+* map values between bases
+
+* add list/permutations from aoc
+** use to generate possible values
 
   1 1 1 1 1 2 2 2 2 2 3 3 3 3 3 4 4 4 4 4 5 5 5 5 5
   1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5

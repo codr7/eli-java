@@ -32,7 +32,7 @@ public class StringType extends BaseType<String> implements CallTrait, CmpTrait,
         }
     }
 
-    @Override public int cmp(final VM vm, final IValue lhs, final IValue rhs, final Loc loc) {
+    @Override public int cmp(final IValue lhs, final IValue rhs) {
         return lhs.cast(this).compareTo(rhs.cast(this));
     }
 

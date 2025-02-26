@@ -13,7 +13,7 @@ public final class IntType extends BaseType<Long> implements CmpTrait, NumTrait 
     }
 
     @Override
-    public int cmp(final VM vm, final IValue lhs, final IValue rhs, final Loc loc) {
+    public int cmp(final IValue lhs, final IValue rhs) {
         return lhs.cast(this).compareTo(rhs.cast(this));
     }
 

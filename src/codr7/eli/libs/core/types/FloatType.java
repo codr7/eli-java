@@ -17,7 +17,7 @@ public final class FloatType
     }
 
     @Override
-    public int cmp(final VM vm, final IValue lhs, final IValue rhs, final Loc loc) {
+    public int cmp(final IValue lhs, final IValue rhs) {
         return lhs.cast(this).compareTo(rhs.cast(this));
     }
 

@@ -44,23 +44,23 @@ public class ListType
     }
 
     @Override
-    public int cmp(final VM vm, final IValue lhs, final IValue rhs, final Loc loc) {
+    public int cmp(final IValue lhs, final IValue rhs) {
         final var ll = lhs.cast(this);
         final var rl = rhs.cast(this);
-        if (ll.size() != rl.size()) { return Integer.compare(ll.size(), rl.size()); }
 
-        for (var i = 0; i < ll.size(); i++) {
+        for (var i = 0; i < Math.min(ll.size(), rl.size()); i++) {
             final var lv = ll.get(i);
 
             if (lv.type() instanceof CmpTrait ct) {
                 final var rv = rl.get(i);
-                final var r = ct.cmp(vm, lv, rv, loc);
+                final var r = ct.cmp(lv, rv);
                 if (r != 0) { return r; }
             } else {
-                throw new EvalError("Expected comparable: " + lv.dump(vm), loc);
+                throw new RuntimeException("Expected cmp: " + lv.type().toString());
             }
         }
 
+        if (ll.size() != rl.size()) { return Integer.compare(ll.size(), rl.size()); }
         return 0;
     }
 

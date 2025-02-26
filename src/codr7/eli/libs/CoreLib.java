@@ -36,6 +36,7 @@ public class CoreLib extends Lib {
     public static final JMethodType jMethodType = new JMethodType("JMethod");
     public static final LibType libType = new LibType("Lib");
     public static final ListType listType = new ListType("List", seqTrait);
+    public static final MapType mapType = new MapType("Map", seqTrait);
     public static final MetaType metaType = new MetaType("Meta");
     public static final MethodType methodType = new MethodType("Method");
     public static final PairType pairType = new PairType("Pair", seqTrait);
@@ -65,6 +66,7 @@ public class CoreLib extends Lib {
         bind(libType);
         bind(listType);
         bind(maybeType);
+        bind(mapType);
         bind(metaType);
         bind(methodType);
         bind(nilType);
@@ -141,7 +143,7 @@ public class CoreLib extends Lib {
                         final var rhs = args[i];
 
                         if (lhs.type() instanceof CmpTrait ct) {
-                            if (ct.cmp(vm, lhs, rhs, loc) >= 0) {
+                            if (ct.cmp(lhs, rhs) >= 0) {
                                 result = false;
                                 break;
                             }
