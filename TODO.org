@@ -5,7 +5,7 @@ fib PT0.68878869S
 
 AC
 
-* debug for loop
+* debug for loops
 ** add nested loop test
 
 * add break macro to for/while loop

@@ -20,7 +20,5 @@
       (for [x (range 1 max-value 1)]
         (for [y (range 1 max-value 1)]
           (let [v (op x y)]
-            (say x " " y " " v)
             (if (= v i)
-              (say i " " x op y))))))))
-
+              (say i " " x " " op " " y))))))))
