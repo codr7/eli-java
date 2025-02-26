@@ -4,12 +4,23 @@ fib PT0.68878869S
 fact PT1.427299916S
 fib PT1.155167071S
 
-* final method/macro imp args
+* add next to loop bodies
+** goto body start
 
 ACO
 
-* add break macro to for/while loop
 ** break when valid op found
+** break when x > (* i 2)
+** break when y > i
+
+  1 1 1 1 1 2 2 2 2 2 3 3 3 3 3 4 4 4 4 4 5 5 5 5 5
+  1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5
++ 2 3 4 5 6 3 4 5 6 7 4 5 6 7 8 5 6 7 8 9 6 7 8 9 10
+- z n n n n o z n n n 2 o z n n 3 2 o z n 4 3 2 o z
+
+n 1 2 3 4, 2 3 4, 3 4, 4
+z 0,    1,     2,   3, 4
+o  ,    0,     1,   2, 3
 
 FEATURES
 

@@ -20,5 +20,6 @@
       (for [x (range 1 max-value 1)]
         (for [y (range 1 max-value 1)]
           (let [v (op x y)]
+            (say "CHECK " i " " x " " op " " y)
             (if (= v i)
-              (say i " " x " " op " " y))))))))
+              (say "FOUND " i " " x " " op " " y))))))))

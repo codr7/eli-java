@@ -39,7 +39,7 @@ public record Method(String id,
                         _vm.emit(new Goto(start));
                     });
 
-            vm.currentLib.bindMacro("return", args,
+            vm.currentLib.bindMacro("return", new Arg[]{new Arg("args*")},
                     (_vm, args, _rResult, _loc) -> {
                         _vm.doLib(null, () -> {
                             _vm.emit( new ArrayDeque<>(Arrays.asList(args)), _rResult);
