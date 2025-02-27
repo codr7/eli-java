@@ -13,16 +13,16 @@ public final class IntLib extends Lib {
                 (vm, args, rResult, loc) -> {
                     var in = args[0].cast(CoreLib.intType);
                     final var b = args[1].cast(CoreLib.intType);
-                    var out = new StringBuilder();
+                    var out = 0L;
 
                     while (in != 0) {
                         final var d = in / b;
                         final var r = in - d * b;
-                        out.append(r);
+                        out = out*10 + r;
                         in = d;
                     }
 
-                    vm.registers.set(rResult, new Value<>(CoreLib.intType, Long.valueOf(out.toString())));
+                    vm.registers.set(rResult, new Value<>(CoreLib.intType, out));
                 });
     }
 }
