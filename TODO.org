@@ -4,6 +4,18 @@ fib PT0.68878869S
 fact PT1.427299916S
 fib PT1.155167071S
 
+* add iter/unzip
+** use in acodr on c
+
+* implement list splat
+** [[1 2 3]*]
+
+* use StreamItems instead of MapEntries
+** like list/combine
+
+* use Long.bitCount to implement bit/len
+** add test
+
 * add next to loop bodies
 ** goto body start
 
@@ -22,6 +34,9 @@ ACODR
 n 1 2 3 4, 2 3 4, 3 4, 4
 z 0,    1,     2,   3, 4
 o  ,    0,     1,   2, 3
+
+(let [max-value (pow base (- value-bits 1))])
+
 
 (for [k (range 0 op-count 1)]
   (for [i (range 1 max-op-value 1)]

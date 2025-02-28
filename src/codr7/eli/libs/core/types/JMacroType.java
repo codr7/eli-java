@@ -6,8 +6,7 @@ import codr7.eli.forms.LiteralForm;
 import codr7.eli.forms.SplatForm;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.traits.CallTrait;
-import codr7.eli.libs.core.traits.IterTrait;
-import codr7.eli.libs.core.traits.SeqTrait;
+import codr7.eli.libs.core.traits.IterableTrait;
 
 import java.util.ArrayList;
 
@@ -44,7 +43,7 @@ public final class JMacroType extends BaseType<JMacro> implements CallTrait {
             if (f instanceof SplatForm sf) {
                 final var t = sf.target.value(vm);
                 if (t == null) { throw new EmitError("Invalid splat: " + sf.target.dump(vm), loc); }
-                final var it = ((IterTrait)t.type()).iter(vm, t);
+                final var it = ((IterableTrait)t.type()).iter(vm, t);
 
                 while (it.next(vm, rIt, sf.target.loc())) {
                     final var v = vm.registers.get(rIt);

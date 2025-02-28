@@ -3,7 +3,7 @@ package codr7.eli;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.*;
 import codr7.eli.libs.core.traits.CallTrait;
-import codr7.eli.libs.core.traits.IterTrait;
+import codr7.eli.libs.core.traits.IterableTrait;
 import codr7.eli.ops.*;
 import codr7.eli.ops.Iter;
 import codr7.eli.ops.List;
@@ -33,6 +33,7 @@ public final class VM {
     //public final CSVLib csvLib = new CSVLib();
     public final GUILib guiLib = new GUILib();
     public final IntLib intLib = new IntLib();
+    public final IterLib iterLib = new IterLib();
     public final ListLib listLib = new ListLib();
     public final StringLib stringLib = new StringLib();
     public final Lib userLib = new Lib("user");
@@ -61,6 +62,7 @@ public final class VM {
         //userLib.bind(csvLib);
         userLib.bind(guiLib);
         userLib.bind(intLib);
+        userLib.bind(iterLib);
         userLib.bind(listLib);
         userLib.bind(stringLib);
         currentLib = userLib;
@@ -70,9 +72,11 @@ public final class VM {
 
     public int alloc(final int n) {
         final var result = registers.size();
+
         for (var i = 0; i < n; i++) {
             registers.add(CoreLib.NIL);
         }
+
         return result;
     }
 
@@ -254,7 +258,7 @@ public final class VM {
                 case Iter: {
                     final var rt = (Integer)opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((IterTrait)t.type()).iter(this, t);
+                    final var it = ((IterableTrait)t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.iterType, it));
                     pc++;
                     break;
@@ -298,7 +302,7 @@ public final class VM {
                 case Splat: {
                     final var rt = (Integer)opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((IterTrait)t.type()).iter(this, t);
+                    final var it = ((IterableTrait)t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.splatType, it));
                     pc++;
                     break;

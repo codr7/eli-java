@@ -1,11 +1,9 @@
 package codr7.eli.libs.core.types;
 
 import codr7.eli.*;
-import codr7.eli.libs.core.iters.ListItems;
-import codr7.eli.libs.core.traits.IterTrait;
-import codr7.eli.libs.core.traits.SeqTrait;
+import codr7.eli.libs.core.traits.IterableTrait;
 
-public class IterType extends BaseType<Iter> implements IterTrait {
+public class IterType extends BaseType<Iter> implements IterableTrait {
     public IterType(final String id) { super(id); }
 
     @Override

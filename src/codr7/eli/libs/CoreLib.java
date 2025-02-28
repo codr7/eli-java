@@ -6,6 +6,7 @@ import codr7.eli.errors.EvalError;
 import codr7.eli.forms.*;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.CmpTrait;
+import codr7.eli.libs.core.traits.IterableTrait;
 import codr7.eli.libs.core.traits.NumTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 import codr7.eli.libs.core.types.*;
@@ -19,7 +20,8 @@ import java.util.regex.Pattern;
 
 public class CoreLib extends Lib {
     public static final TraitType anyType = new TraitType("Any");
-    public static final TraitType callTrait = new TraitType("Call");
+    public static final TraitType callableTrait = new TraitType("Callable");
+    public static final TraitType iterableTrait = new TraitType("Iterable");
     public static final TraitType seqTrait = new TraitType("Seq");
     public static final NilType nilType = new NilType("Nil");
     public static final MaybeType maybeType = new MaybeType("Maybe", anyType, nilType);
@@ -419,17 +421,6 @@ public class CoreLib extends Lib {
 
                     vm.emit(new Inc(rValue, rDelta, loc));
                     if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
-                });
-
-        bindMethod("iter", new Arg[]{new Arg("seq", seqTrait)},
-                (vm, args, rResult, loc) -> {
-                    final var it = args[0];
-
-                    if (it.type() instanceof SeqTrait lt) {
-                        vm.registers.set(rResult, new Value<>(intType, (long) lt.len(it)));
-                    } else {
-                        throw new EvalError("Expected seq: " + it.dump(vm), loc);
-                    }
                 });
 
         bindMethod("is", new Arg[]{new Arg("args*")},

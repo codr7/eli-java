@@ -1,26 +1,18 @@
 package codr7.eli.libs;
 
 import codr7.eli.*;
+import codr7.eli.errors.EvalError;
 import codr7.eli.libs.core.iters.StreamItems;
 import codr7.eli.libs.core.traits.IterableTrait;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
-public final class ListLib extends Lib {
-    public ListLib() {
-        super("list");
+public final class IterLib extends Lib {
+    public IterLib() {
+        super("iter");
 
-        bindMethod("alloc",
-                new Arg[]{new Arg("n", CoreLib.intType)},
-                (vm, args, rResult, loc) -> {
-                    final var vs = new IValue[args[0].cast(CoreLib.intType).intValue()];
-                    Arrays.fill(vs, CoreLib.NIL);
-                    vm.registers.set(rResult, new Value<>(CoreLib.listType, new ArrayList<>(Arrays.asList(vs))));
-                });
-
-        bindMethod("combine",
+        bindMethod("combinations",
                 new Arg[]{new Arg("in", CoreLib.iterableTrait)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
@@ -35,6 +27,17 @@ public final class ListLib extends Lib {
                         final var out = Utils.combine(ol.toArray(IValue[]::new));
                         final Stream<IValue> s = out.map(l -> new Value<>(CoreLib.listType, new ArrayList<>(l)));
                         vm.registers.set(rResult, new Value<>(CoreLib.iterType, new StreamItems(s)));
+                    }
+                });
+
+        bindMethod("get", new Arg[]{new Arg("target", CoreLib.iterableTrait)},
+                (vm, args, rResult, loc) -> {
+                    final var t = args[0];
+
+                    if (t.type() instanceof IterableTrait lt) {
+                        vm.registers.set(rResult, new Value<>(CoreLib.iterType, lt.iter(vm, t)));
+                    } else {
+                        throw new EvalError("Expected iterable: " + t.dump(vm), loc);
                     }
                 });
     }

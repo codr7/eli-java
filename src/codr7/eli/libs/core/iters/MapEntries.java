@@ -6,11 +6,9 @@ import codr7.eli.libs.CoreLib;
 import java.util.*;
 
 public final class MapEntries implements Iter {
-    private final TreeMap<IValue, IValue> map;
     private final Iterator<Map.Entry<IValue, IValue>> iter;
 
     public MapEntries(final TreeMap<IValue, IValue> map) {
-        this.map = map;
         iter = map.entrySet().iterator();
     }
 
