@@ -17,7 +17,7 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 5;
+    public final static int VERSION = 6;
 
     public boolean debug = false;
     public final java.util.List<Reader> suffixReaders = new ArrayList<>();

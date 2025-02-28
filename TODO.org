@@ -4,27 +4,22 @@ fib PT0.68878869S
 fact PT1.427299916S
 fib PT1.155167071S
 
-* add iter/unzip
-** use in acodr on c
+* use StreamItems instead of MapEntries
+** like list/combine
+
+* add next to loop bodies
+** goto body start
+** readme
+
+* add reduce
+** read up on transducers
+** use to sum evs/dvs in acodr
+*** add to map
 
 * implement list splat
 ** [[1 2 3]*]
 
-* use StreamItems instead of MapEntries
-** like list/combine
-
-* use Long.bitCount to implement bit/len
-** add test
-
-* add next to loop bodies
-** goto body start
-
 ACODR
-
-* map values between bases
-
-* add list/permutations from aoc
-** use to generate possible values
 
   1 1 1 1 1 2 2 2 2 2 3 3 3 3 3 4 4 4 4 4 5 5 5 5 5
   1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5

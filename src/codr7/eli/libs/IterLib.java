@@ -40,5 +40,29 @@ public final class IterLib extends Lib {
                         throw new EvalError("Expected iterable: " + t.dump(vm), loc);
                     }
                 });
+
+        bindMethod("unzip", new Arg[]{new Arg("in", CoreLib.iterableTrait)},
+                (vm, args, rResult, loc) -> {
+                    final var in = args[0];
+
+                    if (in.type() instanceof IterableTrait it) {
+                        final var lvs = new ArrayList<IValue>();
+                        final var rvs = new ArrayList<IValue>();
+                        final var i = it.iter(vm, in);
+
+                        while (i.next(vm, vm.rScratch, loc)) {
+                            final var p = vm.registers.get(vm.rScratch).cast(CoreLib.pairType);
+                            lvs.add(p.left());
+                            rvs.add(p.right());
+                        }
+
+                        vm.registers.set(rResult,
+                                new Value<>(CoreLib.pairType,
+                                        new Pair(new Value<>(CoreLib.listType, lvs),
+                                                new Value<>(CoreLib.listType, rvs))));
+                    } else {
+                        throw new EvalError("Expected iterable: " + in.dump(vm), loc);
+                    }
+                });
     }
 }

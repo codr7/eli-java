@@ -16,5 +16,5 @@
 (say encode-map)
 
 (for [c (iter/combinations encode-map)]
-  (say c))
-
+  (let [dvs:evs (iter/unzip c)]
+    (say dvs evs)))
