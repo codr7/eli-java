@@ -3,13 +3,14 @@ package codr7.eli.libs.core.types;
 import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
-import codr7.eli.libs.core.iters.MapEntries;
+import codr7.eli.libs.core.iters.StreamItems;
 import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.CmpTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MapType
         extends BaseType<TreeMap<IValue, IValue>>
@@ -102,7 +103,12 @@ public class MapType
 
     @Override
     public Iter iter(final VM vm, final IValue target) {
-        return new MapEntries(target.cast(this));
+        final Stream<IValue> s = target.cast(this)
+                .entrySet()
+                .stream()
+                .map(e -> new Value<>(CoreLib.pairType, new Pair(e.getKey(), e.getValue())));
+
+        return new StreamItems(s);
     }
 
     @Override

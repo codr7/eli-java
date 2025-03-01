@@ -6,8 +6,6 @@
   base          8
   encode-map    {})
 
-(encode-map 0 0)
-
 (let [dv 1 ev 1]
   (for [_ (range 0 value-bits 1)]
     (encode-map dv ev)
@@ -18,3 +16,5 @@
 (for [c (iter/combinations encode-map)]
   (let [dvs:evs (iter/unzip c)]
     (say dvs evs)))
+
+(encode-map 0 0)
