@@ -10,11 +10,11 @@ public interface IForm {
         throw new EmitError("Invalid arg: " + dump(vm), loc);
     }
 
-    default void bind(final VM vm, final int rValue, final Loc loc) {
+    default void bindRegister(final VM vm, final int rValue, final Loc loc) {
         throw new EmitError("Invalid bind target: " + dump(vm), loc);
     }
 
-    default void bindVar(final VM vm, final IValue value, final Loc loc) {
+    default void bindValue(final VM vm, final IValue value, final Loc loc) {
         throw new EmitError("Invalid bind target: " + dump(vm), loc);
     }
 

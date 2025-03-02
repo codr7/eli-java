@@ -4,17 +4,18 @@ fib PT0.68878869S
 fact PT1.427299916S
 fib PT1.155167071S
 
-* use StreamItems instead of MapEntries
-** like list/combine
-
 * add next to loop bodies
 ** goto body start
 ** readme
 
 * add reduce
-** read up on transducers
+** return transducer
+** add optional transducer arg to iter/get
 ** use to sum evs/dvs in acodr
-*** add to map
+*** add results to map
+
+* implement method composition
+** foo & bar
 
 * implement list splat
 ** [[1 2 3]*]

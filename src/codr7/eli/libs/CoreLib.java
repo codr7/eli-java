@@ -6,7 +6,6 @@ import codr7.eli.errors.EvalError;
 import codr7.eli.forms.*;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.IterableTrait;
 import codr7.eli.libs.core.traits.NumTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 import codr7.eli.libs.core.types.*;
@@ -460,8 +459,15 @@ public class CoreLib extends Lib {
                         vm.doLib(null, () -> {
                             for (var i = 0; i < bs.length; i += 2) {
                                 final var rValue = vm.alloc(1);
-                                bs[i+1].emit(vm, rValue);
-                                bs[i].bind(vm, rValue, loc);
+                                final var vf = bs[i+1];
+                                final var v = vf.value(vm);
+
+                                if (v == null) {
+                                    vf.emit(vm, rValue);
+                                    bs[i].bindRegister(vm, rValue, loc);
+                                } else {
+                                    bs[i].bindValue(vm, v, loc);
+                                }
                             }
 
                             vm.emit(args, rResult);
@@ -576,7 +582,7 @@ public class CoreLib extends Lib {
                         }
 
                         final var value = args.removeFirst().eval(vm);
-                        id.bindVar(vm, value, loc);
+                        id.bindValue(vm, value, loc);
                     }
                 });
 

@@ -29,12 +29,12 @@ public class IdForm extends BaseForm {
 
     @Override public String argId(final VM vm, final Loc loc) { return id; }
 
-    @Override public void bind(final VM vm, final int rValue, final Loc loc) {
+    @Override public void bindRegister(final VM vm, final int rValue, final Loc loc) {
         vm.currentLib.bind(id, new Value<>(CoreLib.bindingType, new Binding(null, rValue)));
     }
 
     @Override
-    public void bindVar(final VM vm, final IValue value, final Loc loc) {
+    public void bindValue(final VM vm, final IValue value, final Loc loc) {
         final var rValue = vm.alloc(1);
         vm.registers.set(rValue, value);
         vm.currentLib.bind(id, new Value<>(CoreLib.bindingType, new Binding(value.type(), rValue)));
