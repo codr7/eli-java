@@ -1,3 +1,7 @@
-(let [foo 0] (say (while T
-  (if (= (inc foo) 10)
-    (break 1 2 (* foo 2))))))
+(^map [f]
+  (^[f1]
+    (^[r in]
+      (f1 r (f in)))))
+
+(let [s ((map inc) +)]
+  (say (s 0 1)))

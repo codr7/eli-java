@@ -42,7 +42,7 @@ public final class Arg {
         this.type = type;
     }
 
-    public Arg(final String id) { this(id, null); }
+    public Arg(final String id) { this(id, CoreLib.anyType); }
 
     public int bind(final VM vm, final IForm[] args, final int i, final int rResult, final Loc loc) {
         if (quote) {

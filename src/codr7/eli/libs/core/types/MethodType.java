@@ -16,7 +16,7 @@ public final class MethodType extends BaseType<Method> implements CallTrait {
                      final int arity,
                      final int rResult,
                      final Loc loc) {
-        throw new EvalError("Indirect call", loc);
+        target.cast(this).call(vm, rArgs, arity, rResult, loc);
     }
 
     @Override

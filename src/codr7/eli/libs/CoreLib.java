@@ -535,6 +535,11 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(iterType, new IntRange(start, end, stride)));
                 });
 
+        bindMethod("reduce", new Arg[]{new Arg("fn")},
+                (vm, args, rResult, loc) -> {
+
+                });
+
         bindMethod("say", new Arg[]{new Arg("body*")},
                 (vm, args, rResult, location) -> {
                     final var buffer = new StringBuilder();
