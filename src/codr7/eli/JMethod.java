@@ -31,9 +31,10 @@ public record JMethod(String id, Arg[] args, Body body) {
             if (v.type() == CoreLib.splatType) {
                 final var svs = new ArrayList<IValue>();
                 final var it = v.cast(CoreLib.splatType);
+                final var rValue = vm.alloc(1);
 
-                while (it.next(vm, vm.rScratch, loc)) {
-                    svs.add(vm.registers.get(vm.rScratch));
+                while (it.next(vm, rValue, loc)) {
+                    svs.add(vm.registers.get(rValue));
                 }
 
                 args = Arrays.copyOf(args, args.length + svs.size() - 1);

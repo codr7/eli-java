@@ -19,9 +19,10 @@ public final class IterLib extends Lib {
                     if (in.type() instanceof IterableTrait it) {
                         final var ol = new ArrayList<IValue>();
                         final var oi = it.iter(vm, in);
+                        final var rValue = vm.alloc(1);
 
-                        while (oi.next(vm, vm.rScratch, loc)) {
-                            ol.add(vm.registers.get(vm.rScratch));
+                        while (oi.next(vm, rValue, loc)) {
+                            ol.add(vm.registers.get(rValue));
                         }
 
                         final var out = Utils.combine(ol.toArray(IValue[]::new));
@@ -49,9 +50,10 @@ public final class IterLib extends Lib {
                         final var lvs = new ArrayList<IValue>();
                         final var rvs = new ArrayList<IValue>();
                         final var i = it.iter(vm, in);
+                        final var rValue = vm.alloc(1);
 
-                        while (i.next(vm, vm.rScratch, loc)) {
-                            final var p = vm.registers.get(vm.rScratch).cast(CoreLib.pairType);
+                        while (i.next(vm, rValue, loc)) {
+                            final var p = vm.registers.get(rValue).cast(CoreLib.pairType);
                             lvs.add(p.left());
                             rvs.add(p.right());
                         }

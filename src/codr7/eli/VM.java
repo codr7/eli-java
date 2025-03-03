@@ -26,7 +26,6 @@ public final class VM {
     public int pc = 0;
     public final List<Reader> prefixReaders = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
-    public final int rScratch;
 
     public final BitLib bitLib = new BitLib();
     public final CoreLib coreLib = new CoreLib();
@@ -66,8 +65,6 @@ public final class VM {
         userLib.bind(listLib);
         userLib.bind(stringLib);
         currentLib = userLib;
-
-        rScratch = alloc(1);
     }
 
     public int alloc(final int n) {

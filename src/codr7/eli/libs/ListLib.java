@@ -27,9 +27,10 @@ public final class ListLib extends Lib {
                     if (in.type() instanceof IterableTrait it) {
                         final var ol = new ArrayList<IValue>();
                         final var oi = it.iter(vm, in);
+                        final var rValue = vm.alloc(1);
 
-                        while (oi.next(vm, vm.rScratch, loc)) {
-                            ol.add(vm.registers.get(vm.rScratch));
+                        while (oi.next(vm, rValue, loc)) {
+                            ol.add(vm.registers.get(rValue));
                         }
 
                         final var out = Utils.combine(ol.toArray(IValue[]::new));
