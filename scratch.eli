@@ -1,1 +1,1 @@
-(say (reduce + [2 3] 1))
+(say (iter/reduce + [2 3] 1))

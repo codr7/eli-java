@@ -3,6 +3,7 @@ package codr7.eli.libs;
 import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.core.iters.StreamItems;
+import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.IterTrait;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public final class IterLib extends Lib {
         super("iter");
 
         bindMethod("combinations",
-                new Arg[]{new Arg("in", CoreLib.iterableTrait)},
+                new Arg[]{new Arg("in", CoreLib.iterTrait)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
                     if (in.type() instanceof IterTrait it) {
@@ -31,7 +32,7 @@ public final class IterLib extends Lib {
                     }
                 });
 
-        bindMethod("get", new Arg[]{new Arg("target", CoreLib.iterableTrait)},
+        bindMethod("get", new Arg[]{new Arg("target", CoreLib.iterTrait)},
                 (vm, args, rResult, loc) -> {
                     final var t = args[0];
 
@@ -42,29 +43,44 @@ public final class IterLib extends Lib {
                     }
                 });
 
-        bindMethod("unzip", new Arg[]{new Arg("in", CoreLib.iterableTrait)},
+        bindMethod("reduce",
+                new Arg[]{new Arg("callback", CoreLib.callTrait),
+                        new Arg("in", CoreLib.iterTrait),
+                        new Arg("seed", CoreLib.anyType)},
+                (vm, args, rResult, loc) -> {
+            final var c = args[0];
+            final var ct = c.type().cast(CoreLib.callTrait, loc);
+            final var in = args[1];
+            final var it = in.type().cast(CoreLib.iterTrait, loc);
+            final var rArgs = vm.alloc(2);
+            vm.registers.set(rArgs, args[2]);
+
+            for (final var i = it.iter(vm, in); i.next(vm, rArgs+1, loc);) {
+                ct.call(vm, c, rArgs, 2, rArgs,true, loc);
+            }
+
+            vm.registers.set(rResult, vm.registers.get(rArgs));
+        });
+
+        bindMethod("unzip", new Arg[]{new Arg("in", CoreLib.iterTrait)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
+                    final var it = in.type().cast(CoreLib.iterTrait, loc);
+                    final var lvs = new ArrayList<IValue>();
+                    final var rvs = new ArrayList<IValue>();
+                    final var i = it.iter(vm, in);
+                    final var rValue = vm.alloc(1);
 
-                    if (in.type() instanceof IterTrait it) {
-                        final var lvs = new ArrayList<IValue>();
-                        final var rvs = new ArrayList<IValue>();
-                        final var i = it.iter(vm, in);
-                        final var rValue = vm.alloc(1);
-
-                        while (i.next(vm, rValue, loc)) {
-                            final var p = vm.registers.get(rValue).cast(CoreLib.pairType);
-                            lvs.add(p.left());
-                            rvs.add(p.right());
-                        }
-
-                        vm.registers.set(rResult,
-                                new Value<>(CoreLib.pairType,
-                                        new Pair(new Value<>(CoreLib.listType, lvs),
-                                                new Value<>(CoreLib.listType, rvs))));
-                    } else {
-                        throw new EvalError("Expected iterable: " + in.dump(vm), loc);
+                    while (i.next(vm, rValue, loc)) {
+                        final var p = vm.registers.get(rValue).cast(CoreLib.pairType);
+                        lvs.add(p.left());
+                        rvs.add(p.right());
                     }
+
+                    vm.registers.set(rResult,
+                            new Value<>(CoreLib.pairType,
+                                    new Pair(new Value<>(CoreLib.listType, lvs),
+                                            new Value<>(CoreLib.listType, rvs))));
                 });
     }
 }

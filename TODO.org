@@ -1,11 +1,9 @@
 fact PT1.041657052S
 fib PT1.014438102S
 
-* add iter/reduce
-** add method to IterLib
-*** add cast(type, loc)
-** use to sum evs/dvs in acodr
-*** add results to map
+* make TraitType generic
+
+* debug acodr
 
 * fix method arg splat
 

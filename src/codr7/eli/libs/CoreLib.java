@@ -5,9 +5,7 @@ import codr7.eli.errors.EmitError;
 import codr7.eli.errors.EvalError;
 import codr7.eli.forms.*;
 import codr7.eli.libs.core.iters.IntRange;
-import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.NumTrait;
-import codr7.eli.libs.core.traits.SeqTrait;
+import codr7.eli.libs.core.traits.*;
 import codr7.eli.libs.core.types.*;
 import codr7.eli.ops.*;
 import codr7.eli.ops.Iter;
@@ -18,13 +16,13 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class CoreLib extends Lib {
-    public static final TraitType anyType = new TraitType("Any");
-    public static final TraitType callableTrait = new TraitType("Callable");
-    public static final TraitType iterableTrait = new TraitType("Iterable");
-    public static final TraitType seqTrait = new TraitType("Seq");
+    public static final TraitType<Void> anyType = new TraitType<>("Any");
+    public static final TraitType<CallTrait> callTrait = new TraitType<>("Callable");
+    public static final TraitType<IterTrait> iterTrait = new TraitType<>("Iterable");
+    public static final TraitType<SeqTrait> seqTrait = new TraitType<>("Seq", iterTrait);
     public static final NilType nilType = new NilType("Nil");
     public static final MaybeType maybeType = new MaybeType("Maybe", anyType, nilType);
-    public static final TraitType numType = new TraitType("Num", anyType);
+    public static final TraitType<NumTrait> numType = new TraitType<>("Num", anyType);
 
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
@@ -34,7 +32,7 @@ public class CoreLib extends Lib {
     public static final IntType intType = new IntType("Int");
     public static final IterType iterType = new IterType("Iter");
     public static final JMacroType jMacroType = new JMacroType("JMacro");
-    public static final JMethodType jMethodType = new JMethodType("JMethod");
+    public static final JMethodType jMethodType = new JMethodType("JMethod", callTrait);
     public static final LibType libType = new LibType("Lib");
     public static final ListType listType = new ListType("List", seqTrait);
     public static final MapType mapType = new MapType("Map", seqTrait);

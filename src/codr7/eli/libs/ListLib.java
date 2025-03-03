@@ -21,7 +21,7 @@ public final class ListLib extends Lib {
                 });
 
         bindMethod("combine",
-                new Arg[]{new Arg("in", CoreLib.iterableTrait)},
+                new Arg[]{new Arg("in", CoreLib.iterTrait)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
                     if (in.type() instanceof IterTrait it) {

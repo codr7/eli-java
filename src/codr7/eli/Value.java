@@ -2,6 +2,7 @@ package codr7.eli;
 
 public record Value<T>(IDataType<T> type, T data) implements IValue {
     public <U> U cast(IDataType<U> type) { return (U)data; }
+
     public IValue dup(final VM vm) { return type.dup(vm, this); }
     public String dump(final VM vm) { return type.dump(vm, this); }
 
