@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public final class IterLib extends Lib {
     public IterLib() {
-        super("iter");
+        super("iter", null);
 
         bindMethod("combinations",
                 new Arg[]{new Arg("in", CoreLib.iterTrait)},

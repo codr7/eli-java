@@ -11,13 +11,8 @@ public class Lib {
     public final Lib parentLib;
     public final Map<String, IValue> bindings = new HashMap<>();
 
-    public Lib(final String id) {
+    public Lib(final String id, final Lib parentLib) {
         this.id = id;
-        this.parentLib = null;
-    }
-
-    public Lib(final Lib parentLib) {
-        this.id = parentLib.id;
         this.parentLib = parentLib;
     }
 

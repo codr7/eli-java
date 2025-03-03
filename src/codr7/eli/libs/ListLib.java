@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 public final class ListLib extends Lib {
     public ListLib() {
-        super("list");
+        super("list", null);
 
         bindMethod("alloc",
                 new Arg[]{new Arg("n", CoreLib.intType)},

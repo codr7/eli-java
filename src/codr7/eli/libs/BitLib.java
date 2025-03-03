@@ -4,7 +4,7 @@ import codr7.eli.*;
 
 public final class BitLib extends Lib {
     public BitLib() {
-        super("bit");
+        super("bit", null);
 
         bindMethod("<<",
                 new Arg[]{new Arg("value", CoreLib.intType), new Arg("n", CoreLib.intType)},

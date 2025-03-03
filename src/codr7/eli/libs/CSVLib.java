@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 
 public final class CSVLib extends Lib {
     public CSVLib() {
-        super("csv");
+        super("csv", null);
 
         bindMethod("open-file", new Arg[]{new Arg("path", CoreLib.stringType)},
                 (vm, args, rResult, loc) -> {

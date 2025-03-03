@@ -6,7 +6,7 @@ import codr7.eli.Value;
 
 public final class IntLib extends Lib {
     public IntLib() {
-        super("int");
+        super("int", null);
 
         bindMethod("rebase",
                 new Arg[]{new Arg("value", CoreLib.intType), new Arg("base", CoreLib.intType)},

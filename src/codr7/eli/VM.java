@@ -35,7 +35,7 @@ public final class VM {
     public final IterLib iterLib = new IterLib();
     public final ListLib listLib = new ListLib();
     public final StringLib stringLib = new StringLib();
-    public final Lib userLib = new Lib("user");
+    public final Lib userLib = new Lib("user", null);
 
     public Lib currentLib = null;
 
@@ -83,13 +83,19 @@ public final class VM {
 
     public void doLib(final Lib lib, final DoLibBody body) {
         final var prevLib = currentLib;
-        currentLib = new Lib((lib == null) ? prevLib : lib);
+        currentLib = (lib == null) ? new Lib(prevLib.id, prevLib) : lib;
 
         try {
             body.call();
         } finally {
             currentLib = prevLib;
         }
+    }
+
+    public void doLibId(final String id, final DoLibBody body) {
+        final var v = currentLib.find(id);
+        final var lib = (v == null) ? new Lib(id, currentLib) : v.cast(CoreLib.libType);
+        doLib(lib, body);
     }
 
     public void dumpOps(final int startPc) {

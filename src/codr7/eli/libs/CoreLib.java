@@ -51,7 +51,7 @@ public class CoreLib extends Lib {
     public static final IValue F = new Value<>(bitType, false);
 
     public CoreLib() {
-        super("core");
+        super("core", null);
 
         bind(anyType);
         bind(bindingType);

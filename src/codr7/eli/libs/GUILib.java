@@ -30,7 +30,7 @@ public final class GUILib extends Lib {
     public static final TableType tableType = new TableType("TableView", containerType);
 
     public GUILib() {
-        super("gui");
+        super("gui", null);
 
         bind(buttonType);
         bind(columnType);

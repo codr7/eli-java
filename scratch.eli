@@ -1,1 +1,0 @@
-(say (list/into (iter/combinations [1 2 3])))
