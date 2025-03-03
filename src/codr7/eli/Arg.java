@@ -12,15 +12,9 @@ public final class Arg {
     IType type;
 
     boolean opt = false;
-    boolean quote = false;
     boolean splat = false;
 
     public Arg(String id, final IType type) {
-        if (id.charAt(0) == '\'') {
-            quote = true;
-            id = id.substring(1);
-        }
-
         var done = false;
 
         while (!done) {
@@ -58,7 +52,6 @@ public final class Arg {
 
     public String dump(final VM vm) {
         var s = id;
-        if (quote) { s = '\'' + s; }
         if (splat) { s = s + '*'; }
         if (opt) { s = s + '?'; }
         return s;

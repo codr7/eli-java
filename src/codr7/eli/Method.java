@@ -19,10 +19,7 @@ public record Method(String id,
     public void bindArgs(final VM vm) {
         for (var i = 0; i < args.length; i++) {
             final var ma = args[i];
-
-            if (!ma.quote) {
-                vm.currentLib.bind(ma.id, bindingType, new Binding(null, rArgs + i));
-            }
+            vm.currentLib.bind(ma.id, bindingType, new Binding(null, rArgs + i));
         }
     }
 
