@@ -20,23 +20,18 @@ public final class ListLib extends Lib {
                     vm.registers.set(rResult, new Value<>(CoreLib.listType, new ArrayList<>(Arrays.asList(vs))));
                 });
 
-        bindMethod("combine",
-                new Arg[]{new Arg("in", CoreLib.iterTrait)},
+        bindMethod("into", new Arg[]{new Arg("in", CoreLib.iterTrait)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
-                    if (in.type() instanceof IterTrait it) {
-                        final var ol = new ArrayList<IValue>();
-                        final var oi = it.iter(vm, in);
-                        final var rValue = vm.alloc(1);
+                    final var it = in.type().cast(CoreLib.iterTrait, loc);
+                    final var rValue = vm.alloc(1);
+                    final var out = new ArrayList<IValue>();
 
-                        while (oi.next(vm, rValue, loc)) {
-                            ol.add(vm.registers.get(rValue));
-                        }
-
-                        final var out = Utils.combine(ol.toArray(IValue[]::new));
-                        final Stream<IValue> s = out.map(l -> new Value<>(CoreLib.listType, new ArrayList<>(l)));
-                        vm.registers.set(rResult, new Value<>(CoreLib.iterType, new StreamItems(s)));
+                    for (final var i = it.iter(vm, in); i.next(vm, rValue, loc);) {
+                        out.add(vm.registers.get(rValue));
                     }
+
+                    vm.registers.set(rResult, new Value<>(CoreLib.listType, out));
                 });
     }
 }

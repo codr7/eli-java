@@ -30,7 +30,7 @@ public class CoreLib extends Lib {
     public static final ExprType exprType = new ExprType("Expr");
     public static final FloatType floatType = new FloatType("Float");
     public static final IntType intType = new IntType("Int");
-    public static final IterType iterType = new IterType("Iter");
+    public static final IterType iterType = new IterType("Iter", iterTrait);
     public static final JMacroType jMacroType = new JMacroType("JMacro");
     public static final JMethodType jMethodType = new JMethodType("JMethod", callTrait);
     public static final LibType libType = new LibType("Lib");

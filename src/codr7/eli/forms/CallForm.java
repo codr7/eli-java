@@ -70,6 +70,6 @@ public class CallForm extends BaseForm {
     }
 
     @Override public IValue rawValue(VM vm) {
-        return eval(vm);
+        return null;
     }
 }

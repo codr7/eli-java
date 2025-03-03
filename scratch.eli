@@ -1,1 +1,1 @@
-(say (iter/reduce + [2 3] 1))
+(say (list/into (iter/combinations [1 2 3])))

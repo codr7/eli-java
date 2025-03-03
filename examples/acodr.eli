@@ -15,7 +15,6 @@
   (iter/reduce + in 0))
 
 (for [c (iter/combinations encode-map)]
-  (say c)
   (let [dvs:evs (iter/unzip c)
         dv (sum dvs)
         ev (sum evs)]
