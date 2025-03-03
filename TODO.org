@@ -1,7 +1,9 @@
 fact PT1.041657052S
 fib PT1.014438102S
 
-* add reduce
+* add iter/reduce
+** add eval flag to CallTrait.call
+*** eval to end in Method
 ** use to sum evs/dvs in acodr
 *** add results to map
 
@@ -16,7 +18,8 @@ fib PT1.014438102S
   (foo 1 2))
 
 * implement list splat
-** [[1 2 3]*]
+
+[[1 2 3]*]
 
 * add next to loop bodies
 ** goto body start
