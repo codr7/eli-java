@@ -1,10 +1,9 @@
 package codr7.eli.libs.core.types;
 
 import codr7.eli.*;
-import codr7.eli.errors.EvalError;
-import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.CallableTrait;
 
-public final class MethodType extends BaseType<Method> implements CallTrait {
+public final class MethodType extends BaseType<Method> implements CallableTrait {
     public MethodType(final String id) {
         super(id);
     }

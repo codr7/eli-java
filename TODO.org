@@ -1,12 +1,19 @@
-fact PT0.852527868S
-fib PT0.698440903S
---
-fact PT1.427299916S
-fib PT1.155167071S
+fact PT1.041657052S
+fib PT1.014438102S
 
 * add reduce
 ** use to sum evs/dvs in acodr
 *** add results to map
+
+* fix method arg splat
+
+(check 3
+  (^foo [x y]
+    (if (= x 1)
+      (foo [2 3]*))
+    y)
+
+  (foo 1 2))
 
 * implement list splat
 ** [[1 2 3]*]

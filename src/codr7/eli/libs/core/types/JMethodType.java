@@ -1,10 +1,9 @@
 package codr7.eli.libs.core.types;
 
 import codr7.eli.*;
-import codr7.eli.libs.core.traits.CallTrait;
-import codr7.eli.ops.CallValue;
+import codr7.eli.libs.core.traits.CallableTrait;
 
-public final class JMethodType extends BaseType<JMethod> implements CallTrait {
+public final class JMethodType extends BaseType<JMethod> implements CallableTrait {
     public JMethodType(final String id) { super(id); }
 
     @Override

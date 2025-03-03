@@ -4,11 +4,11 @@ import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.iters.StringChars;
-import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.CallableTrait;
 import codr7.eli.libs.core.traits.CmpTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 
-public class StringType extends BaseType<String> implements CallTrait, CmpTrait, SeqTrait {
+public class StringType extends BaseType<String> implements CallableTrait, CmpTrait, SeqTrait {
     public StringType(final String id, final IType...parents) {
         super(id, parents);
     }

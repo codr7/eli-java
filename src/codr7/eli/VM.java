@@ -2,7 +2,7 @@ package codr7.eli;
 
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.*;
-import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.CallableTrait;
 import codr7.eli.libs.core.traits.IterableTrait;
 import codr7.eli.ops.*;
 import codr7.eli.ops.Iter;
@@ -209,7 +209,7 @@ public final class VM {
                     final var op = (CallRegister)opValues[pc];
                     final var t = registers.get(op.rTarget());
                     pc++;
-                    ((CallTrait)t.type()).call(this, t, op.rArguments(), op.arity(), op.rResult(), op.loc());
+                    ((CallableTrait)t.type()).call(this, t, op.rArguments(), op.arity(), op.rResult(), op.loc());
                     break;
                 }
                 case CallValue: {
@@ -221,7 +221,7 @@ public final class VM {
                     }
 
                     pc++;
-                    ((CallTrait)t.type()).call(this, t, op.rArgs(), op.arity(), op.rResult(), op.loc());
+                    ((CallableTrait)t.type()).call(this, t, op.rArgs(), op.arity(), op.rResult(), op.loc());
                     break;
                 }
                 case Check: {

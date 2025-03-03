@@ -6,7 +6,7 @@ import codr7.eli.Loc;
 import codr7.eli.VM;
 import codr7.eli.ops.CallValue;
 
-public interface CallTrait {
+public interface CallableTrait {
     void call(VM vm, IValue target, int rArgs, int arity, int rResult, Loc loc);
 
     default void call(final VM vm,

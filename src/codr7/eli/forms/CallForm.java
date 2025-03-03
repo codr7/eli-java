@@ -2,7 +2,7 @@ package codr7.eli.forms;
 
 import codr7.eli.*;
 import codr7.eli.errors.EmitError;
-import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.CallableTrait;
 import codr7.eli.ops.Left;
 import codr7.eli.ops.Right;
 
@@ -36,7 +36,7 @@ public class CallForm extends BaseForm {
         }
 
         var t = tf.rawValue(vm);
-        if (t.type() instanceof CallTrait ct) { ct.emitCall(vm, t, body, rResult, loc()); }
+        if (t.type() instanceof CallableTrait ct) { ct.emitCall(vm, t, body, rResult, loc()); }
         else { throw new EmitError("Not callable: " + t.dump(vm), loc()); }
         if (getLeft) { vm.emit(new Left(rResult, rResult, tf.loc())); }
         else for (; rightCount > 0; rightCount--) { vm.emit(new Right(rResult, rResult, tf.loc())); }

@@ -4,7 +4,7 @@ import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.iters.ListItems;
-import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.CallableTrait;
 import codr7.eli.libs.core.traits.CmpTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class ListType
         extends BaseType<ArrayList<IValue>>
-        implements CallTrait, CmpTrait, SeqTrait {
+        implements CallableTrait, CmpTrait, SeqTrait {
     public ListType(final String id, IType...parents) { super(id, parents); }
 
     @Override

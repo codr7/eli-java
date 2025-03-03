@@ -1,6 +1,7 @@
 package codr7.eli;
 
 import codr7.eli.errors.EvalError;
+import codr7.eli.libs.CoreLib;
 
 import static codr7.eli.libs.CoreLib.bindingType;
 

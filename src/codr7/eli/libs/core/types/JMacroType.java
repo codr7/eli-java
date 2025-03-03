@@ -5,12 +5,12 @@ import codr7.eli.errors.EmitError;
 import codr7.eli.forms.LiteralForm;
 import codr7.eli.forms.SplatForm;
 import codr7.eli.libs.CoreLib;
-import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.CallableTrait;
 import codr7.eli.libs.core.traits.IterableTrait;
 
 import java.util.ArrayList;
 
-public final class JMacroType extends BaseType<JMacro> implements CallTrait {
+public final class JMacroType extends BaseType<JMacro> implements CallableTrait {
     public JMacroType(final String id) { super(id); }
 
     @Override

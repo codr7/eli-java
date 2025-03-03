@@ -116,23 +116,9 @@ public class CoreLib extends Lib {
                     final var skip = new Label();
                     vm.emit(new Goto(skip));
                     start.pc = vm.emitPc();
+                    if (!lambda) { vm.currentLib.bind(m); }
 
                     vm.doLib(null, () -> {
-                        vm.currentLib.bindMacro("recall", m.args(),
-                                (_vm, recallArgs, _rResult, _loc) -> {
-                                    final var rArgsCopy = vm.alloc(recallArgs.length);
-
-                                    for (var i = 0; i < recallArgs.length; i++) {
-                                        recallArgs[i].emit(vm, rArgsCopy+i);
-                                    }
-
-                                    for (var i = 0; i < recallArgs.length; i++) {
-                                        _vm.emit(new Copy(rArgsCopy+i, rArgs+i, loc));
-                                    }
-
-                                    _vm.emit(new Goto(start));
-                                });
-
                         vm.currentLib.bindMacro("return", new Arg[]{new Arg("args*")},
                                 (_vm, returnArgs, _rResult, _loc) -> {
                                     _vm.doLib(null, () -> {
@@ -149,7 +135,6 @@ public class CoreLib extends Lib {
                     end.pc = vm.emitPc();
                     vm.emit(new Return());
                     skip.pc = vm.emitPc();
-                    if (!lambda) { vm.currentLib.bind(m); }
                     vm.registers.set(rResult, new Value<>(methodType, m));
                 });
 
