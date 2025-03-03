@@ -4,7 +4,7 @@ import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.iters.StreamItems;
-import codr7.eli.libs.core.traits.CallableTrait;
+import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.CmpTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 
@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class MapType
         extends BaseType<TreeMap<IValue, IValue>>
-        implements CallableTrait, CmpTrait, SeqTrait {
+        implements CallTrait, CmpTrait, SeqTrait {
     public MapType(final String id, IType...parents) { super(id, parents); }
 
     @Override
@@ -23,6 +23,7 @@ public class MapType
                      final int rArgs,
                      final int arity,
                      final int rResult,
+                     final boolean eval,
                      final Loc loc) {
         final var t = target.cast(this);
 

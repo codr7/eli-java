@@ -2,8 +2,8 @@ package codr7.eli;
 
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.*;
-import codr7.eli.libs.core.traits.CallableTrait;
-import codr7.eli.libs.core.traits.IterableTrait;
+import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.IterTrait;
 import codr7.eli.ops.*;
 import codr7.eli.ops.Iter;
 import codr7.eli.ops.MakeList;
@@ -206,7 +206,7 @@ public final class VM {
                     final var op = (CallRegister)opValues[pc];
                     final var t = registers.get(op.rTarget());
                     pc++;
-                    ((CallableTrait)t.type()).call(this, t, op.rArguments(), op.arity(), op.rResult(), op.loc());
+                    ((CallTrait)t.type()).call(this, t, op.rArguments(), op.arity(), op.rResult(), false, op.loc());
                     break;
                 }
                 case CallValue: {
@@ -218,7 +218,7 @@ public final class VM {
                     }
 
                     pc++;
-                    ((CallableTrait)t.type()).call(this, t, op.rArgs(), op.arity(), op.rResult(), op.loc());
+                    ((CallTrait)t.type()).call(this, t, op.rArgs(), op.arity(), op.rResult(), false, op.loc());
                     break;
                 }
                 case Check: {
@@ -263,7 +263,7 @@ public final class VM {
                 case Iter: {
                     final var rt = (Integer)opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((IterableTrait)t.type()).iter(this, t);
+                    final var it = ((IterTrait)t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.iterType, it));
                     pc++;
                     break;
@@ -317,7 +317,7 @@ public final class VM {
                 case Splat: {
                     final var rt = (Integer)opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((IterableTrait)t.type()).iter(this, t);
+                    final var it = ((IterTrait)t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.splatType, it));
                     pc++;
                     break;

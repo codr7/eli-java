@@ -28,6 +28,7 @@ public record Method(String id,
                      final int rArgs,
                      final int arity,
                      final int rResult,
+                     final boolean eval,
                      final Loc loc) {
         if (arity() != -1 && arity < arity()) {
             throw new EvalError("Not enough args: " + dump(vm), loc);
@@ -46,9 +47,16 @@ public record Method(String id,
             ai = a.bind(vm, avs, ai, rArg, loc);
             rArg++;
         }
+        if (eval) {
+            vm.eval(start.pc, end.pc);
 
-        vm.beginCall(this, vm.pc, rResult, loc);
-        vm.pc = start.pc;
+            if (rResult != this.rResult) {
+                vm.registers.set(rResult, vm.registers.get(this.rResult()));
+            }
+        } else {
+            vm.beginCall(this, vm.pc, rResult, loc);
+            vm.pc = start.pc;
+        }
     }
 
     public String dump(final VM vm) {

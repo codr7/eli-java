@@ -4,6 +4,6 @@ import codr7.eli.IValue;
 import codr7.eli.Iter;
 import codr7.eli.VM;
 
-public interface IterableTrait {
+public interface IterTrait {
     Iter iter(VM vm, IValue target);
 }

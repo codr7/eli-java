@@ -3,7 +3,7 @@ package codr7.eli.libs;
 import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.core.iters.StreamItems;
-import codr7.eli.libs.core.traits.IterableTrait;
+import codr7.eli.libs.core.traits.IterTrait;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -16,7 +16,7 @@ public final class IterLib extends Lib {
                 new Arg[]{new Arg("in", CoreLib.iterableTrait)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
-                    if (in.type() instanceof IterableTrait it) {
+                    if (in.type() instanceof IterTrait it) {
                         final var ol = new ArrayList<IValue>();
                         final var oi = it.iter(vm, in);
                         final var rValue = vm.alloc(1);
@@ -35,7 +35,7 @@ public final class IterLib extends Lib {
                 (vm, args, rResult, loc) -> {
                     final var t = args[0];
 
-                    if (t.type() instanceof IterableTrait lt) {
+                    if (t.type() instanceof IterTrait lt) {
                         vm.registers.set(rResult, new Value<>(CoreLib.iterType, lt.iter(vm, t)));
                     } else {
                         throw new EvalError("Expected iterable: " + t.dump(vm), loc);
@@ -46,7 +46,7 @@ public final class IterLib extends Lib {
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
 
-                    if (in.type() instanceof IterableTrait it) {
+                    if (in.type() instanceof IterTrait it) {
                         final var lvs = new ArrayList<IValue>();
                         final var rvs = new ArrayList<IValue>();
                         final var i = it.iter(vm, in);

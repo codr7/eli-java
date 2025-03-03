@@ -1,9 +1,9 @@
 package codr7.eli.libs.core.types;
 
 import codr7.eli.*;
-import codr7.eli.libs.core.traits.CallableTrait;
+import codr7.eli.libs.core.traits.CallTrait;
 
-public final class JMethodType extends BaseType<JMethod> implements CallableTrait {
+public final class JMethodType extends BaseType<JMethod> implements CallTrait {
     public JMethodType(final String id) { super(id); }
 
     @Override
@@ -12,6 +12,7 @@ public final class JMethodType extends BaseType<JMethod> implements CallableTrai
                      final int rArgs,
                      final int arity,
                      final int rResult,
+                     final boolean eval,
                      final Loc loc) {
         target.cast(this).call(vm, rArgs, arity, rResult, loc);
     }
