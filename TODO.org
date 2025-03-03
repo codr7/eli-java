@@ -4,34 +4,23 @@ fib PT0.698440903S
 fact PT1.427299916S
 fib PT1.155167071S
 
+* add reduce
+** use to sum evs/dvs in acodr
+*** add results to map
+
+* implement list splat
+** [[1 2 3]*]
+
+* add next to loop bodies
+** goto body start
+
 * closures
 ** add test
 ** add Form.collectIds
 *** add IForm.collectIds
 
-* add reduce
-** transducer?
-*** scratch.eli
-** use to sum evs/dvs in acodr
-*** add results to map
-
-(^map [f]
-  (^[f1]
-    (^[r in]
-      (f1 r (f in)))))
-
-(let [s ((map inc) +)]
-  (say (s 0 1)))
-
-* add next to loop bodies
-** goto body start
-** readme
-
-* implement method composition
+* implement composition
 ** foo & bar
-
-* implement list splat
-** [[1 2 3]*]
 
 ACODR
 

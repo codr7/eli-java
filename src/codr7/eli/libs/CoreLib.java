@@ -111,7 +111,8 @@ public class CoreLib extends Lib {
                     final var rArgs = vm.alloc(margs.size());
 
                     final var start = new Label();
-                    final var m = new Method(mid, margs.toArray(new Arg[0]), rArgs, rResult, start, loc);
+                    final var end = new Label();
+                    final var m = new Method(mid, margs.toArray(new Arg[0]), rArgs, rResult, start, end, loc);
                     final var skip = new Label();
                     vm.emit(new Goto(skip));
                     start.pc = vm.emitPc();
@@ -132,10 +133,20 @@ public class CoreLib extends Lib {
                                     _vm.emit(new Goto(start));
                                 });
 
+                        vm.currentLib.bindMacro("return", new Arg[]{new Arg("args*")},
+                                (_vm, returnArgs, _rResult, _loc) -> {
+                                    _vm.doLib(null, () -> {
+                                        _vm.emit(returnArgs, _rResult);
+                                    });
+
+                                    _vm.emit(new Goto(end));
+                                });
+
                         m.bindArgs(vm);
                         vm.emit(args, rResult);
                     });
 
+                    end.pc = vm.emitPc();
                     vm.emit(new Return());
                     skip.pc = vm.emitPc();
                     if (!lambda) { vm.currentLib.bind(m); }
@@ -555,12 +566,6 @@ public class CoreLib extends Lib {
                     final var end = args[1].cast(intType);
                     final var stride = args[2].cast(intType);
                     vm.registers.set(rResult, new Value<>(iterType, new IntRange(start, end, stride)));
-                });
-
-        bindMacro("return", new Arg[]{new Arg("args*")},
-                (vm, args, rResult, loc) -> {
-                    vm.emit(args, rResult);
-                    vm.emit(new Return());
                 });
 
         bindMethod("say", new Arg[]{new Arg("body*")},

@@ -7,7 +7,7 @@ import static codr7.eli.libs.CoreLib.bindingType;
 public record Method(String id,
                      Arg[] args, int rArgs,
                      int rResult,
-                     Label start,
+                     Label start, Label end,
                      Loc loc) {
 
     public int arity() {
