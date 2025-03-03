@@ -2,9 +2,10 @@ package codr7.eli;
 
 import codr7.eli.libs.CoreLib;
 import codr7.eli.ops.AddItem;
-import codr7.eli.ops.List;
+import codr7.eli.ops.MakeList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public final class Arg {
     String id;
@@ -44,38 +45,14 @@ public final class Arg {
 
     public Arg(final String id) { this(id, CoreLib.anyType); }
 
-    public int bind(final VM vm, final IForm[] args, final int i, final int rResult, final Loc loc) {
-        if (quote) {
-            if (splat) {
-                final var vs = new ArrayList<IValue>();
-
-                for (var j = i; j < args.length; j++) {
-                    final var af = args[j];
-                    vs.add(new Value<>(CoreLib.exprType, af));
-                }
-
-                vm.currentLib.bind(id, new Value<>(CoreLib.listType, vs));
-                return args.length;
-            }
-
-            final var af = args[i];
-            vm.currentLib.bind(id, new Value<>(CoreLib.exprType, af));
-            return i+1;
-        }
-
+    public int bind(final VM vm, final IValue[] values, final int i, final int rResult, final Loc loc) {
         if (splat) {
-            vm.emit(new List(rResult));
-            final var rItem = vm.alloc(1);
-
-            for (var j = i; j < args.length; j++) {
-                args[j].emit(vm, rItem);
-                vm.emit(new AddItem(rResult, rItem, loc));
-            }
-
-            return args.length;
+            final var vs = new ArrayList<>(Arrays.asList(values).subList(i, values.length));
+            vm.registers.set(rResult, new Value<>(CoreLib.listType, vs));
+            return values.length;
         }
 
-        args[i].emit(vm, rResult);
+        vm.registers.set(rResult, values[i]);
         return i+1;
     }
 

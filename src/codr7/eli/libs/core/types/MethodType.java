@@ -23,25 +23,4 @@ public final class MethodType extends BaseType<Method> implements CallTrait {
     public String dump(final VM vm, final IValue value) {
         return value.cast(this).dump(vm);
     }
-
-    @Override
-    public void emitCall(final VM vm,
-                         final IValue target,
-                         final IForm[] body,
-                         final int rResult,
-                         final Loc loc) {
-        final var m = target.cast(this);
-
-        vm.doLib(null, () -> {
-            var i = 1;
-            var rArg = m.rArgs();
-
-            for (final var a: m.args()) {
-                i = a.bind(vm, body, i, rArg, loc);
-                rArg++;
-            }
-
-            m.emitBody(vm, m.rArgs(), rResult, loc);
-        });
-    }
 }

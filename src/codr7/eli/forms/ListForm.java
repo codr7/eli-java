@@ -3,7 +3,7 @@ package codr7.eli.forms;
 import codr7.eli.*;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.ops.AddItem;
-import codr7.eli.ops.List;
+import codr7.eli.ops.MakeList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class ListForm extends BaseForm {
         final var v = value(vm);
 
         if (v == null) {
-            vm.emit(new List(rResult));
+            vm.emit(new MakeList(rResult));
             final var rItem = vm.alloc(1);
 
             for (final var it: items) {

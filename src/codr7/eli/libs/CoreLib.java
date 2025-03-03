@@ -110,12 +110,34 @@ public class CoreLib extends Lib {
                     for (IForm iForm : argList) { margs.add(new Arg(iForm.argId(vm, loc))); }
                     final var rArgs = vm.alloc(margs.size());
 
-                    final var m = new Method(
-                            mid,
-                            margs.toArray(new Arg[0]), rArgs,
-                            rResult,
-                            args.toArray(new IForm[0]));
+                    final var start = new Label();
+                    final var m = new Method(mid, margs.toArray(new Arg[0]), rArgs, rResult, start, loc);
+                    final var skip = new Label();
+                    vm.emit(new Goto(skip));
+                    start.pc = vm.emitPc();
 
+                    vm.doLib(null, () -> {
+                        vm.currentLib.bindMacro("recall", m.args(),
+                                (_vm, recallArgs, _rResult, _loc) -> {
+                                    final var rArgsCopy = vm.alloc(recallArgs.length);
+
+                                    for (var i = 0; i < recallArgs.length; i++) {
+                                        recallArgs[i].emit(vm, rArgsCopy+i);
+                                    }
+
+                                    for (var i = 0; i < recallArgs.length; i++) {
+                                        _vm.emit(new Copy(rArgsCopy+i, rArgs+i, loc));
+                                    }
+
+                                    _vm.emit(new Goto(start));
+                                });
+
+                        m.bindArgs(vm);
+                        vm.emit(args, rResult);
+                    });
+
+                    vm.emit(new Return());
+                    skip.pc = vm.emitPc();
                     if (!lambda) { vm.currentLib.bind(m); }
                     vm.registers.set(rResult, new Value<>(methodType, m));
                 });
@@ -535,9 +557,10 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(iterType, new IntRange(start, end, stride)));
                 });
 
-        bindMethod("reduce", new Arg[]{new Arg("fn")},
+        bindMacro("return", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, loc) -> {
-
+                    vm.emit(args, rResult);
+                    vm.emit(new Return());
                 });
 
         bindMethod("say", new Arg[]{new Arg("body*")},

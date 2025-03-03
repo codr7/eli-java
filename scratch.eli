@@ -1,7 +1,0 @@
-(^map [f]
-  (^[f1]
-    (^[r in]
-      (f1 r (f in)))))
-
-(let [s ((map inc) +)]
-  (say (s 0 1)))

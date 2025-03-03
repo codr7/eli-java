@@ -1,20 +1,27 @@
-fact PT0.853468321S
-fib PT0.68878869S
+fact PT0.852527868S
+fib PT0.698440903S
 --
 fact PT1.427299916S
 fib PT1.155167071S
 
 * closures
+** add test
 ** add Form.collectIds
 *** add IForm.collectIds
-** emit op(s) to capture before method def
-*** in Method.init?
 
 * add reduce
 ** transducer?
 *** scratch.eli
 ** use to sum evs/dvs in acodr
 *** add results to map
+
+(^map [f]
+  (^[f1]
+    (^[r in]
+      (f1 r (f in)))))
+
+(let [s ((map inc) +)]
+  (say (s 0 1)))
 
 * add next to loop bodies
 ** goto body start

@@ -6,7 +6,7 @@ import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.IterableTrait;
 import codr7.eli.ops.*;
 import codr7.eli.ops.Iter;
-import codr7.eli.ops.List;
+import codr7.eli.ops.MakeList;
 import codr7.eli.readers.*;
 
 import java.io.IOException;
@@ -17,14 +17,14 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 6;
+    public final static int VERSION = 7;
 
     public boolean debug = false;
-    public final java.util.List<Reader> suffixReaders = new ArrayList<>();
+    public final List<Reader> suffixReaders = new ArrayList<>();
     public final ArrayList<Op> ops = new ArrayList<>();
     public Path path = Paths.get("");
     public int pc = 0;
-    public final java.util.List<Reader> prefixReaders = new ArrayList<>();
+    public final List<Reader> prefixReaders = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
     public final int rScratch;
 
@@ -80,6 +80,10 @@ public final class VM {
         return result;
     }
 
+    public void beginCall(final Method target, final int returnPc, final int rResult, final Loc loc) {
+        calls.add(new Call(target, returnPc, rResult, loc));
+    }
+
     public void doLib(final Lib lib, final DoLibBody body) {
         final var prevLib = currentLib;
         currentLib = new Lib((lib == null) ? prevLib : lib);
@@ -125,6 +129,10 @@ public final class VM {
 
     public int emitPc() {
         return ops.size();
+    }
+
+    public Call endCall() {
+        return calls.removeLast();
     }
 
     public void eval(final int fromPc) {
@@ -269,7 +277,7 @@ public final class VM {
                     pc++;
                     break;
                 }
-                case List: {
+                case MakeList: {
                     registers.set((Integer)opValues[pc], new Value<>(CoreLib.listType, new ArrayList<>()));
                     pc++;
                     break;
@@ -287,6 +295,16 @@ public final class VM {
                     final var op = (Put)opValues[pc];
                     registers.set(op.rTarget(), op.value().dup(this));
                     pc++;
+                    break;
+                }
+                case Return: {
+                    final var c = endCall();
+
+                    if (c.rResult() != c.target().rResult()) {
+                        registers.set(c.rResult(), registers.get(c.target().rResult()));
+                    }
+
+                    pc = c.returnPc();
                     break;
                 }
                 case Right: {
@@ -399,7 +417,7 @@ public final class VM {
                     case Inc op -> op;
                     case Iter op -> op.rTarget();
                     case Left op -> op;
-                    case List op -> op.rTarget();
+                    case MakeList op -> op.rTarget();
                     case Next op -> op;
                     case Put op -> op;
                     case Right op -> op;
@@ -414,6 +432,7 @@ public final class VM {
         }
     }
 
+    private List<Call> calls = new ArrayList<>();
     private Op.Code[] opCodes = new Op.Code[0];
     private Object[] opValues = new Object[0];
 }

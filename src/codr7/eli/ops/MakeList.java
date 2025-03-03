@@ -5,15 +5,15 @@ import codr7.eli.VM;
 
 import java.util.Set;
 
-public record List(int rTarget) implements Op {
+public record MakeList(int rTarget) implements Op {
     @Override
     public Code code() {
-        return Code.List;
+        return Code.MakeList;
     }
 
     @Override
     public String dump(final VM vm) {
-        return "List rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ")";
+        return "MakeList rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ")";
     }
 
     @Override
