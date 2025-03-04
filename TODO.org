@@ -1,10 +1,6 @@
 fact PT1.041657052S
 fib PT1.014438102S
 
-* move sum from acodr to iter lib
-** add lib.init(vm)
-*** init all userLib libs in vm constructor
-
 * fix method arg splat
 
 (check 3

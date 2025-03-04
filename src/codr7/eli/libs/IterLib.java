@@ -83,4 +83,14 @@ public final class IterLib extends Lib {
                                             new Value<>(CoreLib.listType, rvs))));
                 });
     }
+
+    @Override
+    public void init(final VM vm, final Loc loc) {
+        importFrom(vm.coreLib, "^", "+");
+
+        vm.eval("""
+                    (^sum [in]
+                      (reduce + in 0))
+                    """, loc);
+    }
 }

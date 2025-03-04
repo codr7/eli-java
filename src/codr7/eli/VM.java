@@ -17,6 +17,10 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
+    public interface DoLibBody {
+        void call();
+    }
+
     public final static int VERSION = 7;
 
     public boolean debug = false;
@@ -26,6 +30,7 @@ public final class VM {
     public int pc = 0;
     public final List<Reader> prefixReaders = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
+    public final int rNull;
 
     public final BitLib bitLib = new BitLib();
     public final CoreLib coreLib = new CoreLib();
@@ -56,6 +61,8 @@ public final class VM {
         suffixReaders.add(PairReader.instance);
         suffixReaders.add(SplatReader.instance);
 
+        rNull = alloc(1);
+
         userLib.bind(bitLib);
         userLib.bind(coreLib);
         //userLib.bind(csvLib);
@@ -65,6 +72,8 @@ public final class VM {
         userLib.bind(listLib);
         userLib.bind(stringLib);
         currentLib = userLib;
+
+        initLibs();
     }
 
     public int alloc(final int n) {
@@ -181,6 +190,10 @@ public final class VM {
         emit(read(in, loc), rResult);
         skip.pc = emitPc();
         eval(startPc);
+    }
+
+    public void eval(final String in, final Loc loc) {
+        eval(in, rNull, loc);
     }
 
     private void eval() {
@@ -404,10 +417,6 @@ public final class VM {
         return out;
     }
 
-    public interface DoLibBody {
-        void call();
-    }
-
     private void freezeOps() {
         final var n = opCodes.length;
         final var m = ops.size();
@@ -444,6 +453,14 @@ public final class VM {
                     case Zip op -> op;
                     default -> null;
                 };
+            }
+        }
+    }
+
+    private void initLibs() {
+        for (final var v: userLib.bindings.values()) {
+            if (v.type() == CoreLib.libType) {
+                v.cast(CoreLib.libType).tryInit(this);
             }
         }
     }

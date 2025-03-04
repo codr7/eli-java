@@ -1,8 +1,6 @@
 package codr7.eli;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import codr7.eli.libs.CoreLib;
 
@@ -10,6 +8,7 @@ public class Lib {
     public final String id;
     public final Lib parentLib;
     public final Map<String, IValue> bindings = new HashMap<>();
+    private boolean isInit = false;
 
     public Lib(final String id, final Lib parentLib) {
         this.id = id;
@@ -47,9 +46,23 @@ public class Lib {
         for (final var id: ids) { bindings.put(id, source.bindings.get(id)); }
     }
 
+    public void importFrom(final Lib source, String...ids) {
+        importFrom(source, new TreeSet<>(Arrays.stream(ids).toList()));
+    }
+
     public void importFrom(final Lib source) {
         importFrom(source, source.bindings.keySet());
     }
+
+    public void tryInit(final VM vm) {
+        if (!isInit) {
+            final var loc = new Loc(id + " init");
+            vm.doLib(this, () -> init(vm, loc));
+            isInit = true;
+        }
+    }
+
+    protected void init(final VM vm, final Loc loc) { }
 }
 
 

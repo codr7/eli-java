@@ -11,9 +11,6 @@
     (encode-map dv ev)
     (set dv (* dv base) ev (* ev 2))))
 
-(^sum [in]
-  (iter/reduce + in 0))
-
 (for [c (iter/combinations encode-map)]
   (let [dvs:evs (iter/unzip c)
         dv (sum dvs)
