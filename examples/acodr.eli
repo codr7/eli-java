@@ -13,8 +13,8 @@
 
 (for [c (iter/combinations encode-map)]
   (let [dvs:evs (iter/unzip c)
-        dv (sum dvs)
-        ev (sum evs)]
+        dv (iter/sum dvs)
+        ev (iter/sum evs)]
     (encode-map dv ev)))
 
 (encode-map 0 0)

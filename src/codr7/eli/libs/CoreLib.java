@@ -35,7 +35,7 @@ public class CoreLib extends Lib {
     public static final JMethodType jMethodType = new JMethodType("JMethod", callTrait);
     public static final LibType libType = new LibType("Lib");
     public static final ListType listType = new ListType("List", callTrait, seqTrait);
-    public static final MapType mapType = new MapType("Map", seqTrait);
+    public static final MapType mapType = new MapType("Map", callTrait, seqTrait);
     public static final MetaType metaType = new MetaType("Meta");
     public static final MethodType methodType = new MethodType("Method", callTrait);
     public static final PairType pairType = new PairType("Pair", seqTrait);

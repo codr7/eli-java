@@ -32,17 +32,6 @@ public final class IterLib extends Lib {
                     }
                 });
 
-        bindMethod("get", new Arg[]{new Arg("target", CoreLib.iterTrait)},
-                (vm, args, rResult, loc) -> {
-                    final var t = args[0];
-
-                    if (t.type() instanceof IterTrait lt) {
-                        vm.registers.set(rResult, new Value<>(CoreLib.iterType, lt.iter(vm, t)));
-                    } else {
-                        throw new EvalError("Expected iterable: " + t.dump(vm), loc);
-                    }
-                });
-
         bindMethod("reduce",
                 new Arg[]{new Arg("callback", CoreLib.callTrait),
                         new Arg("in", CoreLib.iterTrait),
