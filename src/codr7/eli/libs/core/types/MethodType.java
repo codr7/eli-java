@@ -4,8 +4,8 @@ import codr7.eli.*;
 import codr7.eli.libs.core.traits.CallTrait;
 
 public final class MethodType extends BaseType<Method> implements CallTrait {
-    public MethodType(final String id) {
-        super(id);
+    public MethodType(final String id, final IType...parentTypes) {
+        super(id, parentTypes);
     }
 
     @Override

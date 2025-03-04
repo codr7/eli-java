@@ -94,7 +94,15 @@ public final class VM {
 
     public void doLibId(final String id, final DoLibBody body) {
         final var v = currentLib.find(id);
-        final var lib = (v == null) ? new Lib(id, currentLib) : v.cast(CoreLib.libType);
+        Lib lib;
+
+        if (v == null) {
+            lib = new Lib(id, currentLib);
+            currentLib.bind(id, new Value<>(CoreLib.libType, lib));
+        } else {
+            lib = v.cast(CoreLib.libType);
+        }
+
         doLib(lib, body);
     }
 
@@ -210,9 +218,14 @@ public final class VM {
                 }
                 case CallRegister: {
                     final var op = (CallRegister)opValues[pc];
-                    final var t = registers.get(op.rTarget());
+                    var t = registers.get(op.rTarget());
+
+                    if (t.type() == CoreLib.bindingType) {
+                        t = registers.get(t.cast(CoreLib.bindingType).rValue());
+                    }
+
                     pc++;
-                    ((CallTrait)t.type()).call(this, t, op.rArguments(), op.arity(), op.rResult(), false, op.loc());
+                    t.type().cast(CoreLib.callTrait, op.loc()).call(this, t, op.rArguments(), op.arity(), op.rResult(), false, op.loc());
                     break;
                 }
                 case CallValue: {
@@ -224,7 +237,7 @@ public final class VM {
                     }
 
                     pc++;
-                    ((CallTrait)t.type()).call(this, t, op.rArgs(), op.arity(), op.rResult(), false, op.loc());
+                    t.type().cast(CoreLib.callTrait, op.loc()).call(this, t, op.rArgs(), op.arity(), op.rResult(), false, op.loc());
                     break;
                 }
                 case Check: {

@@ -1,6 +1,7 @@
 package codr7.eli;
 
 import codr7.eli.errors.EmitError;
+import codr7.eli.errors.EvalError;
 import codr7.eli.forms.QuoteForm;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.ops.*;
@@ -16,6 +17,11 @@ public interface IForm {
 
     default void bindValue(final VM vm, final IValue value, final Loc loc) {
         throw new EmitError("Invalid bind target: " + dump(vm), loc);
+    }
+
+    default <T extends IForm> T cast(final VM vm, final Class<T> c) {
+        if (getClass() == c) { return (T)this; }
+        throw new EvalError("Expected " + c.getName() + ": " + dump(vm), loc());
     }
 
     void emit(VM vm, int rResult);

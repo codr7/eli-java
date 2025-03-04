@@ -1,0 +1,4 @@
+(lib foo
+  (var bar 42))
+
+(say foo/bar)

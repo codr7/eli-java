@@ -1,5 +1,6 @@
 package codr7.eli;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.stream.Stream;
@@ -17,5 +18,9 @@ public enum Form {
 
     public static String dump(final VM vm, final IForm[] forms) {
         return dump(vm, Arrays.stream(forms));
+    }
+
+    public static Deque<IForm> toDeque(final IForm[] in) {
+        return new ArrayDeque<>(Arrays.stream(in).toList());
     }
 }

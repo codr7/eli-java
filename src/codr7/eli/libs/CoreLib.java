@@ -34,13 +34,13 @@ public class CoreLib extends Lib {
     public static final JMacroType jMacroType = new JMacroType("JMacro");
     public static final JMethodType jMethodType = new JMethodType("JMethod", callTrait);
     public static final LibType libType = new LibType("Lib");
-    public static final ListType listType = new ListType("List", seqTrait);
+    public static final ListType listType = new ListType("List", callTrait, seqTrait);
     public static final MapType mapType = new MapType("Map", seqTrait);
     public static final MetaType metaType = new MetaType("Meta");
-    public static final MethodType methodType = new MethodType("Method");
+    public static final MethodType methodType = new MethodType("Method", callTrait);
     public static final PairType pairType = new PairType("Pair", seqTrait);
     public static final RangeType rangeType = new RangeType("Range");
-    public static final StringType stringType = new StringType("String", seqTrait);
+    public static final StringType stringType = new StringType("String", callTrait, seqTrait);
     public static final SplatType splatType = new SplatType("Splat");
     public static final SymType symType = new SymType("Sym");
     public static final TimeType timeType = new TimeType("Time");
@@ -492,6 +492,13 @@ public class CoreLib extends Lib {
                         throw new EmitError("Expected bindings: " + bsf.dump(vm), loc);
                     }
             });
+
+        bindMacro("lib", new Arg[]{new Arg("id"), new Arg("body*")},
+                (vm, _args, rResult, loc) -> {
+                    final var args = Form.toDeque(_args);
+                    final var id = args.removeFirst().cast(vm, IdForm.class).id;
+                    vm.doLibId(id, () -> vm.emit(args, rResult));
+                });
 
         bindMethod("next", new Arg[]{new Arg("in", iterType)},
                 (vm, args, rResult, loc) -> {
