@@ -33,5 +33,11 @@ public final class ListLib extends Lib {
 
                     vm.registers.set(rResult, new Value<>(CoreLib.listType, out));
                 });
+
+        bindMethod("push",
+                new Arg[]{new Arg("list", CoreLib.listType), new Arg("value")},
+                (vm, args, rResult, loc) -> {
+                    args[0].cast(CoreLib.listType).add(args[1]);
+                });
     }
 }

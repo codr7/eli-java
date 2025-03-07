@@ -1,10 +1,7 @@
 (var
-  ops           [+ -]
-  op-count      (len ops)
-  op-bits       (bit/len op-count)
-  value-bits    (- 8 op-bits)
-  base          8
-  encode-map    {})
+  value-bits     8
+  base           8
+  encode-map     {})
 
 (let [dv 1 ev 1]
   (for [_ (range 0 value-bits 1)]

@@ -30,7 +30,8 @@ public class MapType
         switch (arity) {
             case 1: {
                 final var k = vm.registers.get(rArgs);
-                vm.registers.set(rResult, t.get(k));
+                final var v = t.get(k);
+                vm.registers.set(rResult, (v == null) ? CoreLib.NIL : v);
                 break;
             }
 
