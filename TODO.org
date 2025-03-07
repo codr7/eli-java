@@ -1,6 +1,8 @@
 fact PT1.041657052S
 fib PT1.014438102S
 
+* remove dec op
+
 * fix method arg splat
 
 (check 3
@@ -17,11 +19,6 @@ fib PT1.014438102S
 
 * add next to loop bodies
 ** goto body start
-
-* closures
-** add test
-** add Form.collectIds
-*** add IForm.collectIds
 
 * implement composition
 ** foo & bar

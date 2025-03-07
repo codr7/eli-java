@@ -133,8 +133,11 @@ public class CoreLib extends Lib {
                     end.pc = vm.emitPc();
                     vm.emit(new Return());
                     skip.pc = vm.emitPc();
-                    vm.registers.set(rResult, new Value<>(methodType, m));
-                });
+
+                    if (lambda) {
+                        new Value<>(methodType, m).emit(vm, rResult, loc);
+                    }
+        });
 
         bindMethod("=", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, location) -> {
