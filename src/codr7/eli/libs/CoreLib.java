@@ -304,14 +304,16 @@ public class CoreLib extends Lib {
                     }
 
                     final var rValue = v.cast(bindingType).rValue();
-                    var rDelta = -1;
+                    var delta = -1L;
 
                     if (args.length > 1) {
-                        rDelta = vm.alloc(1);
-                        args[1].emit(vm, rDelta);
+                        final var df = args[1];
+                        final var dv = df.value(vm);
+                        if (dv == null) { throw new EmitError("Expected delta: " + df.dump(vm), loc); }
+                        delta = -dv.cast(intType);
                     }
 
-                    vm.emit(new Dec(rValue, rDelta, loc));
+                    vm.emit(new Inc(rValue, delta, loc));
                     if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
                 });
 
@@ -430,14 +432,16 @@ public class CoreLib extends Lib {
                     }
 
                     final var rValue = v.cast(bindingType).rValue();
-                    var rDelta = -1;
+                    var delta = 1L;
 
                     if (args.length > 1) {
-                        rDelta = vm.alloc(1);
-                        args[1].emit(vm, rDelta);
+                        final var df = args[1];
+                        final var dv = df.value(vm);
+                        if (dv == null) { throw new EmitError("Expected delta: " + df.dump(vm), loc); }
+                        delta = dv.cast(intType);
                     }
 
-                    vm.emit(new Inc(rValue, rDelta, loc));
+                    vm.emit(new Inc(rValue, delta, loc));
                     if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
                 });
 

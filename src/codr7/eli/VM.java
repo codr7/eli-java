@@ -273,22 +273,13 @@ public final class VM {
                     pc++;
                     break;
                 }
-                case Dec: {
-                    final var op = (Dec)opValues[pc];
-                    final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
-                    final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(CoreLib.intType);
-                    registers.set(op.rTarget(), new Value<>(CoreLib.intType, v - dv));
-                    pc++;
-                    break;
-                }
                 case Goto:
                     pc = ((Label)opValues[pc]).pc;
                     break;
                 case Inc: {
                     final var op = (Inc)opValues[pc];
                     final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
-                    final var dv = (op.rDelta() == -1) ? 1L : registers.get(op.rDelta()).cast(CoreLib.intType);
-                    registers.set(op.rTarget(), new Value<>(CoreLib.intType, v + dv));
+                    registers.set(op.rTarget(), new Value<>(CoreLib.intType, v + op.delta()));
                     pc++;
                     break;
                 }
@@ -437,7 +428,6 @@ public final class VM {
                     case CallValue op -> op;
                     case Check op -> op;
                     case Copy op -> op;
-                    case Dec op -> op;
                     case Goto op -> op.target();
                     case Inc op -> op;
                     case Iter op -> op.rTarget();

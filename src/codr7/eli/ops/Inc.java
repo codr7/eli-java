@@ -6,7 +6,7 @@ import codr7.eli.VM;
 
 import java.util.Set;
 
-public record Inc(int rTarget, int rDelta, Loc loc) implements Op {
+public record Inc(int rTarget, long delta, Loc loc) implements Op {
     @Override
     public Code code() {
         return Code.Inc;
@@ -14,14 +14,12 @@ public record Inc(int rTarget, int rDelta, Loc loc) implements Op {
 
     @Override
     public String dump(final VM vm) {
-        return "Inc rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
-                "rDelta: " + rDelta + " (" + ((rDelta == -1) ? "?" : vm.registers.get(rDelta).dump(vm)) + ")";
+        return "Inc rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") delta: " + delta;
     }
 
     @Override
     public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
         read.add(rTarget);
         write.add(rTarget);
-        if (rDelta != -1) { read.add(rDelta); }
     }
 }

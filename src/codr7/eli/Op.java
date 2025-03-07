@@ -7,7 +7,6 @@ public interface Op {
         AddItem,
         Bench, Branch,
         CallRegister, CallValue, Check, Copy,
-        Dec,
         Goto,
         Inc, Iter,
         Left,
