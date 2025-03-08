@@ -1,11 +1,12 @@
 fact PT1.041657052S
 fib PT1.014438102S
 
-* check method arg splat perf
-
 * implement list splat
 
 [[1 2 3]*]
+
+* pass Stream<IValue> instead of IValue[] in call methods?
+** perf
 
 * add next to loop bodies
 ** goto body start
