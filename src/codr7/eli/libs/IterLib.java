@@ -1,9 +1,7 @@
 package codr7.eli.libs;
 
 import codr7.eli.*;
-import codr7.eli.errors.EvalError;
 import codr7.eli.libs.core.iters.StreamItems;
-import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.IterTrait;
 
 import java.util.ArrayList;
@@ -29,6 +27,13 @@ public final class IterLib extends Lib {
                         final var out = Utils.combine(ol.toArray(IValue[]::new));
                         final Stream<IValue> s = out.map(l -> new Value<>(CoreLib.listType, new ArrayList<>(l)));
                         vm.registers.set(rResult, new Value<>(CoreLib.iterType, new StreamItems(s)));
+                    }
+                });
+
+        bindMethod("pop", new Arg[]{new Arg("in", CoreLib.iterType)},
+                (vm, args, rResult, loc) -> {
+                    if (!args[0].cast(CoreLib.iterType).next(vm, rResult, loc)) {
+                        vm.registers.set(rResult, CoreLib.NIL);
                     }
                 });
 

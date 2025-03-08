@@ -369,11 +369,14 @@ public class CoreLib extends Lib {
                         vm.doLib(null, () -> {
                             vm.currentLib.bindMacro("break", new Arg[]{new Arg("args*")},
                                     (_vm, _breakArgs, _rResult, _loc) -> {
-                                        _vm.doLib(null, () -> {
-                                            _vm.emit( new ArrayDeque<>(Arrays.asList(_breakArgs)), _rResult);
-                                        });
-
+                                        _vm.doLib(null, () -> _vm.emit(_breakArgs, _rResult));
                                         _vm.emit(new Goto(bodyEnd));
+                                    });
+
+                            vm.currentLib.bindMacro("next", new Arg[]{new Arg("args*")},
+                                    (_vm, _breakArgs, _rResult, _loc) -> {
+                                        _vm.doLib(null, () -> _vm.emit(_breakArgs, _rResult));
+                                        _vm.emit(new Goto(bodyStart));
                                     });
 
                             vm.emit(args, rResult);
@@ -507,13 +510,6 @@ public class CoreLib extends Lib {
                     vm.doLibId(id, () -> vm.emit(args, rResult));
                 });
 
-        bindMethod("next", new Arg[]{new Arg("in", iterType)},
-                (vm, args, rResult, loc) -> {
-                    if (!args[0].cast(iterType).next(vm, rResult, loc)) {
-                        vm.registers.set(rResult, CoreLib.NIL);
-                    }
-                });
-
         bindMethod("now", new Arg[]{},
                 (vm, args, rResult, loc) -> {
                     vm.registers.set(rResult, new Value<>(timestampType, LocalDateTime.now()));
@@ -621,7 +617,7 @@ public class CoreLib extends Lib {
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var start = new Label(vm.emitPc());
-                    final var end = new Label(vm.emitPc());
+                    final var end = new Label();
                     final var rCond = vm.alloc(1);
                     args.removeFirst().emit(vm, rCond);
                     vm.emit(new Branch(rCond, end, loc));
@@ -629,15 +625,19 @@ public class CoreLib extends Lib {
                     vm.doLib(null, () -> {
                         vm.currentLib.bindMacro("break", new Arg[]{new Arg("args*")},
                                 (_vm, _breakArgs, _rResult, _loc) -> {
-                                    _vm.doLib(null, () -> {
-                                        _vm.emit( new ArrayDeque<>(Arrays.asList(_breakArgs)), _rResult);
-                                    });
-
+                                    _vm.doLib(null, () -> _vm.emit(_breakArgs, _rResult));
                                     _vm.emit(new Goto(end));
+                                });
+
+                        vm.currentLib.bindMacro("next", new Arg[]{new Arg("args*")},
+                                (_vm, _breakArgs, _rResult, _loc) -> {
+                                    _vm.doLib(null, () -> _vm.emit(_breakArgs, _rResult));
+                                    _vm.emit(new Goto(start));
                                 });
 
                         vm.emit(args, rResult);
                     });
+
 
                     vm.emit(new Goto(start));
                     end.pc = vm.emitPc();
