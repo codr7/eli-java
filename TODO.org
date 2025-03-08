@@ -1,10 +1,6 @@
 fact PT1.041657052S
 fib PT1.014438102S
 
-* implement list splat
-
-[[1 2 3]*]
-
 * add next to loop bodies
 ** goto body start
 

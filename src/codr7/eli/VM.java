@@ -34,7 +34,6 @@ public final class VM {
 
     public final BitLib bitLib = new BitLib();
     public final CoreLib coreLib = new CoreLib();
-    //public final CSVLib csvLib = new CSVLib();
     public final GUILib guiLib = new GUILib();
     public final IntLib intLib = new IntLib();
     public final IterLib iterLib = new IterLib();
@@ -206,7 +205,9 @@ public final class VM {
                 case AddItem: {
                     final var op = (AddItem)opValues[pc];
                     final var t = registers.get(op.rTarget()).cast(CoreLib.listType);
-                    t.add(registers.get(op.rItem()));
+                    final var v = registers.get(op.rItem());
+                    System.out.println(v.dump(this));
+                    Value.expand(this, v, t, op.loc());
                     pc++;
                     break;
                 }

@@ -61,8 +61,6 @@ public class ListForm extends BaseForm {
         return result.toString();
     }
 
-    public Stream<IValue> itemValues(VM vm) {  return Arrays.stream(items).map(it -> it.value(vm)); }
-
     @Override public IValue quote(final VM vm, final Loc loc) {
         final var result = new ArrayList<IValue>();
         for (final var it: items) { result.add(it.quote(vm, loc)); }
@@ -70,14 +68,26 @@ public class ListForm extends BaseForm {
     }
 
     @Override public IValue rawValue(VM vm) {
-        final var vs = Arrays.stream(items).map(it -> it.rawValue(vm));
-        if (itemValues(vm).anyMatch(Objects::isNull)) { return null; }
-        return new Value<>(CoreLib.listType, new ArrayList<>(itemValues(vm).toList()));
+        final var vs = new ArrayList<IValue>();
+
+        for (final var it: items) {
+            final var v = it.rawValue(vm);
+            if (v == null) { return null; }
+            Value.expand(vm, v, vs, loc());
+        }
+
+        return new Value<>(CoreLib.listType, new ArrayList<>(vs));
     }
 
     @Override public IValue value(VM vm) {
-        final var vs = Arrays.stream(items).map(it -> it.value(vm));
-        if (itemValues(vm).anyMatch(Objects::isNull)) { return null; }
-        return new Value<>(CoreLib.listType, new ArrayList<>(itemValues(vm).toList()));
+        final var vs = new ArrayList<IValue>();
+
+        for (final var it: items) {
+            final var v = it.value(vm);
+            if (v == null) { return null; }
+            Value.expand(vm, v, vs, loc());
+        }
+
+        return new Value<>(CoreLib.listType, new ArrayList<>(vs));
     }
 }

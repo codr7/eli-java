@@ -19,14 +19,8 @@ public class SplatForm extends BaseForm {
 
     @Override
     public void emit(final VM vm, final int rResult) {
-        //final var v = value(vm);
-
-        //if (v == null) {
-            target.emit(vm, rResult);
-            vm.emit(new Splat(rResult));
-        //} else {
-        //    v.emit(vm, rResult, loc());
-        //}
+        target.emit(vm, rResult);
+        vm.emit(new Splat(rResult));
     }
 
     @Override
