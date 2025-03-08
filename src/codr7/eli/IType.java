@@ -12,7 +12,8 @@ public interface IType {
         if (isa(trait)) {
             return (U) this;
         }
-        throw new EvalError("Expected " + trait.id() + " trait: " + id(), loc);
+
+        throw new EvalError("Expected " + trait.id() + ": " + id(), loc);
     }
 
     default IValue dup(VM vm, IValue source) {

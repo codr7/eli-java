@@ -5,13 +5,13 @@ import codr7.eli.IValue;
 import codr7.eli.VM;
 import codr7.eli.Value;
 import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.NumTrait;
+import codr7.eli.libs.core.traits.Numeric;
 
 import java.math.BigDecimal;
 
 public final class FloatType
         extends BaseType<BigDecimal>
-        implements CmpTrait, NumTrait {
+        implements CmpTrait, Numeric {
     public FloatType(final String id) {
         super(id);
     }

@@ -4,16 +4,16 @@ import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.iters.ListItems;
-import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.Callable;
 import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.LenTrait;
-import codr7.eli.libs.core.traits.SeqTrait;
+import codr7.eli.libs.core.traits.Countable;
+import codr7.eli.libs.core.traits.Sequential;
 
 import java.util.ArrayList;
 
 public class ListType
         extends BaseType<ArrayList<IValue>>
-        implements CallTrait, CmpTrait, LenTrait, SeqTrait {
+        implements Callable, CmpTrait, Countable, Sequential {
     public ListType(final String id, IType... parents) {
         super(id, parents);
     }

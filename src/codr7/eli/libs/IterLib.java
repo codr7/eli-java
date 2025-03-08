@@ -2,7 +2,7 @@ package codr7.eli.libs;
 
 import codr7.eli.*;
 import codr7.eli.libs.core.iters.StreamItems;
-import codr7.eli.libs.core.traits.IterTrait;
+import codr7.eli.libs.core.traits.Iterable;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -12,10 +12,10 @@ public final class IterLib extends Lib {
         super("iter", null);
 
         bindMethod("combinations",
-                new Arg[]{new Arg("in", CoreLib.iterTrait)},
+                new Arg[]{new Arg("in", CoreLib.Iterable)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
-                    if (in.type() instanceof IterTrait it) {
+                    if (in.type() instanceof Iterable it) {
                         final var ol = new ArrayList<IValue>();
                         final var oi = it.iter(vm, in);
                         final var rValue = vm.alloc(1);
@@ -38,14 +38,14 @@ public final class IterLib extends Lib {
                 });
 
         bindMethod("reduce",
-                new Arg[]{new Arg("callback", CoreLib.callTrait),
-                        new Arg("in", CoreLib.iterTrait),
-                        new Arg("seed", CoreLib.anyType)},
+                new Arg[]{new Arg("callback", CoreLib.Callable),
+                        new Arg("in", CoreLib.Iterable),
+                        new Arg("seed", CoreLib.Any)},
                 (vm, args, rResult, loc) -> {
                     final var c = args[0];
-                    final var ct = c.type().cast(CoreLib.callTrait, loc);
+                    final var ct = c.type().cast(CoreLib.Callable, loc);
                     final var in = args[1];
-                    final var it = in.type().cast(CoreLib.iterTrait, loc);
+                    final var it = in.type().cast(CoreLib.Iterable, loc);
                     final var rArgs = vm.alloc(2);
                     vm.registers.set(rArgs, args[2]);
 
@@ -56,10 +56,10 @@ public final class IterLib extends Lib {
                     vm.registers.set(rResult, vm.registers.get(rArgs));
                 });
 
-        bindMethod("unzip", new Arg[]{new Arg("in", CoreLib.iterTrait)},
+        bindMethod("unzip", new Arg[]{new Arg("in", CoreLib.Iterable)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
-                    final var it = in.type().cast(CoreLib.iterTrait, loc);
+                    final var it = in.type().cast(CoreLib.Iterable, loc);
                     final var lvs = new ArrayList<IValue>();
                     final var rvs = new ArrayList<IValue>();
                     final var i = it.iter(vm, in);

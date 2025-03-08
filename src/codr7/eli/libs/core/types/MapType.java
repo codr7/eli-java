@@ -4,10 +4,10 @@ import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.iters.StreamItems;
-import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.Callable;
 import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.LenTrait;
-import codr7.eli.libs.core.traits.SeqTrait;
+import codr7.eli.libs.core.traits.Countable;
+import codr7.eli.libs.core.traits.Sequential;
 
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class MapType
         extends BaseType<TreeMap<IValue, IValue>>
-        implements CallTrait, CmpTrait, LenTrait, SeqTrait {
+        implements Callable, CmpTrait, Countable, Sequential {
     public MapType(final String id, IType... parents) {
         super(id, parents);
     }

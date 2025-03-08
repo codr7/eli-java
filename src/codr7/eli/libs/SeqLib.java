@@ -8,18 +8,18 @@ public final class SeqLib extends Lib {
         super("seq", null);
 
         bindMethod("head",
-                new Arg[]{new Arg("seq", CoreLib.seqTrait)},
+                new Arg[]{new Arg("seq", CoreLib.Sequential)},
                 (vm, args, rResult, loc) -> {
                     final var s = args[0];
-                    final var st = s.type().cast(CoreLib.seqTrait, loc);
+                    final var st = s.type().cast(CoreLib.Sequential, loc);
                     vm.registers.set(rResult, st.head(s));
                 });
 
         bindMethod("tail",
-                new Arg[]{new Arg("seq", CoreLib.seqTrait)},
+                new Arg[]{new Arg("seq", CoreLib.Sequential)},
                 (vm, args, rResult, loc) -> {
                     final var s = args[0];
-                    final var st = s.type().cast(CoreLib.seqTrait, loc);
+                    final var st = s.type().cast(CoreLib.Sequential, loc);
                     vm.registers.set(rResult, st.tail(s));
                 });
     }

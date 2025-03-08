@@ -20,10 +20,10 @@ public final class ListLib extends Lib {
                     vm.registers.set(rResult, new Value<>(CoreLib.listType, new ArrayList<>(Arrays.asList(vs))));
                 });
 
-        bindMethod("into", new Arg[]{new Arg("in", CoreLib.iterTrait)},
+        bindMethod("into", new Arg[]{new Arg("in", CoreLib.Iterable)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
-                    final var it = in.type().cast(CoreLib.iterTrait, loc);
+                    final var it = in.type().cast(CoreLib.Iterable, loc);
                     final var rValue = vm.alloc(1);
                     final var out = new ArrayList<IValue>();
 

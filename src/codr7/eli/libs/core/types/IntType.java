@@ -4,9 +4,9 @@ import codr7.eli.BaseType;
 import codr7.eli.IValue;
 import codr7.eli.Value;
 import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.NumTrait;
+import codr7.eli.libs.core.traits.Numeric;
 
-public final class IntType extends BaseType<Long> implements CmpTrait, NumTrait {
+public final class IntType extends BaseType<Long> implements CmpTrait, Numeric {
     public IntType(final String id) {
         super(id);
     }

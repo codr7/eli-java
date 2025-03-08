@@ -2,7 +2,7 @@ package codr7.eli;
 
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.*;
-import codr7.eli.libs.core.traits.IterTrait;
+import codr7.eli.libs.core.traits.Iterable;
 import codr7.eli.ops.Iter;
 import codr7.eli.ops.*;
 import codr7.eli.readers.*;
@@ -234,7 +234,7 @@ public final class VM {
                     }
 
                     pc++;
-                    t.type().cast(CoreLib.callTrait, op.loc()).call(this, t, op.rArguments(), op.arity(), op.rResult(), false, op.loc());
+                    t.type().cast(CoreLib.Callable, op.loc()).call(this, t, op.rArguments(), op.arity(), op.rResult(), false, op.loc());
                     break;
                 }
                 case CallValue: {
@@ -246,7 +246,7 @@ public final class VM {
                     }
 
                     pc++;
-                    t.type().cast(CoreLib.callTrait, op.loc()).call(this, t, op.rArgs(), op.arity(), op.rResult(), false, op.loc());
+                    t.type().cast(CoreLib.Callable, op.loc()).call(this, t, op.rArgs(), op.arity(), op.rResult(), false, op.loc());
                     break;
                 }
                 case Check: {
@@ -282,7 +282,7 @@ public final class VM {
                 case Iter: {
                     final var rt = (Integer) opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((IterTrait) t.type()).iter(this, t);
+                    final var it = ((Iterable) t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.iterType, it));
                     pc++;
                     break;
@@ -336,7 +336,7 @@ public final class VM {
                 case Splat: {
                     final var rt = (Integer) opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((IterTrait) t.type()).iter(this, t);
+                    final var it = ((Iterable) t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.splatType, it));
                     pc++;
                     break;

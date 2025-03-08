@@ -4,7 +4,7 @@ import codr7.eli.Arg;
 import codr7.eli.Lib;
 import codr7.eli.Value;
 import codr7.eli.errors.EvalError;
-import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.core.traits.Callable;
 import codr7.eli.libs.gui.shims.Container;
 import codr7.eli.libs.gui.shims.OpenDialog;
 import codr7.eli.libs.gui.shims.TabView;
@@ -19,14 +19,14 @@ import java.awt.*;
 import static javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION;
 
 public final class GUILib extends Lib {
-    public static final WidgetType widgetType = new WidgetType("Widget", CoreLib.anyType);
+    public static final WidgetType widgetType = new WidgetType("Widget", CoreLib.Any);
     public static final ContainerType containerType = new ContainerType("Container", widgetType);
 
     public static final ButtonType buttonType = new ButtonType("Button", containerType);
     public static final OpenDialogType openDialogType = new OpenDialogType("OpenDialog", containerType);
     public static final TabViewType tabViewType = new TabViewType("TabView", containerType);
     public static final TableType tableType = new TableType("TableView", containerType);
-    public static final ColumnType columnType = new ColumnType("Column", CoreLib.anyType);
+    public static final ColumnType columnType = new ColumnType("Column", CoreLib.Any);
     public static final FrameType frameType = new FrameType("Frame", widgetType);
 
     public GUILib() {
@@ -69,13 +69,13 @@ public final class GUILib extends Lib {
                 });
 
         bindMethod("button",
-                new Arg[]{new Arg("title", CoreLib.anyType), new Arg("on-click", CoreLib.anyType)},
+                new Arg[]{new Arg("title", CoreLib.Any), new Arg("on-click", CoreLib.Any)},
                 (vm, args, rResult, loc) -> {
                     final var title = args[0].cast(CoreLib.stringType);
                     final var b = new codr7.eli.libs.gui.shims.Button(new JButton(title));
                     final var c = args[1];
 
-                    if (c.type() instanceof CallTrait ct) {
+                    if (c.type() instanceof Callable ct) {
                         b.button.addActionListener((_) -> ct.call(vm, c, args, vm.alloc(1), true, loc));
                     } else {
                         throw new EvalError("Not callable: " + c.dump(vm), loc);

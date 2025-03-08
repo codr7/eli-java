@@ -18,7 +18,7 @@ public final class StringLib extends Lib {
                 });
 
         bindMethod("strip",
-                new Arg[]{new Arg("in", CoreLib.stringType), new Arg("it", CoreLib.anyType)},
+                new Arg[]{new Arg("in", CoreLib.stringType), new Arg("it", CoreLib.Any)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0].cast(CoreLib.stringType);
                     final var set = args[1].cast(CoreLib.charType);

@@ -36,7 +36,7 @@ public final class Arg {
     }
 
     public Arg(final String id) {
-        this(id, CoreLib.anyType);
+        this(id, CoreLib.Any);
     }
 
     public int bind(final VM vm, final IValue[] values, final int i, final int rResult, final Loc loc) {

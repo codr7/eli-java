@@ -8,6 +8,7 @@ import codr7.eli.forms.IdForm;
 import codr7.eli.forms.ListForm;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.*;
+import codr7.eli.libs.core.traits.Iterable;
 import codr7.eli.libs.core.types.*;
 import codr7.eli.ops.Iter;
 import codr7.eli.ops.*;
@@ -21,30 +22,31 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public class CoreLib extends Lib {
-    public static final TraitType<Void> anyType = new TraitType<>("Any");
-    public static final TraitType<CallTrait> callTrait = new TraitType<>("Callable");
-    public static final TraitType<IterTrait> iterTrait = new TraitType<>("Iterable");
-    public static final TraitType<LenTrait> lenTrait = new TraitType<>("Len");
-    public static final TraitType<SeqTrait> seqTrait = new TraitType<>("Seq", iterTrait);
-    public static final ListType listType = new ListType("List", callTrait, lenTrait, seqTrait);
-    public static final MapType mapType = new MapType("Map", callTrait, lenTrait, seqTrait);
-    public static final PairType pairType = new PairType("Pair", lenTrait, seqTrait);
-    public static final StringType stringType = new StringType("String", callTrait, lenTrait, seqTrait);
+    public static final TraitType<Void> Any = new TraitType<>("Any");
+    public static final TraitType<Callable> Callable = new TraitType<>("Callable");
+    public static final TraitType<Iterable> Iterable = new TraitType<>("Iterable");
+    public static final TraitType<Countable> Countable = new TraitType<>("Countable");
+    public static final TraitType<Numeric> Numeric = new TraitType<>("Numeric");
+    public static final TraitType<Sequential> Sequential = new TraitType<>("Sequential");
+
+    public static final ListType listType = new ListType("List", Callable, Countable, Iterable, Sequential);
+    public static final MapType mapType = new MapType("Map", Callable, Countable, Iterable, Sequential);
+    public static final PairType pairType = new PairType("Pair", Countable, Sequential);
+    public static final StringType stringType = new StringType("String", Callable, Countable, Iterable, Sequential);
     public static final NilType nilType = new NilType("Nil");
-    public static final MaybeType maybeType = new MaybeType("Maybe", anyType, nilType);
-    public static final TraitType<NumTrait> numType = new TraitType<>("Num", anyType);
+    public static final MaybeType maybeType = new MaybeType("Maybe", Any, nilType);
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
     public static final CharType charType = new CharType("Char");
     public static final ExprType exprType = new ExprType("Expr");
     public static final FloatType floatType = new FloatType("Float");
     public static final IntType intType = new IntType("Int");
-    public static final IterType iterType = new IterType("Iter", iterTrait);
+    public static final IterType iterType = new IterType("Iter", Iterable);
     public static final JMacroType jMacroType = new JMacroType("JMacro");
-    public static final JMethodType jMethodType = new JMethodType("JMethod", callTrait);
+    public static final JMethodType jMethodType = new JMethodType("JMethod", Callable);
     public static final LibType libType = new LibType("Lib");
     public static final MetaType metaType = new MetaType("Meta");
-    public static final MethodType methodType = new MethodType("Method", callTrait);
+    public static final MethodType methodType = new MethodType("Method", Callable);
     public static final RangeType rangeType = new RangeType("Range");
     public static final SplatType splatType = new SplatType("Splat");
     public static final SymType symType = new SymType("Sym");
@@ -58,7 +60,13 @@ public class CoreLib extends Lib {
     public CoreLib() {
         super("core", null);
 
-        bind(anyType);
+        bind(Any);
+        bind(Callable);
+        bind(Iterable);
+        bind(Countable);
+        bind(Numeric);
+        bind(Sequential);
+
         bind(bindingType);
         bind(bitType);
         bind(floatType);
@@ -74,7 +82,6 @@ public class CoreLib extends Lib {
         bind(metaType);
         bind(methodType);
         bind(nilType);
-        bind(numType);
         bind(pairType);
         bind(rangeType);
         bind(splatType);
@@ -212,7 +219,7 @@ public class CoreLib extends Lib {
                     for (var i = 1; i < args.length; i++) {
                         final var a = args[i];
 
-                        if (a.type() instanceof NumTrait nt) {
+                        if (a.type() instanceof Numeric nt) {
                             result = nt.add(result, a);
                         } else {
                             throw new EvalError("Expected num: " + a.dump(vm), loc);
@@ -228,7 +235,7 @@ public class CoreLib extends Lib {
 
                     if (args.length == 1) {
                         final var v = args[0];
-                        if (v.type() instanceof NumTrait nt) {
+                        if (v.type() instanceof Numeric nt) {
                             result = nt.sub(v);
                         } else {
                             throw new EvalError("Expected num: " + v.dump(vm), loc);
@@ -239,7 +246,7 @@ public class CoreLib extends Lib {
                         for (var i = 1; i < args.length; i++) {
                             final var a = args[i];
 
-                            if (a.type() instanceof NumTrait nt) {
+                            if (a.type() instanceof Numeric nt) {
                                 result = nt.sub(result, a);
                             } else {
                                 throw new EvalError("Expected num: " + a.dump(vm), loc);
@@ -257,7 +264,7 @@ public class CoreLib extends Lib {
                     for (var i = 1; i < args.length; i++) {
                         final var a = args[i];
 
-                        if (a.type() instanceof NumTrait nt) {
+                        if (a.type() instanceof Numeric nt) {
                             result = nt.mul(result, a);
                         } else {
                             throw new EvalError("Expected num: " + a.dump(vm), loc);
@@ -274,7 +281,7 @@ public class CoreLib extends Lib {
                     for (var i = 1; i < args.length; i++) {
                         final var a = args[i];
 
-                        if (a.type() instanceof NumTrait nt) {
+                        if (a.type() instanceof Numeric nt) {
                             result = nt.div(result, a);
                         } else {
                             throw new EvalError("Expected num: " + a.dump(vm), loc);
@@ -488,7 +495,7 @@ public class CoreLib extends Lib {
         bindMethod("len", new Arg[]{new Arg("it")},
                 (vm, args, rResult, loc) -> {
                     final var it = args[0];
-                    vm.registers.set(rResult, new Value<>(intType, (long) it.type().cast(lenTrait, loc).len(it)));
+                    vm.registers.set(rResult, new Value<>(intType, (long) it.type().cast(Countable, loc).len(it)));
                 });
 
         bindMacro("let", new Arg[]{new Arg("bindings", listType), new Arg("body*")},
@@ -632,7 +639,7 @@ public class CoreLib extends Lib {
                 });
 
         bindMacro("while",
-                new Arg[]{new Arg("cond", anyType), new Arg("body*")},
+                new Arg[]{new Arg("cond", Any), new Arg("body*")},
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
                     final var start = new Label(vm.emitPc());

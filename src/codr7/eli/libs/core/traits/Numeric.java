@@ -2,7 +2,7 @@ package codr7.eli.libs.core.traits;
 
 import codr7.eli.IValue;
 
-public interface NumTrait {
+public interface Numeric {
     IValue add(IValue lhs, IValue rhs);
 
     IValue div(IValue lhs, IValue rhs);
