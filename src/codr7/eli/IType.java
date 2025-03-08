@@ -9,7 +9,7 @@ public interface IType {
 
     default <U> U cast(final TraitType<U> trait, final Loc loc) {
         if (isa(trait)) { return (U)this; }
-        throw new EvalError("Expected " + trait.id() + ": " + id(), loc);
+        throw new EvalError("Expected " + trait.id() + " trait: " + id(), loc);
     }
 
     default IValue dup(VM vm, IValue source) { return source; }

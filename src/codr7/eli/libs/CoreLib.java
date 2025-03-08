@@ -19,7 +19,9 @@ public class CoreLib extends Lib {
     public static final TraitType<Void> anyType = new TraitType<>("Any");
     public static final TraitType<CallTrait> callTrait = new TraitType<>("Callable");
     public static final TraitType<IterTrait> iterTrait = new TraitType<>("Iterable");
+    public static final TraitType<LenTrait> lenTrait = new TraitType<>("Len");
     public static final TraitType<SeqTrait> seqTrait = new TraitType<>("Seq", iterTrait);
+
     public static final NilType nilType = new NilType("Nil");
     public static final MaybeType maybeType = new MaybeType("Maybe", anyType, nilType);
     public static final TraitType<NumTrait> numType = new TraitType<>("Num", anyType);
@@ -34,13 +36,13 @@ public class CoreLib extends Lib {
     public static final JMacroType jMacroType = new JMacroType("JMacro");
     public static final JMethodType jMethodType = new JMethodType("JMethod", callTrait);
     public static final LibType libType = new LibType("Lib");
-    public static final ListType listType = new ListType("List", callTrait, seqTrait);
-    public static final MapType mapType = new MapType("Map", callTrait, seqTrait);
+    public static final ListType listType = new ListType("List", callTrait, lenTrait, seqTrait);
+    public static final MapType mapType = new MapType("Map", callTrait, lenTrait, seqTrait);
     public static final MetaType metaType = new MetaType("Meta");
     public static final MethodType methodType = new MethodType("Method", callTrait);
-    public static final PairType pairType = new PairType("Pair", seqTrait);
+    public static final PairType pairType = new PairType("Pair", lenTrait, seqTrait);
     public static final RangeType rangeType = new RangeType("Range");
-    public static final StringType stringType = new StringType("String", callTrait, seqTrait);
+    public static final StringType stringType = new StringType("String", callTrait, lenTrait, seqTrait);
     public static final SplatType splatType = new SplatType("Splat");
     public static final SymType symType = new SymType("Sym");
     public static final TimeType timeType = new TimeType("Time");
@@ -466,12 +468,7 @@ public class CoreLib extends Lib {
         bindMethod("len", new Arg[]{new Arg("it")},
                 (vm, args, rResult, loc) -> {
             final var it = args[0];
-
-            if (it.type() instanceof SeqTrait lt) {
-                vm.registers.set(rResult, new Value<>(intType, (long) lt.len(it)));
-            } else {
-                throw new EvalError("Expected seq: " + it.dump(vm), loc);
-            }
+            vm.registers.set(rResult, new Value<>(intType, (long) it.type().cast(lenTrait, loc).len(it)));
         });
 
         bindMacro("let", new Arg[]{new Arg("bindings", listType), new Arg("body*")},

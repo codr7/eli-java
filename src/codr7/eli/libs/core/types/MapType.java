@@ -6,6 +6,7 @@ import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.iters.StreamItems;
 import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.CmpTrait;
+import codr7.eli.libs.core.traits.LenTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 
 import java.util.TreeMap;
@@ -14,7 +15,7 @@ import java.util.stream.Stream;
 
 public class MapType
         extends BaseType<TreeMap<IValue, IValue>>
-        implements CallTrait, CmpTrait, SeqTrait {
+        implements CallTrait, CmpTrait, LenTrait, SeqTrait {
     public MapType(final String id, IType...parents) { super(id, parents); }
 
     @Override

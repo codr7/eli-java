@@ -38,6 +38,7 @@ public final class VM {
     public final IntLib intLib = new IntLib();
     public final IterLib iterLib = new IterLib();
     public final ListLib listLib = new ListLib();
+    public final SeqLib seqLib = new SeqLib();
     public final StringLib stringLib = new StringLib();
     public final Lib userLib = new Lib("user", null);
 
@@ -64,11 +65,11 @@ public final class VM {
 
         userLib.bind(bitLib);
         userLib.bind(coreLib);
-        //userLib.bind(csvLib);
         userLib.bind(guiLib);
         userLib.bind(intLib);
         userLib.bind(iterLib);
         userLib.bind(listLib);
+        userLib.bind(seqLib);
         userLib.bind(stringLib);
         currentLib = userLib;
 
@@ -456,7 +457,7 @@ public final class VM {
         }
     }
 
-    private List<Call> calls = new ArrayList<>();
+    private final List<Call> calls = new ArrayList<>();
     private Op.Code[] opCodes = new Op.Code[0];
     private Object[] opValues = new Object[0];
 }

@@ -3,7 +3,8 @@ fib PT1.014438102S
 
 ELI
 
-* add head/tail methods
+* change jmethod call to take Stream<IValue> for args
+** perf
 
 * add Method support for optional args
 ** a.optional
@@ -20,9 +21,6 @@ ELI
 
 * implement composition
 ** foo & bar
-
-* pass Stream<IValue> instead of IValue[] in call methods?
-** perf
 
 * add range syntax
 ** 0..10:2

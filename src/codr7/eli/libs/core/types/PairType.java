@@ -3,9 +3,11 @@ package codr7.eli.libs.core.types;
 import codr7.eli.*;
 import codr7.eli.libs.core.iters.PairItems;
 import codr7.eli.libs.core.traits.CmpTrait;
+import codr7.eli.libs.core.traits.LenTrait;
 import codr7.eli.libs.core.traits.SeqTrait;
 
-public class PairType extends BaseType<Pair> implements CmpTrait, SeqTrait {
+public class PairType extends BaseType<Pair>
+        implements CmpTrait, LenTrait, SeqTrait {
     public PairType(final String id, final IType...parents) { super(id, parents); }
 
     @Override

@@ -1,12 +1,9 @@
 package codr7.eli.libs;
 
 import codr7.eli.*;
-import codr7.eli.libs.core.iters.StreamItems;
-import codr7.eli.libs.core.traits.IterTrait;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 public final class ListLib extends Lib {
     public ListLib() {

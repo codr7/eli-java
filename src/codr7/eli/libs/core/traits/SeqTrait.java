@@ -4,6 +4,5 @@ import codr7.eli.IValue;
 
 public interface SeqTrait extends IterTrait {
     IValue head(IValue target);
-    int len(IValue target);
     IValue tail(IValue target);
 }
