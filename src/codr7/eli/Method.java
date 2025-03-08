@@ -25,28 +25,22 @@ public record Method(String id,
     }
 
     public void call(final VM vm,
-                     final int rArgs,
-                     final int arity,
+                     final IValue[] args,
                      final int rResult,
                      final boolean eval,
                      final Loc loc) {
-        if (arity() != -1 && arity < arity()) {
+        if (arity() != -1 && args.length < arity()) {
             throw new EvalError("Not enough args: " + dump(vm), loc);
-        }
-
-        final var avs = new IValue[arity];
-
-        for (var i = 0; i < arity; i++) {
-            avs[i] = vm.registers.get(rArgs + i);
         }
 
         var rArg = this.rArgs;
         var ai = 0;
 
-        for (final var a: args) {
-            ai = a.bind(vm, avs, ai, rArg, loc);
+        for (final var a: this.args) {
+            ai = a.bind(vm, args, ai, rArg, loc);
             rArg++;
         }
+
         if (eval) {
             vm.eval(start.pc, end.pc);
 

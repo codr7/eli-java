@@ -1,8 +1,6 @@
 package codr7.eli;
 
 import codr7.eli.libs.CoreLib;
-import codr7.eli.ops.AddItem;
-import codr7.eli.ops.MakeList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +9,7 @@ public final class Arg {
     String id;
     IType type;
 
-    boolean opt = false;
+    boolean optional = false;
     boolean splat = false;
 
     public Arg(String id, final IType type) {
@@ -24,7 +22,7 @@ public final class Arg {
                     id = id.substring(0, id.length() - 1);
                     break;
                 case '?':
-                    opt = true;
+                    optional = true;
                     id = id.substring(0, id.length() - 1);
                     break;
                 default:
@@ -53,7 +51,7 @@ public final class Arg {
     public String dump(final VM vm) {
         var s = id;
         if (splat) { s = s + '*'; }
-        if (opt) { s = s + '?'; }
+        if (optional) { s = s + '?'; }
         return s;
     }
 }

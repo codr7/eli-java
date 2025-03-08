@@ -18,36 +18,9 @@ public record JMethod(String id, Arg[] args, Body body) {
     }
 
     public void call(final VM vm,
-                     final int rArgs,
-                     final int arity,
+                     final IValue[] args,
                      final int rResult,
                      final Loc loc) {
-        var args = new IValue[arity];
-        var ai = 0;
-
-        for (var i = 0; i < arity; ai++, i++) {
-            final var v = vm.registers.get(rArgs + ai);
-
-            if (v.type() == CoreLib.splatType) {
-                final var svs = new ArrayList<IValue>();
-                final var it = v.cast(CoreLib.splatType);
-                final var rValue = vm.alloc(1);
-
-                while (it.next(vm, rValue, loc)) {
-                    svs.add(vm.registers.get(rValue));
-                }
-
-                args = Arrays.copyOf(args, args.length + svs.size() - 1);
-
-                for (final var av: svs) {
-                    args[i] = av;
-                    i++;
-                }
-            } else {
-                args[i] = v;
-            }
-        }
-
         if (arity() != -1 && args.length < arity()) {
             throw new EmitError("Not enough args: " + this, loc);
         }

@@ -15,16 +15,15 @@ public class StringType extends BaseType<String> implements CallTrait, CmpTrait,
 
     @Override public void call(final VM vm,
                                final IValue target,
-                               final int rArgs,
-                               final int arity,
+                               final IValue[] args,
                                final int rResult,
                                final boolean eval,
                                final Loc loc) {
         final var t = target.cast(this);
 
-        switch (arity) {
+        switch (args.length) {
             case 1: {
-                final var i = vm.registers.get(rArgs).cast(CoreLib.intType).intValue();
+                final var i = args[0].cast(CoreLib.intType).intValue();
                 vm.registers.set(rResult, new Value<>(CoreLib.charType, t.charAt(i)));
                 break;
             }

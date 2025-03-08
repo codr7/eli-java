@@ -16,8 +16,7 @@ public final class JMacroType extends BaseType<JMacro> implements CallTrait {
     @Override
     public void call(final VM vm,
                      final IValue target,
-                     final int rArgs,
-                     final int arity,
+                     final IValue[] args,
                      final int rResult,
                      final boolean eval,
                      final Loc loc) {

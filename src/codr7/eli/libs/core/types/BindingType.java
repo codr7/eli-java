@@ -10,13 +10,12 @@ public final class BindingType extends BaseType<Binding> implements CallTrait {
 
     @Override public void call(final VM vm,
                       final IValue target,
-                      final int rArgs,
-                      final int arity,
+                      final IValue[] args,
                       final int rResult,
                       final boolean eval,
                       final Loc loc) {
         final var t = vm.registers.get(target.cast(this).rValue());
-        if (t.type() instanceof CallTrait ct) { ct.call(vm, t, rArgs, arity, rResult, eval, loc); }
+        if (t.type() instanceof CallTrait ct) { ct.call(vm, t, args, rResult, eval, loc); }
         else { throw new EvalError("Not callable: " + t.dump(vm), loc); }
     }
 

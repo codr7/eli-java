@@ -20,24 +20,23 @@ public class MapType
     @Override
     public void call(final VM vm,
                      final IValue target,
-                     final int rArgs,
-                     final int arity,
+                     final IValue[] args,
                      final int rResult,
                      final boolean eval,
                      final Loc loc) {
         final var t = target.cast(this);
 
-        switch (arity) {
+        switch (args.length) {
             case 1: {
-                final var k = vm.registers.get(rArgs);
+                final var k = args[0];
                 final var v = t.get(k);
                 vm.registers.set(rResult, (v == null) ? CoreLib.NIL : v);
                 break;
             }
 
             case 2: {
-                final var k = vm.registers.get(rArgs);
-                final var v = vm.registers.get(rArgs+1);
+                final var k = args[0];
+                final var v = args[1];
                 t.put(k, v);
                 break;
             }

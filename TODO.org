@@ -1,15 +1,7 @@
 fact PT1.041657052S
 fib PT1.014438102S
 
-* fix method arg splat
-
-(check 3
-  (^foo [x y]
-    (if (= x 1)
-      (foo [2 3]*))
-    y)
-
-  (foo 1 2))
+* check method arg splat perf
 
 * implement list splat
 
@@ -18,13 +10,13 @@ fib PT1.014438102S
 * add next to loop bodies
 ** goto body start
 
-* implement composition
-** foo & bar
-
 * add head/tail methods + tests + readme
 
 * add Method support for optional args
-** look for ? in arg assignment
+** a.optional
+
+* implement composition
+** foo & bar
 
 * add slice/splice support to list/string
 ** handle pair index with/without value

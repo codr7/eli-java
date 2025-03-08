@@ -12,7 +12,7 @@ public record JMacro(String id, Arg[] args, Body body) {
         var result = 0;
 
         for (final var a: args) {
-            if (!a.opt) { result++; }
+            if (!a.optional) { result++; }
         }
 
         return result;
