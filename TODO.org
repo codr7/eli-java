@@ -5,9 +5,6 @@ fib PT1.014438102S
 
 [[1 2 3]*]
 
-* pass Stream<IValue> instead of IValue[] in call methods?
-** perf
-
 * add next to loop bodies
 ** goto body start
 
@@ -19,14 +16,14 @@ fib PT1.014438102S
 * implement composition
 ** foo & bar
 
-* add slice/splice support to list/string
+* add slice/splice support to list/string/map
 ** handle pair index with/without value
-
-* add update support to list/string
-** handle second arg
 
 * add load macro
 ** emit setpath
+
+* pass Stream<IValue> instead of IValue[] in call methods?
+** perf
 
 * return 1/x for one arg div
 ** add one arg div to num trait
