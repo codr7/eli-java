@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
         final var vm = new VM();
-        vm.userLib.importFrom(vm.coreLib);
+        vm.homeLib.importFrom(vm.coreLib);
 
         if (args.length == 0) {
             System.out.print("eli v" + VM.VERSION + "\n\n");

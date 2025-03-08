@@ -16,25 +16,23 @@ import java.util.*;
 
 public final class VM {
     public final static int VERSION = 7;
-    public final List<Reader> suffixReaders = new ArrayList<>();
-    public final ArrayList<Op> ops = new ArrayList<>();
-    public final List<Reader> prefixReaders = new ArrayList<>();
-    public final ArrayList<IValue> registers = new ArrayList<>();
-    public final int rNull;
-    public final BitLib bitLib = new BitLib();
-    public final CoreLib coreLib = new CoreLib();
-    public final GUILib guiLib = new GUILib();
-    public final IntLib intLib = new IntLib();
-    public final IterLib iterLib = new IterLib();
-    public final ListLib listLib = new ListLib();
-    public final SeqLib seqLib = new SeqLib();
-    public final StringLib stringLib = new StringLib();
-    public final Lib userLib = new Lib("user", null);
-    private final List<Call> calls = new ArrayList<>();
+
     public boolean debug = false;
+
+    public final CoreLib coreLib = new CoreLib();
+    public final Lib homeLib = new Lib("home", null);
+    public Lib currentLib = homeLib;
+
+    public final List<Reader> prefixReaders = new ArrayList<>();
+    public final List<Reader> suffixReaders = new ArrayList<>();
+
+    public final ArrayList<Op> ops = new ArrayList<>();
+    public final ArrayList<IValue> registers = new ArrayList<>();
     public Path path = Paths.get("");
     public int pc = 0;
-    public Lib currentLib = null;
+    public final int rNull;
+
+    private final List<Call> calls = new ArrayList<>();
     private Op.Code[] opCodes = new Op.Code[0];
     private Object[] opValues = new Object[0];
 
@@ -57,15 +55,14 @@ public final class VM {
 
         rNull = alloc(1);
 
-        userLib.bind(bitLib);
-        userLib.bind(coreLib);
-        userLib.bind(guiLib);
-        userLib.bind(intLib);
-        userLib.bind(iterLib);
-        userLib.bind(listLib);
-        userLib.bind(seqLib);
-        userLib.bind(stringLib);
-        currentLib = userLib;
+        homeLib.bind(new BitLib());
+        homeLib.bind(new CoreLib());
+        homeLib.bind(new GUILib());
+        homeLib.bind(new IntLib());
+        homeLib.bind(new IterLib());
+        homeLib.bind(new ListLib());
+        homeLib.bind(new SeqLib());
+        homeLib.bind(new StringLib());
 
         initLibs();
     }
@@ -444,7 +441,7 @@ public final class VM {
     }
 
     private void initLibs() {
-        for (final var v : userLib.bindings.values()) {
+        for (final var v : homeLib.bindings.values()) {
             if (v.type() == CoreLib.Lib) {
                 v.cast(CoreLib.Lib).tryInit(this);
             }
