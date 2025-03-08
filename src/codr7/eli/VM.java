@@ -2,7 +2,7 @@ package codr7.eli;
 
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.*;
-import codr7.eli.libs.core.traits.Iterable;
+import codr7.eli.libs.core.traits.IterableTrait;
 import codr7.eli.ops.Iter;
 import codr7.eli.ops.*;
 import codr7.eli.readers.*;
@@ -15,7 +15,7 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 7;
+    public final static int VERSION = 8;
 
     public boolean debug = false;
 
@@ -279,7 +279,7 @@ public final class VM {
                 case Iter: {
                     final var rt = (Integer) opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((Iterable) t.type()).iter(this, t);
+                    final var it = ((IterableTrait) t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.Iter, it));
                     pc++;
                     break;
@@ -333,7 +333,7 @@ public final class VM {
                 case Splat: {
                     final var rt = (Integer) opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((Iterable) t.type()).iter(this, t);
+                    final var it = ((IterableTrait) t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.Splat, it));
                     pc++;
                     break;

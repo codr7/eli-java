@@ -13,7 +13,7 @@ public final class ExprType extends BaseType<IForm> {
     }
 
     @Override
-    public boolean eq(final IValue left, final IValue right) {
+    public boolean equalValues(final IValue left, final IValue right) {
         return left.cast(this).eq(right.cast(this));
     }
 

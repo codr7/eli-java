@@ -2,7 +2,7 @@ package codr7.eli.libs;
 
 import codr7.eli.*;
 import codr7.eli.libs.core.iters.StreamItems;
-import codr7.eli.libs.core.traits.Iterable;
+import codr7.eli.libs.core.traits.IterableTrait;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -15,7 +15,7 @@ public final class IterLib extends Lib {
                 new Arg[]{new Arg("in", CoreLib.Iterable)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];
-                    if (in.type() instanceof Iterable it) {
+                    if (in.type() instanceof IterableTrait it) {
                         final var ol = new ArrayList<IValue>();
                         final var oi = it.iter(vm, in);
                         final var rValue = vm.alloc(1);

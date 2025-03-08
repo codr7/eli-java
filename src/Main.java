@@ -10,10 +10,6 @@ public class Main {
         final var vm = new VM();
         vm.homeLib.importFrom(vm.coreLib);
 
-        if (args.length == 0) {
-            System.out.print("eli v" + VM.VERSION + "\n\n");
-            new REPL(vm, System.in, System.out).run();
-        } else {
             final var startPc = vm.emitPc();
             final var rResult = vm.alloc(1);
             final var as = new ArrayDeque<>(Arrays.asList(args));
@@ -39,6 +35,10 @@ public class Main {
                 break;
             }
 
+        if (as.isEmpty()) {
+            System.out.print("eli v" + VM.VERSION + "\n\n");
+            new REPL(vm, System.in, System.out).run();
+        } else {
             for (final var a : as) {
                 vm.load(Paths.get(a), rResult);
             }

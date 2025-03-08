@@ -5,7 +5,7 @@ import codr7.eli.ops.CallValue;
 
 import java.util.ArrayList;
 
-public interface Callable {
+public interface CallableTrait {
 
     default void call(final VM vm,
                       final IValue target,

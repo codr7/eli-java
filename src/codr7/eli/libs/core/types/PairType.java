@@ -2,31 +2,33 @@ package codr7.eli.libs.core.types;
 
 import codr7.eli.*;
 import codr7.eli.libs.core.iters.PairItems;
-import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.Countable;
-import codr7.eli.libs.core.traits.Sequential;
+import codr7.eli.libs.core.traits.ComparableTrait;
+import codr7.eli.libs.core.traits.CountableTrait;
+import codr7.eli.libs.core.traits.SequentialTrait;
+import codr7.eli.libs.core.traits.IterableTrait;
 
 public class PairType extends BaseType<Pair>
-        implements CmpTrait, Countable, Sequential {
+        implements ComparableTrait, CountableTrait, IterableTrait, SequentialTrait {
     public PairType(final String id, final IType... parents) {
         super(id, parents);
     }
 
     @Override
-    public int cmp(final IValue lhs, final IValue rhs) {
+    public int compareValues(final IValue lhs, final IValue rhs) {
         final var lp = lhs.cast(this);
         final var rp = rhs.cast(this);
 
-        if (lhs.type() instanceof CmpTrait ct) {
-            final var lr = ct.cmp(lp.left(), rp.left());
+        if (lhs.type() instanceof ComparableTrait ct) {
+            final var lr = ct.compareValues(lp.left(), rp.left());
+
             if (lr != 0) {
                 return lr;
             }
-            final var rr = ct.cmp(lp.right(), rp.right());
-            return rr;
+
+            return ct.compareValues(lp.right(), rp.right());
         }
 
-        return 0;
+        throw new RuntimeException("Not comparable");
     }
 
     @Override
@@ -35,7 +37,7 @@ public class PairType extends BaseType<Pair>
     }
 
     @Override
-    public boolean eq(final IValue left, final IValue right) {
+    public boolean equalValues(final IValue left, final IValue right) {
         final var lv = left.cast(this);
         final var rv = right.cast(this);
         return lv.left().equals(rv.left()) && lv.right().equals(rv.right());

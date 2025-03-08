@@ -4,16 +4,16 @@ import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.iters.ListItems;
-import codr7.eli.libs.core.traits.Callable;
-import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.Countable;
-import codr7.eli.libs.core.traits.Sequential;
+import codr7.eli.libs.core.traits.CallableTrait;
+import codr7.eli.libs.core.traits.ComparableTrait;
+import codr7.eli.libs.core.traits.CountableTrait;
+import codr7.eli.libs.core.traits.SequentialTrait;
 
 import java.util.ArrayList;
 
 public class ListType
         extends BaseType<ArrayList<IValue>>
-        implements Callable, CmpTrait, Countable, Sequential {
+        implements CallableTrait, ComparableTrait, CountableTrait, SequentialTrait {
     public ListType(final String id, IType... parents) {
         super(id, parents);
     }
@@ -45,16 +45,16 @@ public class ListType
     }
 
     @Override
-    public int cmp(final IValue lhs, final IValue rhs) {
+    public int compareValues(final IValue lhs, final IValue rhs) {
         final var ll = lhs.cast(this);
         final var rl = rhs.cast(this);
 
         for (var i = 0; i < Math.min(ll.size(), rl.size()); i++) {
             final var lv = ll.get(i);
 
-            if (lv.type() instanceof CmpTrait ct) {
+            if (lv.type() instanceof ComparableTrait ct) {
                 final var rv = rl.get(i);
-                final var r = ct.cmp(lv, rv);
+                final var r = ct.compareValues(lv, rv);
                 if (r != 0) {
                     return r;
                 }
@@ -87,7 +87,7 @@ public class ListType
     }
 
     @Override
-    public boolean eq(IValue left, IValue right) {
+    public boolean equalValues(IValue left, IValue right) {
         final var lv = left.cast(this);
         final var rv = right.cast(this);
         if (lv.size() != rv.size()) {

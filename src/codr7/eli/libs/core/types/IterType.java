@@ -1,9 +1,9 @@
 package codr7.eli.libs.core.types;
 
 import codr7.eli.*;
-import codr7.eli.libs.core.traits.Iterable;
+import codr7.eli.libs.core.traits.IterableTrait;
 
-public class IterType extends BaseType<Iter> implements Iterable {
+public class IterType extends BaseType<Iter> implements IterableTrait {
     public IterType(final String id, final IType... parentTypes) {
         super(id, parentTypes);
     }

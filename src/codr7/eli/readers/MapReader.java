@@ -24,6 +24,7 @@ public class MapReader implements Reader {
         for (; ; ) {
             WhitespaceReader.instance.read(vm, in, out, location);
             var c = in.peek();
+
             if (c == 0) {
                 throw new ReadError("Unexpected end of map", location);
             }
@@ -33,10 +34,11 @@ public class MapReader implements Reader {
                 break;
             }
 
-            if (!PairReader.instance.read(vm, in, out, location)) {
+            if (!vm.read(in, out, location)) {
                 throw new ReadError("Unexpected end of map", location);
             }
-            final var pf = (PairForm) out.removeLast();
+
+            final var pf = out.removeLast().cast(vm, PairForm.class);
             m.put(pf.left.value(vm), pf.right.value(vm));
         }
 

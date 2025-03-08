@@ -8,7 +8,7 @@ import codr7.eli.forms.IdForm;
 import codr7.eli.forms.ListForm;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.*;
-import codr7.eli.libs.core.traits.Iterable;
+import codr7.eli.libs.core.traits.IterableTrait;
 import codr7.eli.libs.core.types.*;
 import codr7.eli.ops.Iter;
 import codr7.eli.ops.*;
@@ -23,16 +23,17 @@ import java.util.regex.Pattern;
 
 public class CoreLib extends Lib {
     public static final TraitType<Void> Any = new TraitType<>("Any");
-    public static final TraitType<Callable> Callable = new TraitType<>("Callable");
-    public static final TraitType<Iterable> Iterable = new TraitType<>("Iterable");
-    public static final TraitType<Countable> Countable = new TraitType<>("Countable");
-    public static final TraitType<Numeric> Numeric = new TraitType<>("Numeric");
-    public static final TraitType<Sequential> Sequential = new TraitType<>("Sequential");
+    public static final TraitType<CallableTrait> Callable = new TraitType<>("Callable");
+    public static final TraitType<ComparableTrait> Comparable = new TraitType<>("Comparable");
+    public static final TraitType<IterableTrait> Iterable = new TraitType<>("Iterable");
+    public static final TraitType<CountableTrait> Countable = new TraitType<>("Countable");
+    public static final TraitType<NumericTrait> Numeric = new TraitType<>("Numeric", Comparable);
+    public static final TraitType<SequentialTrait> Sequential = new TraitType<>("Sequential");
 
-    public static final ListType List = new ListType("List", Callable, Countable, Iterable, Sequential);
-    public static final MapType Map = new MapType("Map", Callable, Countable, Iterable, Sequential);
-    public static final PairType Pair = new PairType("Pair", Countable, Sequential);
-    public static final StringType String = new StringType("String", Callable, Countable, Iterable, Sequential);
+    public static final ListType List = new ListType("List", Callable, Comparable, Countable, Iterable, Sequential);
+    public static final MapType Map = new MapType("Map", Callable, Comparable, Countable, Iterable, Sequential);
+    public static final PairType Pair = new PairType("Pair", Comparable, Countable, Iterable, Sequential);
+    public static final StringType String = new StringType("String", Callable, Comparable, Countable, Iterable, Sequential);
     public static final NilType Nil = new NilType("Nil");
     public static final MaybeType Maybe = new MaybeType("Maybe", Any, Nil);
     public static final BindingType Binding = new BindingType("Binding");
@@ -178,8 +179,8 @@ public class CoreLib extends Lib {
                     for (var i = 1; i < args.length; i++) {
                         final var rhs = args[i];
 
-                        if (lhs.type() instanceof CmpTrait ct) {
-                            if (ct.cmp(lhs, rhs) >= 0) {
+                        if (lhs.type() instanceof ComparableTrait ct) {
+                            if (ct.compareValues(lhs, rhs) >= 0) {
                                 result = false;
                                 break;
                             }
@@ -219,7 +220,7 @@ public class CoreLib extends Lib {
                     for (var i = 1; i < args.length; i++) {
                         final var a = args[i];
 
-                        if (a.type() instanceof Numeric nt) {
+                        if (a.type() instanceof NumericTrait nt) {
                             result = nt.add(result, a);
                         } else {
                             throw new EvalError("Expected num: " + a.dump(vm), loc);
@@ -235,7 +236,7 @@ public class CoreLib extends Lib {
 
                     if (args.length == 1) {
                         final var v = args[0];
-                        if (v.type() instanceof Numeric nt) {
+                        if (v.type() instanceof NumericTrait nt) {
                             result = nt.sub(v);
                         } else {
                             throw new EvalError("Expected num: " + v.dump(vm), loc);
@@ -246,7 +247,7 @@ public class CoreLib extends Lib {
                         for (var i = 1; i < args.length; i++) {
                             final var a = args[i];
 
-                            if (a.type() instanceof Numeric nt) {
+                            if (a.type() instanceof NumericTrait nt) {
                                 result = nt.sub(result, a);
                             } else {
                                 throw new EvalError("Expected num: " + a.dump(vm), loc);
@@ -264,7 +265,7 @@ public class CoreLib extends Lib {
                     for (var i = 1; i < args.length; i++) {
                         final var a = args[i];
 
-                        if (a.type() instanceof Numeric nt) {
+                        if (a.type() instanceof NumericTrait nt) {
                             result = nt.mul(result, a);
                         } else {
                             throw new EvalError("Expected num: " + a.dump(vm), loc);
@@ -281,7 +282,7 @@ public class CoreLib extends Lib {
                     for (var i = 1; i < args.length; i++) {
                         final var a = args[i];
 
-                        if (a.type() instanceof Numeric nt) {
+                        if (a.type() instanceof NumericTrait nt) {
                             result = nt.div(result, a);
                         } else {
                             throw new EvalError("Expected num: " + a.dump(vm), loc);

@@ -2,10 +2,10 @@ package codr7.eli.libs.core.types;
 
 import codr7.eli.*;
 import codr7.eli.errors.EvalError;
-import codr7.eli.libs.core.traits.Callable;
+import codr7.eli.libs.core.traits.CallableTrait;
 import codr7.eli.ops.Copy;
 
-public final class BindingType extends BaseType<Binding> implements Callable {
+public final class BindingType extends BaseType<Binding> implements CallableTrait {
     public BindingType(final String id) {
         super(id);
     }
@@ -18,7 +18,7 @@ public final class BindingType extends BaseType<Binding> implements Callable {
                      final boolean eval,
                      final Loc loc) {
         final var t = vm.registers.get(target.cast(this).rValue());
-        if (t.type() instanceof Callable ct) {
+        if (t.type() instanceof CallableTrait ct) {
             ct.call(vm, t, args, rResult, eval, loc);
         } else {
             throw new EvalError("Not callable: " + t.dump(vm), loc);

@@ -4,7 +4,7 @@ import codr7.eli.Arg;
 import codr7.eli.Lib;
 import codr7.eli.Value;
 import codr7.eli.errors.EvalError;
-import codr7.eli.libs.core.traits.Callable;
+import codr7.eli.libs.core.traits.CallableTrait;
 import codr7.eli.libs.gui.shims.Container;
 import codr7.eli.libs.gui.shims.OpenDialog;
 import codr7.eli.libs.gui.shims.TabView;
@@ -75,7 +75,7 @@ public final class GUILib extends Lib {
                     final var b = new codr7.eli.libs.gui.shims.Button(new JButton(title));
                     final var c = args[1];
 
-                    if (c.type() instanceof Callable ct) {
+                    if (c.type() instanceof CallableTrait ct) {
                         b.button.addActionListener((_) -> ct.call(vm, c, args, vm.alloc(1), true, loc));
                     } else {
                         throw new EvalError("Not callable: " + c.dump(vm), loc);

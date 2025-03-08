@@ -5,12 +5,12 @@ import codr7.eli.errors.EmitError;
 import codr7.eli.forms.LiteralForm;
 import codr7.eli.forms.SplatForm;
 import codr7.eli.libs.CoreLib;
-import codr7.eli.libs.core.traits.Callable;
-import codr7.eli.libs.core.traits.Iterable;
+import codr7.eli.libs.core.traits.CallableTrait;
+import codr7.eli.libs.core.traits.IterableTrait;
 
 import java.util.ArrayList;
 
-public final class JMacroType extends BaseType<JMacro> implements Callable {
+public final class JMacroType extends BaseType<JMacro> implements CallableTrait {
     public JMacroType(final String id) {
         super(id);
     }
@@ -47,7 +47,7 @@ public final class JMacroType extends BaseType<JMacro> implements Callable {
                 if (t == null) {
                     throw new EmitError("Invalid splat: " + sf.target.dump(vm), loc);
                 }
-                final var it = ((Iterable) t.type()).iter(vm, t);
+                final var it = ((IterableTrait) t.type()).iter(vm, t);
 
                 while (it.next(vm, rIt, sf.target.loc())) {
                     final var v = vm.registers.get(rIt);

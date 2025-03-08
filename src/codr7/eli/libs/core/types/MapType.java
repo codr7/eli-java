@@ -4,10 +4,7 @@ import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.iters.StreamItems;
-import codr7.eli.libs.core.traits.Callable;
-import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.Countable;
-import codr7.eli.libs.core.traits.Sequential;
+import codr7.eli.libs.core.traits.*;
 
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -15,7 +12,7 @@ import java.util.stream.Stream;
 
 public class MapType
         extends BaseType<TreeMap<IValue, IValue>>
-        implements Callable, CmpTrait, Countable, Sequential {
+        implements CallableTrait, ComparableTrait, CountableTrait, IterableTrait, SequentialTrait {
     public MapType(final String id, IType... parents) {
         super(id, parents);
     }
@@ -50,7 +47,7 @@ public class MapType
     }
 
     @Override
-    public int cmp(final IValue lhs, final IValue rhs) {
+    public int compareValues(final IValue lhs, final IValue rhs) {
         final var lm = lhs.cast(this);
         final var rm = rhs.cast(this);
         final var lks = lm.navigableKeySet().iterator();
@@ -64,8 +61,8 @@ public class MapType
                 throw new RuntimeException("Type mismatch: " + lk.type().id() + '/' + rk.type().id());
             }
 
-            if (lk.type() instanceof CmpTrait ct) {
-                final var r = ct.cmp(lk, rk);
+            if (lk.type() instanceof ComparableTrait ct) {
+                final var r = ct.compareValues(lk, rk);
                 if (r != 0) {
                     return r;
                 }
@@ -90,7 +87,7 @@ public class MapType
     }
 
     @Override
-    public boolean eq(IValue left, IValue right) {
+    public boolean equalValues(IValue left, IValue right) {
         final var lm = left.cast(this);
         final var rm = right.cast(this);
         if (lm.size() != rm.size()) {

@@ -3,6 +3,9 @@ fib PT1.014438102S
 
 ELI
 
+* add MapForm
+** fix reader
+
 * change jmethod call to take Stream<IValue> for args
 ** perf
 

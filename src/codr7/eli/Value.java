@@ -34,7 +34,7 @@ public record Value<T>(IDataType<T> type, T data) implements IValue {
     }
 
     public boolean eq(final IValue other) {
-        return other instanceof IValue v && v.type() == type && type.eq(this, other);
+        return other instanceof IValue v && v.type() == type && type.equalValues(this, other);
     }
 
     public void emit(final VM vm, final int rResult, final Loc loc) {

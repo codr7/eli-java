@@ -3,10 +3,10 @@ package codr7.eli.libs.core.types;
 import codr7.eli.BaseType;
 import codr7.eli.IValue;
 import codr7.eli.Value;
-import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.Numeric;
+import codr7.eli.libs.core.traits.ComparableTrait;
+import codr7.eli.libs.core.traits.NumericTrait;
 
-public final class IntType extends BaseType<Long> implements CmpTrait, Numeric {
+public final class IntType extends BaseType<Long> implements ComparableTrait, NumericTrait {
     public IntType(final String id) {
         super(id);
     }
@@ -17,7 +17,7 @@ public final class IntType extends BaseType<Long> implements CmpTrait, Numeric {
     }
 
     @Override
-    public int cmp(final IValue lhs, final IValue rhs) {
+    public int compareValues(final IValue lhs, final IValue rhs) {
         return lhs.cast(this).compareTo(rhs.cast(this));
     }
 

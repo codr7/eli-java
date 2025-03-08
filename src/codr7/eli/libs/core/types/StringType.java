@@ -4,13 +4,10 @@ import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.libs.core.iters.StringChars;
-import codr7.eli.libs.core.traits.Callable;
-import codr7.eli.libs.core.traits.CmpTrait;
-import codr7.eli.libs.core.traits.Countable;
-import codr7.eli.libs.core.traits.Sequential;
+import codr7.eli.libs.core.traits.*;
 
 public class StringType extends BaseType<String>
-        implements Callable, CmpTrait, Countable, Sequential {
+        implements CallableTrait, ComparableTrait, CountableTrait, IterableTrait, SequentialTrait {
     public StringType(final String id, final IType... parents) {
         super(id, parents);
     }
@@ -36,7 +33,7 @@ public class StringType extends BaseType<String>
     }
 
     @Override
-    public int cmp(final IValue lhs, final IValue rhs) {
+    public int compareValues(final IValue lhs, final IValue rhs) {
         return lhs.cast(this).compareTo(rhs.cast(this));
     }
 

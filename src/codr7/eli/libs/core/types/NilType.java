@@ -3,16 +3,11 @@ package codr7.eli.libs.core.types;
 import codr7.eli.BaseType;
 import codr7.eli.IValue;
 import codr7.eli.VM;
-import codr7.eli.libs.core.traits.CmpTrait;
+import codr7.eli.libs.core.traits.ComparableTrait;
 
-public final class NilType extends BaseType<Object> implements CmpTrait {
+public final class NilType extends BaseType<Object> {
     public NilType(final String id) {
         super(id);
-    }
-
-    @Override
-    public int cmp(final IValue lhs, final IValue rhs) {
-        return lhs.type().id().compareTo(rhs.type().id());
     }
 
     @Override
@@ -21,7 +16,7 @@ public final class NilType extends BaseType<Object> implements CmpTrait {
     }
 
     @Override
-    public boolean eq(final IValue left, final IValue right) {
+    public boolean equalValues(final IValue left, final IValue right) {
         return true;
     }
 

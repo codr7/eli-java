@@ -38,7 +38,7 @@ public abstract class BaseType<T> implements IDataType<T> {
     }
 
     @Override
-    public boolean eq(IValue left, IValue right) {
+    public boolean equalValues(IValue left, IValue right) {
         final var lv = left.cast(this);
         final var rv = right.cast(this);
         return Objects.equals(lv, rv);

@@ -26,7 +26,7 @@ public interface IType {
         vm.emit(new Put(rResult, value, loc));
     }
 
-    boolean eq(IValue left, IValue right);
+    boolean equalValues(IValue left, IValue right);
 
     String id();
 

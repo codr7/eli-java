@@ -3,15 +3,15 @@ package codr7.eli.libs.core.types;
 import codr7.eli.BaseType;
 import codr7.eli.IValue;
 import codr7.eli.VM;
-import codr7.eli.libs.core.traits.CmpTrait;
+import codr7.eli.libs.core.traits.ComparableTrait;
 
-public final class SymType extends BaseType<String> implements CmpTrait {
+public final class SymType extends BaseType<String> implements ComparableTrait {
     public SymType(final String id) {
         super(id);
     }
 
     @Override
-    public int cmp(final IValue lhs, final IValue rhs) {
+    public int compareValues(final IValue lhs, final IValue rhs) {
         return lhs.cast(this).compareTo(rhs.cast(this));
     }
 
