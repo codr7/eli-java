@@ -10,25 +10,25 @@ public final class BitLib extends Lib {
         super("bit", null);
 
         bindMethod("<<",
-                new Arg[]{new Arg("value", CoreLib.intType), new Arg("n", CoreLib.intType)},
+                new Arg[]{new Arg("value", CoreLib.Int), new Arg("n", CoreLib.Int)},
                 (vm, args, rResult, loc) -> {
-                    final var v = args[0].cast(CoreLib.intType);
-                    final var n = args[0].cast(CoreLib.intType);
-                    vm.registers.set(rResult, new Value<>(CoreLib.intType, v << n));
+                    final var v = args[0].cast(CoreLib.Int);
+                    final var n = args[0].cast(CoreLib.Int);
+                    vm.registers.set(rResult, new Value<>(CoreLib.Int, v << n));
                 });
 
         bindMethod(">>",
-                new Arg[]{new Arg("value", CoreLib.intType), new Arg("n", CoreLib.intType)},
+                new Arg[]{new Arg("value", CoreLib.Int), new Arg("n", CoreLib.Int)},
                 (vm, args, rResult, loc) -> {
-                    final var v = args[0].cast(CoreLib.intType);
-                    final var n = args[0].cast(CoreLib.intType);
-                    vm.registers.set(rResult, new Value<>(CoreLib.intType, v >>> n));
+                    final var v = args[0].cast(CoreLib.Int);
+                    final var n = args[0].cast(CoreLib.Int);
+                    vm.registers.set(rResult, new Value<>(CoreLib.Int, v >>> n));
                 });
 
-        bindMethod("len", new Arg[]{new Arg("value", CoreLib.intType)},
+        bindMethod("len", new Arg[]{new Arg("value", CoreLib.Int)},
                 (vm, args, rResult, loc) -> {
-                    final var v = args[0].cast(CoreLib.intType).intValue();
-                    vm.registers.set(rResult, new Value<>(CoreLib.intType, (long) Utils.log2(v)));
+                    final var v = args[0].cast(CoreLib.Int).intValue();
+                    vm.registers.set(rResult, new Value<>(CoreLib.Int, (long) Utils.log2(v)));
                 });
     }
 }

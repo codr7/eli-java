@@ -9,21 +9,21 @@ public final class StringLib extends Lib {
         super("string", null);
 
         bindMethod("find",
-                new Arg[]{new Arg("in", CoreLib.stringType), new Arg("it", CoreLib.stringType)},
+                new Arg[]{new Arg("in", CoreLib.String), new Arg("it", CoreLib.String)},
                 (vm, args, rResult, loc) -> {
-                    final var in = args[0].cast(CoreLib.stringType);
-                    final var it = args[0].cast(CoreLib.stringType);
+                    final var in = args[0].cast(CoreLib.String);
+                    final var it = args[0].cast(CoreLib.String);
                     final var i = in.indexOf(it);
-                    vm.registers.set(rResult, (i == -1) ? CoreLib.NIL : new Value<>(CoreLib.intType, (long) i));
+                    vm.registers.set(rResult, (i == -1) ? CoreLib.NIL : new Value<>(CoreLib.Int, (long) i));
                 });
 
         bindMethod("strip",
-                new Arg[]{new Arg("in", CoreLib.stringType), new Arg("it", CoreLib.Any)},
+                new Arg[]{new Arg("in", CoreLib.String), new Arg("it", CoreLib.Any)},
                 (vm, args, rResult, loc) -> {
-                    final var in = args[0].cast(CoreLib.stringType);
-                    final var set = args[1].cast(CoreLib.charType);
+                    final var in = args[0].cast(CoreLib.String);
+                    final var set = args[1].cast(CoreLib.Char);
                     final var out = in.replaceAll("[" + set + "]", "");
-                    vm.registers.set(rResult, new Value<>(CoreLib.stringType, out));
+                    vm.registers.set(rResult, new Value<>(CoreLib.String, out));
                 });
     }
 }

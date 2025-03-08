@@ -44,7 +44,7 @@ public class SplatForm extends BaseForm {
 
         if (v != null && v.type() instanceof Iterable t) {
             final var it = t.iter(vm, v);
-            return new Value<>(CoreLib.splatType, it);
+            return new Value<>(CoreLib.Splat, it);
         }
 
         return null;

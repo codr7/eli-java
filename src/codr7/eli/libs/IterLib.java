@@ -25,14 +25,14 @@ public final class IterLib extends Lib {
                         }
 
                         final var out = Utils.combine(ol.toArray(IValue[]::new));
-                        final Stream<IValue> s = out.map(l -> new Value<>(CoreLib.listType, new ArrayList<>(l)));
-                        vm.registers.set(rResult, new Value<>(CoreLib.iterType, new StreamItems(s)));
+                        final Stream<IValue> s = out.map(l -> new Value<>(CoreLib.List, new ArrayList<>(l)));
+                        vm.registers.set(rResult, new Value<>(CoreLib.Iter, new StreamItems(s)));
                     }
                 });
 
-        bindMethod("pop", new Arg[]{new Arg("in", CoreLib.iterType)},
+        bindMethod("pop", new Arg[]{new Arg("in", CoreLib.Iter)},
                 (vm, args, rResult, loc) -> {
-                    if (!args[0].cast(CoreLib.iterType).next(vm, rResult, loc)) {
+                    if (!args[0].cast(CoreLib.Iter).next(vm, rResult, loc)) {
                         vm.registers.set(rResult, CoreLib.NIL);
                     }
                 });
@@ -66,15 +66,15 @@ public final class IterLib extends Lib {
                     final var rValue = vm.alloc(1);
 
                     while (i.next(vm, rValue, loc)) {
-                        final var p = vm.registers.get(rValue).cast(CoreLib.pairType);
+                        final var p = vm.registers.get(rValue).cast(CoreLib.Pair);
                         lvs.add(p.left());
                         rvs.add(p.right());
                     }
 
                     vm.registers.set(rResult,
-                            new Value<>(CoreLib.pairType,
-                                    new Pair(new Value<>(CoreLib.listType, lvs),
-                                            new Value<>(CoreLib.listType, rvs))));
+                            new Value<>(CoreLib.Pair,
+                                    new Pair(new Value<>(CoreLib.List, lvs),
+                                            new Value<>(CoreLib.List, rvs))));
                 });
     }
 

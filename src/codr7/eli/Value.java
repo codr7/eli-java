@@ -9,9 +9,9 @@ public record Value<T>(IDataType<T> type, T data) implements IValue {
                               final IValue value,
                               final List<IValue> out,
                               final Loc loc) {
-        if (value.type() == CoreLib.splatType) {
+        if (value.type() == CoreLib.Splat) {
             final var rValue = vm.alloc(1);
-            final var it = value.cast(CoreLib.splatType);
+            final var it = value.cast(CoreLib.Splat);
 
             while (it.next(vm, rValue, loc)) {
                 expand(vm, vm.registers.get(rValue), out, loc);

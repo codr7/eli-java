@@ -17,7 +17,7 @@ public class IdForm extends BaseForm {
 
         if (i > 0) {
             final var lid = id.substring(0, i);
-            final var l = lib.find(lid).cast(CoreLib.libType);
+            final var l = lib.find(lid).cast(CoreLib.Lib);
             if (l == null) {
                 throw new EmitError("Unknown id: " + l + "/" + lid, loc);
             }
@@ -38,14 +38,14 @@ public class IdForm extends BaseForm {
 
     @Override
     public void bindRegister(final VM vm, final int rValue, final Loc loc) {
-        vm.currentLib.bind(id, new Value<>(CoreLib.bindingType, new Binding(null, rValue)));
+        vm.currentLib.bind(id, new Value<>(CoreLib.Binding, new Binding(null, rValue)));
     }
 
     @Override
     public void bindValue(final VM vm, final IValue value, final Loc loc) {
         final var rValue = vm.alloc(1);
         vm.registers.set(rValue, value);
-        vm.currentLib.bind(id, new Value<>(CoreLib.bindingType, new Binding(value.type(), rValue)));
+        vm.currentLib.bind(id, new Value<>(CoreLib.Binding, new Binding(value.type(), rValue)));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class IdForm extends BaseForm {
 
     @Override
     public IValue quote(final VM vm, final Loc loc) {
-        return new Value<>(CoreLib.symType, id);
+        return new Value<>(CoreLib.Sym, id);
     }
 
     @Override

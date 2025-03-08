@@ -44,7 +44,7 @@ public class IntReader implements Reader {
             loc.update(c);
         }
 
-        out.addLast(new LiteralForm(new Value<>(CoreLib.intType, isNeg ? -v : v), loc));
+        out.addLast(new LiteralForm(new Value<>(CoreLib.Int, isNeg ? -v : v), loc));
         return true;
     }
 }

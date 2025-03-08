@@ -16,7 +16,7 @@ public class CharReader implements Reader {
         final var floc = loc.dup();
         loc.update(in.pop());
         final var c = in.pop();
-        out.addLast(new LiteralForm(new Value<>(CoreLib.charType, c), floc));
+        out.addLast(new LiteralForm(new Value<>(CoreLib.Char, c), floc));
         return true;
     }
 }

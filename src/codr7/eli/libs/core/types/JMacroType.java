@@ -52,8 +52,8 @@ public final class JMacroType extends BaseType<JMacro> implements Callable {
                 while (it.next(vm, rIt, sf.target.loc())) {
                     final var v = vm.registers.get(rIt);
 
-                    if (v.type() == CoreLib.exprType) {
-                        args.add(v.cast(CoreLib.exprType));
+                    if (v.type() == CoreLib.Expr) {
+                        args.add(v.cast(CoreLib.Expr));
                     } else {
                         args.add(new LiteralForm(v, loc));
                     }

@@ -13,11 +13,11 @@ public final class ListLib extends Lib {
         super("list", null);
 
         bindMethod("alloc",
-                new Arg[]{new Arg("n", CoreLib.intType)},
+                new Arg[]{new Arg("n", CoreLib.Int)},
                 (vm, args, rResult, loc) -> {
-                    final var vs = new IValue[args[0].cast(CoreLib.intType).intValue()];
+                    final var vs = new IValue[args[0].cast(CoreLib.Int).intValue()];
                     Arrays.fill(vs, CoreLib.NIL);
-                    vm.registers.set(rResult, new Value<>(CoreLib.listType, new ArrayList<>(Arrays.asList(vs))));
+                    vm.registers.set(rResult, new Value<>(CoreLib.List, new ArrayList<>(Arrays.asList(vs))));
                 });
 
         bindMethod("into", new Arg[]{new Arg("in", CoreLib.Iterable)},
@@ -31,13 +31,13 @@ public final class ListLib extends Lib {
                         out.add(vm.registers.get(rValue));
                     }
 
-                    vm.registers.set(rResult, new Value<>(CoreLib.listType, out));
+                    vm.registers.set(rResult, new Value<>(CoreLib.List, out));
                 });
 
         bindMethod("push",
-                new Arg[]{new Arg("list", CoreLib.listType), new Arg("value")},
+                new Arg[]{new Arg("list", CoreLib.List), new Arg("value")},
                 (vm, args, rResult, loc) -> {
-                    args[0].cast(CoreLib.listType).add(args[1]);
+                    args[0].cast(CoreLib.List).add(args[1]);
                 });
     }
 }

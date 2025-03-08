@@ -49,10 +49,10 @@ public final class GUILib extends Lib {
                 });
 
         bindMethod("add-column",
-                new Arg[]{new Arg("table", tableType), new Arg("title", CoreLib.stringType)},
+                new Arg[]{new Arg("table", tableType), new Arg("title", CoreLib.String)},
                 (vm, args, rResult, location) -> {
                     final var table = args[0].cast(tableType).table();
-                    final var title = args[1].cast(CoreLib.stringType);
+                    final var title = args[1].cast(CoreLib.String);
                     final var c = new TableColumn();
                     c.setHeaderValue(title);
                     table.addColumn(c);
@@ -60,10 +60,10 @@ public final class GUILib extends Lib {
 
         bindMethod("add-tab",
                 new Arg[]{new Arg("parent", tabViewType),
-                        new Arg("title", CoreLib.stringType),
+                        new Arg("title", CoreLib.String),
                         new Arg("child", widgetType)},
                 (vm, args, rResult, location) -> {
-                    final var title = args[1].cast(CoreLib.stringType);
+                    final var title = args[1].cast(CoreLib.String);
                     final var child = args[2].cast(widgetType);
                     args[0].cast(tabViewType).tabbedPane.add(title, child.component());
                 });
@@ -71,7 +71,7 @@ public final class GUILib extends Lib {
         bindMethod("button",
                 new Arg[]{new Arg("title", CoreLib.Any), new Arg("on-click", CoreLib.Any)},
                 (vm, args, rResult, loc) -> {
-                    final var title = args[0].cast(CoreLib.stringType);
+                    final var title = args[0].cast(CoreLib.String);
                     final var b = new codr7.eli.libs.gui.shims.Button(new JButton(title));
                     final var c = args[1];
 
@@ -97,28 +97,28 @@ public final class GUILib extends Lib {
                 });
 
         bindMethod("frame",
-                new Arg[]{new Arg("title", CoreLib.stringType), new Arg("size", CoreLib.pairType)},
+                new Arg[]{new Arg("title", CoreLib.String), new Arg("size", CoreLib.Pair)},
                 (vm, args, rResult, loc) -> {
-                    final var title = args[0].cast(CoreLib.stringType);
+                    final var title = args[0].cast(CoreLib.String);
                     final var f = new JFrame(title);
-                    final var size = args[1].cast(CoreLib.pairType);
-                    final var width = size.left().cast(CoreLib.intType).intValue();
-                    final var height = size.right().cast(CoreLib.intType).intValue();
+                    final var size = args[1].cast(CoreLib.Pair);
+                    final var width = size.left().cast(CoreLib.Int).intValue();
+                    final var height = size.right().cast(CoreLib.Int).intValue();
                     f.setPreferredSize(new Dimension(width, height));
                     f.setLocationRelativeTo(null);
                     vm.registers.set(rResult, new Value<>(frameType, new codr7.eli.libs.gui.shims.Frame(f)));
                 });
 
         bindMethod("open-file",
-                new Arg[]{new Arg("parent", widgetType), new Arg("filters", CoreLib.listType)},
+                new Arg[]{new Arg("parent", widgetType), new Arg("filters", CoreLib.List)},
                 (vm, args, rResult, loc) -> {
                     final var d = new OpenDialog(new JFileChooser());
 
                     if (args.length > 1) {
-                        for (final var f : args[1].cast(CoreLib.listType)) {
-                            final var fp = f.cast(CoreLib.pairType);
-                            final var ext = fp.left().cast(CoreLib.symType);
-                            final var inf = fp.right().cast(CoreLib.stringType);
+                        for (final var f : args[1].cast(CoreLib.List)) {
+                            final var fp = f.cast(CoreLib.Pair);
+                            final var ext = fp.left().cast(CoreLib.Sym);
+                            final var inf = fp.right().cast(CoreLib.String);
                             d.fileChooser.setFileFilter(new FileNameExtensionFilter(inf, ext));
                         }
                     }
@@ -127,7 +127,7 @@ public final class GUILib extends Lib {
 
                     if (d.fileChooser.showOpenDialog(parent.component()) == JFileChooser.APPROVE_OPTION) {
                         vm.registers.set(rResult,
-                                new Value<>(CoreLib.stringType,
+                                new Value<>(CoreLib.String,
                                         d.fileChooser.getSelectedFile().getName()));
                     } else {
                         vm.registers.set(rResult, CoreLib.NIL);

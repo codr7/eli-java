@@ -49,7 +49,7 @@ public interface IForm {
         if (v == null) {
             throw new EmitError("Expected type: " + dump(vm), loc);
         }
-        final var t = v.cast(CoreLib.metaType);
+        final var t = v.cast(CoreLib.Meta);
         if (t == null) {
             throw new EmitError("Expected type: " + dump(vm), loc);
         }
@@ -65,7 +65,7 @@ public interface IForm {
     String dump(VM vm);
 
     default IValue quote(final VM vm, final Loc loc) {
-        return new Value<>(CoreLib.exprType, new QuoteForm(this, loc));
+        return new Value<>(CoreLib.Expr, new QuoteForm(this, loc));
     }
 
     IValue rawValue(VM vm);
@@ -80,6 +80,6 @@ public interface IForm {
 
     default IValue value(final VM vm) {
         final var v = rawValue(vm);
-        return (v == null || v.type() == CoreLib.bindingType) ? null : v;
+        return (v == null || v.type() == CoreLib.Binding) ? null : v;
     }
 }

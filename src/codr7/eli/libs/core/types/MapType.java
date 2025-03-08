@@ -116,7 +116,7 @@ public class MapType
         final Stream<IValue> s = target.cast(this)
                 .entrySet()
                 .stream()
-                .map(e -> new Value<>(CoreLib.pairType, new Pair(e.getKey(), e.getValue())));
+                .map(e -> new Value<>(CoreLib.Pair, new Pair(e.getKey(), e.getValue())));
 
         return new StreamItems(s);
     }
@@ -130,7 +130,7 @@ public class MapType
         }
 
         final var e = t.firstEntry();
-        return new Value<>(CoreLib.pairType, new Pair(e.getKey(), e.getValue()));
+        return new Value<>(CoreLib.Pair, new Pair(e.getKey(), e.getValue()));
     }
 
     @Override

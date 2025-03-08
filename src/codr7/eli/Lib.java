@@ -32,23 +32,23 @@ public class Lib {
     }
 
     public void bind(final IType value) {
-        bind(value.id(), CoreLib.metaType, value);
+        bind(value.id(), CoreLib.Meta, value);
     }
 
     public void bind(final JMacro value) {
-        bind(value.id(), CoreLib.jMacroType, value);
+        bind(value.id(), CoreLib.JMacro, value);
     }
 
     public void bind(final JMethod value) {
-        bind(value.id(), CoreLib.jMethodType, value);
+        bind(value.id(), CoreLib.JMethod, value);
     }
 
     public void bind(final Lib value) {
-        bind(value.id, CoreLib.libType, value);
+        bind(value.id, CoreLib.Lib, value);
     }
 
     public void bind(final Method value) {
-        bind(value.id(), CoreLib.methodType, value);
+        bind(value.id(), CoreLib.Method, value);
     }
 
     public boolean drop(final String id) {

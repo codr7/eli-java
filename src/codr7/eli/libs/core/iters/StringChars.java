@@ -25,7 +25,7 @@ public final class StringChars implements Iter {
             return false;
         }
         if (rResult != -1) {
-            vm.registers.set(rResult, new Value<>(CoreLib.charType, s.charAt(i)));
+            vm.registers.set(rResult, new Value<>(CoreLib.Char, s.charAt(i)));
         }
         i++;
         return true;

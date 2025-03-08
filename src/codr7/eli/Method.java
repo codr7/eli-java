@@ -2,7 +2,7 @@ package codr7.eli;
 
 import codr7.eli.errors.EvalError;
 
-import static codr7.eli.libs.CoreLib.bindingType;
+import static codr7.eli.libs.CoreLib.Binding;
 
 public record Method(String id,
                      Arg[] args, int rArgs,
@@ -21,7 +21,7 @@ public record Method(String id,
     public void bindArgs(final VM vm) {
         for (var i = 0; i < args.length; i++) {
             final var ma = args[i];
-            vm.currentLib.bind(ma.id, bindingType, new Binding(null, rArgs + i));
+            vm.currentLib.bind(ma.id, Binding, new Binding(null, rArgs + i));
         }
     }
 

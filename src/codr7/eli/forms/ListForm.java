@@ -73,7 +73,7 @@ public class ListForm extends BaseForm {
         for (final var it : items) {
             result.add(it.quote(vm, loc));
         }
-        return new Value<>(CoreLib.listType, result);
+        return new Value<>(CoreLib.List, result);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ListForm extends BaseForm {
             Value.expand(vm, v, vs, loc());
         }
 
-        return new Value<>(CoreLib.listType, new ArrayList<>(vs));
+        return new Value<>(CoreLib.List, new ArrayList<>(vs));
     }
 
     @Override
@@ -103,6 +103,6 @@ public class ListForm extends BaseForm {
             Value.expand(vm, v, vs, loc());
         }
 
-        return new Value<>(CoreLib.listType, new ArrayList<>(vs));
+        return new Value<>(CoreLib.List, new ArrayList<>(vs));
     }
 }

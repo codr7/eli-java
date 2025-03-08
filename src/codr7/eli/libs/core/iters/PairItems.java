@@ -25,8 +25,8 @@ public final class PairItems implements Iter {
         }
         IValue v;
 
-        if (head.type() == CoreLib.pairType) {
-            final var p = head.cast(CoreLib.pairType);
+        if (head.type() == CoreLib.Pair) {
+            final var p = head.cast(CoreLib.Pair);
             v = p.left();
             head = p.right();
         } else {

@@ -101,9 +101,9 @@ public final class VM {
 
         if (v == null) {
             lib = new Lib(id, currentLib);
-            currentLib.bind(id, new Value<>(CoreLib.libType, lib));
+            currentLib.bind(id, new Value<>(CoreLib.Lib, lib));
         } else {
-            lib = v.cast(CoreLib.libType);
+            lib = v.cast(CoreLib.Lib);
         }
 
         doLib(lib, body);
@@ -199,7 +199,7 @@ public final class VM {
             switch (opCodes[pc]) {
                 case AddItem: {
                     final var op = (AddItem) opValues[pc];
-                    final var t = registers.get(op.rTarget()).cast(CoreLib.listType);
+                    final var t = registers.get(op.rTarget()).cast(CoreLib.List);
                     final var v = registers.get(op.rItem());
                     System.out.println(v.dump(this));
                     Value.expand(this, v, t, op.loc());
@@ -216,7 +216,7 @@ public final class VM {
                     }
 
                     final var elapsed = Duration.ofNanos(System.nanoTime() - started);
-                    registers.set(op.rResult(), new Value<>(CoreLib.timeType, elapsed));
+                    registers.set(op.rResult(), new Value<>(CoreLib.Time, elapsed));
                     pc = op.bodyEnd().pc;
                     break;
                 }
@@ -229,8 +229,8 @@ public final class VM {
                     final var op = (CallRegister) opValues[pc];
                     var t = registers.get(op.rTarget());
 
-                    if (t.type() == CoreLib.bindingType) {
-                        t = registers.get(t.cast(CoreLib.bindingType).rValue());
+                    if (t.type() == CoreLib.Binding) {
+                        t = registers.get(t.cast(CoreLib.Binding).rValue());
                     }
 
                     pc++;
@@ -241,8 +241,8 @@ public final class VM {
                     final var op = (CallValue) opValues[pc];
                     var t = op.target();
 
-                    if (t.type() == CoreLib.bindingType) {
-                        t = registers.get(t.cast(CoreLib.bindingType).rValue());
+                    if (t.type() == CoreLib.Binding) {
+                        t = registers.get(t.cast(CoreLib.Binding).rValue());
                     }
 
                     pc++;
@@ -274,8 +274,8 @@ public final class VM {
                     break;
                 case Inc: {
                     final var op = (Inc) opValues[pc];
-                    final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
-                    registers.set(op.rTarget(), new Value<>(CoreLib.intType, v + op.delta()));
+                    final var v = registers.get(op.rTarget()).cast(CoreLib.Int);
+                    registers.set(op.rTarget(), new Value<>(CoreLib.Int, v + op.delta()));
                     pc++;
                     break;
                 }
@@ -283,24 +283,24 @@ public final class VM {
                     final var rt = (Integer) opValues[pc];
                     final var t = registers.get(rt);
                     final var it = ((Iterable) t.type()).iter(this, t);
-                    registers.set(rt, new Value<>(CoreLib.iterType, it));
+                    registers.set(rt, new Value<>(CoreLib.Iter, it));
                     pc++;
                     break;
                 }
                 case Left: {
                     final var op = (Left) opValues[pc];
-                    registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).left());
+                    registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.Pair).left());
                     pc++;
                     break;
                 }
                 case MakeList: {
-                    registers.set((Integer) opValues[pc], new Value<>(CoreLib.listType, new ArrayList<>()));
+                    registers.set((Integer) opValues[pc], new Value<>(CoreLib.List, new ArrayList<>()));
                     pc++;
                     break;
                 }
                 case Next: {
                     final var op = (Next) opValues[pc];
-                    final var iter = registers.get(op.rIter()).cast(CoreLib.iterType);
+                    final var iter = registers.get(op.rIter()).cast(CoreLib.Iter);
                     pc = (iter.next(this, op.rItem(), op.loc())) ? pc + 1 : op.bodyEnd().pc;
                     break;
                 }
@@ -325,7 +325,7 @@ public final class VM {
                 }
                 case Right: {
                     final var op = (Right) opValues[pc];
-                    registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).right());
+                    registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.Pair).right());
                     pc++;
                     break;
                 }
@@ -337,7 +337,7 @@ public final class VM {
                     final var rt = (Integer) opValues[pc];
                     final var t = registers.get(rt);
                     final var it = ((Iterable) t.type()).iter(this, t);
-                    registers.set(rt, new Value<>(CoreLib.splatType, it));
+                    registers.set(rt, new Value<>(CoreLib.Splat, it));
                     pc++;
                     break;
                 }
@@ -350,7 +350,7 @@ public final class VM {
                     break;
                 case Unzip: {
                     final var op = (Unzip) opValues[pc];
-                    final var p = registers.get(op.rPair()).cast(CoreLib.pairType);
+                    final var p = registers.get(op.rPair()).cast(CoreLib.Pair);
                     registers.set(op.rLeft(), p.left());
                     registers.set(op.rRight(), p.right());
                     pc++;
@@ -360,7 +360,7 @@ public final class VM {
                     final var op = (Zip) opValues[pc];
                     final var l = registers.get(op.rLeft());
                     final var r = registers.get(op.rRight());
-                    registers.set(op.rResult(), new Value<>(CoreLib.pairType, new Pair(l, r)));
+                    registers.set(op.rResult(), new Value<>(CoreLib.Pair, new Pair(l, r)));
                     pc++;
                     break;
                 }
@@ -445,8 +445,8 @@ public final class VM {
 
     private void initLibs() {
         for (final var v : userLib.bindings.values()) {
-            if (v.type() == CoreLib.libType) {
-                v.cast(CoreLib.libType).tryInit(this);
+            if (v.type() == CoreLib.Lib) {
+                v.cast(CoreLib.Lib).tryInit(this);
             }
         }
     }

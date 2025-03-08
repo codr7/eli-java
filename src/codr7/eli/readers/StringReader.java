@@ -30,7 +30,7 @@ public class StringReader implements Reader {
             buffer.append(c);
         }
 
-        out.addLast(new LiteralForm(new Value<>(CoreLib.stringType, buffer.toString()), loc));
+        out.addLast(new LiteralForm(new Value<>(CoreLib.String, buffer.toString()), loc));
         return true;
     }
 }

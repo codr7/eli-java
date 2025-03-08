@@ -40,7 +40,7 @@ public class MapReader implements Reader {
             m.put(pf.left.value(vm), pf.right.value(vm));
         }
 
-        out.addLast(new LiteralForm(new Value<>(CoreLib.mapType, m), loc));
+        out.addLast(new LiteralForm(new Value<>(CoreLib.Map, m), loc));
         return true;
     }
 }

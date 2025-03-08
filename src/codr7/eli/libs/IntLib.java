@@ -9,10 +9,10 @@ public final class IntLib extends Lib {
         super("int", null);
 
         bindMethod("rebase",
-                new Arg[]{new Arg("value", CoreLib.intType), new Arg("base", CoreLib.intType)},
+                new Arg[]{new Arg("value", CoreLib.Int), new Arg("base", CoreLib.Int)},
                 (vm, args, rResult, loc) -> {
-                    var in = args[0].cast(CoreLib.intType);
-                    final var b = args[1].cast(CoreLib.intType);
+                    var in = args[0].cast(CoreLib.Int);
+                    final var b = args[1].cast(CoreLib.Int);
                     var out = 0L;
 
                     while (in != 0) {
@@ -22,7 +22,7 @@ public final class IntLib extends Lib {
                         in = d;
                     }
 
-                    vm.registers.set(rResult, new Value<>(CoreLib.intType, out));
+                    vm.registers.set(rResult, new Value<>(CoreLib.Int, out));
                 });
     }
 }

@@ -26,8 +26,8 @@ public class StringType extends BaseType<String>
 
         switch (args.length) {
             case 1: {
-                final var i = args[0].cast(CoreLib.intType).intValue();
-                vm.registers.set(rResult, new Value<>(CoreLib.charType, t.charAt(i)));
+                final var i = args[0].cast(CoreLib.Int).intValue();
+                vm.registers.set(rResult, new Value<>(CoreLib.Char, t.charAt(i)));
                 break;
             }
             default:
@@ -53,7 +53,7 @@ public class StringType extends BaseType<String>
     @Override
     public IValue head(final IValue target) {
         final var t = target.cast(this);
-        return t.isEmpty() ? CoreLib.NIL : new Value<>(CoreLib.charType, t.charAt(0));
+        return t.isEmpty() ? CoreLib.NIL : new Value<>(CoreLib.Char, t.charAt(0));
     }
 
     @Override
@@ -67,7 +67,7 @@ public class StringType extends BaseType<String>
 
         return t.isEmpty()
                 ? CoreLib.NIL
-                : new Value<>(CoreLib.charType, t.charAt(t.length() - 1));
+                : new Value<>(CoreLib.Char, t.charAt(t.length() - 1));
     }
 
     @Override

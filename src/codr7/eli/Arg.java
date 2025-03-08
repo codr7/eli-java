@@ -42,7 +42,7 @@ public final class Arg {
     public int bind(final VM vm, final IValue[] values, final int i, final int rResult, final Loc loc) {
         if (splat) {
             final var vs = new ArrayList<>(Arrays.asList(values).subList(i, values.length));
-            vm.registers.set(rResult, new Value<>(CoreLib.listType, vs));
+            vm.registers.set(rResult, new Value<>(CoreLib.List, vs));
             return values.length;
         }
 

@@ -28,7 +28,7 @@ public final class IntRange implements Iter {
             return false;
         }
         if (rResult != -1) {
-            vm.registers.set(rResult, new Value<>(CoreLib.intType, current));
+            vm.registers.set(rResult, new Value<>(CoreLib.Int, current));
         }
         current += stride;
         return true;

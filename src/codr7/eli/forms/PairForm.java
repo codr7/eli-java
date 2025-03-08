@@ -18,7 +18,7 @@ public final class PairForm extends BaseForm {
 
     @Override
     public void bindValue(final VM vm, final IValue value, final Loc loc) {
-        final var p = value.cast(CoreLib.pairType);
+        final var p = value.cast(CoreLib.Pair);
 
         if (left.isNil()) {
             right.bindValue(vm, p.right(), loc);
@@ -79,7 +79,7 @@ public final class PairForm extends BaseForm {
 
     @Override
     public IValue quote(final VM vm, final Loc loc) {
-        return new Value<>(CoreLib.pairType, new Pair(left.quote(vm, loc), right.value(vm)));
+        return new Value<>(CoreLib.Pair, new Pair(left.quote(vm, loc), right.value(vm)));
     }
 
     @Override
@@ -89,7 +89,7 @@ public final class PairForm extends BaseForm {
         if (lv != null) {
             final var rv = right.rawValue(vm);
             if (rv != null) {
-                return new Value<>(CoreLib.pairType, new Pair(lv, rv));
+                return new Value<>(CoreLib.Pair, new Pair(lv, rv));
             }
         }
 
@@ -103,7 +103,7 @@ public final class PairForm extends BaseForm {
         if (lv != null) {
             final var rv = right.value(vm);
             if (rv != null) {
-                return new Value<>(CoreLib.pairType, new Pair(lv, rv));
+                return new Value<>(CoreLib.Pair, new Pair(lv, rv));
             }
         }
 
