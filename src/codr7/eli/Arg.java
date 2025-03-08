@@ -35,7 +35,9 @@ public final class Arg {
         this.type = type;
     }
 
-    public Arg(final String id) { this(id, CoreLib.anyType); }
+    public Arg(final String id) {
+        this(id, CoreLib.anyType);
+    }
 
     public int bind(final VM vm, final IValue[] values, final int i, final int rResult, final Loc loc) {
         if (splat) {
@@ -45,13 +47,17 @@ public final class Arg {
         }
 
         vm.registers.set(rResult, values[i]);
-        return i+1;
+        return i + 1;
     }
 
     public String dump(final VM vm) {
         var s = id;
-        if (splat) { s = s + '*'; }
-        if (optional) { s = s + '?'; }
+        if (splat) {
+            s = s + '*';
+        }
+        if (optional) {
+            s = s + '?';
+        }
         return s;
     }
 }

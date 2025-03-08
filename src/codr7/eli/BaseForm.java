@@ -7,5 +7,7 @@ public abstract class BaseForm implements IForm {
         this.loc = loc;
     }
 
-    public Loc loc() { return loc; }
+    public Loc loc() {
+        return loc;
+    }
 }

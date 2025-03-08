@@ -25,15 +25,21 @@ public class IdReader implements Reader {
                     c == '\'' ||
                     c == '"' ||
                     c == '#' ||
-                    (c == '*' && !buffer.isEmpty())) { break; }
+                    (c == '*' && !buffer.isEmpty())) {
+                break;
+            }
 
             in.pop();
             buffer.append(c);
             location.update(c);
-            if (c == '^') { break; }
+            if (c == '^') {
+                break;
+            }
         }
 
-        if (buffer.isEmpty()) { return false; }
+        if (buffer.isEmpty()) {
+            return false;
+        }
         out.addLast(new IdForm(buffer.toString(), loc));
         return true;
     }

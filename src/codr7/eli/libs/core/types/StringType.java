@@ -11,16 +11,17 @@ import codr7.eli.libs.core.traits.SeqTrait;
 
 public class StringType extends BaseType<String>
         implements CallTrait, CmpTrait, LenTrait, SeqTrait {
-    public StringType(final String id, final IType...parents) {
+    public StringType(final String id, final IType... parents) {
         super(id, parents);
     }
 
-    @Override public void call(final VM vm,
-                               final IValue target,
-                               final IValue[] args,
-                               final int rResult,
-                               final boolean eval,
-                               final Loc loc) {
+    @Override
+    public void call(final VM vm,
+                     final IValue target,
+                     final IValue[] args,
+                     final int rResult,
+                     final boolean eval,
+                     final Loc loc) {
         final var t = target.cast(this);
 
         switch (args.length) {
@@ -34,11 +35,13 @@ public class StringType extends BaseType<String>
         }
     }
 
-    @Override public int cmp(final IValue lhs, final IValue rhs) {
+    @Override
+    public int cmp(final IValue lhs, final IValue rhs) {
         return lhs.cast(this).compareTo(rhs.cast(this));
     }
 
-    @Override public String dump(final VM vm, final IValue value) {
+    @Override
+    public String dump(final VM vm, final IValue value) {
         return '"' + value.cast(this) + '"';
     }
 
@@ -53,7 +56,10 @@ public class StringType extends BaseType<String>
         return t.isEmpty() ? CoreLib.NIL : new Value<>(CoreLib.charType, t.charAt(0));
     }
 
-    @Override public int len(final IValue target) { return target.cast(this).length(); }
+    @Override
+    public int len(final IValue target) {
+        return target.cast(this).length();
+    }
 
     @Override
     public IValue tail(final IValue target) {
@@ -61,14 +67,16 @@ public class StringType extends BaseType<String>
 
         return t.isEmpty()
                 ? CoreLib.NIL
-                : new Value<>(CoreLib.charType, t.charAt(t.length()-1));
+                : new Value<>(CoreLib.charType, t.charAt(t.length() - 1));
     }
 
-    @Override public boolean toBit(final VM vm, final IValue value) {
+    @Override
+    public boolean toBit(final VM vm, final IValue value) {
         return !value.cast(this).isEmpty();
     }
 
-    @Override public String toString(final VM vm, final IValue value) {
+    @Override
+    public String toString(final VM vm, final IValue value) {
         return value.cast(this);
     }
 }

@@ -21,19 +21,24 @@ public class REPL {
         final var location = new Loc("REPL");
         var lineIndex = 0;
 
-        for (;;) {
+        for (; ; ) {
             out.printf("% 2d ", location.line() + lineIndex);
 
             String line;
-            try { line = in.readLine(); }
-            catch (final IOException e) { throw new RuntimeException(e); }
+            try {
+                line = in.readLine();
+            } catch (final IOException e) {
+                throw new RuntimeException(e);
+            }
 
             if (line.isEmpty()) {
                 try {
                     vm.eval(inputBuffer.toString(), rResult, location);
                     out.println(vm.registers.get(rResult).dump(vm));
                 } catch (final Exception e) {
-                    if (vm.debug) { throw e; }
+                    if (vm.debug) {
+                        throw e;
+                    }
                     out.println(e.getMessage());
                 } finally {
                     inputBuffer.setLength(0);

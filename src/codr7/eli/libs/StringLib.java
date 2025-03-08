@@ -11,10 +11,10 @@ public final class StringLib extends Lib {
         bindMethod("find",
                 new Arg[]{new Arg("in", CoreLib.stringType), new Arg("it", CoreLib.stringType)},
                 (vm, args, rResult, loc) -> {
-                        final var in = args[0].cast(CoreLib.stringType);
-                        final var it = args[0].cast(CoreLib.stringType);
-                        final var i = in.indexOf(it);
-                        vm.registers.set(rResult, (i == -1) ? CoreLib.NIL : new Value<>(CoreLib.intType, (long) i));
+                    final var in = args[0].cast(CoreLib.stringType);
+                    final var it = args[0].cast(CoreLib.stringType);
+                    final var i = in.indexOf(it);
+                    vm.registers.set(rResult, (i == -1) ? CoreLib.NIL : new Value<>(CoreLib.intType, (long) i));
                 });
 
         bindMethod("strip",

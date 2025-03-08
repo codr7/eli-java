@@ -9,5 +9,8 @@ public class BasicWidget implements Widget {
         this.component = imp;
     }
 
-    @Override public Component component() { return component; }
+    @Override
+    public Component component() {
+        return component;
+    }
 }

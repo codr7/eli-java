@@ -10,9 +10,17 @@ public final class Loc {
         this.column = column;
     }
 
-    public Loc(final String source) { this(source, 1, 1); }
-    public Loc dup() { return new Loc(source, line, column); }
-    public int line() { return line; }
+    public Loc(final String source) {
+        this(source, 1, 1);
+    }
+
+    public Loc dup() {
+        return new Loc(source, line, column);
+    }
+
+    public int line() {
+        return line;
+    }
 
     public char update(final char c) {
         if (c == '\n') {
@@ -25,5 +33,7 @@ public final class Loc {
         return c;
     }
 
-    public String toString() { return String.format("%s@%d:%d", source, line, column); }
+    public String toString() {
+        return String.format("%s@%d:%d", source, line, column);
+    }
 }

@@ -3,16 +3,21 @@ package codr7.eli.libs;
 import codr7.eli.*;
 import codr7.eli.errors.EmitError;
 import codr7.eli.errors.EvalError;
-import codr7.eli.forms.*;
+import codr7.eli.forms.CallForm;
+import codr7.eli.forms.IdForm;
+import codr7.eli.forms.ListForm;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.*;
 import codr7.eli.libs.core.types.*;
-import codr7.eli.ops.*;
 import codr7.eli.ops.Iter;
+import codr7.eli.ops.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public class CoreLib extends Lib {
@@ -21,11 +26,13 @@ public class CoreLib extends Lib {
     public static final TraitType<IterTrait> iterTrait = new TraitType<>("Iterable");
     public static final TraitType<LenTrait> lenTrait = new TraitType<>("Len");
     public static final TraitType<SeqTrait> seqTrait = new TraitType<>("Seq", iterTrait);
-
+    public static final ListType listType = new ListType("List", callTrait, lenTrait, seqTrait);
+    public static final MapType mapType = new MapType("Map", callTrait, lenTrait, seqTrait);
+    public static final PairType pairType = new PairType("Pair", lenTrait, seqTrait);
+    public static final StringType stringType = new StringType("String", callTrait, lenTrait, seqTrait);
     public static final NilType nilType = new NilType("Nil");
     public static final MaybeType maybeType = new MaybeType("Maybe", anyType, nilType);
     public static final TraitType<NumTrait> numType = new TraitType<>("Num", anyType);
-
     public static final BindingType bindingType = new BindingType("Binding");
     public static final BitType bitType = new BitType("Bit");
     public static final CharType charType = new CharType("Char");
@@ -36,13 +43,9 @@ public class CoreLib extends Lib {
     public static final JMacroType jMacroType = new JMacroType("JMacro");
     public static final JMethodType jMethodType = new JMethodType("JMethod", callTrait);
     public static final LibType libType = new LibType("Lib");
-    public static final ListType listType = new ListType("List", callTrait, lenTrait, seqTrait);
-    public static final MapType mapType = new MapType("Map", callTrait, lenTrait, seqTrait);
     public static final MetaType metaType = new MetaType("Meta");
     public static final MethodType methodType = new MethodType("Method", callTrait);
-    public static final PairType pairType = new PairType("Pair", lenTrait, seqTrait);
     public static final RangeType rangeType = new RangeType("Range");
-    public static final StringType stringType = new StringType("String", callTrait, lenTrait, seqTrait);
     public static final SplatType splatType = new SplatType("Splat");
     public static final SymType symType = new SymType("Sym");
     public static final TimeType timeType = new TimeType("Time");
@@ -107,7 +110,9 @@ public class CoreLib extends Lib {
                     }
 
                     final var margs = new ArrayList<Arg>();
-                    for (IForm iForm : argList) { margs.add(new Arg(iForm.argId(vm, loc))); }
+                    for (IForm iForm : argList) {
+                        margs.add(new Arg(iForm.argId(vm, loc)));
+                    }
                     final var rArgs = vm.alloc(margs.size());
 
                     final var start = new Label();
@@ -116,7 +121,9 @@ public class CoreLib extends Lib {
                     final var skip = new Label();
                     vm.emit(new Goto(skip));
                     start.pc = vm.emitPc();
-                    if (!lambda) { vm.currentLib.bind(m); }
+                    if (!lambda) {
+                        vm.currentLib.bind(m);
+                    }
 
                     vm.doLib(null, () -> {
                         vm.currentLib.bindMacro("return", new Arg[]{new Arg("args*")},
@@ -139,7 +146,7 @@ public class CoreLib extends Lib {
                     if (lambda) {
                         new Value<>(methodType, m).emit(vm, rResult, loc);
                     }
-        });
+                });
 
         bindMethod("=", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, location) -> {
@@ -221,8 +228,11 @@ public class CoreLib extends Lib {
 
                     if (args.length == 1) {
                         final var v = args[0];
-                        if (v.type() instanceof NumTrait nt) { result = nt.sub(v); }
-                        else { throw new EvalError("Expected num: " + v.dump(vm), loc); }
+                        if (v.type() instanceof NumTrait nt) {
+                            result = nt.sub(v);
+                        } else {
+                            throw new EvalError("Expected num: " + v.dump(vm), loc);
+                        }
                     } else {
                         result = args[0];
 
@@ -298,7 +308,7 @@ public class CoreLib extends Lib {
 
         bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")},
                 (vm, args, rResult, loc) -> {
-                    final var t = (IdForm)args[0];
+                    final var t = (IdForm) args[0];
                     final var v = vm.currentLib.find(t.id);
 
                     if (v == null || v.type() != bindingType) {
@@ -311,12 +321,16 @@ public class CoreLib extends Lib {
                     if (args.length > 1) {
                         final var df = args[1];
                         final var dv = df.value(vm);
-                        if (dv == null) { throw new EmitError("Expected delta: " + df.dump(vm), loc); }
+                        if (dv == null) {
+                            throw new EmitError("Expected delta: " + df.dump(vm), loc);
+                        }
                         delta = -dv.cast(intType);
                     }
 
                     vm.emit(new Inc(rValue, delta, loc));
-                    if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
+                    if (rResult != rValue) {
+                        vm.emit(new Copy(rValue, rResult, loc));
+                    }
                 });
 
         bindMacro("do", new Arg[]{new Arg("body*")},
@@ -364,7 +378,7 @@ public class CoreLib extends Lib {
                         final var bodyStart = new Label(vm.emitPc());
                         final var bodyEnd = new Label();
 
-                        for (final var br: brs.entrySet()) {
+                        for (final var br : brs.entrySet()) {
                             vm.emit(new Next(br.getKey(), br.getValue(), bodyEnd, loc));
                         }
 
@@ -401,14 +415,14 @@ public class CoreLib extends Lib {
                         final var bodyLib = vm.currentLib;
 
                         vm.currentLib.bindMacro("else", new Arg[]{new Arg("body*")},
-                            (_vm, _body, _rResult, _loc) -> {
-                                final var skipElse = new Label();
-                                vm.emit(new Goto(skipElse));
-                                elseStart.pc = vm.emitPc();
-                                bodyLib.drop("else");
-                                vm.emit(_body, _rResult);
-                                skipElse.pc = vm.emitPc();
-                            });
+                                (_vm, _body, _rResult, _loc) -> {
+                                    final var skipElse = new Label();
+                                    vm.emit(new Goto(skipElse));
+                                    elseStart.pc = vm.emitPc();
+                                    bodyLib.drop("else");
+                                    vm.emit(_body, _rResult);
+                                    skipElse.pc = vm.emitPc();
+                                });
 
                         vm.currentLib.bindMacro("else-if",
                                 new Arg[]{new Arg("cond"), new Arg("body*")},
@@ -423,13 +437,15 @@ public class CoreLib extends Lib {
                                 });
 
                         vm.emit(args, rResult);
-                        if (elseStart.pc == -1) { elseStart.pc = vm.emitPc(); }
+                        if (elseStart.pc == -1) {
+                            elseStart.pc = vm.emitPc();
+                        }
                     });
                 });
 
         bindMacro("inc", new Arg[]{new Arg("place"), new Arg("delta?")},
                 (vm, args, rResult, loc) -> {
-                    final var t = (IdForm)args[0];
+                    final var t = (IdForm) args[0];
                     final var v = vm.currentLib.find(t.id);
 
                     if (v == null || v.type() != bindingType) {
@@ -442,12 +458,16 @@ public class CoreLib extends Lib {
                     if (args.length > 1) {
                         final var df = args[1];
                         final var dv = df.value(vm);
-                        if (dv == null) { throw new EmitError("Expected delta: " + df.dump(vm), loc); }
+                        if (dv == null) {
+                            throw new EmitError("Expected delta: " + df.dump(vm), loc);
+                        }
                         delta = dv.cast(intType);
                     }
 
                     vm.emit(new Inc(rValue, delta, loc));
-                    if (rResult != rValue) { vm.emit(new Copy(rValue, rResult, loc)); }
+                    if (rResult != rValue) {
+                        vm.emit(new Copy(rValue, rResult, loc));
+                    }
                 });
 
         bindMethod("is", new Arg[]{new Arg("args*")},
@@ -467,9 +487,9 @@ public class CoreLib extends Lib {
 
         bindMethod("len", new Arg[]{new Arg("it")},
                 (vm, args, rResult, loc) -> {
-            final var it = args[0];
-            vm.registers.set(rResult, new Value<>(intType, (long) it.type().cast(lenTrait, loc).len(it)));
-        });
+                    final var it = args[0];
+                    vm.registers.set(rResult, new Value<>(intType, (long) it.type().cast(lenTrait, loc).len(it)));
+                });
 
         bindMacro("let", new Arg[]{new Arg("bindings", listType), new Arg("body*")},
                 (vm, _args, rResult, loc) -> {
@@ -482,7 +502,7 @@ public class CoreLib extends Lib {
                         vm.doLib(null, () -> {
                             for (var i = 0; i < bs.length; i += 2) {
                                 final var rValue = vm.alloc(1);
-                                final var vf = bs[i+1];
+                                final var vf = bs[i + 1];
                                 final var v = vf.value(vm);
 
                                 if (v == null) {
@@ -498,7 +518,7 @@ public class CoreLib extends Lib {
                     } else {
                         throw new EmitError("Expected bindings: " + bsf.dump(vm), loc);
                     }
-            });
+                });
 
         bindMacro("lib", new Arg[]{new Arg("id"), new Arg("body*")},
                 (vm, _args, rResult, loc) -> {
@@ -529,24 +549,24 @@ public class CoreLib extends Lib {
 
         bindMethod("parse-int", new Arg[]{new Arg("in")},
                 (vm, args, rResult, loc) -> {
-            final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
-            final var in = args[0].cast(stringType).substring(start);
-            final var match = Pattern.compile("^\\s*(-?\\d+).*").matcher(in);
+                    final var start = (args.length == 2) ? args[1].cast(intType).intValue() : 0;
+                    final var in = args[0].cast(stringType).substring(start);
+                    final var match = Pattern.compile("^\\s*(-?\\d+).*").matcher(in);
 
-            if (match.find()) {
-                vm.registers.set(rResult, new Value<>(pairType, new Pair(
-                        new Value<>(intType, Long.valueOf(match.group(1))),
-                        new Value<>(intType, (long) match.end(1) + start))));
-            } else {
-                vm.registers.set(rResult, new Value<>(pairType, new Pair(CoreLib.NIL, CoreLib.NIL)));
-            }
-        });
+                    if (match.find()) {
+                        vm.registers.set(rResult, new Value<>(pairType, new Pair(
+                                new Value<>(intType, Long.valueOf(match.group(1))),
+                                new Value<>(intType, (long) match.end(1) + start))));
+                    } else {
+                        vm.registers.set(rResult, new Value<>(pairType, new Pair(CoreLib.NIL, CoreLib.NIL)));
+                    }
+                });
 
         bindMethod("pow", new Arg[]{new Arg("base", intType), new Arg("exp", intType)},
                 (vm, args, rResult, loc) -> {
                     final var b = args[0].cast(intType);
                     final var e = args[1].cast(intType);
-                    vm.registers.set(rResult, new Value<>(intType, (long)Math.pow(b, e)));
+                    vm.registers.set(rResult, new Value<>(intType, (long) Math.pow(b, e)));
                 });
 
         bindMethod("range",
@@ -590,7 +610,9 @@ public class CoreLib extends Lib {
 
         bindMacro("unquote", new Arg[]{new Arg("forms*")},
                 (vm, args, rResult, loc) -> {
-                    for (final var a: args) { a.unquote(vm, rResult, loc); }
+                    for (final var a : args) {
+                        a.unquote(vm, rResult, loc);
+                    }
                 });
 
         bindMacro("var", new Arg[]{new Arg("name1"), new Arg("value1"), new Arg("rest*")},

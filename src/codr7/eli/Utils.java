@@ -12,7 +12,7 @@ public enum Utils {
     ;
 
     public static int log2(final long n) {
-        return (int)(Math.log(n) / Math.log(2)) + 1;
+        return (int) (Math.log(n) / Math.log(2)) + 1;
     }
 
     public static <T> Stream<List<T>> combine(final T[] in) {
@@ -23,11 +23,11 @@ public enum Utils {
 
             @Override
             public boolean tryAdvance(final Consumer<? super List<T>> action) {
-                if(i < N) {
+                if (i < N) {
                     final var out = new ArrayList<T>(Long.bitCount(i));
 
                     for (var bit = 0; bit < in.length; bit++) {
-                        if((i & (1 << bit)) != 0) {
+                        if ((i & (1 << bit)) != 0) {
                             out.add(in[bit]);
                         }
                     }

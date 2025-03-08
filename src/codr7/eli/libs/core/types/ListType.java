@@ -14,7 +14,9 @@ import java.util.ArrayList;
 public class ListType
         extends BaseType<ArrayList<IValue>>
         implements CallTrait, CmpTrait, LenTrait, SeqTrait {
-    public ListType(final String id, IType...parents) { super(id, parents); }
+    public ListType(final String id, IType... parents) {
+        super(id, parents);
+    }
 
     @Override
     public void call(final VM vm,
@@ -53,13 +55,17 @@ public class ListType
             if (lv.type() instanceof CmpTrait ct) {
                 final var rv = rl.get(i);
                 final var r = ct.cmp(lv, rv);
-                if (r != 0) { return r; }
+                if (r != 0) {
+                    return r;
+                }
             } else {
                 throw new RuntimeException("Expected cmp: " + lv.type().toString());
             }
         }
 
-        if (ll.size() != rl.size()) { return Integer.compare(ll.size(), rl.size()); }
+        if (ll.size() != rl.size()) {
+            return Integer.compare(ll.size(), rl.size());
+        }
         return 0;
     }
 
@@ -70,7 +76,9 @@ public class ListType
         final var v = value.cast(this);
 
         for (var i = 0; i < v.size(); i++) {
-            if (i > 0) { result.append(' '); }
+            if (i > 0) {
+                result.append(' ');
+            }
             result.append(v.get(i).dump(vm));
         }
 
@@ -82,10 +90,14 @@ public class ListType
     public boolean eq(IValue left, IValue right) {
         final var lv = left.cast(this);
         final var rv = right.cast(this);
-        if (lv.size() != rv.size()) { return false; }
+        if (lv.size() != rv.size()) {
+            return false;
+        }
 
         for (var i = 0; i < lv.size(); i++) {
-            if (!lv.get(i).eq(rv.get(i))) { return false; }
+            if (!lv.get(i).eq(rv.get(i))) {
+                return false;
+            }
         }
 
         return true;
@@ -103,7 +115,9 @@ public class ListType
     }
 
     @Override
-    public int len(final IValue target) { return target.cast(this).size(); }
+    public int len(final IValue target) {
+        return target.cast(this).size();
+    }
 
     @Override
     public IValue tail(IValue target) {
@@ -114,15 +128,21 @@ public class ListType
                 : new Value<>(this, new ArrayList<>(t.subList(1, t.size())));
     }
 
-    @Override public boolean toBit(final VM vm, final IValue value) { return !value.cast(this).isEmpty(); }
+    @Override
+    public boolean toBit(final VM vm, final IValue value) {
+        return !value.cast(this).isEmpty();
+    }
 
-    @Override public String toString(final VM vm, final IValue value) {
+    @Override
+    public String toString(final VM vm, final IValue value) {
         final var result = new StringBuilder();
         result.append('[');
         final var v = value.cast(this);
 
         for (var i = 0; i < v.size(); i++) {
-            if (i > 0) { result.append(' '); }
+            if (i > 0) {
+                result.append(' ');
+            }
             result.append(v.get(i).toString(vm));
         }
 

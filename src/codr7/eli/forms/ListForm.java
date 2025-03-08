@@ -6,9 +6,6 @@ import codr7.eli.ops.AddItem;
 import codr7.eli.ops.MakeList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 public class ListForm extends BaseForm {
     public final IForm[] items;
@@ -18,14 +15,15 @@ public class ListForm extends BaseForm {
         this.items = items;
     }
 
-    @Override public void emit(final VM vm, final int rResult) {
+    @Override
+    public void emit(final VM vm, final int rResult) {
         final var v = value(vm);
 
         if (v == null) {
             vm.emit(new MakeList(rResult));
             final var rItem = vm.alloc(1);
 
-            for (final var it: items) {
+            for (final var it : items) {
                 it.emit(vm, rItem);
                 vm.emit(new AddItem(rResult, rItem, it.loc()));
             }
@@ -34,12 +32,17 @@ public class ListForm extends BaseForm {
         }
     }
 
-    @Override public boolean eq(final IForm other) {
+    @Override
+    public boolean eq(final IForm other) {
         if (other instanceof ListForm f) {
-            if (f.items.length != items.length) { return false; }
+            if (f.items.length != items.length) {
+                return false;
+            }
 
             for (var i = 0; i < items.length; i++) {
-                if (!f.items[i].eq(items[i])) { return false; }
+                if (!f.items[i].eq(items[i])) {
+                    return false;
+                }
             }
 
             return true;
@@ -48,12 +51,15 @@ public class ListForm extends BaseForm {
         return false;
     }
 
-    @Override public String dump(VM vm) {
+    @Override
+    public String dump(VM vm) {
         final var result = new StringBuilder();
         result.append('[');
 
         for (var i = 0; i < items.length; i++) {
-            if (i > 0) { result.append(' '); }
+            if (i > 0) {
+                result.append(' ');
+            }
             result.append(items[i].dump(vm));
         }
 
@@ -61,30 +67,39 @@ public class ListForm extends BaseForm {
         return result.toString();
     }
 
-    @Override public IValue quote(final VM vm, final Loc loc) {
+    @Override
+    public IValue quote(final VM vm, final Loc loc) {
         final var result = new ArrayList<IValue>();
-        for (final var it: items) { result.add(it.quote(vm, loc)); }
+        for (final var it : items) {
+            result.add(it.quote(vm, loc));
+        }
         return new Value<>(CoreLib.listType, result);
     }
 
-    @Override public IValue rawValue(VM vm) {
+    @Override
+    public IValue rawValue(VM vm) {
         final var vs = new ArrayList<IValue>();
 
-        for (final var it: items) {
+        for (final var it : items) {
             final var v = it.rawValue(vm);
-            if (v == null) { return null; }
+            if (v == null) {
+                return null;
+            }
             Value.expand(vm, v, vs, loc());
         }
 
         return new Value<>(CoreLib.listType, new ArrayList<>(vs));
     }
 
-    @Override public IValue value(VM vm) {
+    @Override
+    public IValue value(VM vm) {
         final var vs = new ArrayList<IValue>();
 
-        for (final var it: items) {
+        for (final var it : items) {
             final var v = it.value(vm);
-            if (v == null) { return null; }
+            if (v == null) {
+                return null;
+            }
             Value.expand(vm, v, vs, loc());
         }
 

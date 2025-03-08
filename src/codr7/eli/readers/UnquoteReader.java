@@ -8,9 +8,12 @@ import codr7.eli.forms.IdForm;
 public class UnquoteReader extends PrefixReader {
     public static final UnquoteReader instance = new UnquoteReader();
 
-    public UnquoteReader() { super(','); }
+    public UnquoteReader() {
+        super(',');
+    }
 
-    @Override public IForm boxTarget(final IForm target, final Loc loc) {
+    @Override
+    public IForm boxTarget(final IForm target, final Loc loc) {
         return new CallForm(new IForm[]{new IdForm("unquote", loc), target}, loc);
     }
 }

@@ -11,11 +11,13 @@ public class LiteralForm extends BaseForm {
         this.value = value;
     }
 
-    @Override public void emit(final VM vm, final int rResult) {
+    @Override
+    public void emit(final VM vm, final int rResult) {
         vm.emit(new Put(rResult, value, loc()));
     }
 
-    @Override public boolean eq(final IForm other) {
+    @Override
+    public boolean eq(final IForm other) {
         if (other instanceof LiteralForm f) {
             return f.value.eq(value);
         }
@@ -23,7 +25,18 @@ public class LiteralForm extends BaseForm {
         return false;
     }
 
-    @Override public String dump(final VM vm) { return value.dump(vm); }
-    @Override public IValue quote(final VM vm, final Loc loc) { return value; }
-    @Override public IValue rawValue(final VM vm) { return value; }
+    @Override
+    public String dump(final VM vm) {
+        return value.dump(vm);
+    }
+
+    @Override
+    public IValue quote(final VM vm, final Loc loc) {
+        return value;
+    }
+
+    @Override
+    public IValue rawValue(final VM vm) {
+        return value;
+    }
 }

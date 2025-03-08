@@ -16,7 +16,9 @@ import java.util.stream.Stream;
 public class MapType
         extends BaseType<TreeMap<IValue, IValue>>
         implements CallTrait, CmpTrait, LenTrait, SeqTrait {
-    public MapType(final String id, IType...parents) { super(id, parents); }
+    public MapType(final String id, IType... parents) {
+        super(id, parents);
+    }
 
     @Override
     public void call(final VM vm,
@@ -64,22 +66,26 @@ public class MapType
 
             if (lk.type() instanceof CmpTrait ct) {
                 final var r = ct.cmp(lk, rk);
-                if (r != 0) { return r; }
+                if (r != 0) {
+                    return r;
+                }
             } else {
                 throw new RuntimeException("Expected cmp: " + lk.type().toString());
             }
         }
 
-        if (lm.size() != rm.size()) { return Integer.compare(lm.size(), rm.size()); }
+        if (lm.size() != rm.size()) {
+            return Integer.compare(lm.size(), rm.size());
+        }
         return 0;
     }
 
     @Override
     public String dump(final VM vm, final IValue value) {
         return '{' +
-            value.cast(this).entrySet().stream()
-                .map(e -> e.getKey().dump(vm) + ':' + e.getValue().dump(vm))
-                    .collect(Collectors.joining(" ")) +
+                value.cast(this).entrySet().stream()
+                        .map(e -> e.getKey().dump(vm) + ':' + e.getValue().dump(vm))
+                        .collect(Collectors.joining(" ")) +
                 '}';
     }
 
@@ -87,7 +93,9 @@ public class MapType
     public boolean eq(IValue left, IValue right) {
         final var lm = left.cast(this);
         final var rm = right.cast(this);
-        if (lm.size() != rm.size()) { return false; }
+        if (lm.size() != rm.size()) {
+            return false;
+        }
         final var les = lm.entrySet().iterator();
         final var res = rm.entrySet().iterator();
 
@@ -126,7 +134,9 @@ public class MapType
     }
 
     @Override
-    public int len(final IValue target) { return target.cast(this).size(); }
+    public int len(final IValue target) {
+        return target.cast(this).size();
+    }
 
     @Override
     public IValue tail(IValue target) {

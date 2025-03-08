@@ -1,11 +1,15 @@
 package codr7.eli.libs.core.types;
 
-import codr7.eli.*;
+import codr7.eli.BaseType;
+import codr7.eli.IValue;
+import codr7.eli.Value;
 import codr7.eli.libs.core.traits.CmpTrait;
 import codr7.eli.libs.core.traits.NumTrait;
 
 public final class IntType extends BaseType<Long> implements CmpTrait, NumTrait {
-    public IntType(final String id) { super(id); }
+    public IntType(final String id) {
+        super(id);
+    }
 
     @Override
     public IValue add(final IValue lhs, final IValue rhs) {
@@ -33,5 +37,7 @@ public final class IntType extends BaseType<Long> implements CmpTrait, NumTrait 
     }
 
     @Override
-    public IValue sub(final IValue v) { return new Value<>(this, -v.cast(this)); }
+    public IValue sub(final IValue v) {
+        return new Value<>(this, -v.cast(this));
+    }
 }

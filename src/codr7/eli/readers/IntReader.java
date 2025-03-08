@@ -20,7 +20,9 @@ public class IntReader implements Reader {
         }
 
         if (!Character.isDigit(c)) {
-            if (isNeg) { in.push('-'); }
+            if (isNeg) {
+                in.push('-');
+            }
             return false;
         }
 
@@ -34,7 +36,9 @@ public class IntReader implements Reader {
                 return DecimalReader.instance.read(vm, in, isNeg ? -v : v, out, loc);
             }
 
-            if (!Character.isDigit(c)) { break; }
+            if (!Character.isDigit(c)) {
+                break;
+            }
             in.pop();
             v = v * 10 + Character.digit(c, 10);
             loc.update(c);

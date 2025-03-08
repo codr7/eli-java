@@ -5,11 +5,17 @@ import codr7.eli.IValue;
 import codr7.eli.VM;
 
 public final class CharType extends BaseType<Character> {
-    public CharType(final String id) { super(id); }
+    public CharType(final String id) {
+        super(id);
+    }
 
     @Override
-    public String dump(final VM vm, final IValue value) { return "\\" + value.cast(this); }
+    public String dump(final VM vm, final IValue value) {
+        return "\\" + value.cast(this);
+    }
 
     @Override
-    public boolean toBit(final VM vm, final IValue value) { return value.cast(this) != 0; }
+    public boolean toBit(final VM vm, final IValue value) {
+        return value.cast(this) != 0;
+    }
 }

@@ -13,7 +13,8 @@ public class SplatForm extends BaseForm {
         this.target = target;
     }
 
-    @Override public String argId(final VM vm, final Loc loc) {
+    @Override
+    public String argId(final VM vm, final Loc loc) {
         return target.argId(vm, loc) + '*';
     }
 

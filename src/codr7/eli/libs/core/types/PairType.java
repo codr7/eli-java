@@ -8,7 +8,9 @@ import codr7.eli.libs.core.traits.SeqTrait;
 
 public class PairType extends BaseType<Pair>
         implements CmpTrait, LenTrait, SeqTrait {
-    public PairType(final String id, final IType...parents) { super(id, parents); }
+    public PairType(final String id, final IType... parents) {
+        super(id, parents);
+    }
 
     @Override
     public int cmp(final IValue lhs, final IValue rhs) {
@@ -17,7 +19,9 @@ public class PairType extends BaseType<Pair>
 
         if (lhs.type() instanceof CmpTrait ct) {
             final var lr = ct.cmp(lp.left(), rp.left());
-            if (lr != 0) { return lr; }
+            if (lr != 0) {
+                return lr;
+            }
             final var rr = ct.cmp(lp.right(), rp.right());
             return rr;
         }
@@ -26,7 +30,9 @@ public class PairType extends BaseType<Pair>
     }
 
     @Override
-    public String dump(final VM vm, final IValue value) { return value.cast(this).dump(vm); }
+    public String dump(final VM vm, final IValue value) {
+        return value.cast(this).dump(vm);
+    }
 
     @Override
     public boolean eq(final IValue left, final IValue right) {

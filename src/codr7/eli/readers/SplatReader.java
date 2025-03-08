@@ -7,9 +7,12 @@ import codr7.eli.forms.SplatForm;
 public class SplatReader extends SuffixReader {
     public static final SplatReader instance = new SplatReader();
 
-    public SplatReader() { super('*'); }
+    public SplatReader() {
+        super('*');
+    }
 
-    @Override public IForm boxTarget(final IForm target, final Loc loc) {
+    @Override
+    public IForm boxTarget(final IForm target, final Loc loc) {
         return new SplatForm(target, loc);
     }
 }

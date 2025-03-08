@@ -21,7 +21,9 @@ public class DecimalReader implements Reader {
         }
 
         if (c != '.') {
-            if (isNeg) { in.push('-'); }
+            if (isNeg) {
+                in.push('-');
+            }
             return false;
         }
 
@@ -29,13 +31,17 @@ public class DecimalReader implements Reader {
         loc.update(in.pop());
         var e = 0;
         var v = new StringBuilder();
-        if (isNeg) { v.append('-'); }
+        if (isNeg) {
+            v.append('-');
+        }
         v.append(Math.abs(value));
         v.append('.');
 
         for (; ; ) {
             c = in.peek();
-            if (!Character.isDigit(c)) { break; }
+            if (!Character.isDigit(c)) {
+                break;
+            }
             loc.update(in.pop());
             v.append(c);
             e++;

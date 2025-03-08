@@ -1,2 +1,0 @@
-(let [foo [1 2 3]]
-  (say (seq/head foo):(seq/tail foo):foo))

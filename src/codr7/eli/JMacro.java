@@ -3,16 +3,16 @@ package codr7.eli;
 import codr7.eli.errors.EmitError;
 
 public record JMacro(String id, Arg[] args, Body body) {
-    public interface Body {
-        void call(VM vm, IForm[] args, int rResult, Loc loc);
-    }
-
     public int arity() {
-        if (args.length > 0 && args[args.length-1].splat) { return -1; }
+        if (args.length > 0 && args[args.length - 1].splat) {
+            return -1;
+        }
         var result = 0;
 
-        for (final var a: args) {
-            if (!a.optional) { result++; }
+        for (final var a : args) {
+            if (!a.optional) {
+                result++;
+            }
         }
 
         return result;
@@ -23,9 +23,17 @@ public record JMacro(String id, Arg[] args, Body body) {
                      final int rResult,
                      final Loc loc) {
         final var arity = arity();
-        if (arity != -1 && args.length < arity) { throw new EmitError("Not enough args: " + this, loc); }
+        if (arity != -1 && args.length < arity) {
+            throw new EmitError("Not enough args: " + this, loc);
+        }
         body.call(vm, args, rResult, loc);
     }
 
-    public String toString() { return String.format("(JMacro %s)", id); }
+    public String toString() {
+        return String.format("(JMacro %s)", id);
+    }
+
+    public interface Body {
+        void call(VM vm, IForm[] args, int rResult, Loc loc);
+    }
 }

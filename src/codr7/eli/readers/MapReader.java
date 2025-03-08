@@ -13,7 +13,9 @@ public class MapReader implements Reader {
     public static final MapReader instance = new MapReader();
 
     public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc location) {
-        if (in.peek() != '{') { return false; }
+        if (in.peek() != '{') {
+            return false;
+        }
         final var loc = location.dup();
         location.update(in.pop());
         final var m = new TreeMap<IValue, IValue>();
@@ -22,15 +24,19 @@ public class MapReader implements Reader {
         for (; ; ) {
             WhitespaceReader.instance.read(vm, in, out, location);
             var c = in.peek();
-            if (c == 0) { throw new ReadError("Unexpected end of map", location); }
+            if (c == 0) {
+                throw new ReadError("Unexpected end of map", location);
+            }
 
             if (c == '}') {
                 in.pop();
                 break;
             }
 
-            if (!PairReader.instance.read(vm, in, out, location)) { throw new ReadError("Unexpected end of map", location); }
-            final var pf = (PairForm)out.removeLast();
+            if (!PairReader.instance.read(vm, in, out, location)) {
+                throw new ReadError("Unexpected end of map", location);
+            }
+            final var pf = (PairForm) out.removeLast();
             m.put(pf.left.value(vm), pf.right.value(vm));
         }
 

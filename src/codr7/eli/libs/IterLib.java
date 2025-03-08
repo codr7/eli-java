@@ -42,19 +42,19 @@ public final class IterLib extends Lib {
                         new Arg("in", CoreLib.iterTrait),
                         new Arg("seed", CoreLib.anyType)},
                 (vm, args, rResult, loc) -> {
-            final var c = args[0];
-            final var ct = c.type().cast(CoreLib.callTrait, loc);
-            final var in = args[1];
-            final var it = in.type().cast(CoreLib.iterTrait, loc);
-            final var rArgs = vm.alloc(2);
-            vm.registers.set(rArgs, args[2]);
+                    final var c = args[0];
+                    final var ct = c.type().cast(CoreLib.callTrait, loc);
+                    final var in = args[1];
+                    final var it = in.type().cast(CoreLib.iterTrait, loc);
+                    final var rArgs = vm.alloc(2);
+                    vm.registers.set(rArgs, args[2]);
 
-            for (final var i = it.iter(vm, in); i.next(vm, rArgs+1, loc);) {
-                ct.call(vm, c, rArgs, 2, rArgs,true, loc);
-            }
+                    for (final var i = it.iter(vm, in); i.next(vm, rArgs + 1, loc); ) {
+                        ct.call(vm, c, rArgs, 2, rArgs, true, loc);
+                    }
 
-            vm.registers.set(rResult, vm.registers.get(rArgs));
-        });
+                    vm.registers.set(rResult, vm.registers.get(rArgs));
+                });
 
         bindMethod("unzip", new Arg[]{new Arg("in", CoreLib.iterTrait)},
                 (vm, args, rResult, loc) -> {
@@ -83,8 +83,8 @@ public final class IterLib extends Lib {
         importFrom(vm.coreLib, "^", "+");
 
         vm.eval("""
-                    (^sum [in]
-                      (reduce + in 0))
-                    """, loc);
+                (^sum [in]
+                  (reduce + in 0))
+                """, loc);
     }
 }

@@ -17,6 +17,7 @@ public class Input {
     public Input(final String in) {
         this(new StringReader(in));
     }
+
     public char peek() {
         if (buffer.isEmpty()) {
             fillBuffer();
@@ -41,7 +42,9 @@ public class Input {
         return buffer.removeFirst();
     }
 
-    public void push(char c) { buffer.addFirst(c); }
+    public void push(char c) {
+        buffer.addFirst(c);
+    }
 
     private void fillBuffer() {
         try {

@@ -1,6 +1,9 @@
 package codr7.eli.libs;
 
-import codr7.eli.*;
+import codr7.eli.Arg;
+import codr7.eli.IValue;
+import codr7.eli.Lib;
+import codr7.eli.Value;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +27,7 @@ public final class ListLib extends Lib {
                     final var rValue = vm.alloc(1);
                     final var out = new ArrayList<IValue>();
 
-                    for (final var i = it.iter(vm, in); i.next(vm, rValue, loc);) {
+                    for (final var i = it.iter(vm, in); i.next(vm, rValue, loc); ) {
                         out.add(vm.registers.get(rValue));
                     }
 

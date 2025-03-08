@@ -18,7 +18,7 @@ public final class IntLib extends Lib {
                     while (in != 0) {
                         final var d = in / b;
                         final var r = in - d * b;
-                        out = out*10 + r;
+                        out = out * 10 + r;
                         in = d;
                     }
 

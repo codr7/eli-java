@@ -1,8 +1,8 @@
 package codr7.eli;
 
-import java.util.*;
-
 import codr7.eli.libs.CoreLib;
+
+import java.util.*;
 
 public class Lib {
     public final String id;
@@ -15,7 +15,9 @@ public class Lib {
         this.parentLib = parentLib;
     }
 
-    public void bind(final String id, final IValue value) { bindings.put(id, value); }
+    public void bind(final String id, final IValue value) {
+        bindings.put(id, value);
+    }
 
     public <T> void bind(final String id, final IDataType<T> type, final T data) {
         bind(id, new Value<>(type, data));
@@ -29,13 +31,29 @@ public class Lib {
         bind(new JMethod(id, arguments, body));
     }
 
-    public void bind(final IType value) { bind(value.id(), CoreLib.metaType, value); }
-    public void bind(final JMacro value) { bind(value.id(), CoreLib.jMacroType, value); }
-    public void bind(final JMethod value) { bind(value.id(), CoreLib.jMethodType, value); }
-    public void bind(final Lib value) { bind(value.id, CoreLib.libType, value); }
-    public void bind(final Method value) { bind(value.id(), CoreLib.methodType, value); }
+    public void bind(final IType value) {
+        bind(value.id(), CoreLib.metaType, value);
+    }
 
-    public boolean drop(final String id) { return bindings.remove(id) != null; }
+    public void bind(final JMacro value) {
+        bind(value.id(), CoreLib.jMacroType, value);
+    }
+
+    public void bind(final JMethod value) {
+        bind(value.id(), CoreLib.jMethodType, value);
+    }
+
+    public void bind(final Lib value) {
+        bind(value.id, CoreLib.libType, value);
+    }
+
+    public void bind(final Method value) {
+        bind(value.id(), CoreLib.methodType, value);
+    }
+
+    public boolean drop(final String id) {
+        return bindings.remove(id) != null;
+    }
 
     public IValue find(final String id) {
         final var v = bindings.get(id);
@@ -43,10 +61,12 @@ public class Lib {
     }
 
     public void importFrom(final Lib source, final Set<String> ids) {
-        for (final var id: ids) { bindings.put(id, source.bindings.get(id)); }
+        for (final var id : ids) {
+            bindings.put(id, source.bindings.get(id));
+        }
     }
 
-    public void importFrom(final Lib source, String...ids) {
+    public void importFrom(final Lib source, String... ids) {
         importFrom(source, new TreeSet<>(Arrays.stream(ids).toList()));
     }
 
@@ -62,7 +82,8 @@ public class Lib {
         }
     }
 
-    protected void init(final VM vm, final Loc loc) { }
+    protected void init(final VM vm, final Loc loc) {
+    }
 }
 
 

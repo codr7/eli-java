@@ -13,7 +13,7 @@ public final class SeqLib extends Lib {
                     final var s = args[0];
                     final var st = s.type().cast(CoreLib.seqTrait, loc);
                     vm.registers.set(rResult, st.head(s));
-        });
+                });
 
         bindMethod("tail",
                 new Arg[]{new Arg("seq", CoreLib.seqTrait)},

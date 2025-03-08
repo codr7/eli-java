@@ -3,6 +3,12 @@ package codr7.eli;
 import java.util.Set;
 
 public interface Op {
+    Code code();
+
+    String dump(VM vm);
+
+    void io(VM vm, Set<Integer> read, Set<Integer> write);
+
     enum Code {
         AddItem,
         Bench, Branch,
@@ -19,8 +25,4 @@ public interface Op {
         Unzip,
         Zip
     }
-
-    Code code();
-    String dump(VM vm);
-    void io(VM vm, Set<Integer> read, Set<Integer> write);
 }

@@ -10,7 +10,9 @@ public class CharReader implements Reader {
     public static final CharReader instance = new CharReader();
 
     public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc loc) {
-        if (in.peek() != '\\') { return false; }
+        if (in.peek() != '\\') {
+            return false;
+        }
         final var floc = loc.dup();
         loc.update(in.pop());
         final var c = in.pop();

@@ -18,5 +18,6 @@ public record SetPath(Path path) implements Op {
     }
 
     @Override
-    public void io(VM vm, Set<Integer> read, Set<Integer> write) {}
+    public void io(VM vm, Set<Integer> read, Set<Integer> write) {
+    }
 }

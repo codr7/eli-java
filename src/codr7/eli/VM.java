@@ -2,11 +2,9 @@ package codr7.eli;
 
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.*;
-import codr7.eli.libs.core.traits.CallTrait;
 import codr7.eli.libs.core.traits.IterTrait;
-import codr7.eli.ops.*;
 import codr7.eli.ops.Iter;
-import codr7.eli.ops.MakeList;
+import codr7.eli.ops.*;
 import codr7.eli.readers.*;
 
 import java.io.IOException;
@@ -17,21 +15,12 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public interface DoLibBody {
-        void call();
-    }
-
     public final static int VERSION = 7;
-
-    public boolean debug = false;
     public final List<Reader> suffixReaders = new ArrayList<>();
     public final ArrayList<Op> ops = new ArrayList<>();
-    public Path path = Paths.get("");
-    public int pc = 0;
     public final List<Reader> prefixReaders = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
     public final int rNull;
-
     public final BitLib bitLib = new BitLib();
     public final CoreLib coreLib = new CoreLib();
     public final GUILib guiLib = new GUILib();
@@ -41,8 +30,13 @@ public final class VM {
     public final SeqLib seqLib = new SeqLib();
     public final StringLib stringLib = new StringLib();
     public final Lib userLib = new Lib("user", null);
-
+    private final List<Call> calls = new ArrayList<>();
+    public boolean debug = false;
+    public Path path = Paths.get("");
+    public int pc = 0;
     public Lib currentLib = null;
+    private Op.Code[] opCodes = new Op.Code[0];
+    private Object[] opValues = new Object[0];
 
     public VM() {
         prefixReaders.add(WhitespaceReader.instance);
@@ -204,7 +198,7 @@ public final class VM {
 
             switch (opCodes[pc]) {
                 case AddItem: {
-                    final var op = (AddItem)opValues[pc];
+                    final var op = (AddItem) opValues[pc];
                     final var t = registers.get(op.rTarget()).cast(CoreLib.listType);
                     final var v = registers.get(op.rItem());
                     System.out.println(v.dump(this));
@@ -213,9 +207,9 @@ public final class VM {
                     break;
                 }
                 case Bench: {
-                    final var op = (Bench)opValues[pc];
+                    final var op = (Bench) opValues[pc];
                     final var started = System.nanoTime();
-                    final var startPc = pc+1;
+                    final var startPc = pc + 1;
 
                     for (var i = 0; i < op.reps(); i++) {
                         eval(startPc, op.bodyEnd().pc);
@@ -227,12 +221,12 @@ public final class VM {
                     break;
                 }
                 case Branch: {
-                    final var op = (Branch)opValues[pc];
+                    final var op = (Branch) opValues[pc];
                     pc = registers.get(op.rCondition()).toBit(this) ? pc + 1 : op.elseStart().pc;
                     break;
                 }
                 case CallRegister: {
-                    final var op = (CallRegister)opValues[pc];
+                    final var op = (CallRegister) opValues[pc];
                     var t = registers.get(op.rTarget());
 
                     if (t.type() == CoreLib.bindingType) {
@@ -244,7 +238,7 @@ public final class VM {
                     break;
                 }
                 case CallValue: {
-                    final var op = (CallValue)opValues[pc];
+                    final var op = (CallValue) opValues[pc];
                     var t = op.target();
 
                     if (t.type() == CoreLib.bindingType) {
@@ -256,7 +250,7 @@ public final class VM {
                     break;
                 }
                 case Check: {
-                    final var op = (Check)opValues[pc];
+                    final var op = (Check) opValues[pc];
                     final var expected = registers.get(op.rValues());
                     final var actual = registers.get(op.rValues() + 1);
 
@@ -270,42 +264,42 @@ public final class VM {
                     break;
                 }
                 case Copy: {
-                    final var op = (Copy)opValues[pc];
+                    final var op = (Copy) opValues[pc];
                     registers.set(op.rTo(), registers.get(op.rFrom()));
                     pc++;
                     break;
                 }
                 case Goto:
-                    pc = ((Label)opValues[pc]).pc;
+                    pc = ((Label) opValues[pc]).pc;
                     break;
                 case Inc: {
-                    final var op = (Inc)opValues[pc];
+                    final var op = (Inc) opValues[pc];
                     final var v = registers.get(op.rTarget()).cast(CoreLib.intType);
                     registers.set(op.rTarget(), new Value<>(CoreLib.intType, v + op.delta()));
                     pc++;
                     break;
                 }
                 case Iter: {
-                    final var rt = (Integer)opValues[pc];
+                    final var rt = (Integer) opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((IterTrait)t.type()).iter(this, t);
+                    final var it = ((IterTrait) t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.iterType, it));
                     pc++;
                     break;
                 }
                 case Left: {
-                    final var op = (Left)opValues[pc];
+                    final var op = (Left) opValues[pc];
                     registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).left());
                     pc++;
                     break;
                 }
                 case MakeList: {
-                    registers.set((Integer)opValues[pc], new Value<>(CoreLib.listType, new ArrayList<>()));
+                    registers.set((Integer) opValues[pc], new Value<>(CoreLib.listType, new ArrayList<>()));
                     pc++;
                     break;
                 }
                 case Next: {
-                    final var op = (Next)opValues[pc];
+                    final var op = (Next) opValues[pc];
                     final var iter = registers.get(op.rIter()).cast(CoreLib.iterType);
                     pc = (iter.next(this, op.rItem(), op.loc())) ? pc + 1 : op.bodyEnd().pc;
                     break;
@@ -314,7 +308,7 @@ public final class VM {
                     pc++;
                     break;
                 case Put: {
-                    final var op = (Put)opValues[pc];
+                    final var op = (Put) opValues[pc];
                     registers.set(op.rTarget(), op.value().dup(this));
                     pc++;
                     break;
@@ -330,19 +324,19 @@ public final class VM {
                     break;
                 }
                 case Right: {
-                    final var op = (Right)opValues[pc];
+                    final var op = (Right) opValues[pc];
                     registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.pairType).right());
                     pc++;
                     break;
                 }
                 case SetPath:
-                    path = (Path)opValues[pc];
+                    path = (Path) opValues[pc];
                     pc++;
                     break;
                 case Splat: {
-                    final var rt = (Integer)opValues[pc];
+                    final var rt = (Integer) opValues[pc];
                     final var t = registers.get(rt);
-                    final var it = ((IterTrait)t.type()).iter(this, t);
+                    final var it = ((IterTrait) t.type()).iter(this, t);
                     registers.set(rt, new Value<>(CoreLib.splatType, it));
                     pc++;
                     break;
@@ -351,11 +345,11 @@ public final class VM {
                     pc++;
                     return;
                 case Trace:
-                    System.out.println((String)opValues[pc]);
+                    System.out.println((String) opValues[pc]);
                     pc++;
                     break;
                 case Unzip: {
-                    final var op = (Unzip)opValues[pc];
+                    final var op = (Unzip) opValues[pc];
                     final var p = registers.get(op.rPair()).cast(CoreLib.pairType);
                     registers.set(op.rLeft(), p.left());
                     registers.set(op.rRight(), p.right());
@@ -363,7 +357,7 @@ public final class VM {
                     break;
                 }
                 case Zip: {
-                    final var op = (Zip)opValues[pc];
+                    final var op = (Zip) opValues[pc];
                     final var l = registers.get(op.rLeft());
                     final var r = registers.get(op.rRight());
                     registers.set(op.rResult(), new Value<>(CoreLib.pairType, new Pair(l, r)));
@@ -450,14 +444,13 @@ public final class VM {
     }
 
     private void initLibs() {
-        for (final var v: userLib.bindings.values()) {
+        for (final var v : userLib.bindings.values()) {
             if (v.type() == CoreLib.libType) {
                 v.cast(CoreLib.libType).tryInit(this);
             }
         }
     }
-
-    private final List<Call> calls = new ArrayList<>();
-    private Op.Code[] opCodes = new Op.Code[0];
-    private Object[] opValues = new Object[0];
+    public interface DoLibBody {
+        void call();
+    }
 }

@@ -17,7 +17,7 @@ public interface CallTrait {
         final var args = new ArrayList<IValue>();
 
         for (var i = 0; i < arity; i++) {
-            final var v = vm.registers.get(rArgs+i);
+            final var v = vm.registers.get(rArgs + i);
             Value.expand(vm, v, args, loc);
         }
 
@@ -36,7 +36,7 @@ public interface CallTrait {
         final var rArgs = vm.alloc(arity);
 
         for (var i = 0; i < arity; i++) {
-            final var f = body[i+1];
+            final var f = body[i + 1];
             f.emit(vm, rArgs + i);
         }
 

@@ -10,7 +10,9 @@ public class WhitespaceReader implements Reader {
     public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc loc) {
         for (; ; ) {
             final var c = in.peek();
-            if (!Character.isWhitespace(c)) { break; }
+            if (!Character.isWhitespace(c)) {
+                break;
+            }
             in.pop();
             loc.update(c);
         }

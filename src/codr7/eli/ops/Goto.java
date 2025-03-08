@@ -1,6 +1,8 @@
 package codr7.eli.ops;
 
-import codr7.eli.*;
+import codr7.eli.Label;
+import codr7.eli.Op;
+import codr7.eli.VM;
 
 import java.util.Set;
 
@@ -16,5 +18,6 @@ public record Goto(Label target) implements Op {
     }
 
     @Override
-    public void io(VM vm, Set<Integer> read, Set<Integer> write) {}
+    public void io(VM vm, Set<Integer> read, Set<Integer> write) {
+    }
 }

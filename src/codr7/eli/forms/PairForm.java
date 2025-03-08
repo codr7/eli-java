@@ -30,7 +30,8 @@ public final class PairForm extends BaseForm {
         }
     }
 
-    @Override public void bindRegister(final VM vm, final int rValue, final Loc loc) {
+    @Override
+    public void bindRegister(final VM vm, final int rValue, final Loc loc) {
         if (left.isNil()) {
             final var rRight = vm.alloc(1);
             vm.emit(new Right(rValue, rRight, loc));
@@ -48,9 +49,13 @@ public final class PairForm extends BaseForm {
         }
     }
 
-    @Override public String dump(final VM vm) { return left.dump(vm) + ":" + right.dump(vm); }
+    @Override
+    public String dump(final VM vm) {
+        return left.dump(vm) + ":" + right.dump(vm);
+    }
 
-    @Override public void emit(final VM vm, final int rResult) {
+    @Override
+    public void emit(final VM vm, final int rResult) {
         final var v = value(vm);
 
         if (v == null) {
@@ -63,7 +68,8 @@ public final class PairForm extends BaseForm {
         }
     }
 
-    @Override public boolean eq(final IForm other) {
+    @Override
+    public boolean eq(final IForm other) {
         if (other instanceof PairForm f) {
             return left.eq(f.left) && right.eq(f.right);
         }
@@ -71,27 +77,34 @@ public final class PairForm extends BaseForm {
         return false;
     }
 
-    @Override public IValue quote(final VM vm, final Loc loc) {
+    @Override
+    public IValue quote(final VM vm, final Loc loc) {
         return new Value<>(CoreLib.pairType, new Pair(left.quote(vm, loc), right.value(vm)));
     }
 
-    @Override public IValue rawValue(final VM vm) {
+    @Override
+    public IValue rawValue(final VM vm) {
         final var lv = left.rawValue(vm);
 
         if (lv != null) {
             final var rv = right.rawValue(vm);
-            if (rv != null) { return new Value<>(CoreLib.pairType, new Pair(lv, rv)); }
+            if (rv != null) {
+                return new Value<>(CoreLib.pairType, new Pair(lv, rv));
+            }
         }
 
         return null;
     }
 
-    @Override public IValue value(final VM vm) {
+    @Override
+    public IValue value(final VM vm) {
         final var lv = left.value(vm);
 
         if (lv != null) {
             final var rv = right.value(vm);
-            if (rv != null) { return new Value<>(CoreLib.pairType, new Pair(lv, rv)); }
+            if (rv != null) {
+                return new Value<>(CoreLib.pairType, new Pair(lv, rv));
+            }
         }
 
         return null;

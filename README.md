@@ -8,7 +8,7 @@ Launching the `.jar`-file without arguments starts a REPL.
 
 ```
 $ java -jar eli.jar
-eli v7
+eli v8
 
  1 (say 'hello)
  2

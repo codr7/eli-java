@@ -5,11 +5,11 @@ import codr7.eli.Lib;
 import codr7.eli.Value;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.core.traits.CallTrait;
+import codr7.eli.libs.gui.shims.Container;
 import codr7.eli.libs.gui.shims.OpenDialog;
 import codr7.eli.libs.gui.shims.TabView;
 import codr7.eli.libs.gui.shims.Table;
 import codr7.eli.libs.gui.types.*;
-import codr7.eli.libs.gui.shims.Container;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -23,11 +23,11 @@ public final class GUILib extends Lib {
     public static final ContainerType containerType = new ContainerType("Container", widgetType);
 
     public static final ButtonType buttonType = new ButtonType("Button", containerType);
-    public static final ColumnType columnType = new ColumnType("Column", CoreLib.anyType);
-    public static final FrameType frameType = new FrameType("Frame", widgetType);
     public static final OpenDialogType openDialogType = new OpenDialogType("OpenDialog", containerType);
     public static final TabViewType tabViewType = new TabViewType("TabView", containerType);
     public static final TableType tableType = new TableType("TableView", containerType);
+    public static final ColumnType columnType = new ColumnType("Column", CoreLib.anyType);
+    public static final FrameType frameType = new FrameType("Frame", widgetType);
 
     public GUILib() {
         super("gui", null);
@@ -61,7 +61,7 @@ public final class GUILib extends Lib {
         bindMethod("add-tab",
                 new Arg[]{new Arg("parent", tabViewType),
                         new Arg("title", CoreLib.stringType),
-                new Arg("child", widgetType)},
+                        new Arg("child", widgetType)},
                 (vm, args, rResult, location) -> {
                     final var title = args[1].cast(CoreLib.stringType);
                     final var child = args[2].cast(widgetType);
@@ -115,7 +115,7 @@ public final class GUILib extends Lib {
                     final var d = new OpenDialog(new JFileChooser());
 
                     if (args.length > 1) {
-                        for (final var f: args[1].cast(CoreLib.listType)) {
+                        for (final var f : args[1].cast(CoreLib.listType)) {
                             final var fp = f.cast(CoreLib.pairType);
                             final var ext = fp.left().cast(CoreLib.symType);
                             final var inf = fp.right().cast(CoreLib.stringType);
@@ -136,7 +136,9 @@ public final class GUILib extends Lib {
 
         bindMethod("pack", new Arg[]{new Arg("frames*")},
                 (vm, args, rResult, loc) -> {
-                    for (final var a: args) { a.cast(frameType).frame.pack(); }
+                    for (final var a : args) {
+                        a.cast(frameType).frame.pack();
+                    }
                 });
 
         bindMethod("panel", new Arg[]{},
@@ -168,7 +170,9 @@ public final class GUILib extends Lib {
 
         bindMethod("show", new Arg[]{new Arg("widgets*")},
                 (vm, args, rResult, loc) -> {
-                    for (final var a: args) { a.cast(widgetType).component().setVisible(true); }
+                    for (final var a : args) {
+                        a.cast(widgetType).component().setVisible(true);
+                    }
                 });
     }
 }

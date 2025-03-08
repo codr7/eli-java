@@ -17,5 +17,6 @@ public record Stop() implements Op {
     }
 
     @Override
-    public void io(VM vm, Set<Integer> read, Set<Integer> write) {}
+    public void io(VM vm, Set<Integer> read, Set<Integer> write) {
+    }
 }

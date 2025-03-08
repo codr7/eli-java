@@ -1,7 +1,6 @@
 package codr7.eli;
 
 import codr7.eli.errors.EvalError;
-import codr7.eli.libs.CoreLib;
 
 import static codr7.eli.libs.CoreLib.bindingType;
 
@@ -13,7 +12,9 @@ public record Method(String id,
 
     public int arity() {
         var result = args.length;
-        if (result > 0 && args[result-1].splat) { return -1; }
+        if (result > 0 && args[result - 1].splat) {
+            return -1;
+        }
         return result;
     }
 
@@ -36,7 +37,7 @@ public record Method(String id,
         var rArg = this.rArgs;
         var ai = 0;
 
-        for (final var a: this.args) {
+        for (final var a : this.args) {
             ai = a.bind(vm, args, ai, rArg, loc);
             rArg++;
         }
