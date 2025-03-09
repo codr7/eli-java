@@ -2,14 +2,13 @@ package codr7.eli.forms;
 
 import codr7.eli.*;
 import codr7.eli.libs.CoreLib;
-import codr7.eli.ops.ListAdd;
+import codr7.eli.ops.MapAdd;
+import java.util.TreeMap;
 
-import java.util.ArrayList;
+public class MapForm extends BaseForm {
+    public final PairForm[] items;
 
-public class ListForm extends BaseForm {
-    public final IForm[] items;
-
-    public ListForm(IForm[] items, final Loc loc) {
+    public MapForm(final PairForm[] items, final Loc loc) {
         super(loc);
         this.items = items;
     }
@@ -19,12 +18,14 @@ public class ListForm extends BaseForm {
         final var v = value(vm);
 
         if (v == null) {
-            new Value<>(CoreLib.List, new ArrayList<>()).emit(vm, rResult, loc());
-            final var rItem = vm.alloc(1);
+            new Value<>(CoreLib.Map, new TreeMap<>()).emit(vm, rResult, loc());
+            final var rKey = vm.alloc(1);
+            final var rValue = vm.alloc(1);
 
             for (final var it : items) {
-                it.emit(vm, rItem);
-                vm.emit(new ListAdd(rResult, rItem, it.loc()));
+                it.left.emit(vm, rKey);
+                it.right.emit(vm, rValue);
+                vm.emit(new MapAdd(rResult, rKey, rValue, it.loc()));
             }
         } else {
             v.emit(vm, rResult, loc());
@@ -33,7 +34,7 @@ public class ListForm extends BaseForm {
 
     @Override
     public boolean eq(final IForm other) {
-        if (other instanceof ListForm f) {
+        if (other instanceof MapForm f) {
             if (f.items.length != items.length) {
                 return false;
             }
@@ -53,55 +54,74 @@ public class ListForm extends BaseForm {
     @Override
     public String dump(VM vm) {
         final var result = new StringBuilder();
-        result.append('[');
+        result.append('{');
 
         for (var i = 0; i < items.length; i++) {
             if (i > 0) {
                 result.append(' ');
             }
+
             result.append(items[i].dump(vm));
         }
 
-        result.append(']');
+        result.append('}');
         return result.toString();
     }
 
     @Override
     public IValue quote(final VM vm, final Loc loc) {
-        final var result = new ArrayList<IValue>();
+        final var result = new TreeMap<IValue, IValue>();
+
         for (final var it : items) {
-            result.add(it.quote(vm, loc));
+            result.put(it.left.quote(vm, loc), it.right.quote(vm, loc));
         }
-        return new Value<>(CoreLib.List, result);
+
+        return new Value<>(CoreLib.Map, result);
     }
 
     @Override
     public IValue rawValue(VM vm) {
-        final var vs = new ArrayList<IValue>();
+        final var vs = new TreeMap<IValue, IValue>();
 
         for (final var it : items) {
-            final var v = it.rawValue(vm);
+            final var k = it.left.rawValue(vm);
+
+            if (k == null) {
+                return null;
+            }
+
+            final var v = it.right.rawValue(vm);
+
             if (v == null) {
                 return null;
             }
-            Value.expand(vm, v, vs, loc());
+
+            vs.put(k, v);
         }
 
-        return new Value<>(CoreLib.List, vs);
+        return new Value<>(CoreLib.Map, vs);
     }
 
     @Override
     public IValue value(VM vm) {
-        final var vs = new ArrayList<IValue>();
+        final var vs = new TreeMap<IValue, IValue>();
 
         for (final var it : items) {
-            final var v = it.value(vm);
+            final var k = it.left.value(vm);
+
+            if (k == null) {
+                return null;
+            }
+
+            final var v = it.right.rawValue(vm);
+
             if (v == null) {
                 return null;
             }
-            Value.expand(vm, v, vs, loc());
+
+            vs.put(k, v);
         }
 
-        return new Value<>(CoreLib.List, vs);
+        return new Value<>(CoreLib.Map, vs);
     }
 }

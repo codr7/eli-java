@@ -2,10 +2,10 @@ package codr7.eli.readers;
 
 import codr7.eli.*;
 import codr7.eli.errors.ReadError;
-import codr7.eli.forms.LiteralForm;
-import codr7.eli.forms.PairForm;
+import codr7.eli.forms.*;
 import codr7.eli.libs.CoreLib;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.TreeMap;
 
@@ -18,8 +18,7 @@ public class MapReader implements Reader {
         }
         final var loc = location.dup();
         location.update(in.pop());
-        final var m = new TreeMap<IValue, IValue>();
-
+        final var body = new ArrayDeque<PairForm>();
 
         for (; ; ) {
             WhitespaceReader.instance.read(vm, in, out, location);
@@ -38,11 +37,18 @@ public class MapReader implements Reader {
                 throw new ReadError("Unexpected end of map", location);
             }
 
-            final var pf = out.removeLast().cast(vm, PairForm.class);
-            m.put(pf.left.value(vm), pf.right.value(vm));
+
+            var it = out.removeLast();
+
+            if (it instanceof QuoteForm qf) {
+                final var p = qf.target.cast(vm, PairForm.class);
+                it = new PairForm(new QuoteForm(p.left, p.left.loc()), p.right, p.loc());
+            }
+
+            body.add(it.cast(vm, PairForm.class));
         }
 
-        out.addLast(new LiteralForm(new Value<>(CoreLib.Map, m), loc));
+        out.addLast(new MapForm(body.toArray(new PairForm[0]), loc));
         return true;
     }
 }

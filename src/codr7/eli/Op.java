@@ -10,13 +10,12 @@ public interface Op {
     void io(VM vm, Set<Integer> read, Set<Integer> write);
 
     enum Code {
-        AddItem,
         Bench, Branch,
         CallRegister, CallValue, Check, Copy,
         Goto,
         Inc, Iter,
-        Left,
-        MakeList,
+        Left, ListAdd,
+        MapAdd,
         Next, Nop,
         Put,
         Return, Right,

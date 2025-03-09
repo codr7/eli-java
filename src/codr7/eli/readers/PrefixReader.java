@@ -18,9 +18,11 @@ public abstract class PrefixReader implements Reader {
         }
         final var floc = loc.dup();
         loc.update(in.pop());
+
         if (!vm.read(in, out, loc)) {
             throw new ReadError("Missing target", loc);
         }
+
         out.addLast(boxTarget(out.removeLast(), floc));
         return true;
     }

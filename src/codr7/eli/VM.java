@@ -194,15 +194,6 @@ public final class VM {
             //System.out.println(pc + " " + ops.get(pc).dump(this));
 
             switch (opCodes[pc]) {
-                case AddItem: {
-                    final var op = (AddItem) opValues[pc];
-                    final var t = registers.get(op.rTarget()).cast(CoreLib.List);
-                    final var v = registers.get(op.rItem());
-                    System.out.println(v.dump(this));
-                    Value.expand(this, v, t, op.loc());
-                    pc++;
-                    break;
-                }
                 case Bench: {
                     final var op = (Bench) opValues[pc];
                     final var started = System.nanoTime();
@@ -290,8 +281,20 @@ public final class VM {
                     pc++;
                     break;
                 }
-                case MakeList: {
-                    registers.set((Integer) opValues[pc], new Value<>(CoreLib.List, new ArrayList<>()));
+                case ListAdd: {
+                    final var op = (ListAdd) opValues[pc];
+                    final var t = registers.get(op.rTarget()).cast(CoreLib.List);
+                    final var v = registers.get(op.rItem());
+                    Value.expand(this, v, t, op.loc());
+                    pc++;
+                    break;
+                }
+                case MapAdd: {
+                    final var op = (MapAdd) opValues[pc];
+                    final var t = registers.get(op.rTarget()).cast(CoreLib.Map);
+                    final var k = registers.get(op.rKey());
+                    final var v = registers.get(op.rValue());
+                    t.put(k, v);
                     pc++;
                     break;
                 }
@@ -414,7 +417,6 @@ public final class VM {
                 opCodes[i] = o.code();
 
                 opValues[i] = switch (o) {
-                    case AddItem op -> op;
                     case Bench op -> op;
                     case Branch op -> op;
                     case CallRegister op -> op;
@@ -425,7 +427,8 @@ public final class VM {
                     case Inc op -> op;
                     case Iter op -> op.rTarget();
                     case Left op -> op;
-                    case MakeList op -> op.rTarget();
+                    case ListAdd op -> op;
+                    case MapAdd op -> op;
                     case Next op -> op;
                     case Put op -> op;
                     case Right op -> op;
