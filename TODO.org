@@ -4,6 +4,9 @@ fib PT1.014438102S
 * add MapForm
 ** fix reader
 
+* make VM.emit(IForm[]/Deque<IForm>) static in Form
+** fix errors
+
 * change jmethod call to take Stream<IValue> for args
 ** perf
 
