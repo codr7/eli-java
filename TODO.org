@@ -1,8 +1,6 @@
 fact PT1.041657052S
 fib PT1.014438102S
 
-ELI
-
 * add MapForm
 ** fix reader
 
@@ -20,7 +18,19 @@ ELI
 *** add support in / method
 
 * add load macro
-** emit setpath
+** add import macro
+** reorganize tests
+
+* add typing
+** add TypeForm
+** perform type check on emit
+
+foo @ Int
+
+* add method sets
+** create on method with typed args
+** create on method with same name (check values !=)
+** dispatch on arg types when called
 
 * implement composition
 ** foo & bar
