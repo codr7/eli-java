@@ -1,8 +1,9 @@
-fact PT1.041657052S
-fib PT1.014438102S
+fact PT1.682860949S
+fib PT1.568288647S
 
-* change jmethod call to take Stream<IValue> for args
-** perf
+* add load macro
+** add import macro
+** reorganize tests
 
 * add Method support for optional args
 ** a.optional
@@ -13,10 +14,6 @@ fib PT1.014438102S
 * return 1/x for one arg div
 ** add one arg div to num trait
 *** add support in / method
-
-* add load macro
-** add import macro
-** reorganize tests
 
 * add typing
 ** add TypeForm
