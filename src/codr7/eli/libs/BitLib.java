@@ -25,7 +25,7 @@ public final class BitLib extends Lib {
                     vm.registers.set(rResult, new Value<>(CoreLib.Int, v >>> n));
                 });
 
-        bindMethod("len", new Arg[]{new Arg("value", CoreLib.Int)},
+        bindMethod("size", new Arg[]{new Arg("value", CoreLib.Int)},
                 (vm, args, rResult, loc) -> {
                     final var v = args[0].cast(CoreLib.Int).intValue();
                     vm.registers.set(rResult, new Value<>(CoreLib.Int, (long) Utils.log2(v)));

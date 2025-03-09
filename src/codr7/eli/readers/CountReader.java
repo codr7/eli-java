@@ -5,15 +5,15 @@ import codr7.eli.Loc;
 import codr7.eli.forms.CallForm;
 import codr7.eli.forms.IdForm;
 
-public class LenReader extends PrefixReader {
-    public static final LenReader instance = new LenReader();
+public class CountReader extends PrefixReader {
+    public static final CountReader instance = new CountReader();
 
-    public LenReader() {
+    public CountReader() {
         super('#');
     }
 
     @Override
     public IForm boxTarget(final IForm target, final Loc loc) {
-        return new CallForm(new IForm[]{new IdForm("len", loc), target}, loc);
+        return new CallForm(new IForm[]{new IdForm("count", loc), target}, loc);
     }
 }

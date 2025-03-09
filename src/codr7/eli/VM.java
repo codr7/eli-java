@@ -43,7 +43,7 @@ public final class VM {
         prefixReaders.add(DecimalReader.instance);
         prefixReaders.add(IntReader.instance);
         prefixReaders.add(IdReader.instance);
-        prefixReaders.add(LenReader.instance);
+        prefixReaders.add(CountReader.instance);
         prefixReaders.add(ListReader.instance);
         prefixReaders.add(MapReader.instance);
         prefixReaders.add(QuoteReader.instance);

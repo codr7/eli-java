@@ -115,7 +115,7 @@ public class ListType
     }
 
     @Override
-    public int len(final IValue target) {
+    public int count(final IValue target) {
         return target.cast(this).size();
     }
 

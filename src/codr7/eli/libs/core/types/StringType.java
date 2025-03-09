@@ -54,7 +54,7 @@ public class StringType extends BaseType<String>
     }
 
     @Override
-    public int len(final IValue target) {
+    public int count(final IValue target) {
         return target.cast(this).length();
     }
 

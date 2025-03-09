@@ -54,7 +54,7 @@ public class PairType extends BaseType<Pair>
     }
 
     @Override
-    public int len(final IValue target) {
+    public int count(final IValue target) {
         int n = 0;
         var v = target;
 
