@@ -13,6 +13,11 @@ public record SetPath(Path path) implements Op {
     }
 
     @Override
+    public Object data() {
+        return path;
+    }
+
+    @Override
     public String dump(final VM vm) {
         return "SetPath path: " + path;
     }

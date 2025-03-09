@@ -5,6 +5,10 @@ import java.util.Set;
 public interface Op {
     Code code();
 
+    default Object data() {
+        return this;
+    }
+
     String dump(VM vm);
 
     void io(VM vm, Set<Integer> read, Set<Integer> write);

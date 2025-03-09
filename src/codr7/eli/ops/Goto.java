@@ -13,6 +13,11 @@ public record Goto(Label target) implements Op {
     }
 
     @Override
+    public Object data() {
+        return target;
+    }
+
+    @Override
     public String dump(final VM vm) {
         return "Goto target: " + target;
     }

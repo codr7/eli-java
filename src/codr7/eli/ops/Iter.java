@@ -12,6 +12,11 @@ public record Iter(int rTarget) implements Op {
     }
 
     @Override
+    public Object data() {
+        return rTarget;
+    }
+
+    @Override
     public String dump(final VM vm) {
         return "Iter rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ")";
     }

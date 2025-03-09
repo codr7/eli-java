@@ -12,6 +12,11 @@ public record Trace(String text) implements Op {
     }
 
     @Override
+    public Object data() {
+        return text;
+    }
+
+    @Override
     public String dump(final VM vm) {
         return text;
     }
