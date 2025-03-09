@@ -137,14 +137,14 @@ public class CoreLib extends Lib {
                         vm.currentLib.bindMacro("return", new Arg[]{new Arg("args*")},
                                 (_vm, returnArgs, _rResult, _loc) -> {
                                     _vm.doLib(null, () -> {
-                                        _vm.emit(returnArgs, _rResult);
+                                        Form.emit(_vm, returnArgs, _rResult);
                                     });
 
                                     _vm.emit(new Goto(end));
                                 });
 
                         m.bindArgs(vm);
-                        vm.emit(args, rResult);
+                        Form.emit(vm, args, rResult);
                     });
 
                     end.pc = vm.emitPc();
@@ -298,7 +298,7 @@ public class CoreLib extends Lib {
                     final var reps = args.removeFirst().eval(vm).cast(Int);
                     final var bodyEnd = new Label();
                     vm.emit(new Bench(reps, bodyEnd, rResult, loc));
-                    vm.emit(args, rResult);
+                    Form.emit(vm, args, rResult);
                     bodyEnd.pc = vm.emitPc();
                 });
 
@@ -309,7 +309,7 @@ public class CoreLib extends Lib {
 
                     vm.doLib(null, () -> {
                         args.removeFirst().emit(vm, rValues);
-                        vm.emit(args, rValues + 1);
+                        Form.emit(vm, args, rValues + 1);
                         vm.emit(new Check(rValues, location));
                     });
                 });
@@ -349,11 +349,8 @@ public class CoreLib extends Lib {
                 });
 
         bindMacro("do", new Arg[]{new Arg("body*")},
-                (vm, args, rResult, location) -> {
-                    vm.doLib(null, () -> {
-                        vm.emit(new ArrayDeque<>(Arrays.asList(args)), rResult);
-                    });
-                });
+                (vm, args, rResult, location) ->
+                    vm.doLib(null, () -> Form.emit(vm, args, rResult)));
 
         bindMacro("for",
                 new Arg[]{new Arg("bindings", List), new Arg("body*")},
@@ -400,17 +397,17 @@ public class CoreLib extends Lib {
                         vm.doLib(null, () -> {
                             vm.currentLib.bindMacro("break", new Arg[]{new Arg("args*")},
                                     (_vm, _breakArgs, _rResult, _loc) -> {
-                                        _vm.doLib(null, () -> _vm.emit(_breakArgs, _rResult));
+                                        _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
                                         _vm.emit(new Goto(bodyEnd));
                                     });
 
                             vm.currentLib.bindMacro("next", new Arg[]{new Arg("args*")},
                                     (_vm, _breakArgs, _rResult, _loc) -> {
-                                        _vm.doLib(null, () -> _vm.emit(_breakArgs, _rResult));
+                                        _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
                                         _vm.emit(new Goto(bodyStart));
                                     });
 
-                            vm.emit(args, rResult);
+                            Form.emit(vm, args, rResult);
                         });
 
                         vm.emit(new Goto(bodyStart));
@@ -432,11 +429,11 @@ public class CoreLib extends Lib {
                         vm.currentLib.bindMacro("else", new Arg[]{new Arg("body*")},
                                 (_vm, _body, _rResult, _loc) -> {
                                     final var skipElse = new Label();
-                                    vm.emit(new Goto(skipElse));
-                                    elseStart.pc = vm.emitPc();
+                                    _vm.emit(new Goto(skipElse));
+                                    elseStart.pc = _vm.emitPc();
                                     bodyLib.drop("else");
-                                    vm.emit(_body, _rResult);
-                                    skipElse.pc = vm.emitPc();
+                                    Form.emit(_vm, _body, _rResult);
+                                    skipElse.pc = _vm.emitPc();
                                 });
 
                         vm.currentLib.bindMacro("else-if",
@@ -451,7 +448,7 @@ public class CoreLib extends Lib {
                                     new CallForm(fs.toArray(new IForm[0]), _loc).emit(vm, _rResult);
                                 });
 
-                        vm.emit(args, rResult);
+                        Form.emit(vm, args, rResult);
                         if (elseStart.pc == -1) {
                             elseStart.pc = vm.emitPc();
                         }
@@ -522,7 +519,7 @@ public class CoreLib extends Lib {
                                 }
                             }
 
-                            vm.emit(args, rResult);
+                            Form.emit(vm, args, rResult);
                         });
                     } else {
                         throw new EmitError("Expected bindings: " + bsf.dump(vm), loc);
@@ -533,7 +530,7 @@ public class CoreLib extends Lib {
                 (vm, _args, rResult, loc) -> {
                     final var args = Form.toDeque(_args);
                     final var id = args.removeFirst().cast(vm, IdForm.class).id;
-                    vm.doLibId(id, () -> vm.emit(args, rResult));
+                    vm.doLibId(id, () -> Form.emit(vm, args, rResult));
                 });
 
         bindMethod("now", new Arg[]{},
@@ -653,17 +650,17 @@ public class CoreLib extends Lib {
                     vm.doLib(null, () -> {
                         vm.currentLib.bindMacro("break", new Arg[]{new Arg("args*")},
                                 (_vm, _breakArgs, _rResult, _loc) -> {
-                                    _vm.doLib(null, () -> _vm.emit(_breakArgs, _rResult));
+                                    _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
                                     _vm.emit(new Goto(end));
                                 });
 
                         vm.currentLib.bindMacro("next", new Arg[]{new Arg("args*")},
                                 (_vm, _breakArgs, _rResult, _loc) -> {
-                                    _vm.doLib(null, () -> _vm.emit(_breakArgs, _rResult));
+                                    _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
                                     _vm.emit(new Goto(start));
                                 });
 
-                        vm.emit(args, rResult);
+                        Form.emit(vm, args, rResult);
                     });
 
 

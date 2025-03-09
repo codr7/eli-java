@@ -20,6 +20,26 @@ public enum Form {
         return dump(vm, Arrays.stream(forms));
     }
 
+    public static int emit(final VM vm, final Deque<IForm> in, final int rResult) {
+        final var startPc = vm.emitPc();
+
+        for (final var f : in) {
+            f.emit(vm, rResult);
+        }
+
+        return startPc;
+    }
+
+    public static int emit(final VM vm, final IForm[] in, final int rResult) {
+        final var startPc = vm.emitPc();
+
+        for (final var f : in) {
+            f.emit(vm, rResult);
+        }
+
+        return startPc;
+    }
+
     public static Deque<IForm> toDeque(final IForm[] in) {
         return new ArrayDeque<>(Arrays.stream(in).toList());
     }

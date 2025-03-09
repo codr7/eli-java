@@ -117,26 +117,6 @@ public final class VM {
         return startPc;
     }
 
-    public int emit(final Deque<IForm> in, final int rResult) {
-        final var startPc = emitPc();
-
-        for (final var f : in) {
-            f.emit(this, rResult);
-        }
-
-        return startPc;
-    }
-
-    public int emit(final IForm[] in, final int rResult) {
-        final var startPc = emitPc();
-
-        for (final var f : in) {
-            f.emit(this, rResult);
-        }
-
-        return startPc;
-    }
-
     public int emitPc() {
         return ops.size();
     }
@@ -177,7 +157,7 @@ public final class VM {
         final var skip = new Label();
         emit(new Goto(skip));
         final var startPc = emitPc();
-        emit(read(in, loc), rResult);
+        Form.emit(this, read(in, loc), rResult);
         skip.pc = emitPc();
         eval(startPc);
     }
@@ -383,7 +363,7 @@ public final class VM {
             }
 
             emit(new SetPath(p.getParent()));
-            emit(out, rResult);
+            Form.emit(this, out, rResult);
             emit(new SetPath(prevPath));
         } finally {
             this.path = prevPath;
