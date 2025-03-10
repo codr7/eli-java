@@ -8,12 +8,8 @@ public abstract class BaseType<T> implements IDataType<T> {
     public final String id;
     private final Map<IType, Integer> parentTypes = new HashMap<>();
 
-    public BaseType(final String id) {
-        this.id = id;
-    }
-
     public BaseType(final String id, final IType[] parentTypes) {
-        this(id);
+        this.id = id;
         addParentType(this, 1);
         for (final var pt : parentTypes) {
             pt.addParentTypes(this);

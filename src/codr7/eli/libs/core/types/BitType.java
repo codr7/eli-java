@@ -1,13 +1,14 @@
 package codr7.eli.libs.core.types;
 
 import codr7.eli.BaseType;
+import codr7.eli.IType;
 import codr7.eli.IValue;
 import codr7.eli.VM;
 import codr7.eli.libs.core.traits.ComparableTrait;
 
 public final class BitType extends BaseType<Boolean> implements ComparableTrait {
-    public BitType(final String id) {
-        super(id);
+    public BitType(final String id, final IType...parentTypes) {
+        super(id, parentTypes);
     }
 
     @Override

@@ -53,8 +53,8 @@ public class IdForm extends BaseForm {
     }
 
     @Override
-    public void bindRegister(final VM vm, final int rValue, final Loc loc) {
-        vm.currentLib.bind(id, new Value<>(CoreLib.Binding, new Binding(null, rValue)));
+    public void bindRegister(final VM vm, final int rValue, final IType type, final Loc loc) {
+        vm.currentLib.bind(id, new Value<>(CoreLib.Binding, new Binding(type, rValue)));
     }
 
     @Override

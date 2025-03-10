@@ -1,9 +1,6 @@
 package codr7.eli.libs.core.types;
 
-import codr7.eli.BaseType;
-import codr7.eli.IValue;
-import codr7.eli.VM;
-import codr7.eli.Value;
+import codr7.eli.*;
 import codr7.eli.libs.core.traits.ComparableTrait;
 import codr7.eli.libs.core.traits.NumericTrait;
 
@@ -12,8 +9,8 @@ import java.math.BigDecimal;
 public final class FloatType
         extends BaseType<BigDecimal>
         implements ComparableTrait, NumericTrait {
-    public FloatType(final String id) {
-        super(id);
+    public FloatType(final String id, final IType...parentTypes) {
+        super(id, parentTypes);
     }
 
     @Override

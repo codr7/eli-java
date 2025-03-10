@@ -31,21 +31,21 @@ public final class PairForm extends BaseForm {
     }
 
     @Override
-    public void bindRegister(final VM vm, final int rValue, final Loc loc) {
+    public void bindRegister(final VM vm, final int rValue, final IType type, final Loc loc) {
         if (left.isNil()) {
             final var rRight = vm.alloc(1);
             vm.emit(new Right(rValue, rRight, loc));
-            right.bindRegister(vm, rRight, loc);
+            right.bindRegister(vm, rRight, type, loc);
         } else if (right.isNil()) {
             final var rLeft = vm.alloc(1);
             vm.emit(new Left(rValue, rLeft, loc));
-            left.bindRegister(vm, rLeft, loc);
+            left.bindRegister(vm, rLeft, type, loc);
         } else {
             final var rLeft = vm.alloc(1);
             final var rRight = vm.alloc(1);
             vm.emit(new Unzip(rValue, rLeft, rRight, loc));
-            left.bindRegister(vm, rLeft, loc);
-            right.bindRegister(vm, rRight, loc);
+            left.bindRegister(vm, rLeft, null, loc);
+            right.bindRegister(vm, rRight, null, loc);
         }
     }
 

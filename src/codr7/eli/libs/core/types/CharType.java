@@ -1,12 +1,13 @@
 package codr7.eli.libs.core.types;
 
 import codr7.eli.BaseType;
+import codr7.eli.IType;
 import codr7.eli.IValue;
 import codr7.eli.VM;
 
 public final class CharType extends BaseType<Character> {
-    public CharType(final String id) {
-        super(id);
+    public CharType(final String id, final IType...parentTypes) {
+        super(id, parentTypes);
     }
 
     @Override

@@ -1,8 +1,17 @@
 fact PT1.682860949S
 fib PT1.568288647S
 
+* typing
+** register binding/scratch
+** method arg
+
+foo @ Int
+
 * add slice/splice support to list/string/map
 ** handle pair index with/without value
+
+* extreact InfixReader
+** pair/type
 
 * return 1/x for one arg div
 ** add one arg div to num trait
@@ -11,12 +20,6 @@ fib PT1.568288647S
 * fix JMethod arg performance
 ** change to Stream<IValue> & arity?
 ** fixed instance argValues array in JMethod
-
-* add typing
-** add TypeForm
-** perform type check on emit
-
-foo @ Int
 
 * add type sets
 ** Int | Nil

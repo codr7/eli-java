@@ -25,6 +25,7 @@ public class IdReader implements Reader {
                     c == '\'' ||
                     c == '"' ||
                     c == '#' ||
+                    c == '@' ||
                     (c == '*' && !buffer.isEmpty())) {
                 break;
             }
@@ -40,6 +41,7 @@ public class IdReader implements Reader {
         if (buffer.isEmpty()) {
             return false;
         }
+
         out.addLast(new IdForm(buffer.toString(), loc));
         return true;
     }

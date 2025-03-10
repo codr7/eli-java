@@ -11,8 +11,8 @@ import codr7.eli.libs.core.traits.IterableTrait;
 import java.util.ArrayList;
 
 public final class JMacroType extends BaseType<JMacro> implements CallableTrait {
-    public JMacroType(final String id) {
-        super(id);
+    public JMacroType(final String id, final IType...parentTypes) {
+        super(id, parentTypes);
     }
 
     @Override

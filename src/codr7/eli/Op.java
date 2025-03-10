@@ -24,7 +24,7 @@ public interface Op {
         Put,
         Return, Right,
         SetPath, Splat, Stop,
-        Trace,
+        Trace, TypeCheck,
         Unzip,
         Zip
     }

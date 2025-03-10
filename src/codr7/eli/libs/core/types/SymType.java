@@ -1,13 +1,14 @@
 package codr7.eli.libs.core.types;
 
 import codr7.eli.BaseType;
+import codr7.eli.IType;
 import codr7.eli.IValue;
 import codr7.eli.VM;
 import codr7.eli.libs.core.traits.ComparableTrait;
 
 public final class SymType extends BaseType<String> implements ComparableTrait {
-    public SymType(final String id) {
-        super(id);
+    public SymType(final String id, final IType...parentTypes) {
+        super(id, parentTypes);
     }
 
     @Override

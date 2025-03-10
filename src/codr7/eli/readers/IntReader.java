@@ -20,9 +20,11 @@ public class IntReader implements Reader {
         }
 
         if (!Character.isDigit(c)) {
+
             if (isNeg) {
                 in.push('-');
             }
+
             return false;
         }
 

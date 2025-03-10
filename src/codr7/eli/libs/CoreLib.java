@@ -39,8 +39,8 @@ public class CoreLib extends Lib {
     public static final BitType Bit = new BitType("Bit");
     public static final CharType Char = new CharType("Char");
     public static final ExprType Expr = new ExprType("Expr");
-    public static final FloatType Float = new FloatType("Float");
-    public static final IntType Int = new IntType("Int");
+    public static final FloatType Float = new FloatType("Float", Any, Numeric);
+    public static final IntType Int = new IntType("Int", Any, Numeric);
     public static final IterType Iter = new IterType("Iter", Iterable);
     public static final JMacroType JMacro = new JMacroType("JMacro");
     public static final JMethodType JMethod = new JMethodType("JMethod", Callable);
@@ -552,7 +552,7 @@ public class CoreLib extends Lib {
 
                                 if (v == null) {
                                     vf.emit(vm, rValue);
-                                    bs[i].bindRegister(vm, rValue, loc);
+                                    bs[i].bindRegister(vm, rValue, null, loc);
                                 } else {
                                     bs[i].bindValue(vm, v, loc);
                                 }

@@ -3,8 +3,8 @@ package codr7.eli.libs.core.types;
 import codr7.eli.*;
 
 public final class ExprType extends BaseType<IForm> {
-    public ExprType(final String id) {
-        super(id);
+    public ExprType(final String id, final IType...parentTypes) {
+        super(id, parentTypes);
     }
 
     @Override

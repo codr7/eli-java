@@ -49,7 +49,9 @@ public final class VM {
         prefixReaders.add(StringReader.instance);
         prefixReaders.add(UnquoteReader.instance);
 
+        suffixReaders.add(WhitespaceReader.instance);
         suffixReaders.add(PairReader.instance);
+        suffixReaders.add(TypeReader.instance);
         suffixReaders.add(SplatReader.instance);
 
         rNull = alloc(1);
@@ -327,6 +329,13 @@ public final class VM {
                     System.out.println((String) opData[pc]);
                     pc++;
                     break;
+                case TypeCheck: {
+                    final var op = (TypeCheck) opData[pc];
+                    final var v = registers.get(op.rTarget());
+                    v.checkType(this, op.type(), op.loc());
+                    pc++;
+                    break;
+                }
                 case Unzip: {
                     final var op = (Unzip) opData[pc];
                     final var p = registers.get(op.rPair()).cast(CoreLib.Pair);

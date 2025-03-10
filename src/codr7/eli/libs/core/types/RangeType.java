@@ -1,13 +1,10 @@
 package codr7.eli.libs.core.types;
 
-import codr7.eli.BaseType;
-import codr7.eli.IValue;
-import codr7.eli.Range;
-import codr7.eli.VM;
+import codr7.eli.*;
 
 public final class RangeType extends BaseType<Range> {
-    public RangeType(final String id) {
-        super(id);
+    public RangeType(final String id, final IType...parentTypes) {
+        super(id, parentTypes);
     }
 
     @Override

@@ -1,5 +1,5 @@
-(^foo [x y?]
-  (say x " " y))
+(^foo []
+  42)
 
-(foo 1 2)
-(foo 3)
+(let [bar@String (foo)]
+  (say bar))
