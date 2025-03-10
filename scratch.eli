@@ -1,0 +1,5 @@
+(^foo [x y?]
+  (say x " " y))
+
+(foo 1 2)
+(foo 3)

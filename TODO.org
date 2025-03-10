@@ -1,9 +1,6 @@
 fact PT1.682860949S
 fib PT1.568288647S
 
-* add Method support for optional args
-** a.optional
-
 * add slice/splice support to list/string/map
 ** handle pair index with/without value
 
@@ -11,11 +8,22 @@ fib PT1.568288647S
 ** add one arg div to num trait
 *** add support in / method
 
+* fix JMethod arg performance
+** change to Stream<IValue> & arity?
+** fixed instance argValues array in JMethod
+
 * add typing
 ** add TypeForm
 ** perform type check on emit
 
 foo @ Int
+
+* add type sets
+** Int | Nil
+** add X? shortcut for X | Nil
+*** remove Maybe type
+** grep NIL results
+*** switch to Int?
 
 * add method sets
 ** create on method with typed args
@@ -27,11 +35,6 @@ foo @ Int
 
 * add range syntax
 ** 0..10:2
-
-* add type sets
-** Int | Nil
-** add Int? shortcut for Maybe
-** switch string/find result type to intType.maybe
 
 STOJ
 

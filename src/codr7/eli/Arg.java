@@ -1,5 +1,6 @@
 package codr7.eli;
 
+import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 
 import java.util.ArrayList;
@@ -46,7 +47,16 @@ public final class Arg {
             return values.length;
         }
 
-        vm.registers.set(rResult, values[i]);
+        if (values.length > i) {
+            vm.registers.set(rResult, values[i]);
+        } else {
+            if (!optional){
+                throw new EvalError("Missing arg: " + id, loc);
+            }
+
+            vm.registers.set(rResult, CoreLib.NIL);
+        }
+
         return i + 1;
     }
 

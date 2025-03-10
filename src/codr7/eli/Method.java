@@ -11,11 +11,21 @@ public record Method(String id,
                      Loc loc) {
 
     public int arity() {
-        var result = args.length;
-        if (result > 0 && args[result - 1].splat) {
+        final var l = args.length;
+
+        if (l > 0 && args[l-1].splat) {
             return -1;
         }
-        return result;
+
+        var n = 0;
+
+        for (final var a: args) {
+            if (!a.optional) {
+                n++;
+            }
+        }
+
+        return n;
     }
 
     public void bindArgs(final VM vm) {
