@@ -3,10 +3,7 @@ package codr7.eli.libs;
 import codr7.eli.*;
 import codr7.eli.errors.EmitError;
 import codr7.eli.errors.EvalError;
-import codr7.eli.forms.CallForm;
-import codr7.eli.forms.IdForm;
-import codr7.eli.forms.ListForm;
-import codr7.eli.forms.LiteralForm;
+import codr7.eli.forms.*;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.*;
 import codr7.eli.libs.core.traits.IterableTrait;
@@ -484,6 +481,46 @@ public class CoreLib extends Lib {
                     }
                 });
 
+        bindMacro("include", new Arg[]{new Arg("files*")},
+                (vm, args, rResult, loc) -> {
+                    for (final var f: args) {
+                        final var v = f.value(vm);
+
+                        if (v == null) {
+                            throw new EmitError("Expected filename: " + f.dump(vm), f.loc());
+                        }
+
+                        vm.load(Path.of(v.cast(String)), rResult);
+                    }
+                });
+
+        bindMacro("import", new Arg[]{new Arg("ids*")},
+                (vm, args, rResult, loc) -> {
+                    for (final var f: args) {
+                        switch (f) {
+                            case IdForm idf: {
+                                final var found = IdForm.find(vm.currentLib, idf.id, idf.loc());
+
+                                if (found == null) {
+                                    throw new EmitError("Not found: " + idf.dump(vm), idf.loc());
+                                }
+
+                                vm.currentLib.bind(found.id(), found.lib().find(found.id()));
+                                break;
+                            }
+                            case PairForm pf: {
+                                final var srcId= pf.left.cast(vm, IdForm.class).id;
+                                final var dstId = pf.right.cast(vm, IdForm.class).id;
+                                final var v = IdForm.get(vm.currentLib, srcId, pf.loc());
+                                vm.currentLib.bind(dstId, v);
+                                break;
+                            }
+                            default:
+                                throw new EmitError("Expected id: " + f.dump(vm), f.loc());
+                        }
+                    }
+                });
+
         bindMethod("is", new Arg[]{new Arg("args*")},
                 (vm, args, rResult, loc) -> {
                     final var lhs = args[0];
@@ -533,6 +570,20 @@ public class CoreLib extends Lib {
                     final var args = Form.toDeque(_args);
                     final var id = args.removeFirst().cast(vm, IdForm.class).id;
                     vm.doLibId(id, () -> Form.emit(vm, args, rResult));
+                });
+
+        bindMethod("load", new Arg[]{},
+                (vm, args, rResult, loc) -> {
+                    final var skip = new Label();
+                    vm.emit(new Goto(skip));
+                    final var startPc = vm.emitPc();
+
+                    for (final var f: args) {
+                        vm.load(Path.of(f.cast(String)), rResult);
+                    }
+
+                    skip.pc = vm.emitPc();
+                    vm.eval(startPc);
                 });
 
         bindMacro("load", new Arg[]{new Arg("files*")},

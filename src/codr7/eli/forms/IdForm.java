@@ -5,30 +5,46 @@ import codr7.eli.errors.EmitError;
 import codr7.eli.libs.CoreLib;
 
 public class IdForm extends BaseForm {
+    public record Result(Lib lib, String id) {}
+
+    public static Result find(final Lib lib, final String id, final Loc loc) {
+        final var i = id.indexOf('/');
+
+        if (i > 0) {
+            final var lid = id.substring(0, i);
+            final var lv = lib.find(lid);
+
+            if (lv == null) {
+                return null;
+            }
+
+            final var l = lv.cast(CoreLib.Lib);
+
+            if (l == null) {
+                return null;
+            }
+
+            return find(l, id.substring(i + 1), loc);
+        }
+
+        return new Result(lib, id);
+    }
+
+    public static IValue get(final Lib lib, final String id, final Loc loc) {
+        final var found = find(lib, id, loc);
+
+        if (found == null) {
+            throw new EmitError("Unknown id: " + lib.id + '/' + id, loc);
+        }
+
+        return found.lib.find(found.id);
+    }
+
     public final String id;
 
     public IdForm(final String id, final Loc loc) {
         super(loc);
         this.id = id;
-    }
-
-    public static IValue get(final Lib lib, final String id, final Loc loc) {
-        final var i = id.indexOf('/');
-
-        if (i > 0) {
-            final var lid = id.substring(0, i);
-            final var l = lib.find(lid).cast(CoreLib.Lib);
-            if (l == null) {
-                throw new EmitError("Unknown id: " + l + "/" + lid, loc);
-            }
-            return get(l, id.substring(i + 1), loc);
-        }
-
-        final var v = lib.find(id);
-        if (v == null) {
-            throw new EmitError("Unknown id: " + id, loc);
-        }
-        return v;
     }
 
     @Override
