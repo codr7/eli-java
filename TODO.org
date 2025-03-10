@@ -1,9 +1,7 @@
 fact PT1.682860949S
 fib PT1.568288647S
 
-* add load macro
-** add import macro
-** reorganize tests
+* add import macro
 
 * add Method support for optional args
 ** a.optional

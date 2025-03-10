@@ -6,6 +6,7 @@ import codr7.eli.errors.EvalError;
 import codr7.eli.forms.CallForm;
 import codr7.eli.forms.IdForm;
 import codr7.eli.forms.ListForm;
+import codr7.eli.forms.LiteralForm;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.*;
 import codr7.eli.libs.core.traits.IterableTrait;
@@ -14,6 +15,7 @@ import codr7.eli.ops.Iter;
 import codr7.eli.ops.*;
 
 import java.math.BigDecimal;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -531,6 +533,19 @@ public class CoreLib extends Lib {
                     final var args = Form.toDeque(_args);
                     final var id = args.removeFirst().cast(vm, IdForm.class).id;
                     vm.doLibId(id, () -> Form.emit(vm, args, rResult));
+                });
+
+        bindMacro("load", new Arg[]{new Arg("files*")},
+                (vm, args, rResult, loc) -> {
+                    for (final var f: args) {
+                        final var v = f.value(vm);
+
+                        if (v == null) {
+                            throw new EmitError("Expected filename: " + f.dump(vm), f.loc());
+                        }
+
+                        vm.load(Path.of(v.cast(String)), rResult);
+                    }
                 });
 
         bindMethod("now", new Arg[]{},
