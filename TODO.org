@@ -2,10 +2,19 @@ fact PT1.682860949S
 fib PT1.568288647S
 
 * typing
-** register binding/scratch
 ** method arg
 
-foo @ Int
+* add method sets
+** create on method with typed args
+** create on method with same name (check args !=)
+** dispatch on arg types when called
+
+* implement composition
+** foo & bar
+
+* fix JMethod arg performance
+** change to Stream<IValue> & arity?
+** fixed instance argValues array in JMethod
 
 * add slice/splice support to list/string/map
 ** handle pair index with/without value
@@ -17,24 +26,12 @@ foo @ Int
 ** add one arg div to num trait
 *** add support in / method
 
-* fix JMethod arg performance
-** change to Stream<IValue> & arity?
-** fixed instance argValues array in JMethod
-
 * add type sets
 ** Int | Nil
 ** add X? shortcut for X | Nil
 *** remove Maybe type
 ** grep NIL results
 *** switch to Int?
-
-* add method sets
-** create on method with typed args
-** create on method with same name (check values !=)
-** dispatch on arg types when called
-
-* implement composition
-** foo & bar
 
 * add range syntax
 ** 0..10:2

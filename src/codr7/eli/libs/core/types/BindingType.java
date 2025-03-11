@@ -4,6 +4,7 @@ import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.core.traits.CallableTrait;
 import codr7.eli.ops.Copy;
+import codr7.eli.ops.TypeCheck;
 
 public final class BindingType extends BaseType<Binding> implements CallableTrait {
     public BindingType(final String id, final IType...parentTypes) {
@@ -27,9 +28,13 @@ public final class BindingType extends BaseType<Binding> implements CallableTrai
 
     @Override
     public void emit(final VM vm, final IValue value, final int rResult, final Loc loc) {
-        final var rValue = value.cast(this).rValue();
-        if (rResult != rValue) {
-            vm.emit(new Copy(rValue, rResult, loc));
+        final var b = value.cast(this);
+
+        if (rResult != b.rValue()) {
+            if (b.type() != null) {
+                vm.emit(new TypeCheck(b.rValue(), b.type(), loc));
+            }
+            vm.emit(new Copy(b.rValue(), rResult, loc));
         }
     }
 
