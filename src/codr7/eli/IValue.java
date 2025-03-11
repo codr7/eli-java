@@ -6,7 +6,7 @@ import codr7.eli.libs.core.traits.ComparableTrait;
 public sealed interface IValue extends Comparable<IValue> permits Value {
     <U> U cast(IDataType<U> type);
 
-    default void checkType(final VM vm, final IType expected, final Loc loc) {
+    default void typeCheck(final VM vm, final IType expected, final Loc loc) {
         if (!type().isa(expected)) {
             throw new EvalError("Type check failed, expected " + expected.id() + ": " +
                     dump(vm), loc);

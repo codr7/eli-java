@@ -37,7 +37,7 @@ public final class Arg {
     }
 
     public Arg(final String id) {
-        this(id, CoreLib.Any);
+        this(id, null);
     }
 
     public int bind(final VM vm, final IValue[] values, final int i, final int rResult, final Loc loc) {
@@ -48,7 +48,13 @@ public final class Arg {
         }
 
         if (values.length > i) {
-            vm.registers.set(rResult, values[i]);
+            final var v = values[i];
+
+            if (type != null) {
+                v.typeCheck(vm, type, loc);
+            }
+
+            vm.registers.set(rResult, v);
         } else {
             if (!optional){
                 throw new EvalError("Missing arg: " + id, loc);

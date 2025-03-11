@@ -21,7 +21,7 @@ public final class TypeForm extends BaseForm {
 
     @Override
     public void bindValue(final VM vm, final IValue value, final Loc loc) {
-        value.checkType(vm, getType(vm), loc);
+        value.typeCheck(vm, getType(vm), loc);
         target.bindValue(vm, value, loc);
     }
 
@@ -57,6 +57,11 @@ public final class TypeForm extends BaseForm {
     @Override
     public IValue rawValue(final VM vm) {
         return target.rawValue(vm);
+    }
+
+    @Override
+    public Arg toArg(final VM vm, final Loc loc) {
+        return new Arg(target.cast(vm, IdForm.class).id, getType(vm));
     }
 
     @Override

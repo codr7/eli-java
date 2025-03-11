@@ -14,11 +14,6 @@ public class SplatForm extends BaseForm {
     }
 
     @Override
-    public String argId(final VM vm, final Loc loc) {
-        return target.argId(vm, loc) + '*';
-    }
-
-    @Override
     public void emit(final VM vm, final int rResult) {
         target.emit(vm, rResult);
         vm.emit(new Splat(rResult));
@@ -48,5 +43,10 @@ public class SplatForm extends BaseForm {
         }
 
         return null;
+    }
+
+    @Override
+    public Arg toArg(final VM vm, final Loc loc) {
+        return new Arg(target.cast(vm, IdForm.class).id + '*');
     }
 }

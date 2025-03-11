@@ -11,11 +11,6 @@ public class QuoteForm extends BaseForm {
     }
 
     @Override
-    public String argId(final VM vm, final Loc loc) {
-        return "'" + target.argId(vm, loc);
-    }
-
-    @Override
     public void emit(final VM vm, final int rResult) {
         value(vm).emit(vm, rResult, loc());
     }

@@ -48,8 +48,8 @@ public class IdForm extends BaseForm {
     }
 
     @Override
-    public String argId(final VM vm, final Loc loc) {
-        return id;
+    public Arg toArg(final VM vm, final Loc loc) {
+        return new Arg(id);
     }
 
     @Override

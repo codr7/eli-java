@@ -117,9 +117,11 @@ public class CoreLib extends Lib {
                     }
 
                     final var margs = new ArrayList<Arg>();
-                    for (IForm iForm : argList) {
-                        margs.add(new Arg(iForm.argId(vm, loc)));
+
+                    for (final var af : argList) {
+                        margs.add(af.toArg(vm, loc));
                     }
+
                     final var rArgs = vm.alloc(margs.size());
 
                     final var start = new Label();

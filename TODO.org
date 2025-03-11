@@ -2,7 +2,7 @@ fact PT1.682860949S
 fib PT1.568288647S
 
 * typing
-** method arg
+** splat arg
 
 * add method sets
 ** create on method with typed args

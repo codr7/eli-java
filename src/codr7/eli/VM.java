@@ -332,7 +332,7 @@ public final class VM {
                 case TypeCheck: {
                     final var op = (TypeCheck) opData[pc];
                     final var v = registers.get(op.rTarget());
-                    v.checkType(this, op.type(), op.loc());
+                    v.typeCheck(this, op.type(), op.loc());
                     pc++;
                     break;
                 }

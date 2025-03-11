@@ -1,4 +1,4 @@
-(^foo [x@String]
+(^foo [x@Int]
   x)
 
 (say (foo 42))

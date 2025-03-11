@@ -7,7 +7,7 @@ import codr7.eli.libs.CoreLib;
 import codr7.eli.ops.Goto;
 
 public interface IForm {
-    default String argId(final VM vm, final Loc loc) {
+    default Arg toArg(final VM vm, final Loc loc) {
         throw new EmitError("Invalid arg: " + dump(vm), loc);
     }
 
