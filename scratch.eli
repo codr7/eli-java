@@ -1,4 +1,0 @@
-(^foo [x@Int]
-  x)
-
-(say (foo 42))

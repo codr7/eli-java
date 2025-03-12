@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 9;
+    public final static int VERSION = 10;
 
     public boolean debug = false;
 

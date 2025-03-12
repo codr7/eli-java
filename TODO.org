@@ -1,40 +1,37 @@
 fact PT1.682860949S
 fib PT1.568288647S
 
-* typing
-** splat arg
+ADD
 
-* add method sets
-** create on method with typed args
-** create on method with same name (check args !=)
-** dispatch on arg types when called
-
-* implement composition
+* composition
 ** foo & bar
 
-* fix JMethod arg performance
-** change to Stream<IValue> & arity?
-** fixed instance argValues array in JMethod
+* add method sets
+** create for method with typed args
+** create on method with same name but different args
+** dispatch on args when called
 
-* add slice/splice support to list/string/map
+* union types
+** Int | Nil
+** add X? shortcut for X | Nil
+*** remove Maybe type
+
+* intersection types
+** Iterable & Comparable
+
+* range syntax
+** 0..10:2
+
+FIX
+
+* JMethod arg performance
+
+* slice/splice support in list/string/map
 ** handle pair index with/without value
-
-* extreact InfixReader
-** pair/type
 
 * return 1/x for one arg div
 ** add one arg div to num trait
 *** add support in / method
-
-* add type sets
-** Int | Nil
-** add X? shortcut for X | Nil
-*** remove Maybe type
-** grep NIL results
-*** switch to Int?
-
-* add range syntax
-** 0..10:2
 
 STOJ
 
@@ -57,6 +54,5 @@ STOJ
 *** draw a projection for each found id & one for actual data if any
 
 * add padding to column/row-layout
-* figure out why csv parser isn't included in jar build
 
 jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

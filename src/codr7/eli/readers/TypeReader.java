@@ -2,6 +2,7 @@ package codr7.eli.readers;
 
 import codr7.eli.*;
 import codr7.eli.errors.ReadError;
+import codr7.eli.forms.SplatForm;
 import codr7.eli.forms.TypeForm;
 
 import java.util.Deque;
@@ -23,7 +24,13 @@ public class TypeReader implements Reader {
 
         final var type = out.removeLast();
         final var target = out.removeLast();
-        out.addLast(new TypeForm(target, type, floc));
+
+        if (type instanceof SplatForm sf) {
+            out.addLast(new SplatForm(new TypeForm(target, sf.target, floc), floc));
+        } else {
+            out.addLast(new TypeForm(target, type, floc));
+        }
+
         return true;
     }
 }

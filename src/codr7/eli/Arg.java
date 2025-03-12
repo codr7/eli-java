@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class Arg {
-    String id;
-    IType type;
+    public final String id;
+    public final IType type;
 
     boolean optional = false;
     boolean splat = false;
@@ -43,6 +43,13 @@ public final class Arg {
     public int bind(final VM vm, final IValue[] values, final int i, final int rResult, final Loc loc) {
         if (splat) {
             final var vs = new ArrayList<>(Arrays.asList(values).subList(i, values.length));
+
+            if (type != null) {
+                for (final var v: vs) {
+                    v.typeCheck(vm, type, loc);
+                }
+            }
+
             vm.registers.set(rResult, new Value<>(CoreLib.List, vs));
             return values.length;
         }

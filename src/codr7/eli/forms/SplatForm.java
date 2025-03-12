@@ -47,6 +47,8 @@ public class SplatForm extends BaseForm {
 
     @Override
     public Arg toArg(final VM vm, final Loc loc) {
-        return new Arg(target.cast(vm, IdForm.class).id + '*');
+        final var ta = target.toArg(vm, loc);
+
+        return new Arg(ta.id + '*', ta.type);
     }
 }
