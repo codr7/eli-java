@@ -18,9 +18,4 @@ public record Branch(int rCondition, Label elseStart, Loc loc) implements Op {
         return "Branch rCondition: " + rCondition + " (" + vm.registers.get(rCondition).dump(vm) + ") " +
                 "elseStart: " + elseStart;
     }
-
-    @Override
-    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        read.add(rCondition);
-    }
 }

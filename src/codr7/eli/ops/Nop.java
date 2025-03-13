@@ -15,8 +15,4 @@ public record Nop() implements Op {
     public String dump(VM vm) {
         return "Nop";
     }
-
-    @Override
-    public void io(VM vm, Set<Integer> read, Set<Integer> write) {
-    }
 }

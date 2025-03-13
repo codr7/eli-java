@@ -16,10 +16,4 @@ public record Inc(int rTarget, long delta, Loc loc) implements Op {
     public String dump(final VM vm) {
         return "Inc rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") delta: " + delta;
     }
-
-    @Override
-    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        read.add(rTarget);
-        write.add(rTarget);
-    }
 }

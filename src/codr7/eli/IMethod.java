@@ -29,5 +29,7 @@ public interface IMethod extends Comparable<IMethod> {
         return Integer.compare(o.weight(), weight());
     }
 
+    String dump(VM vm);
+    String id();
     int weight();
 }

@@ -18,9 +18,4 @@ public record Put(int rTarget, IValue value, Loc loc) implements Op {
         return "Put rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
                 "value: " + value.dump(vm);
     }
-
-    @Override
-    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        write.add(rTarget);
-    }
 }

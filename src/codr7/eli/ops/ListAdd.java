@@ -17,11 +17,4 @@ public record ListAdd(int rTarget, int rItem, Loc loc) implements Op {
         return "ListAdd rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
                 "rItem: " + rItem + " (" + vm.registers.get(rItem).dump(vm) + ")";
     }
-
-    @Override
-    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        read.add(rItem);
-        read.add(rTarget);
-        write.add(rTarget);
-    }
 }

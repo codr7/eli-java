@@ -18,12 +18,4 @@ public record MapAdd(int rTarget, int rKey, int rValue, Loc loc) implements Op {
                 "rKey: " + rKey + " (" + vm.registers.get(rKey).dump(vm) + ") " +
                 "rValue: " + rValue + " (" + vm.registers.get(rValue).dump(vm) + ")";
     }
-
-    @Override
-    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        read.add(rKey);
-        read.add(rValue);
-        read.add(rTarget);
-        write.add(rTarget);
-    }
 }

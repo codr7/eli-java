@@ -39,7 +39,6 @@ public class CoreLib extends Lib {
     public static final IntType Int = new IntType("Int", Any, Numeric);
     public static final IterType Iter = new IterType("Iter", Iterable);
     public static final JMacroType JMacro = new JMacroType("JMacro");
-    public static final JMethodType JMethod = new JMethodType("JMethod", Callable);
     public static final LibType Lib = new LibType("Lib");
     public static final ListType List = new ListType("List", Callable, Comparable, Countable, Iterable, Sequential);
     public static final MapType Map = new MapType("Map", Callable, Comparable, Countable, Iterable, Sequential);
@@ -75,7 +74,6 @@ public class CoreLib extends Lib {
         bind(Int);
         bind(Iter);
         bind(JMacro);
-        bind(JMethod);
         bind(Lib);
         bind(List);
         bind(Map);
@@ -607,7 +605,7 @@ public class CoreLib extends Lib {
                     vm.registers.set(rResult, new Value<>(Timestamp, LocalDateTime.now()));
                 });
 
-        bindMethod("parse-float", new Arg[]{new Arg("in")},
+        bindMethod("parse-float", new Arg[]{new Arg("in", String), new Arg("start?", Int)},
                 (vm, args, rResult, loc) -> {
                     final var start = (args.length == 2) ? args[1].cast(Int).intValue() : 0;
                     final var in = args[0].cast(String).substring(start);
@@ -622,7 +620,7 @@ public class CoreLib extends Lib {
                     }
                 });
 
-        bindMethod("parse-int", new Arg[]{new Arg("in")},
+        bindMethod("parse-int", new Arg[]{new Arg("in", String), new Arg("start?", Int)},
                 (vm, args, rResult, loc) -> {
                     final var start = (args.length == 2) ? args[1].cast(Int).intValue() : 0;
                     final var in = args[0].cast(String).substring(start);

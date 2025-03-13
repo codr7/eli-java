@@ -15,8 +15,4 @@ public record Stop() implements Op {
     public String dump(VM vm) {
         return "Stop";
     }
-
-    @Override
-    public void io(VM vm, Set<Integer> read, Set<Integer> write) {
-    }
 }

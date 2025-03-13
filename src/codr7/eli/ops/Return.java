@@ -15,8 +15,4 @@ public record Return() implements Op {
     public String dump(VM vm) {
         return "Return";
     }
-
-    @Override
-    public void io(VM vm, Set<Integer> read, Set<Integer> write) {
-    }
 }

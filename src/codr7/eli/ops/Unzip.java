@@ -18,11 +18,4 @@ public record Unzip(int rPair, int rLeft, int rRight, Loc loc) implements Op {
                 "rLeft: " + rLeft + " (" + vm.registers.get(rLeft).dump(vm) + ") " +
                 "rRight: " + rRight + " (" + vm.registers.get(rRight).dump(vm) + ")";
     }
-
-    @Override
-    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        read.add(rPair);
-        write.add(rLeft);
-        write.add(rRight);
-    }
 }

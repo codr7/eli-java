@@ -18,11 +18,4 @@ public record Zip(int rLeft, int rRight, int rResult, Loc loc) implements Op {
                 "rRight: " + rRight + " (" + vm.registers.get(rRight).dump(vm) + ") " +
                 "rResult: " + rResult + " (" + vm.registers.get(rResult).dump(vm) + ")";
     }
-
-    @Override
-    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        read.add(rLeft);
-        read.add(rRight);
-        write.add(rResult);
-    }
 }

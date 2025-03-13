@@ -1,12 +1,13 @@
 package codr7.eli;
 
+import codr7.eli.errors.EmitError;
 import codr7.eli.errors.EvalError;
 
 import java.util.Arrays;
 
 import static codr7.eli.libs.CoreLib.Binding;
 
-public class Method implements IMethod {
+public final class Method implements IMethod {
     public final String id;
     public final int rArgs;
     public final int rResult;
@@ -57,8 +58,8 @@ public class Method implements IMethod {
                      final int rResult,
                      final boolean eval,
                      final Loc loc) {
-        if (minArity != -1 && args.length < minArity) {
-            throw new EvalError("Not enough args: " + dump(vm), loc);
+        if (args.length < minArity || args.length > maxArity) {
+            throw new EmitError("Wrong number of args: " + this, loc);
         }
 
         var rArg = this.rArgs;
@@ -82,7 +83,12 @@ public class Method implements IMethod {
     }
 
     public String dump(final VM vm) {
-        return "(Method " + id + ")";
+        return "(^" + id + "[?])";
+    }
+
+    @Override
+    public String id() {
+        return id;
     }
 
     @Override

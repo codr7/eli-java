@@ -18,9 +18,4 @@ public record TypeCheck(int rTarget, IType type, Loc loc) implements Op {
         return "TypeCheck rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
                 "type: " + type.id();
     }
-
-    @Override
-    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        read.add(rTarget);
-    }
 }

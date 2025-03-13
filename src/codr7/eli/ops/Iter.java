@@ -20,10 +20,4 @@ public record Iter(int rTarget) implements Op {
     public String dump(final VM vm) {
         return "Iter rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ")";
     }
-
-    @Override
-    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        read.add(rTarget);
-        write.add(rTarget);
-    }
 }

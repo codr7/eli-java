@@ -11,8 +11,6 @@ public interface Op {
 
     String dump(VM vm);
 
-    void io(VM vm, Set<Integer> read, Set<Integer> write);
-
     enum Code {
         Bench, Branch,
         CallRegister, CallValue, Check, Copy,

@@ -15,7 +15,24 @@ public class Lib {
         this.parentLib = parentLib;
     }
 
-    public void bind(final String id, final IValue value) {
+    public void bind(final String id, IValue value) {
+        if (value.type() == CoreLib.Method) {
+            final var v = bindings.get(id);
+
+            if (v != null) {
+                if (v.type() == CoreLib.Method) {
+                    final var d = new Dispatch(id);
+                    d.add(v.cast(CoreLib.Method));
+                    d.add(value.cast(CoreLib.Method));
+                    bind(id, CoreLib.Dispatch, d);
+                    return;
+                } else if (v.type() == CoreLib.Dispatch) {
+                    v.cast(CoreLib.Dispatch).add(value.cast(CoreLib.Method));
+                    return;
+                }
+            }
+        }
+
         bindings.put(id, value);
     }
 
@@ -39,16 +56,12 @@ public class Lib {
         bind(value.id(), CoreLib.JMacro, value);
     }
 
-    public void bind(final JMethod value) {
-        bind(value.id(), CoreLib.JMethod, value);
-    }
-
     public void bind(final Lib value) {
         bind(value.id, CoreLib.Lib, value);
     }
 
-    public void bind(final Method value) {
-        final var id = value.id;
+    public void bind(final IMethod value) {
+        final var id = value.id();
         final var v = bindings.get(id);
 
         if (v == null) {
@@ -74,7 +87,7 @@ public class Lib {
 
     public void importFrom(final Lib source, final Set<String> ids) {
         for (final var id : ids) {
-            bindings.put(id, source.bindings.get(id));
+            bind(id, source.find(id));
         }
     }
 

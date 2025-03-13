@@ -19,10 +19,4 @@ public record Next(int rIter, int rItem, Label bodyEnd, Loc loc) implements Op {
                 "rItem: " + rItem + " (" + ((rItem == -1) ? "n/a" : vm.registers.get(rItem).dump(vm)) + ") " +
                 "bodyEnd: " + bodyEnd;
     }
-
-    @Override
-    public void io(final VM vm, final Set<Integer> read, final Set<Integer> write) {
-        read.add(rIter);
-        write.add(rItem);
-    }
 }

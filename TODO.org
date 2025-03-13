@@ -4,11 +4,11 @@ fib PT1.568288647S
 ADD
 
 * dispatch
-** make JMethod conform to IMethod
-*** split arity into min/max
-** implement dispatch binding of JMethod in Lib
-
-* method composition
+** extract Dispatch.getIndex(min, max, weight)
+** switch to encoding all three order values as one Int
+** add type override test
+*** same args but typed
+** extract BaseMethod class
 
 * union types
 ** Int | Nil
@@ -17,6 +17,8 @@ ADD
 
 * range syntax
 ** 0..10:2
+
+* method composition
 
 FIX
 
