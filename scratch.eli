@@ -4,5 +4,10 @@
 (^foo [x y]
   (say 'foo2))
 
-(foo 42)
+(foo 1)
+(foo 1 2)
+
+(^foo [x y]
+  (say 'foo3))
+
 (foo 1 2)
