@@ -33,10 +33,12 @@ public record CallRegister(int rTarget, int rArguments, int arity, int rResult, 
 
         if (t.type() == CoreLib.Method) {
             final var m = t.cast(CoreLib.Method);
+
             for (var i = 0; i < m.args().length; i++) {
-                read.add(m.rArgs() + i);
+                read.add(m.rArgs + i);
             }
-            write.add(m.rResult());
+
+            write.add(m.rResult);
         }
     }
 }

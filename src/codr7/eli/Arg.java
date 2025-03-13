@@ -7,6 +7,40 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class Arg {
+    public static int minArity(final Arg[] args) {
+        final var l = args.length;
+
+        var n = 0;
+
+        for (final var a: args) {
+            if (!a.optional && !a.splat) {
+                n++;
+            }
+        }
+
+        return n;
+    }
+
+    public static int maxArity(final Arg[] args) {
+        final var l = args.length;
+
+        if (l > 0 && args[l-1].splat) {
+            return Integer.MAX_VALUE;
+        }
+
+        return l;
+    }
+
+    public static int weight(final Arg[] args) {
+        var w = 0;
+
+        for (final var a: args) {
+            w += a.weight();
+        }
+
+        return w;
+    }
+
     public final String id;
     public final IType type;
 
@@ -82,5 +116,9 @@ public final class Arg {
             s = s + '?';
         }
         return s;
+    }
+
+    public int weight() {
+        return (type == null) ? 0 : type.weight();
     }
 }

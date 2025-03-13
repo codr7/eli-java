@@ -2,30 +2,47 @@ package codr7.eli;
 
 import codr7.eli.errors.EvalError;
 
+import java.util.Arrays;
+
 import static codr7.eli.libs.CoreLib.Binding;
 
-public record Method(String id,
-                     Arg[] args, int rArgs,
-                     int rResult,
-                     Label start, Label end,
-                     Loc loc) {
+public class Method implements IMethod {
+    public final String id;
+    public final int rArgs;
+    public final int rResult;
+    public final int minArity;
+    public final int maxArity;
 
-    public int arity() {
-        final var l = args.length;
+    public Method(final String id,
+                  final Arg[] args, final int rArgs,
+                  final int rResult,
+                  final Label start, final Label end,
+                  final Loc loc) {
+        this.id = id;
+        this.args = args;
+        this.rArgs = rArgs;
+        this.rResult = rResult;
+        this.start = start;
+        this.end = end;
+        this.loc = loc;
+        this.minArity = Arg.minArity(args);
+        this.maxArity = Arg.maxArity(args);
+        this.weight = Arg.weight(args);
+    }
 
-        if (l > 0 && args[l-1].splat) {
-            return -1;
-        }
+    @Override
+    public Arg[] args() {
+        return args;
+    }
 
-        var n = 0;
+    @Override
+    public int minArity() {
+        return minArity;
+    }
 
-        for (final var a: args) {
-            if (!a.optional) {
-                n++;
-            }
-        }
-
-        return n;
+    @Override
+    public int maxArity() {
+        return maxArity;
     }
 
     public void bindArgs(final VM vm) {
@@ -40,7 +57,7 @@ public record Method(String id,
                      final int rResult,
                      final boolean eval,
                      final Loc loc) {
-        if (arity() != -1 && args.length < arity()) {
+        if (minArity != -1 && args.length < minArity) {
             throw new EvalError("Not enough args: " + dump(vm), loc);
         }
 
@@ -56,7 +73,7 @@ public record Method(String id,
             vm.eval(start.pc, end.pc);
 
             if (rResult != this.rResult) {
-                vm.registers.set(rResult, vm.registers.get(this.rResult()));
+                vm.registers.set(rResult, vm.registers.get(this.rResult));
             }
         } else {
             vm.beginCall(this, vm.pc, rResult, loc);
@@ -67,4 +84,15 @@ public record Method(String id,
     public String dump(final VM vm) {
         return "(Method " + id + ")";
     }
+
+    @Override
+    public int weight() {
+        return weight;
+    }
+
+    private final Arg[] args;
+    private final Label start;
+    private final Label end;
+    private final Loc loc;
+    private final int weight;
 }

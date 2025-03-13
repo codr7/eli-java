@@ -3,21 +3,17 @@ fib PT1.568288647S
 
 ADD
 
-* composition
-** foo & bar
+* dispatch
+** make JMethod conform to IMethod
+*** split arity into min/max
+** implement dispatch binding of JMethod in Lib
 
-* add method sets
-** create for method with typed args
-** create on method with same name but different args
-** dispatch on args when called
+* method composition
 
 * union types
 ** Int | Nil
 ** add X? shortcut for X | Nil
 *** remove Maybe type
-
-* intersection types
-** Iterable & Comparable
 
 * range syntax
 ** 0..10:2

@@ -1,30 +1,29 @@
 package codr7.eli;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public abstract class BaseType<T> implements IDataType<T> {
     public final String id;
-    private final Map<IType, Integer> parentTypes = new HashMap<>();
+    private final Set<IType> parentTypes = new HashSet<>();
 
     public BaseType(final String id, final IType[] parentTypes) {
         this.id = id;
-        addParentType(this, 1);
+        addParentType(this);
+
         for (final var pt : parentTypes) {
             pt.addParentTypes(this);
         }
     }
 
     @Override
-    final public void addParentType(final IType type, final int weight) {
-        parentTypes.compute(type, (k, w) -> (w == null) ? weight : weight + w);
+    final public void addParentType(final IType type) {
+        parentTypes.add(type);
     }
 
     @Override
     final public void addParentTypes(final IType childType) {
-        for (final var pe : parentTypes.entrySet()) {
-            childType.addParentType(pe.getKey(), pe.getValue());
+        for (final var pt : parentTypes) {
+            childType.addParentType(pt);
         }
     }
 
@@ -52,7 +51,12 @@ public abstract class BaseType<T> implements IDataType<T> {
 
     @Override
     public boolean isa(final IType type) {
-        return parentTypes.containsKey(type);
+        return parentTypes.contains(type);
+    }
+
+    @Override
+    public int weight() {
+        return parentTypes.size();
     }
 }
 

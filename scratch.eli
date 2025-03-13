@@ -1,0 +1,8 @@
+(^foo [x]
+  (say 'foo1))
+
+(^foo [x y]
+  (say 'foo2))
+
+(foo 42)
+(foo 1 2)

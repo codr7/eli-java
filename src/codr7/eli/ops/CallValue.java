@@ -31,10 +31,12 @@ public record CallValue(IValue target, int rArgs, int arity, int rResult, Loc lo
 
         if (target.type() == CoreLib.Method) {
             final var m = target.cast(CoreLib.Method);
+
             for (var i = 0; i < m.args().length; i++) {
-                read.add(m.rArgs() + i);
+                read.add(m.rArgs + i);
             }
-            write.add(m.rResult());
+
+            write.add(m.rResult);
         }
     }
 }

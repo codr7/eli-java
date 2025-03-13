@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 public class CoreLib extends Lib {
     public static final TraitType<Void> Any = new TraitType<>("Any");
+    public static final NilType Nil = new NilType("Nil");
     public static final TraitType<CallableTrait> Callable = new TraitType<>("Callable");
     public static final TraitType<ComparableTrait> Comparable = new TraitType<>("Comparable");
     public static final TraitType<IterableTrait> Iterable = new TraitType<>("Iterable");
@@ -29,15 +30,10 @@ public class CoreLib extends Lib {
     public static final TraitType<NumericTrait> Numeric = new TraitType<>("Numeric", Comparable);
     public static final TraitType<SequentialTrait> Sequential = new TraitType<>("Sequential");
 
-    public static final ListType List = new ListType("List", Callable, Comparable, Countable, Iterable, Sequential);
-    public static final MapType Map = new MapType("Map", Callable, Comparable, Countable, Iterable, Sequential);
-    public static final PairType Pair = new PairType("Pair", Comparable, Countable, Iterable, Sequential);
-    public static final StringType String = new StringType("String", Callable, Comparable, Countable, Iterable, Sequential);
-    public static final NilType Nil = new NilType("Nil");
-    public static final MaybeType Maybe = new MaybeType("Maybe", Any, Nil);
     public static final BindingType Binding = new BindingType("Binding");
     public static final BitType Bit = new BitType("Bit");
     public static final CharType Char = new CharType("Char");
+    public static final DispatchType Dispatch = new DispatchType("Dispatch", Callable);
     public static final ExprType Expr = new ExprType("Expr");
     public static final FloatType Float = new FloatType("Float", Any, Numeric);
     public static final IntType Int = new IntType("Int", Any, Numeric);
@@ -45,10 +41,14 @@ public class CoreLib extends Lib {
     public static final JMacroType JMacro = new JMacroType("JMacro");
     public static final JMethodType JMethod = new JMethodType("JMethod", Callable);
     public static final LibType Lib = new LibType("Lib");
+    public static final ListType List = new ListType("List", Callable, Comparable, Countable, Iterable, Sequential);
+    public static final MapType Map = new MapType("Map", Callable, Comparable, Countable, Iterable, Sequential);
     public static final MetaType Meta = new MetaType("Meta");
     public static final MethodType Method = new MethodType("Method", Callable);
+    public static final PairType Pair = new PairType("Pair", Comparable, Countable, Iterable, Sequential);
     public static final RangeType Range = new RangeType("Range");
     public static final SplatType Splat = new SplatType("Splat");
+    public static final StringType String = new StringType("String", Callable, Comparable, Countable, Iterable, Sequential);
     public static final SymType Sym = new SymType("Sym");
     public static final TimeType Time = new TimeType("Time");
     public static final TimestampType Timestamp = new TimestampType("Timestamp");
@@ -69,6 +69,7 @@ public class CoreLib extends Lib {
 
         bind(Binding);
         bind(Bit);
+        bind(Dispatch);
         bind(Float);
         bind(Expr);
         bind(Int);
@@ -77,7 +78,6 @@ public class CoreLib extends Lib {
         bind(JMethod);
         bind(Lib);
         bind(List);
-        bind(Maybe);
         bind(Map);
         bind(Meta);
         bind(Method);
@@ -130,6 +130,7 @@ public class CoreLib extends Lib {
                     final var skip = new Label();
                     vm.emit(new Goto(skip));
                     start.pc = vm.emitPc();
+
                     if (!lambda) {
                         vm.currentLib.bind(m);
                     }

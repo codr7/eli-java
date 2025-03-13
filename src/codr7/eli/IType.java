@@ -4,7 +4,7 @@ import codr7.eli.errors.EvalError;
 import codr7.eli.ops.Put;
 
 public interface IType {
-    void addParentType(IType type, int weight);
+    void addParentType(IType type);
 
     void addParentTypes(IType childType);
 
@@ -45,4 +45,6 @@ public interface IType {
     default void unquote(VM vm, IValue value, int rResult, Loc loc) {
         value.emit(vm, rResult, loc);
     }
+
+    int weight();
 }

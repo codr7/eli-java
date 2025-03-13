@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 10;
+    public final static int VERSION = 11;
 
     public boolean debug = false;
 
@@ -297,8 +297,8 @@ public final class VM {
                 case Return: {
                     final var c = endCall();
 
-                    if (c.rResult() != c.target().rResult()) {
-                        registers.set(c.rResult(), registers.get(c.target().rResult()));
+                    if (c.rResult() != c.target().rResult) {
+                        registers.set(c.rResult(), registers.get(c.target().rResult));
                     }
 
                     pc = c.returnPc();

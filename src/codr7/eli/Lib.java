@@ -48,7 +48,19 @@ public class Lib {
     }
 
     public void bind(final Method value) {
-        bind(value.id(), CoreLib.Method, value);
+        final var id = value.id;
+        final var v = bindings.get(id);
+
+        if (v == null) {
+            bind(id, CoreLib.Method, value);
+        } else if (v.type() == CoreLib.Method) {
+            final var d = new Dispatch(id);
+            d.add(v.cast(CoreLib.Method));
+            d.add(value);
+            bind(id, CoreLib.Dispatch, d);
+        } else if (v.type() == CoreLib.Dispatch) {
+            v.cast(CoreLib.Dispatch).add(value);
+        }
     }
 
     public boolean drop(final String id) {
