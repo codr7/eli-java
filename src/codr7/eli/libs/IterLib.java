@@ -32,6 +32,32 @@ public final class IterLib extends Lib {
                     }
                 });
 
+        bindMethod("cross",
+                new Arg[]{new Arg("callback", CoreLib.Callable),
+                        new Arg("xs", CoreLib.Iterable),
+                        new Arg("ys", CoreLib.Iterable)},
+                (vm, args, rResult, loc) -> {
+                    final var out = new ArrayList<IValue>();
+
+                    final var cb = args[0];
+                    final var ct = cb.type().cast(CoreLib.Callable, loc);
+                    final var xs = args[1];
+                    final var xi = xs.type().cast(CoreLib.Iterable, loc).iter(vm, xs);
+                    final var ys = args[2];
+                    final var rArgs = vm.alloc(2);
+
+                    while (xi.next(vm, rArgs, loc)) {
+                        final var yi = ys.type().cast(CoreLib.Iterable, loc).iter(vm, ys);
+
+                        while (yi.next(vm, rArgs+1, loc)) {
+                            ct.call(vm, cb, rArgs, 2, rResult, true, loc);
+                            out.add(vm.registers.get(rResult));
+                        }
+                    }
+
+                    vm.registers.set(rResult, new Value<>(CoreLib.List, out));
+                });
+
         bindMethod("map",
                 new Arg[]{new Arg("callback", CoreLib.Callable),
                         new Arg("in*", CoreLib.Iterable)},

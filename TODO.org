@@ -3,17 +3,24 @@ fib PT1.568288647S
 
 https://norvig.com/sudoku.html
 
+FIX
+
+* turn iter/cross into iterator
+** CrossResult
+** soduko
+** iter-tests
+
 ADD
 
 * iter/filter method
-** return iter
+** return FilterResult iter
 
 * iter/zip method
-** return iter
+** return ZipResult iter
 
 * json encode/decode
 ** add json lib
-** jackson
+** lib/jackson
 
 * add read/dump methods
 ** use reader

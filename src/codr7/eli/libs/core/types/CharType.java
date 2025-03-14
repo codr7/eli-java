@@ -19,4 +19,9 @@ public final class CharType extends BaseType<Character> {
     public boolean toBit(final VM vm, final IValue value) {
         return value.cast(this) != 0;
     }
+
+    @Override
+    public String toString(final VM vm, final IValue value) {
+        return Character.toString(value.cast(this));
+    }
 }

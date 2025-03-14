@@ -8,6 +8,17 @@ public final class StringLib extends Lib {
     public StringLib() {
         super("string", null);
 
+        bindMethod("dump", new Arg[]{new Arg("args*")},
+                (vm, args, rResult, loc) -> {
+                    final var out = new StringBuilder();
+
+                    for (final var a: args) {
+                        out.append(a.dump(vm));
+                    }
+
+                    vm.registers.set(rResult, new Value<>(CoreLib.String, out.toString()));
+                });
+
         bindMethod("find",
                 new Arg[]{new Arg("in", CoreLib.String), new Arg("it", CoreLib.String)},
                 (vm, args, rResult, loc) -> {

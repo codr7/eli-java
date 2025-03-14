@@ -58,6 +58,7 @@ public final class VM {
         homeLib.bind(new IterLib());
         homeLib.bind(new ListLib());
         homeLib.bind(new SeqLib());
+        homeLib.bind(new SymLib());
         homeLib.bind(new StringLib());
 
         initLibs();

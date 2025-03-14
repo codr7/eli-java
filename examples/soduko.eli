@@ -1,0 +1,7 @@
+(var
+  rows    "abcdefghi"
+  cols    "123456789"
+  squares (iter/cross (^[r c] (sym/make r c)) rows cols))
+
+(say squares)
+
