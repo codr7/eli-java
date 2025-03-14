@@ -10,4 +10,10 @@
 (^foo [x y]
   (say 'foo3))
 
+(^foo [x y@Int]
+  (say 'foo4))
+
+(foo 1 'bar)
 (foo 1 2)
+
+

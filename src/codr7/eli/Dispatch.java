@@ -2,6 +2,8 @@ package codr7.eli;
 
 import codr7.eli.errors.EvalError;
 
+import java.util.Arrays;
+
 public final class Dispatch {
     public final String id;
     public final IMethod[] methods;
@@ -9,6 +11,7 @@ public final class Dispatch {
     public Dispatch(final String id, IMethod...methods) {
         this.id = id;
         this.methods = methods;
+        Arrays.sort(methods);
     }
 
     public void call(final VM vm,

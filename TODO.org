@@ -5,10 +5,6 @@ fib PT1.568288647S
 
 ADD
 
-* dispatch
-** add type override test
-*** stable sort methods on weight
-
 * union types
 ** Int | Nil
 ** add X? shortcut for X | Nil
