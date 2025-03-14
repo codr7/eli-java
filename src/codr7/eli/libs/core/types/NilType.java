@@ -4,10 +4,9 @@ import codr7.eli.BaseType;
 import codr7.eli.IType;
 import codr7.eli.IValue;
 import codr7.eli.VM;
-import codr7.eli.libs.core.traits.ComparableTrait;
 
 public final class NilType extends BaseType<Object> {
-    public NilType(final String id, final IType...parentTypes) {
+    public NilType(final String id, final IType... parentTypes) {
         super(id, parentTypes);
     }
 

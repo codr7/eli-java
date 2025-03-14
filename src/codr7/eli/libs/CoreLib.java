@@ -3,10 +3,12 @@ package codr7.eli.libs;
 import codr7.eli.*;
 import codr7.eli.errors.EmitError;
 import codr7.eli.errors.EvalError;
-import codr7.eli.forms.*;
+import codr7.eli.forms.CallForm;
+import codr7.eli.forms.IdForm;
+import codr7.eli.forms.ListForm;
+import codr7.eli.forms.PairForm;
 import codr7.eli.libs.core.iters.IntRange;
 import codr7.eli.libs.core.traits.*;
-import codr7.eli.libs.core.traits.IterableTrait;
 import codr7.eli.libs.core.types.*;
 import codr7.eli.ops.Iter;
 import codr7.eli.ops.*;
@@ -28,15 +30,14 @@ public class CoreLib extends Lib {
     public static final TraitType<IterableTrait> Iterable = new TraitType<>("Iterable");
     public static final TraitType<CountableTrait> Countable = new TraitType<>("Countable");
     public static final TraitType<NumericTrait> Numeric = new TraitType<>("Numeric", Comparable);
+    public static final FloatType Float = new FloatType("Float", Any, Numeric);
+    public static final IntType Int = new IntType("Int", Any, Numeric);
     public static final TraitType<SequentialTrait> Sequential = new TraitType<>("Sequential");
-
     public static final BindingType Binding = new BindingType("Binding");
     public static final BitType Bit = new BitType("Bit");
     public static final CharType Char = new CharType("Char");
     public static final DispatchType Dispatch = new DispatchType("Dispatch", Callable);
     public static final ExprType Expr = new ExprType("Expr");
-    public static final FloatType Float = new FloatType("Float", Any, Numeric);
-    public static final IntType Int = new IntType("Int", Any, Numeric);
     public static final IterType Iter = new IterType("Iter", Iterable);
     public static final JMacroType JMacro = new JMacroType("JMacro");
     public static final LibType Lib = new LibType("Lib");
@@ -350,7 +351,7 @@ public class CoreLib extends Lib {
 
         bindMacro("do", new Arg[]{new Arg("body*")},
                 (vm, args, rResult, location) ->
-                    vm.doLib(null, () -> Form.emit(vm, args, rResult)));
+                        vm.doLib(null, () -> Form.emit(vm, args, rResult)));
 
         bindMacro("for",
                 new Arg[]{new Arg("bindings", List), new Arg("body*")},
@@ -484,7 +485,7 @@ public class CoreLib extends Lib {
 
         bindMacro("include", new Arg[]{new Arg("files*")},
                 (vm, args, rResult, loc) -> {
-                    for (final var f: args) {
+                    for (final var f : args) {
                         final var v = f.value(vm);
 
                         if (v == null) {
@@ -497,7 +498,7 @@ public class CoreLib extends Lib {
 
         bindMacro("import", new Arg[]{new Arg("ids*")},
                 (vm, args, rResult, loc) -> {
-                    for (final var f: args) {
+                    for (final var f : args) {
                         switch (f) {
                             case IdForm idf: {
                                 final var found = IdForm.find(vm.currentLib, idf.id, idf.loc());
@@ -510,7 +511,7 @@ public class CoreLib extends Lib {
                                 break;
                             }
                             case PairForm pf: {
-                                final var srcId= pf.left.cast(vm, IdForm.class).id;
+                                final var srcId = pf.left.cast(vm, IdForm.class).id;
                                 final var dstId = pf.right.cast(vm, IdForm.class).id;
                                 final var v = IdForm.get(vm.currentLib, srcId, pf.loc());
                                 vm.currentLib.bind(dstId, v);
@@ -579,7 +580,7 @@ public class CoreLib extends Lib {
                     vm.emit(new Goto(skip));
                     final var startPc = vm.emitPc();
 
-                    for (final var f: args) {
+                    for (final var f : args) {
                         vm.load(Path.of(f.cast(String)), rResult);
                     }
 
@@ -589,7 +590,7 @@ public class CoreLib extends Lib {
 
         bindMacro("load", new Arg[]{new Arg("files*")},
                 (vm, args, rResult, loc) -> {
-                    for (final var f: args) {
+                    for (final var f : args) {
                         final var v = f.value(vm);
 
                         if (v == null) {

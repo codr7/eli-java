@@ -10,30 +10,30 @@ public class Main {
         final var vm = new VM();
         vm.homeLib.importFrom(vm.coreLib, new codr7.eli.Loc("main"));
 
-            final var startPc = vm.emitPc();
-            final var rResult = vm.alloc(1);
-            final var as = new ArrayDeque<>(Arrays.asList(args));
+        final var startPc = vm.emitPc();
+        final var rResult = vm.alloc(1);
+        final var as = new ArrayDeque<>(Arrays.asList(args));
 
-            while (!as.isEmpty()) {
-                if (as.getFirst().equals("--debug")) {
-                    as.removeFirst();
-                    vm.debug = true;
-                    continue;
-                }
-
-                if (as.getFirst().equals("--list")) {
-                    as.removeFirst();
-
-                    for (final var a : as) {
-                        vm.load(Paths.get(a), rResult);
-                    }
-
-                    vm.dumpOps(startPc);
-                    return;
-                }
-
-                break;
+        while (!as.isEmpty()) {
+            if (as.getFirst().equals("--debug")) {
+                as.removeFirst();
+                vm.debug = true;
+                continue;
             }
+
+            if (as.getFirst().equals("--list")) {
+                as.removeFirst();
+
+                for (final var a : as) {
+                    vm.load(Paths.get(a), rResult);
+                }
+
+                vm.dumpOps(startPc);
+                return;
+            }
+
+            break;
+        }
 
         if (as.isEmpty()) {
             System.out.print("eli v" + VM.VERSION + "\n\n");

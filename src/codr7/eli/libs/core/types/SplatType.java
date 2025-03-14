@@ -3,7 +3,7 @@ package codr7.eli.libs.core.types;
 import codr7.eli.*;
 
 public final class SplatType extends BaseType<Iter> {
-    public SplatType(final String id, final IType...parentTypes) {
+    public SplatType(final String id, final IType... parentTypes) {
         super(id, parentTypes);
     }
 

@@ -3,9 +3,6 @@ package codr7.eli.ops;
 import codr7.eli.Loc;
 import codr7.eli.Op;
 import codr7.eli.VM;
-import codr7.eli.libs.CoreLib;
-
-import java.util.Set;
 
 public record CallRegister(int rTarget, int rArguments, int arity, int rResult, Loc loc) implements Op {
     @Override

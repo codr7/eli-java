@@ -4,8 +4,8 @@ import codr7.eli.*;
 import codr7.eli.libs.core.iters.PairItems;
 import codr7.eli.libs.core.traits.ComparableTrait;
 import codr7.eli.libs.core.traits.CountableTrait;
-import codr7.eli.libs.core.traits.SequentialTrait;
 import codr7.eli.libs.core.traits.IterableTrait;
+import codr7.eli.libs.core.traits.SequentialTrait;
 
 public class PairType extends BaseType<Pair>
         implements ComparableTrait, CountableTrait, IterableTrait, SequentialTrait {

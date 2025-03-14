@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 public final class FloatType
         extends BaseType<BigDecimal>
         implements ComparableTrait, NumericTrait {
-    public FloatType(final String id, final IType...parentTypes) {
+    public FloatType(final String id, final IType... parentTypes) {
         super(id, parentTypes);
     }
 

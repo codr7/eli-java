@@ -28,12 +28,10 @@ public class Lib {
                     return;
                 } else if (v.type() == CoreLib.Dispatch) {
                     final var d = v.cast(CoreLib.Dispatch);
-                    final var ms = new IMethod[d.methods.length+1];
+                    final var ms = new IMethod[d.methods.length + 1];
                     ms[0] = m;
 
-                    for (var i = 0; i < d.methods.length; i++) {
-                        ms[i+1] = d.methods[i];
-                    }
+                    System.arraycopy(d.methods, 0, ms, 1, d.methods.length);
 
                     bind(bid, CoreLib.Dispatch, new Dispatch(bid, ms));
                     return;

@@ -5,8 +5,6 @@ import codr7.eli.Loc;
 import codr7.eli.Op;
 import codr7.eli.VM;
 
-import java.util.Set;
-
 public record Next(int rIter, int rItem, Label bodyEnd, Loc loc) implements Op {
     @Override
     public Code code() {

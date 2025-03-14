@@ -4,7 +4,6 @@ import codr7.eli.Op;
 import codr7.eli.VM;
 
 import java.nio.file.Path;
-import java.util.Set;
 
 public record SetPath(Path path) implements Op {
     @Override

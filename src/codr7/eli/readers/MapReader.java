@@ -2,12 +2,12 @@ package codr7.eli.readers;
 
 import codr7.eli.*;
 import codr7.eli.errors.ReadError;
-import codr7.eli.forms.*;
-import codr7.eli.libs.CoreLib;
+import codr7.eli.forms.MapForm;
+import codr7.eli.forms.PairForm;
+import codr7.eli.forms.QuoteForm;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.TreeMap;
 
 public class MapReader implements Reader {
     public static final MapReader instance = new MapReader();

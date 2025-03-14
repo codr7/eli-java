@@ -4,6 +4,7 @@ public interface IMethod extends Comparable<IMethod> {
     Arg[] args();
 
     int minArity();
+
     int maxArity();
 
     void call(VM vm,
@@ -18,6 +19,8 @@ public interface IMethod extends Comparable<IMethod> {
     }
 
     String dump(VM vm);
+
     String id();
+
     int weight();
 }

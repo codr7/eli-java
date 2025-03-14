@@ -7,7 +7,7 @@ import codr7.eli.ops.Copy;
 import codr7.eli.ops.TypeCheck;
 
 public final class BindingType extends BaseType<Binding> implements CallableTrait {
-    public BindingType(final String id, final IType...parentTypes) {
+    public BindingType(final String id, final IType... parentTypes) {
         super(id, parentTypes);
     }
 

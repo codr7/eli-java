@@ -8,7 +8,7 @@ import codr7.eli.libs.core.traits.ComparableTrait;
 import codr7.eli.libs.core.traits.NumericTrait;
 
 public final class IntType extends BaseType<Long> implements ComparableTrait, NumericTrait {
-    public IntType(final String id, final IType...parentTypes) {
+    public IntType(final String id, final IType... parentTypes) {
         super(id, parentTypes);
     }
 

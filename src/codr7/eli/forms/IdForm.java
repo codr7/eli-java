@@ -5,7 +5,12 @@ import codr7.eli.errors.EmitError;
 import codr7.eli.libs.CoreLib;
 
 public class IdForm extends BaseForm {
-    public record Result(Lib lib, String id) {}
+    public final String id;
+
+    public IdForm(final String id, final Loc loc) {
+        super(loc);
+        this.id = id;
+    }
 
     public static Result find(final Lib lib, final String id, final Loc loc) {
         final var i = id.indexOf('/');
@@ -38,13 +43,6 @@ public class IdForm extends BaseForm {
         }
 
         return found.lib.find(found.id);
-    }
-
-    public final String id;
-
-    public IdForm(final String id, final Loc loc) {
-        super(loc);
-        this.id = id;
     }
 
     @Override
@@ -95,5 +93,8 @@ public class IdForm extends BaseForm {
     @Override
     public IValue rawValue(final VM vm) {
         return get(vm.currentLib, id, loc());
+    }
+
+    public record Result(Lib lib, String id) {
     }
 }

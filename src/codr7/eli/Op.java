@@ -1,7 +1,5 @@
 package codr7.eli;
 
-import java.util.Set;
-
 public interface Op {
     Code code();
 

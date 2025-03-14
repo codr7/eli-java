@@ -4,9 +4,6 @@ import codr7.eli.IValue;
 import codr7.eli.Loc;
 import codr7.eli.Op;
 import codr7.eli.VM;
-import codr7.eli.libs.CoreLib;
-
-import java.util.Set;
 
 public record CallValue(IValue target, int rArgs, int arity, int rResult, Loc loc) implements Op {
     @Override

@@ -1,6 +1,8 @@
 package codr7.eli;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 public abstract class BaseType<T> implements IDataType<T> {
     public final String id;

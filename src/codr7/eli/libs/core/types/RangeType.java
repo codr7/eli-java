@@ -3,7 +3,7 @@ package codr7.eli.libs.core.types;
 import codr7.eli.*;
 
 public final class RangeType extends BaseType<Range> {
-    public RangeType(final String id, final IType...parentTypes) {
+    public RangeType(final String id, final IType... parentTypes) {
         super(id, parentTypes);
     }
 

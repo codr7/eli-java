@@ -7,46 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class Arg {
-    public static int minArity(final Arg[] args) {
-        final var l = args.length;
-
-        var n = 0;
-
-        for (final var a: args) {
-            if (!a.optional && !a.splat) {
-                n++;
-            }
-        }
-
-        return n;
-    }
-
-    public static int maxArity(final Arg[] args) {
-        final var l = args.length;
-
-        if (l > 0 && args[l-1].splat) {
-            return Integer.MAX_VALUE;
-        }
-
-        return l;
-    }
-
-    public static int weight(final Arg[] args) {
-        var w = 0;
-
-        for (final var a: args) {
-            w += a.weight();
-        }
-
-        return w;
-    }
-
     public final String id;
     public final IType type;
-
     boolean optional = false;
     boolean splat = false;
-
     public Arg(String id, final IType type) {
         var done = false;
 
@@ -74,12 +38,46 @@ public final class Arg {
         this(id, null);
     }
 
+    public static int minArity(final Arg[] args) {
+        final var l = args.length;
+
+        var n = 0;
+
+        for (final var a : args) {
+            if (!a.optional && !a.splat) {
+                n++;
+            }
+        }
+
+        return n;
+    }
+
+    public static int maxArity(final Arg[] args) {
+        final var l = args.length;
+
+        if (l > 0 && args[l - 1].splat) {
+            return Integer.MAX_VALUE;
+        }
+
+        return l;
+    }
+
+    public static int weight(final Arg[] args) {
+        var w = 0;
+
+        for (final var a : args) {
+            w += a.weight();
+        }
+
+        return w;
+    }
+
     public int bind(final VM vm, final IValue[] values, final int i, final int rResult, final Loc loc) {
         if (splat) {
             final var vs = new ArrayList<>(Arrays.asList(values).subList(i, values.length));
 
             if (type != null) {
-                for (final var v: vs) {
+                for (final var v : vs) {
                     v.typeCheck(vm, type, loc);
                 }
             }
@@ -97,7 +95,7 @@ public final class Arg {
 
             vm.registers.set(rResult, v);
         } else {
-            if (!optional){
+            if (!optional) {
                 throw new EvalError("Missing arg: " + id, loc);
             }
 
@@ -126,14 +124,22 @@ public final class Arg {
     }
 
     public String dump(final VM vm) {
-        var s = id;
+        var s = new StringBuilder();
+        s.append(id);
+
         if (splat) {
-            s = s + '*';
+            s.append('*');
         }
+
         if (optional) {
-            s = s + '?';
+            s.append('?');
         }
-        return s;
+
+        if (type != null) {
+            s.append('@').append(type.id());
+        }
+
+        return s.toString();
     }
 
     public int weight() {

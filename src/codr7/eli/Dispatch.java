@@ -8,7 +8,7 @@ public final class Dispatch {
     public final String id;
     public final IMethod[] methods;
 
-    public Dispatch(final String id, IMethod...methods) {
+    public Dispatch(final String id, IMethod... methods) {
         this.id = id;
         this.methods = methods;
         Arrays.sort(methods);
@@ -33,11 +33,11 @@ public final class Dispatch {
     }
 
     public IMethod findMethod(final IValue[] args) {
-        for (final var m: methods) {
+        for (final var m : methods) {
             if (args.length >= m.minArity() && args.length <= m.maxArity()) {
                 var i = 0;
 
-                for (final var a: m.args()) {
+                for (final var a : m.args()) {
                     i = a.check(args, i);
 
                     if (i == -1) {

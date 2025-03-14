@@ -14,24 +14,19 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 11;
-
-    public boolean debug = false;
-
+    public final static int VERSION = 12;
     public final CoreLib coreLib = new CoreLib();
     public final Lib homeLib = new Lib("home", null);
-    public Lib currentLib = homeLib;
-
     public final List<Reader> prefixReaders = new ArrayList<>();
     public final List<Reader> suffixReaders = new ArrayList<>();
-
     public final ArrayList<Op> ops = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
+    public final int rNull;
+    private final List<Call> calls = new ArrayList<>();
+    public boolean debug = false;
+    public Lib currentLib = homeLib;
     public Path path = Paths.get("");
     public int pc = 0;
-    public final int rNull;
-
-    private final List<Call> calls = new ArrayList<>();
     private Op.Code[] opCode = new Op.Code[0];
     private Object[] opData = new Object[0];
 
@@ -415,6 +410,7 @@ public final class VM {
             }
         }
     }
+
     public interface DoLibBody {
         void call();
     }

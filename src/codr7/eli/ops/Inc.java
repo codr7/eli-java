@@ -4,8 +4,6 @@ import codr7.eli.Loc;
 import codr7.eli.Op;
 import codr7.eli.VM;
 
-import java.util.Set;
-
 public record Inc(int rTarget, long delta, Loc loc) implements Op {
     @Override
     public Code code() {

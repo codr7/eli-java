@@ -1,49 +1,27 @@
 package codr7.eli;
 
 import codr7.eli.errors.EmitError;
-import codr7.eli.errors.EvalError;
-
-import java.util.Arrays;
 
 import static codr7.eli.libs.CoreLib.Binding;
 
-public final class Method implements IMethod {
-    public final String id;
+public final class Method extends BaseMethod implements IMethod {
+    public final Loc loc;
     public final int rArgs;
     public final int rResult;
-    public final int minArity;
-    public final int maxArity;
+    public final Label start;
+    public final Label end;
 
     public Method(final String id,
                   final Arg[] args, final int rArgs,
                   final int rResult,
                   final Label start, final Label end,
                   final Loc loc) {
-        this.id = id;
-        this.args = args;
+        super(id, args);
         this.rArgs = rArgs;
         this.rResult = rResult;
         this.start = start;
         this.end = end;
         this.loc = loc;
-        this.minArity = Arg.minArity(args);
-        this.maxArity = Arg.maxArity(args);
-        this.weight = Arg.weight(args);
-    }
-
-    @Override
-    public Arg[] args() {
-        return args;
-    }
-
-    @Override
-    public int minArity() {
-        return minArity;
-    }
-
-    @Override
-    public int maxArity() {
-        return maxArity;
     }
 
     public void bindArgs(final VM vm) {
@@ -81,24 +59,4 @@ public final class Method implements IMethod {
             vm.pc = start.pc;
         }
     }
-
-    public String dump(final VM vm) {
-        return "(^" + id + "[?])";
-    }
-
-    @Override
-    public String id() {
-        return id;
-    }
-
-    @Override
-    public int weight() {
-        return weight;
-    }
-
-    private final Arg[] args;
-    private final Label start;
-    private final Label end;
-    private final Loc loc;
-    private final int weight;
 }

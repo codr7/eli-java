@@ -1,9 +1,10 @@
 fact PT1.682860949S
 fib PT1.568288647S
 
-* extract BaseMethod class
-
 ADD
+
+* json encode/decode
+** add json lib
 
 * union types
 ** Int | Nil
