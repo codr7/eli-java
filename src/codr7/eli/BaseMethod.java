@@ -24,6 +24,23 @@ public abstract class BaseMethod implements IMethod {
     }
 
     @Override
+    public int compareTo(final IMethod m) {
+        return Integer.compare(m.weight(), weight);
+    }
+
+    @Override
+    public String dump(final VM vm) {
+        return "(^" + id + " [" +
+                Arrays.stream(args).map(Arg::dump).collect(Collectors.joining(" ")) +
+                "])";
+    }
+
+    @Override
+    public String id() {
+        return id;
+    }
+
+    @Override
     public int minArity() {
         return minArity;
     }
@@ -31,18 +48,6 @@ public abstract class BaseMethod implements IMethod {
     @Override
     public int maxArity() {
         return maxArity;
-    }
-
-    @Override
-    public String dump(final VM vm) {
-        return "(^" + id + "[" +
-                Arrays.stream(args).map(Object::toString).collect(Collectors.joining(" ")) +
-                "])";
-    }
-
-    @Override
-    public String id() {
-        return id;
     }
 
     @Override

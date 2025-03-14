@@ -109,7 +109,7 @@ public final class Arg {
         return (values.length > i && (type != null && !values[i].type().isa(type))) ? -1 : i + 1;
     }
 
-    public String dump(final VM vm) {
+    public String dump() {
         var s = new StringBuilder();
         s.append(id);
 
