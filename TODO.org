@@ -7,7 +7,7 @@ FIX
 
 * turn iter/cross into iterator
 ** CrossResult
-** soduko
+** sudoku
 ** iter-tests
 
 ADD
