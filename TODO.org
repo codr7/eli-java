@@ -5,12 +5,17 @@ ADD
 
 * json encode/decode
 ** add json lib
+** jackson
 
-* map
+* map method
 ** return iter
 
-* filter
+* filter method
 ** return iter
+
+* add read/dump methods
+** use reader
+*** return iterator
 
 * union types
 ** Int | Nil
