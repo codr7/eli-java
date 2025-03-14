@@ -3,8 +3,10 @@ package codr7.eli.libs;
 import codr7.eli.*;
 import codr7.eli.libs.core.iters.StreamItems;
 import codr7.eli.libs.core.traits.IterableTrait;
+import codr7.eli.libs.iter.iters.MapResult;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public final class IterLib extends Lib {
@@ -28,6 +30,21 @@ public final class IterLib extends Lib {
                         final Stream<IValue> s = out.map(l -> new Value<>(CoreLib.List, new ArrayList<>(l)));
                         vm.registers.set(rResult, new Value<>(CoreLib.Iter, new StreamItems(s)));
                     }
+                });
+
+        bindMethod("map",
+                new Arg[]{new Arg("callback", CoreLib.Callable),
+                        new Arg("in*", CoreLib.Iterable)},
+                (vm, args, rResult, loc) -> {
+                    final var cb = args[0];
+                    final var its = new Iter[args.length-1];
+
+                    for (var i = 0; i < args.length-1; i++) {
+                        final var in = args[i+1];
+                        its[i] = in.type().cast(CoreLib.Iterable, loc).iter(vm, in);
+                    }
+
+                    vm.registers.set(rResult, new Value<>(CoreLib.Iter, new MapResult(vm, its, cb, loc)));
                 });
 
         bindMethod("pop", new Arg[]{new Arg("in", CoreLib.Iter)},

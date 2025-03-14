@@ -5,18 +5,15 @@ https://norvig.com/sudoku.html
 
 ADD
 
-* json encode/decode
-** add json lib
-** jackson
-
-* iter/map method
-** return iter
-
 * iter/filter method
 ** return iter
 
 * iter/zip method
-return iter
+** return iter
+
+* json encode/decode
+** add json lib
+** jackson
 
 * add read/dump methods
 ** use reader
