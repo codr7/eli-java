@@ -4,10 +4,8 @@ fib PT1.568288647S
 ADD
 
 * dispatch
-** extract Dispatch.getIndex(min, max, weight)
-** switch to encoding all three order values as one Int
+** scratch.eli
 ** add type override test
-*** same args but typed
 ** extract BaseMethod class
 
 * union types

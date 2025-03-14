@@ -107,6 +107,24 @@ public final class Arg {
         return i + 1;
     }
 
+    public int check(final IValue[] values, int i) {
+        if (splat) {
+            if (type != null) {
+                while (i < values.length) {
+                    if (!values[i].type().isa(type)) {
+                        return -1;
+                    }
+
+                    i++;
+                }
+            }
+
+            return values.length;
+        }
+
+        return (values.length > i && (type != null && !values[i].type().isa(type))) ? -1 : i + 1;
+    }
+
     public String dump(final VM vm) {
         var s = id;
         if (splat) {

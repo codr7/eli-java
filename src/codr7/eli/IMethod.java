@@ -13,20 +13,8 @@ public interface IMethod extends Comparable<IMethod> {
               Loc loc);
 
     @Override
-    default int compareTo(IMethod o) {
-        var r = Integer.compare(minArity(), o.minArity());
-
-        if (r != 0) {
-            return r;
-        }
-
-        r = Integer.compare(maxArity(), o.maxArity());
-
-        if (r != 0) {
-            return r;
-        }
-
-        return Integer.compare(o.weight(), weight());
+    default int compareTo(final IMethod m) {
+        return Integer.compare(m.weight(), weight());
     }
 
     String dump(VM vm);

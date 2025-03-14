@@ -3,7 +3,6 @@ package codr7.eli;
 import codr7.eli.errors.EvalError;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public final class Dispatch {
     public final String id;
@@ -14,14 +13,7 @@ public final class Dispatch {
     }
 
     public void add(final IMethod m) {
-        var i = Collections.binarySearch(methods, m);
-        if (i < 0) { i = Math.abs(i + 1); }
-
-        if (i == methods.size()) {
-            methods.add(m);
-        } else {
-            methods.add(i, m);
-        }
+       methods.addFirst(m);
     }
 
     public void call(final VM vm,
@@ -29,7 +21,7 @@ public final class Dispatch {
                      final int rResult,
                      final boolean eval,
                      final Loc loc) {
-        final var m = findMethod(vm, args);
+        final var m = findMethod(args);
 
         if (m == null) {
             throw new EvalError("No applicable methods found", loc);
@@ -42,28 +34,22 @@ public final class Dispatch {
         return "(^" + id + " [" + methods.size() + ']';
     }
 
-    public IMethod findMethod(final VM vm, final IValue[] args) {
-        var w = 0;
+    public IMethod findMethod(final IValue[] args) {
+        for (final var m: methods) {
+            if (args.length >= m.minArity() && args.length <= m.maxArity()) {
+                var i = 0;
 
-        for (final var v: args) {
-            w += v.type().weight();
-        }
+                for (final var a: m.args()) {
+                    i = a.check(args, i);
 
-        var min = 0;
-        var max = methods.size();
+                    if (i == -1) {
+                        break;
+                    }
+                }
 
-        while (min < max) {
-            var i = (max - min) / 2;
-            final var m = methods.get(i);
-
-            if (args.length < m.minArity()) {
-                max = i;
-            } else if (args.length > m.maxArity()) {
-                min = i;
-            } else if (w < m.weight()) {
-                max = i;
-            } else {
-                return m;
+                if (i != -1) {
+                    return m;
+                }
             }
         }
 
