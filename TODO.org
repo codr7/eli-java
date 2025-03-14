@@ -1,17 +1,22 @@
 fact PT1.682860949S
 fib PT1.568288647S
 
+https://norvig.com/sudoku.html
+
 ADD
 
 * json encode/decode
 ** add json lib
 ** jackson
 
-* map method
+* iter/map method
 ** return iter
 
-* filter method
+* iter/filter method
 ** return iter
+
+* iter/zip method
+return iter
 
 * add read/dump methods
 ** use reader

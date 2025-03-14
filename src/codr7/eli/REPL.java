@@ -18,7 +18,7 @@ public class REPL {
 
     public void run() {
         final var inputBuffer = new StringBuilder();
-        final var location = new Loc("REPL");
+        final var location = new Loc("repl");
         var lineIndex = 0;
 
         for (; ; ) {
