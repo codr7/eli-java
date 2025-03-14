@@ -12,6 +12,7 @@ public interface IMethod extends Comparable<IMethod> {
               boolean eval,
               Loc loc);
 
+
     @Override
     default int compareTo(final IMethod m) {
         return Integer.compare(m.weight(), weight());

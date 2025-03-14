@@ -37,6 +37,11 @@ public class CallForm extends BaseForm {
         }
 
         var t = tf.rawValue(vm);
+
+        if (t == null) {
+            throw new EmitError("Target not found: " + tf.dump(vm), tf.loc());
+        }
+
         if (t.type() instanceof CallableTrait ct) {
             ct.emitCall(vm, t, body, rResult, loc());
         } else {

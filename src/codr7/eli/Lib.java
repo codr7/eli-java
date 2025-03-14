@@ -1,5 +1,6 @@
 package codr7.eli;
 
+import codr7.eli.errors.EmitError;
 import codr7.eli.libs.CoreLib;
 
 import java.util.*;
@@ -15,25 +16,32 @@ public class Lib {
         this.parentLib = parentLib;
     }
 
-    public void bind(final String id, IValue value) {
+    public void bind(final String bid, final IValue value) {
         if (value.type() == CoreLib.Method) {
-            final var v = bindings.get(id);
+            final var v = bindings.get(bid);
 
             if (v != null) {
+                final var m = value.cast(CoreLib.Method);
+
                 if (v.type() == CoreLib.Method) {
-                    final var d = new Dispatch(id);
-                    d.add(v.cast(CoreLib.Method));
-                    d.add(value.cast(CoreLib.Method));
-                    bind(id, CoreLib.Dispatch, d);
+                    bind(bid, CoreLib.Dispatch, new Dispatch(bid, v.cast(CoreLib.Method), m));
                     return;
                 } else if (v.type() == CoreLib.Dispatch) {
-                    v.cast(CoreLib.Dispatch).add(value.cast(CoreLib.Method));
+                    final var d = v.cast(CoreLib.Dispatch);
+                    final var ms = new IMethod[d.methods.length+1];
+                    ms[0] = m;
+
+                    for (var i = 0; i < d.methods.length; i++) {
+                        ms[i+1] = d.methods[i];
+                    }
+
+                    bind(bid, CoreLib.Dispatch, new Dispatch(bid, ms));
                     return;
                 }
             }
         }
 
-        bindings.put(id, value);
+        bindings.put(bid, value);
     }
 
     public <T> void bind(final String id, final IDataType<T> type, final T data) {
@@ -61,23 +69,11 @@ public class Lib {
     }
 
     public void bind(final IMethod value) {
-        final var id = value.id();
-        final var v = bindings.get(id);
-
-        if (v == null) {
-            bind(id, CoreLib.Method, value);
-        } else if (v.type() == CoreLib.Method) {
-            final var d = new Dispatch(id);
-            d.add(v.cast(CoreLib.Method));
-            d.add(value);
-            bind(id, CoreLib.Dispatch, d);
-        } else if (v.type() == CoreLib.Dispatch) {
-            v.cast(CoreLib.Dispatch).add(value);
-        }
+        bind(value.id(), CoreLib.Method, value);
     }
 
-    public boolean drop(final String id) {
-        return bindings.remove(id) != null;
+    public boolean drop(final String bid) {
+        return bindings.remove(bid) != null;
     }
 
     public IValue find(final String id) {
@@ -85,18 +81,22 @@ public class Lib {
         return (v == null && parentLib != null) ? parentLib.find(id) : v;
     }
 
-    public void importFrom(final Lib source, final Set<String> ids) {
+    public void importFrom(final Lib source, final Set<String> ids, final Loc loc) {
         for (final var id : ids) {
-            bind(id, source.find(id));
+            final var v = source.find(id);
+            if (v == null) {
+                throw new EmitError("Not found " + source.id + '/' + id, loc);
+            }
+            bind(id, v);
         }
     }
 
-    public void importFrom(final Lib source, String... ids) {
-        importFrom(source, new TreeSet<>(Arrays.stream(ids).toList()));
+    public void importFrom(final Lib source, String[] ids, final Loc loc) {
+        importFrom(source, new TreeSet<>(Arrays.stream(ids).toList()), loc);
     }
 
-    public void importFrom(final Lib source) {
-        importFrom(source, source.bindings.keySet());
+    public void importFrom(final Lib source, final Loc loc) {
+        importFrom(source, source.bindings.keySet(), loc);
     }
 
     public void tryInit(final VM vm) {

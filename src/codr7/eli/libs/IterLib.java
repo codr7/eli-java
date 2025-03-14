@@ -80,7 +80,7 @@ public final class IterLib extends Lib {
 
     @Override
     public void init(final VM vm, final Loc loc) {
-        importFrom(vm.coreLib, "^", "+");
+        importFrom(vm.coreLib, new String[]{"^", "+"}, loc);
 
         vm.eval("""
                 (^sum [in]

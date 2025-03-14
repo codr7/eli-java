@@ -1,12 +1,13 @@
 fact PT1.682860949S
 fib PT1.568288647S
 
+* extract BaseMethod class
+
 ADD
 
 * dispatch
-** scratch.eli
 ** add type override test
-** extract BaseMethod class
+*** stable sort methods on weight
 
 * union types
 ** Int | Nil

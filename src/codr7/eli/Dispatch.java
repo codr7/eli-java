@@ -2,18 +2,13 @@ package codr7.eli;
 
 import codr7.eli.errors.EvalError;
 
-import java.util.ArrayList;
-
 public final class Dispatch {
     public final String id;
-    private final ArrayList<IMethod> methods = new ArrayList<>();
+    public final IMethod[] methods;
 
-    public Dispatch(final String id) {
+    public Dispatch(final String id, IMethod...methods) {
         this.id = id;
-    }
-
-    public void add(final IMethod m) {
-       methods.addFirst(m);
+        this.methods = methods;
     }
 
     public void call(final VM vm,
@@ -31,7 +26,7 @@ public final class Dispatch {
     }
 
     public String dump(final VM vm) {
-        return "(^" + id + " [" + methods.size() + ']';
+        return "(^" + id + " [" + methods.length + ']';
     }
 
     public IMethod findMethod(final IValue[] args) {

@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
         final var vm = new VM();
-        vm.homeLib.importFrom(vm.coreLib);
+        vm.homeLib.importFrom(vm.coreLib, new codr7.eli.Loc("main"));
 
             final var startPc = vm.emitPc();
             final var rResult = vm.alloc(1);
