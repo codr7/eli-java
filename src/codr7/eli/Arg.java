@@ -9,28 +9,14 @@ import java.util.Arrays;
 public final class Arg {
     public final String id;
     public final IType type;
-    boolean optional = false;
-    boolean splat = false;
+    public final boolean optional;
+    public final boolean splat;
+
     public Arg(String id, final IType type) {
-        var done = false;
-
-        while (!done) {
-            switch (id.charAt(id.length() - 1)) {
-                case '*':
-                    splat = true;
-                    id = id.substring(0, id.length() - 1);
-                    break;
-                case '?':
-                    optional = true;
-                    id = id.substring(0, id.length() - 1);
-                    break;
-                default:
-                    done = true;
-                    break;
-            }
-        }
-
-        this.id = id;
+        final var lc = id.charAt(id.length()-1);
+        splat = lc == '*';
+        optional = lc == '?';
+        this.id = (splat || optional) ? id.substring(0, id.length() - 1) : id;
         this.type = type;
     }
 

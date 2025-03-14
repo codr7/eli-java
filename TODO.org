@@ -6,6 +6,12 @@ ADD
 * json encode/decode
 ** add json lib
 
+* map
+** return iter
+
+* filter
+** return iter
+
 * union types
 ** Int | Nil
 ** add X? shortcut for X | Nil
