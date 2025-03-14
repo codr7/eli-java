@@ -8,7 +8,7 @@
     (encode-map dv ev)
     (set dv (* dv base) ev (* ev 2))))
 
-(for [c (iter/combinations encode-map)]
+(for [c (iter/comb encode-map)]
   (let [dvs:evs (iter/unzip c)
         dv (iter/sum dvs)
         ev (iter/sum evs)]
