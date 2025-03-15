@@ -17,7 +17,7 @@ public final class StreamItems implements Iter {
 
     @Override
     public String dump(final VM vm) {
-        return "(StreamItems " + in + ")";
+        return "(StreamItems)";
     }
 
     @Override

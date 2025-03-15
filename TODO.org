@@ -3,13 +3,6 @@ fib PT1.568288647S
 
 https://norvig.com/sudoku.html
 
-FIX
-
-* turn iter/cross into iterator
-** CrossResult
-** sudoku
-** iter-tests
-
 ADD
 
 * iter/filter method
@@ -22,9 +15,9 @@ ADD
 ** add json lib
 ** lib/jackson
 
-* add read/dump methods
+* add read method
 ** use reader
-*** return iterator
+** return ReadResult iter
 
 * union types
 ** Int | Nil

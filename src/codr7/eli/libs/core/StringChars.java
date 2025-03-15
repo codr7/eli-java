@@ -16,7 +16,7 @@ public final class StringChars implements Iter {
 
     @Override
     public String dump(final VM vm) {
-        return "(StringChars \"" + s + "\" " + i + ")";
+        return "(StringChars " + i + ")";
     }
 
     @Override

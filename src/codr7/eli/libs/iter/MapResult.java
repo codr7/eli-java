@@ -16,7 +16,7 @@ public final class MapResult implements Iter {
 
     @Override
     public String dump(final VM vm) {
-        return "(iter/MapResult)";
+        return "(iter/MapResult #" + rIn + ")";
     }
 
     public MapResult(final VM vm, final Iter[] in, final IValue callback, final Loc loc) {

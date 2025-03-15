@@ -3,6 +3,7 @@ package codr7.eli.libs;
 import codr7.eli.*;
 import codr7.eli.libs.core.StreamItems;
 import codr7.eli.libs.core.IterableTrait;
+import codr7.eli.libs.iter.CrossResult;
 import codr7.eli.libs.iter.MapResult;
 
 import java.util.ArrayList;
@@ -37,25 +38,12 @@ public final class IterLib extends Lib {
                         new Arg("xs", CoreLib.Iterable),
                         new Arg("ys", CoreLib.Iterable)},
                 (vm, args, rResult, loc) -> {
-                    final var out = new ArrayList<IValue>();
-
                     final var cb = args[0];
-                    final var ct = cb.type().cast(CoreLib.Callable, loc);
                     final var xs = args[1];
-                    final var xi = xs.type().cast(CoreLib.Iterable, loc).iter(vm, xs);
                     final var ys = args[2];
-                    final var rArgs = vm.alloc(2);
 
-                    while (xi.next(vm, rArgs, loc)) {
-                        final var yi = ys.type().cast(CoreLib.Iterable, loc).iter(vm, ys);
-
-                        while (yi.next(vm, rArgs+1, loc)) {
-                            ct.call(vm, cb, rArgs, 2, rResult, true, loc);
-                            out.add(vm.registers.get(rResult));
-                        }
-                    }
-
-                    vm.registers.set(rResult, new Value<>(CoreLib.List, out));
+                    vm.registers.set(rResult,
+                            new Value<>(CoreLib.Iter, new CrossResult(vm, xs, ys, cb, loc)));
                 });
 
         bindMethod("fold",
