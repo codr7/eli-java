@@ -11,11 +11,6 @@ public final class WhereResult implements Iter {
     private final int rArgs;
     private final int rPred;
 
-    @Override
-    public String dump(final VM vm) {
-        return "(iter/WhereResult #" + rArgs + ' ' + args.length + ")";
-    }
-
     public WhereResult(final VM vm, final Iter[] args, final IValue pred, final Loc loc) {
         this.args = args;
         this.pred = pred;
@@ -25,21 +20,26 @@ public final class WhereResult implements Iter {
     }
 
     @Override
+    public String dump(final VM vm) {
+        return "(iter/WhereResult #" + rArgs + ' ' + args.length + ")";
+    }
+
+    @Override
     public boolean next(final VM vm, final int rResult, final Loc loc) {
         for (var i = 0; i < args.length; i++) {
-            if (!args[i].next(vm, rArgs+i, loc)) {
+            if (!args[i].next(vm, rArgs + i, loc)) {
                 return false;
             }
         }
 
-        predType.call(vm, pred, rArgs, args.length, rPred,true, loc);
+        predType.call(vm, pred, rArgs, args.length, rPred, true, loc);
 
         if (vm.registers.get(rPred).cast(CoreLib.Bit)) {
             if (rResult != -1) {
                 var v = vm.registers.get(rArgs);
 
                 for (var i = 1; i < args.length; i++) {
-                    v = new Value<>(CoreLib.Pair, new Pair(v, vm.registers.get(rArgs+i)));
+                    v = new Value<>(CoreLib.Pair, new Pair(v, vm.registers.get(rArgs + i)));
                 }
 
                 vm.registers.set(rResult, v);

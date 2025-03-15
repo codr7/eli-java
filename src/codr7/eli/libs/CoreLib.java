@@ -8,8 +8,6 @@ import codr7.eli.forms.IdForm;
 import codr7.eli.forms.ListForm;
 import codr7.eli.forms.PairForm;
 import codr7.eli.libs.core.*;
-import codr7.eli.libs.core.IntRange;
-import codr7.eli.ops.Iter;
 import codr7.eli.ops.*;
 
 import java.math.BigDecimal;
@@ -18,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public class CoreLib extends Lib {

@@ -12,7 +12,7 @@ public final class StringLib extends Lib {
                 (vm, args, rResult, loc) -> {
                     final var out = new StringBuilder();
 
-                    for (final var a: args) {
+                    for (final var a : args) {
                         out.append(a.dump(vm));
                     }
 

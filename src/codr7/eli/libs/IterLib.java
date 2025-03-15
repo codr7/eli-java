@@ -4,8 +4,8 @@ import codr7.eli.*;
 import codr7.eli.errors.EmitError;
 import codr7.eli.forms.IdForm;
 import codr7.eli.forms.ListForm;
-import codr7.eli.libs.core.StreamItems;
 import codr7.eli.libs.core.IterableTrait;
+import codr7.eli.libs.core.StreamItems;
 import codr7.eli.libs.iter.CrossResult;
 import codr7.eli.libs.iter.MapResult;
 import codr7.eli.libs.iter.WhereResult;
@@ -143,10 +143,10 @@ public final class IterLib extends Lib {
                         new Arg("in*", CoreLib.Iterable)},
                 (vm, args, rResult, loc) -> {
                     final var cb = args[0];
-                    final var its = new Iter[args.length-1];
+                    final var its = new Iter[args.length - 1];
 
-                    for (var i = 0; i < args.length-1; i++) {
-                        final var in = args[i+1];
+                    for (var i = 0; i < args.length - 1; i++) {
+                        final var in = args[i + 1];
                         its[i] = in.type().cast(CoreLib.Iterable, loc).iter(vm, in);
                     }
 
@@ -183,13 +183,13 @@ public final class IterLib extends Lib {
 
         bindMethod("where",
                 new Arg[]{new Arg("pred", CoreLib.Callable),
-                          new Arg("in*", CoreLib.Iterable)},
+                        new Arg("in*", CoreLib.Iterable)},
                 (vm, args, rResult, loc) -> {
                     final var p = args[0];
-                    final var its = new Iter[args.length-1];
+                    final var its = new Iter[args.length - 1];
 
-                    for (var i = 0; i < args.length-1; i++) {
-                        final var in = args[i+1];
+                    for (var i = 0; i < args.length - 1; i++) {
+                        final var in = args[i + 1];
                         its[i] = in.type().cast(CoreLib.Iterable, loc).iter(vm, in);
                     }
 

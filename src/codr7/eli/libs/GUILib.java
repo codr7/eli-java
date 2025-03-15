@@ -5,10 +5,10 @@ import codr7.eli.Lib;
 import codr7.eli.Value;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.core.CallableTrait;
-import codr7.eli.libs.gui.*;
 import codr7.eli.libs.gui.Button;
 import codr7.eli.libs.gui.Container;
 import codr7.eli.libs.gui.Frame;
+import codr7.eli.libs.gui.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;

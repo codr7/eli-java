@@ -13,7 +13,7 @@ public final class Arg {
     public final boolean splat;
 
     public Arg(String id, final IType type) {
-        final var lc = id.charAt(id.length()-1);
+        final var lc = id.charAt(id.length() - 1);
         splat = lc == '*';
         optional = lc == '?';
         this.id = (splat || optional) ? id.substring(0, id.length() - 1) : id;
