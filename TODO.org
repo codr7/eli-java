@@ -3,10 +3,10 @@ fib PT1.568288647S
 
 https://norvig.com/sudoku.html
 
-ADD
+* cl-eli
+** iter lib
 
-* iter/filter method
-** return FilterResult iter
+ADD
 
 * iter/zip method
 ** return ZipResult iter

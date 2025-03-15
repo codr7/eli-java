@@ -1,12 +1,22 @@
 package codr7.eli.libs;
 
 import codr7.eli.*;
+import codr7.eli.errors.EmitError;
+import codr7.eli.forms.IdForm;
+import codr7.eli.forms.ListForm;
 import codr7.eli.libs.core.StreamItems;
 import codr7.eli.libs.core.IterableTrait;
 import codr7.eli.libs.iter.CrossResult;
 import codr7.eli.libs.iter.MapResult;
+import codr7.eli.libs.iter.WhereResult;
+import codr7.eli.ops.Branch;
+import codr7.eli.ops.Goto;
+import codr7.eli.ops.Next;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.stream.Stream;
 
 public final class IterLib extends Lib {
@@ -65,6 +75,69 @@ public final class IterLib extends Lib {
                     vm.registers.set(rResult, vm.registers.get(rArgs));
                 });
 
+        bindMacro("for",
+                new Arg[]{new Arg("bindings"), new Arg("body*")},
+                (vm, _args, rResult, loc) -> {
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+
+                    vm.doLib(null, () -> {
+                        final var brs = new HashMap<Integer, Integer>();
+                        final var bsf = args.removeFirst();
+
+                        if (bsf instanceof ListForm bslf) {
+                            final var bs = new ArrayDeque<>(Arrays.asList(bslf.items));
+
+                            while (!bs.isEmpty()) {
+                                final var vf = bs.removeFirst();
+                                final var sf = bs.removeFirst();
+
+                                if (vf instanceof IdForm idf) {
+                                    final var v = sf.rawValue(vm);
+                                    final var rSeq = vm.alloc(1);
+                                    final var rIt = idf.isNil() ? -1 : vm.alloc(1);
+                                    brs.put(rSeq, rIt);
+                                    sf.emit(vm, rSeq);
+                                    vm.emit(new codr7.eli.ops.Iter(rSeq));
+
+                                    if (!idf.isNil()) {
+                                        vm.currentLib.bind(idf.id, CoreLib.Binding, new Binding(null, rIt));
+                                    }
+                                } else {
+                                    throw new EmitError("Expected id: " + vf.dump(vm), loc);
+                                }
+                            }
+                        } else {
+                            throw new EmitError("Expected bindings: " + bsf.dump(vm), loc);
+                        }
+
+                        final var bodyStart = new Label(vm.emitPc());
+                        final var bodyEnd = new Label();
+
+                        for (final var br : brs.entrySet()) {
+                            vm.emit(new Next(br.getKey(), br.getValue(), bodyEnd, loc));
+                        }
+
+                        vm.doLib(null, () -> {
+                            vm.currentLib.bindMacro("break", new Arg[]{new Arg("args*")},
+                                    (_vm, _breakArgs, _rResult, _loc) -> {
+                                        _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
+                                        _vm.emit(new Goto(bodyEnd));
+                                    });
+
+                            vm.currentLib.bindMacro("next", new Arg[]{new Arg("args*")},
+                                    (_vm, _breakArgs, _rResult, _loc) -> {
+                                        _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
+                                        _vm.emit(new Goto(bodyStart));
+                                    });
+
+                            Form.emit(vm, args, rResult);
+                        });
+
+                        vm.emit(new Goto(bodyStart));
+                        bodyEnd.pc = vm.emitPc();
+                    });
+                });
+
         bindMethod("map",
                 new Arg[]{new Arg("callback", CoreLib.Callable),
                         new Arg("in*", CoreLib.Iterable)},
@@ -106,6 +179,52 @@ public final class IterLib extends Lib {
                             new Value<>(CoreLib.Pair,
                                     new Pair(new Value<>(CoreLib.List, lvs),
                                             new Value<>(CoreLib.List, rvs))));
+                });
+
+        bindMethod("where",
+                new Arg[]{new Arg("pred", CoreLib.Callable),
+                          new Arg("in*", CoreLib.Iterable)},
+                (vm, args, rResult, loc) -> {
+                    final var p = args[0];
+                    final var its = new Iter[args.length-1];
+
+                    for (var i = 0; i < args.length-1; i++) {
+                        final var in = args[i+1];
+                        its[i] = in.type().cast(CoreLib.Iterable, loc).iter(vm, in);
+                    }
+
+                    vm.registers.set(rResult, new Value<>(CoreLib.Iter, new WhereResult(vm, its, p, loc)));
+                });
+
+        bindMacro("while",
+                new Arg[]{new Arg("cond"), new Arg("body*")},
+                (vm, _args, rResult, loc) -> {
+                    final var args = new ArrayDeque<>(Arrays.asList(_args));
+                    final var start = new Label(vm.emitPc());
+                    final var end = new Label();
+                    final var rCond = vm.alloc(1);
+                    args.removeFirst().emit(vm, rCond);
+                    vm.emit(new Branch(rCond, end, loc));
+
+                    vm.doLib(null, () -> {
+                        vm.currentLib.bindMacro("break", new Arg[]{new Arg("args*")},
+                                (_vm, _breakArgs, _rResult, _loc) -> {
+                                    _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
+                                    _vm.emit(new Goto(end));
+                                });
+
+                        vm.currentLib.bindMacro("next", new Arg[]{new Arg("args*")},
+                                (_vm, _breakArgs, _rResult, _loc) -> {
+                                    _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
+                                    _vm.emit(new Goto(start));
+                                });
+
+                        Form.emit(vm, args, rResult);
+                    });
+
+
+                    vm.emit(new Goto(start));
+                    end.pc = vm.emitPc();
                 });
     }
 
