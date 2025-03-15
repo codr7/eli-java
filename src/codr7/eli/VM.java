@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 12;
+    public final static int VERSION = 13;
     public final CoreLib coreLib = new CoreLib();
     public final Lib homeLib = new Lib("home", null);
     public final List<Reader> prefixReaders = new ArrayList<>();
