@@ -2,7 +2,7 @@ package codr7.eli.forms;
 
 import codr7.eli.*;
 import codr7.eli.errors.EmitError;
-import codr7.eli.libs.core.traits.CallableTrait;
+import codr7.eli.libs.core.CallableTrait;
 import codr7.eli.ops.Left;
 import codr7.eli.ops.Right;
 

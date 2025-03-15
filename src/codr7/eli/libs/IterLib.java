@@ -1,12 +1,11 @@
 package codr7.eli.libs;
 
 import codr7.eli.*;
-import codr7.eli.libs.core.iters.StreamItems;
-import codr7.eli.libs.core.traits.IterableTrait;
-import codr7.eli.libs.iter.iters.MapResult;
+import codr7.eli.libs.core.StreamItems;
+import codr7.eli.libs.core.IterableTrait;
+import codr7.eli.libs.iter.MapResult;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public final class IterLib extends Lib {

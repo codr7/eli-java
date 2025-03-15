@@ -4,12 +4,11 @@ import codr7.eli.Arg;
 import codr7.eli.Lib;
 import codr7.eli.Value;
 import codr7.eli.errors.EvalError;
-import codr7.eli.libs.core.traits.CallableTrait;
-import codr7.eli.libs.gui.shims.Container;
-import codr7.eli.libs.gui.shims.OpenDialog;
-import codr7.eli.libs.gui.shims.TabView;
-import codr7.eli.libs.gui.shims.Table;
-import codr7.eli.libs.gui.types.*;
+import codr7.eli.libs.core.CallableTrait;
+import codr7.eli.libs.gui.*;
+import codr7.eli.libs.gui.Button;
+import codr7.eli.libs.gui.Container;
+import codr7.eli.libs.gui.Frame;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -72,7 +71,7 @@ public final class GUILib extends Lib {
                 new Arg[]{new Arg("title", CoreLib.Any), new Arg("on-click", CoreLib.Any)},
                 (vm, args, rResult, loc) -> {
                     final var title = args[0].cast(CoreLib.String);
-                    final var b = new codr7.eli.libs.gui.shims.Button(new JButton(title));
+                    final var b = new Button(new JButton(title));
                     final var c = args[1];
 
                     if (c.type() instanceof CallableTrait ct) {
@@ -106,7 +105,7 @@ public final class GUILib extends Lib {
                     final var height = size.right().cast(CoreLib.Int).intValue();
                     f.setPreferredSize(new Dimension(width, height));
                     f.setLocationRelativeTo(null);
-                    vm.registers.set(rResult, new Value<>(frameType, new codr7.eli.libs.gui.shims.Frame(f)));
+                    vm.registers.set(rResult, new Value<>(frameType, new Frame(f)));
                 });
 
         bindMethod("open-file",

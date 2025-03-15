@@ -1,7 +1,7 @@
 package codr7.eli;
 
 import codr7.eli.errors.EvalError;
-import codr7.eli.libs.core.traits.ComparableTrait;
+import codr7.eli.libs.core.ComparableTrait;
 
 public sealed interface IValue extends Comparable<IValue> permits Value {
     <U> U cast(IDataType<U> type);

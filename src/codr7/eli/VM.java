@@ -2,7 +2,7 @@ package codr7.eli;
 
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.*;
-import codr7.eli.libs.core.traits.IterableTrait;
+import codr7.eli.libs.core.IterableTrait;
 import codr7.eli.ops.*;
 import codr7.eli.readers.*;
 

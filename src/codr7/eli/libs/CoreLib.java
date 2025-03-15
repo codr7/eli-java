@@ -7,9 +7,8 @@ import codr7.eli.forms.CallForm;
 import codr7.eli.forms.IdForm;
 import codr7.eli.forms.ListForm;
 import codr7.eli.forms.PairForm;
-import codr7.eli.libs.core.iters.IntRange;
-import codr7.eli.libs.core.traits.*;
-import codr7.eli.libs.core.types.*;
+import codr7.eli.libs.core.*;
+import codr7.eli.libs.core.IntRange;
 import codr7.eli.ops.Iter;
 import codr7.eli.ops.*;
 
