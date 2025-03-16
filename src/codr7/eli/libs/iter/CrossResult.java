@@ -13,7 +13,7 @@ public final class CrossResult implements Iter {
     private final CallableTrait callType;
     private final IValue callTarget;
     private final int rArgs;
-    private Iter yi;
+    private Iter yi = null;
 
     public CrossResult(final VM vm, final IValue xs, final IValue ys, final IValue callback, final Loc loc) {
         xi = xs.type().cast(CoreLib.Iterable, loc).iter(vm, xs);

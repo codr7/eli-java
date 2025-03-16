@@ -6,6 +6,7 @@ import codr7.eli.forms.IdForm;
 import codr7.eli.forms.ListForm;
 import codr7.eli.libs.core.IterableTrait;
 import codr7.eli.libs.core.StreamItems;
+import codr7.eli.libs.iter.ConcatResult;
 import codr7.eli.libs.iter.CrossResult;
 import codr7.eli.libs.iter.MapResult;
 import codr7.eli.libs.iter.WhereResult;
@@ -54,6 +55,19 @@ public final class IterLib extends Lib {
 
                     vm.registers.set(rResult,
                             new Value<>(CoreLib.Iter, new CrossResult(vm, xs, ys, cb, loc)));
+                });
+
+        bindMethod("concat",
+                new Arg[]{new Arg("in*", CoreLib.Iterable)},
+                (vm, args, rResult, loc) -> {
+                    final var its = new Iter[args.length];
+
+                    for (var i = 0; i < args.length; i++) {
+                        final var in = args[i];
+                        its[i] = in.type().cast(CoreLib.Iterable, loc).iter(vm, in);
+                    }
+
+                    vm.registers.set(rResult, new Value<>(CoreLib.Iter, new ConcatResult(its)));
                 });
 
         bindMethod("fold",

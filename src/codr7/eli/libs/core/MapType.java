@@ -4,6 +4,7 @@ import codr7.eli.*;
 import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 
+import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -82,6 +83,11 @@ public class MapType
                         .map(e -> e.getKey().dump(vm) + ':' + e.getValue().dump(vm))
                         .collect(Collectors.joining(" ")) +
                 '}';
+    }
+
+    @Override
+    public IValue dup(VM vm, IValue source) {
+        return new Value<>(this, new TreeMap<>(source.cast(this)));
     }
 
     @Override

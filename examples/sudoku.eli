@@ -1,6 +1,12 @@
-(var
-  rows    "abcdefghi"
-  cols    "123456789"
-  squares [(iter/cross sym/make rows cols)*])
+(^csym [x y]
+  (iter/cross sym/make x y))
 
-(say squares)
+(var
+  rows     "abcdefghi"
+  cols     "123456789"
+  squares   [(csym rows cols)*]
+  unit-list (let [col-rows  (iter/map (^[c] [(csym rows [c])*]) cols)
+                  row-cols  (iter/map (^[r] [(csym [r] cols)*]) rows)]
+              [(iter/concat col-rows row-cols)*]))
+
+(say (dump unit-list))

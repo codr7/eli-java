@@ -3,16 +3,19 @@ fib PT1.568288647S
 
 https://norvig.com/sudoku.html
 
-ADD
+* sudoku
+** unitlist
+*** string/split(n)
 
-* iter/zip method
-** debug test (pair construction order?)
-** readme
+ADD
 
 * list bind destructuring
 ** splat for tail
 
 * tracing
+
+* term lib
+** sharpl
 
 * json encode/decode
 ** add json lib

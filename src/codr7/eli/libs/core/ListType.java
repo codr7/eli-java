@@ -115,6 +115,11 @@ public class ListType
     }
 
     @Override
+    public IValue dup(VM vm, IValue source) {
+        return new Value<>(this, new ArrayList<>(source.cast(this)));
+    }
+
+    @Override
     public IValue tail(IValue target) {
         final var t = target.cast(this);
 
