@@ -3,10 +3,6 @@ fib PT1.568288647S
 
 https://norvig.com/sudoku.html
 
-* move string/dump to core
-** fix test
-** add to readme/testing
-
 ADD
 
 * iter/zip method

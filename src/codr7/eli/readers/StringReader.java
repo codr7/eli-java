@@ -10,27 +10,46 @@ import java.util.Deque;
 public class StringReader implements Reader {
     public static final StringReader instance = new StringReader();
 
-    public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc location) {
+    public boolean read(final VM vm, final Input in, final Deque<IForm> out, final Loc loc) {
         if (in.peek() != '"') {
             return false;
         }
-        final var loc = location.dup();
-        location.update(in.pop());
+        final var floc = loc.dup();
+        loc.update(in.pop());
         final var buffer = new StringBuilder();
 
         for (; ; ) {
             var c = in.peek();
+
             if (c == 0) {
-                throw new ReadError("Unexpected end of string", location);
+                throw new ReadError("Unexpected end of string", loc);
             }
-            location.update(in.pop());
+
+            loc.update(in.pop());
+
             if (c == '"') {
                 break;
             }
+
+            if (c == '\\') {
+                c = in.pop();
+
+                switch (c) {
+                    case '"':
+                    case '\\':
+                        break;
+                    case 'n':
+                        c = '\n';
+                        break;
+                    default:
+                        throw new ReadError("Invalid escape: " + c, loc);
+                }
+            }
+
             buffer.append(c);
         }
 
-        out.addLast(new LiteralForm(new Value<>(CoreLib.String, buffer.toString()), loc));
+        out.addLast(new LiteralForm(new Value<>(CoreLib.String, buffer.toString()), floc));
         return true;
     }
 }
