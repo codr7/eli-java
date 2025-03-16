@@ -79,7 +79,7 @@ public final class PairForm extends BaseForm {
 
     @Override
     public IValue quote(final VM vm, final Loc loc) {
-        return new Value<>(CoreLib.Pair, new Pair(left.quote(vm, loc), right.value(vm)));
+        return new Value<>(CoreLib.Pair, new Pair(left.quote(vm, loc), right.eval(vm)));
     }
 
     @Override
