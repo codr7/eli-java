@@ -2,7 +2,9 @@ package codr7.eli;
 
 import codr7.eli.libs.CoreLib;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public record Value<T>(IDataType<T> type, T data) implements IValue {
     public static void expand(final VM vm,
@@ -19,6 +21,17 @@ public record Value<T>(IDataType<T> type, T data) implements IValue {
         } else {
             out.add(value);
         }
+    }
+
+    public static IValue zip(final Iterator<IValue> items) {
+        if (!items.hasNext()) {
+            return null;
+        }
+
+        final var lv = items.next();
+        final var rv = zip(items);
+
+        return (rv == null) ? lv : new Value<>(CoreLib.Pair, new Pair(lv, rv));
     }
 
     public <U> U cast(IDataType<U> type) {

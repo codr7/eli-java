@@ -138,6 +138,13 @@ public final class IterLib extends Lib {
                     });
                 });
 
+        bindMethod("get", new Arg[]{new Arg("in", CoreLib.Iterable)},
+                (vm, args, rResult, loc) -> {
+                    final var in = args[0];
+                    final var it = in.type().cast(CoreLib.Iterable, loc).iter(vm, in);
+                    vm.registers.set(rResult, new Value<>(CoreLib.Iter, it));
+                });
+
         bindMethod("map",
                 new Arg[]{new Arg("callback", CoreLib.Callable),
                         new Arg("in*", CoreLib.Iterable)},
@@ -230,11 +237,15 @@ public final class IterLib extends Lib {
 
     @Override
     public void init(final VM vm, final Loc loc) {
+        bind("core", new Value<>(CoreLib.Lib, vm.coreLib));
         importFrom(vm.coreLib, new String[]{"^", "+"}, loc);
 
         vm.eval("""
                 (^sum [in]
                   (fold + in 0))
+                  
+                (^zip [in*]
+                  (map core/zip in*))
                 """, loc);
     }
 }

@@ -664,5 +664,11 @@ public class CoreLib extends Lib {
                         id.bindValue(vm, value, loc);
                     }
                 });
+
+        bindMethod("zip",
+                new Arg[]{new Arg("in*")},
+                (vm, args, rResult, loc) -> {
+                    vm.registers.set(rResult, Value.zip(Arrays.stream(args).iterator()));
+                });
     }
 }

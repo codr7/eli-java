@@ -6,7 +6,8 @@ https://norvig.com/sudoku.html
 ADD
 
 * iter/zip method
-** return ZipResult iter
+** debug test (pair construction order?)
+** readme
 
 * list bind destructuring
 ** splat for tail

@@ -17,7 +17,7 @@ public final class JMethod extends BaseMethod implements IMethod {
                      boolean eval,
                      final Loc loc) {
         if (args.length < minArity || args.length > maxArity) {
-            throw new EmitError("Wrong number of args: " + this, loc);
+            throw new EmitError("Wrong number of args: " + this.dump(vm), loc);
         }
 
         body.call(vm, args, rResult, loc);
