@@ -17,6 +17,8 @@ ADD
 ** add json lib
 ** lib/jackson
 
+http://www.cowtowncoder.com/blog/archives/2009/01/entry_132.html
+
 * add read method
 ** use reader
 ** return ReadResult iter
@@ -30,6 +32,9 @@ ADD
 ** 0..10:2
 
 * method composition
+
+* macros
+** fix expression splat/head/tail etc
 
 FIX
 
