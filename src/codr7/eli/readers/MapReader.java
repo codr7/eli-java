@@ -18,7 +18,7 @@ public class MapReader implements Reader {
         }
         final var loc = location.dup();
         location.update(in.pop());
-        final var body = new ArrayDeque<PairForm>();
+        final var body = new ArrayDeque<IForm>();
 
         for (; ; ) {
             WhitespaceReader.instance.read(vm, in, out, location);
@@ -37,18 +37,10 @@ public class MapReader implements Reader {
                 throw new ReadError("Unexpected end of map", location);
             }
 
-
-            var it = out.removeLast();
-
-            if (it instanceof QuoteForm qf) {
-                final var p = qf.target.cast(vm, PairForm.class);
-                it = new PairForm(new QuoteForm(p.left, p.left.loc()), p.right, p.loc());
-            }
-
-            body.add(it.cast(vm, PairForm.class));
+            body.add(out.removeLast());
         }
 
-        out.addLast(new MapForm(body.toArray(new PairForm[0]), loc));
+        out.addLast(new MapForm(body.toArray(new IForm[0]), loc));
         return true;
     }
 }

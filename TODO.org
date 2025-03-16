@@ -11,6 +11,9 @@ ADD
 * iter/zip method
 ** return ZipResult iter
 
+* list bind destructuring
+** splat for tail
+
 * json encode/decode
 ** add json lib
 ** lib/jackson

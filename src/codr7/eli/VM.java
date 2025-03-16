@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 13;
+    public final static int VERSION = 14;
     public final CoreLib coreLib = new CoreLib();
     public final Lib homeLib = new Lib("home", null);
     public final List<Reader> prefixReaders = new ArrayList<>();
@@ -266,12 +266,18 @@ public final class VM {
                     pc++;
                     break;
                 }
-                case MapAdd: {
-                    final var op = (MapAdd) opData[pc];
-                    final var t = registers.get(op.rTarget()).cast(CoreLib.Map);
-                    final var k = registers.get(op.rKey());
-                    final var v = registers.get(op.rValue());
-                    t.put(k, v);
+                case MapGet: {
+                    final var op = (MapGet) opData[pc];
+                    final var m = registers.get(op.rMap()).cast(CoreLib.Map);
+                    registers.set(op.rItem(), m.get(op.key()));
+                    pc++;
+                    break;
+                }
+                case MapSet: {
+                    final var op = (MapSet) opData[pc];
+                    final var m = registers.get(op.rMap()).cast(CoreLib.Map);
+                    final var p = registers.get(op.rItem()).cast(CoreLib.Pair);
+                    m.put(p.left(), p.right());
                     pc++;
                     break;
                 }

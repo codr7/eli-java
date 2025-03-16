@@ -15,7 +15,7 @@ public interface Op {
         Goto,
         Inc, Iter,
         Left, ListAdd,
-        MapAdd,
+        MapGet, MapSet,
         Next, Nop,
         Put,
         Return, Right,
