@@ -62,7 +62,7 @@ public class StringType extends BaseType<String>
 
         return t.isEmpty()
                 ? CoreLib.NIL
-                : new Value<>(CoreLib.Char, t.charAt(t.length() - 1));
+                : new Value<>(CoreLib.String, t.substring(1));
     }
 
     @Override

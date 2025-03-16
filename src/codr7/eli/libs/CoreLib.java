@@ -311,13 +311,6 @@ public class CoreLib extends Lib {
                     });
                 });
 
-        bindMethod("count", new Arg[]{new Arg("it")},
-                (vm, args, rResult, loc) -> {
-                    final var it = args[0];
-                    final var n = (long) it.type().cast(Countable, loc).count(it);
-                    vm.registers.set(rResult, new Value<>(Int, n));
-                });
-
         bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")},
                 (vm, args, rResult, loc) -> {
                     final var t = (IdForm) args[0];

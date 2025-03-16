@@ -14,6 +14,6 @@ public class CountReader extends PrefixReader {
 
     @Override
     public IForm boxTarget(final IForm target, final Loc loc) {
-        return new CallForm(new IForm[]{new IdForm("count", loc), target}, loc);
+        return new CallForm(new IForm[]{new IdForm("seq/count", loc), target}, loc);
     }
 }
