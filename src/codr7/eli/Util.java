@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public enum Utils {
+public enum Util {
     ;
-
-    public static int log2(final long n) {
-        return (int) (Math.log(n) / Math.log(2)) + 1;
-    }
-
     public static <T> Stream<List<T>> combine(final T[] in) {
         final long N = (long) Math.pow(2, in.length);
 
@@ -40,5 +38,13 @@ public enum Utils {
                 return false;
             }
         }, false);
+    }
+
+    public static int log2(final long n) {
+        return (int) (Math.log(n) / Math.log(2)) + 1;
+    }
+
+    public static Stream<String> split(final String s, final int n) {
+        return Pattern.compile("(?<=\\G.{" + n + "})").splitAsStream(s);
     }
 }

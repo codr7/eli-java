@@ -136,17 +136,16 @@ public class ListType
     @Override
     public String toString(final VM vm, final IValue value) {
         final var result = new StringBuilder();
-        result.append('[');
         final var v = value.cast(this);
 
         for (var i = 0; i < v.size(); i++) {
             if (i > 0) {
                 result.append(' ');
             }
+
             result.append(v.get(i).toString(vm));
         }
 
-        result.append(']');
         return result.toString();
     }
 }

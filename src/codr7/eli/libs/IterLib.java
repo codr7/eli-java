@@ -37,7 +37,7 @@ public final class IterLib extends Lib {
                             ol.add(vm.registers.get(rValue));
                         }
 
-                        final var out = Utils.combine(ol.toArray(IValue[]::new));
+                        final var out = Util.combine(ol.toArray(IValue[]::new));
                         final Stream<IValue> s = out.map(l ->
                                 new Value<>(CoreLib.List, new ArrayList<>(l)));
                         vm.registers.set(rResult, new Value<>(CoreLib.Iter, new StreamItems(s)));
@@ -251,9 +251,6 @@ public final class IterLib extends Lib {
 
     @Override
     public void init(final VM vm, final Loc loc) {
-        //bind("core", new Value<>(CoreLib.Lib, vm.coreLib));
-        //importFrom(vm.coreLib, new String[]{"^", "+"}, loc);
-
         vm.eval("""
                 (^sum [in]
                   (fold + in 0))

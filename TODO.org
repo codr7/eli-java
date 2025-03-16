@@ -4,8 +4,9 @@ fib PT1.568288647S
 https://norvig.com/sudoku.html
 
 * sudoku
-** unitlist
-*** string/split(n)
+** cache ys in CrossResult
+** units
+** peers
 
 ADD
 

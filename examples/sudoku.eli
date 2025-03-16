@@ -5,10 +5,14 @@
   rows     "abcdefghi"
   cols     "123456789"
   squares   [(csym rows cols)*]
-  unit-list (let [col-rows  (iter/map (^[c] [(csym rows [c])*]) cols)
-                  row-cols  (iter/map (^[r] [(csym [r] cols)*]) rows)]
-              [(iter/concat col-rows row-cols)*]))
+  unit-list (let [col-rows      (iter/map (^[c] [(csym rows [c])*]) cols)
+                  row-cols      (iter/map (^[r] [(csym [r] cols)*]) rows)
+                  row-groups    [(string/split rows 3)*]
+                  col-groups    [(string/split cols 3)*]
+                  square-groups (iter/cross (^[r c] [(csym r c)*]) row-groups col-groups)]
+              [(iter/concat col-rows row-cols square-groups)*]))
 
 (check 81 #squares)
+(check 27 #unit-list)
 
-(say (dump (map csym (string/split rows 3) (string/split cols 3))))
+(say unit-list)

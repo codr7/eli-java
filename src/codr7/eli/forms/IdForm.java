@@ -42,7 +42,13 @@ public class IdForm extends BaseForm {
             throw new EmitError("Unknown id: " + lib.id + '/' + id, loc);
         }
 
-        return found.lib.find(found.id);
+        final var v = found.lib.find(found.id);
+
+        if (v == null) {
+            throw new EmitError("Unknown id: " + found.lib.id + '/' + found.id, loc);
+        }
+
+        return v;
     }
 
     @Override
