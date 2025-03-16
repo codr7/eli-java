@@ -349,6 +349,17 @@ public class CoreLib extends Lib {
                 (vm, args, rResult, location) ->
                         vm.doLib(null, () -> Form.emit(vm, args, rResult)));
 
+        bindMethod("dump", new Arg[]{new Arg("args*")},
+                (vm, args, rResult, loc) -> {
+                    final var out = new StringBuilder();
+
+                    for (final var a : args) {
+                        out.append(a.dump(vm));
+                    }
+
+                    vm.registers.set(rResult, new Value<>(CoreLib.String, out.toString()));
+                });
+
         bindMacro("if", new Arg[]{new Arg("cond"), new Arg("body*")},
                 (vm, _args, rResult, loc) -> {
                     final var args = new ArrayDeque<>(Arrays.asList(_args));
