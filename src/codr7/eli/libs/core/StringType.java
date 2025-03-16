@@ -37,7 +37,12 @@ public class StringType extends BaseType<String>
 
     @Override
     public String dump(final VM vm, final IValue value) {
-        return '"' + value.cast(this) + '"';
+        var s = value.cast(this)
+                .replaceAll("\\\\", "\\\\\\\\")
+                .replaceAll("\"", "\\\\\"")
+                .replaceAll("\n", "\\\\n");
+
+        return '"' + s + '"';
     }
 
     @Override
