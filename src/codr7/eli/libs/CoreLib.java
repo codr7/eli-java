@@ -53,8 +53,8 @@ public class CoreLib extends Lib {
     public static final IValue T = new Value<>(Bit, true);
     public static final IValue F = new Value<>(Bit, false);
 
-    public CoreLib() {
-        super("core", null);
+    public CoreLib(final Lib parentLib) {
+        super("core", parentLib);
 
         bind(Any);
         bind(Callable);

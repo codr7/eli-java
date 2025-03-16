@@ -6,8 +6,8 @@ import codr7.eli.Utils;
 import codr7.eli.Value;
 
 public final class BitLib extends Lib {
-    public BitLib() {
-        super("bit", null);
+    public BitLib(final Lib parentLib) {
+        super("bit", parentLib);
 
         bindMethod("<<",
                 new Arg[]{new Arg("value", CoreLib.Int), new Arg("n", CoreLib.Int)},

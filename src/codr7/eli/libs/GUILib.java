@@ -28,8 +28,8 @@ public final class GUILib extends Lib {
     public static final ColumnType columnType = new ColumnType("Column", CoreLib.Any);
     public static final FrameType frameType = new FrameType("Frame", widgetType);
 
-    public GUILib() {
-        super("gui", null);
+    public GUILib(final Lib parentLib) {
+        super("gui", parentLib);
 
         bind(buttonType);
         bind(columnType);

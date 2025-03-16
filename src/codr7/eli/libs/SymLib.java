@@ -5,8 +5,8 @@ import codr7.eli.Lib;
 import codr7.eli.Value;
 
 public final class SymLib extends Lib {
-    public SymLib() {
-        super("sym", null);
+    public SymLib(final Lib parentLib) {
+        super("sym", parentLib);
 
         bindMethod("make",
                 new Arg[]{new Arg("in*")},

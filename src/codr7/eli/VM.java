@@ -15,7 +15,7 @@ import java.util.*;
 
 public final class VM {
     public final static int VERSION = 18;
-    public final CoreLib coreLib = new CoreLib();
+    public final CoreLib coreLib = new CoreLib(null);
     public final Lib homeLib = new Lib("home", null);
     public final List<Reader> prefixReaders = new ArrayList<>();
     public final List<Reader> suffixReaders = new ArrayList<>();
@@ -51,14 +51,14 @@ public final class VM {
 
         rNull = alloc(1);
 
-        homeLib.bind(new BitLib());
-        homeLib.bind(new CoreLib());
-        homeLib.bind(new GUILib());
-        homeLib.bind(new IntLib());
-        homeLib.bind(new IterLib());
-        homeLib.bind(new ListLib());
-        homeLib.bind(new SymLib());
-        homeLib.bind(new StringLib());
+        homeLib.bind(new BitLib(homeLib));
+        homeLib.bind(new CoreLib(homeLib));
+        homeLib.bind(new GUILib(homeLib));
+        homeLib.bind(new IntLib(homeLib));
+        homeLib.bind(new IterLib(homeLib));
+        homeLib.bind(new ListLib(homeLib));
+        homeLib.bind(new SymLib(homeLib));
+        homeLib.bind(new StringLib(homeLib));
 
         initLibs();
     }
@@ -414,6 +414,8 @@ public final class VM {
     }
 
     private void initLibs() {
+        homeLib.importFrom(coreLib, new codr7.eli.Loc("vm"));
+
         for (final var v : homeLib.bindings.values()) {
             if (v.type() == CoreLib.Lib) {
                 v.cast(CoreLib.Lib).tryInit(this);

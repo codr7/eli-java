@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.stream.Stream;
 
 public final class IterLib extends Lib {
-    public IterLib() {
-        super("iter", null);
+    public IterLib(final Lib parentLib) {
+        super("iter", parentLib);
 
         bindMethod("comb",
                 new Arg[]{new Arg("in", CoreLib.Iterable)},
@@ -251,8 +251,8 @@ public final class IterLib extends Lib {
 
     @Override
     public void init(final VM vm, final Loc loc) {
-        bind("core", new Value<>(CoreLib.Lib, vm.coreLib));
-        importFrom(vm.coreLib, new String[]{"^", "+"}, loc);
+        //bind("core", new Value<>(CoreLib.Lib, vm.coreLib));
+        //importFrom(vm.coreLib, new String[]{"^", "+"}, loc);
 
         vm.eval("""
                 (^sum [in]

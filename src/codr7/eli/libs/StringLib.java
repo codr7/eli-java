@@ -5,8 +5,8 @@ import codr7.eli.Lib;
 import codr7.eli.Value;
 
 public final class StringLib extends Lib {
-    public StringLib() {
-        super("string", null);
+    public StringLib(final Lib parentLib) {
+        super("string", parentLib);
 
         bindMethod("find",
                 new Arg[]{new Arg("in", CoreLib.String), new Arg("it", CoreLib.String)},

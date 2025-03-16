@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class ListLib extends Lib {
-    public ListLib() {
-        super("list", null);
+    public ListLib(final Lib parentLib) {
+        super("list", parentLib);
 
         bindMethod("alloc",
                 new Arg[]{new Arg("n", CoreLib.Int)},

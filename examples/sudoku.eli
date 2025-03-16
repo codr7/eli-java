@@ -9,4 +9,6 @@
                   row-cols  (iter/map (^[r] [(csym [r] cols)*]) rows)]
               [(iter/concat col-rows row-cols)*]))
 
-(say (dump unit-list))
+(check 81 #squares)
+
+(say (dump (map csym (string/split rows 3) (string/split cols 3))))
