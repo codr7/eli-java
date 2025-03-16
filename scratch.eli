@@ -1,2 +1,0 @@
-(let [{f:foo b:bar} '{foo:1 bar:2}]
-  (say f:b))

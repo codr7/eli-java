@@ -3,9 +3,6 @@ fib PT1.568288647S
 
 https://norvig.com/sudoku.html
 
-* cl-eli
-** iter lib
-
 ADD
 
 * iter/zip method
