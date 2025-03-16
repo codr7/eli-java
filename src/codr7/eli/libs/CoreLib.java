@@ -311,6 +311,13 @@ public class CoreLib extends Lib {
                     });
                 });
 
+        bindMethod("count", new Arg[]{new Arg("it")},
+                (vm, args, rResult, loc) -> {
+                    final var it = args[0];
+                    final var n = (long) it.type().cast(CoreLib.Countable, loc).count(it);
+                    vm.registers.set(rResult, new Value<>(CoreLib.Int, n));
+                });
+
         bindMacro("dec", new Arg[]{new Arg("place"), new Arg("delta?")},
                 (vm, args, rResult, loc) -> {
                     final var t = (IdForm) args[0];
@@ -351,6 +358,14 @@ public class CoreLib extends Lib {
                     }
 
                     vm.registers.set(rResult, new Value<>(CoreLib.String, out.toString()));
+                });
+
+        bindMethod("head",
+                new Arg[]{new Arg("seq", CoreLib.Sequential)},
+                (vm, args, rResult, loc) -> {
+                    final var s = args[0];
+                    final var st = s.type().cast(CoreLib.Sequential, loc);
+                    vm.registers.set(rResult, st.head(s));
                 });
 
         bindMacro("if", new Arg[]{new Arg("cond"), new Arg("body*")},
@@ -617,6 +632,14 @@ public class CoreLib extends Lib {
                             throw new EmitError("Expected id", id.loc());
                         }
                     }
+                });
+
+        bindMethod("tail",
+                new Arg[]{new Arg("seq", CoreLib.Sequential)},
+                (vm, args, rResult, loc) -> {
+                    final var s = args[0];
+                    final var st = s.type().cast(CoreLib.Sequential, loc);
+                    vm.registers.set(rResult, st.tail(s));
                 });
 
         bindMacro("unquote", new Arg[]{new Arg("forms*")},
