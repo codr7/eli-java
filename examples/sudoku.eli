@@ -7,8 +7,8 @@
   squares   [(csym rows cols)*]
   unit-list (let [col-rows      (iter/map (^[c] [(csym rows [c])*]) cols)
                   row-cols      (iter/map (^[r] [(csym [r] cols)*]) rows)
-                  row-groups    [(string/split rows 3)*]
-                  col-groups    [(string/split cols 3)*]
+                  row-groups    (string/split rows 3)
+                  col-groups    (string/split cols 3)
                   square-groups (iter/cross (^[r c] [(csym r c)*]) row-groups col-groups)]
               [(iter/concat col-rows row-cols square-groups)*]))
 

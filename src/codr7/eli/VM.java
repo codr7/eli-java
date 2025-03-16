@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.*;
 
 public final class VM {
-    public final static int VERSION = 18;
+    public final static int VERSION = 19;
     public final CoreLib coreLib = new CoreLib(null);
     public final Lib homeLib = new Lib("home", null);
     public final List<Reader> prefixReaders = new ArrayList<>();
@@ -380,12 +380,8 @@ public final class VM {
         }
     }
 
-    public boolean readPrefix(final Input in, final Deque<IForm> out, final Loc loc) {
-        return prefixReaders.stream().anyMatch(r -> r.read(this, in, out, loc));
-    }
-
     public boolean read(final Input in, final Deque<IForm> out, final Loc loc) {
-        final var result = readPrefix(in, out, loc);
+        final var result = prefixReaders.stream().anyMatch(r -> r.read(this, in, out, loc));
         var _ = suffixReaders.stream().anyMatch(r -> r.read(this, in, out, loc));
         return result;
     }

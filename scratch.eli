@@ -1,1 +1,0 @@
-(say [(string/split "foobarbaz" 3)*])
