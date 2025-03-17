@@ -11,22 +11,13 @@ https://norvig.com/sudoku.html
 
 ADD
 
-* add nil check
-** foo?
-** nil-reader
-*** like count-reader/suffix
-** return F if _ otherwise T
+* range syntax
+** 0..10:2
+** add RangeTrait
 
 * term lib
 ** sharpl
-
-* tracing
-
-* json encode/decode
-** add json lib
-** lib/jackson
-
-http://www.cowtowncoder.com/blog/archives/2009/01/entry_132.html
+** fire
 
 * add read method
 ** use reader
@@ -35,10 +26,14 @@ http://www.cowtowncoder.com/blog/archives/2009/01/entry_132.html
 * union types
 ** Int | Nil
 ** add X? shortcut for X | Nil
-*** remove Maybe type
 
-* range syntax
-** 0..10:2
+* tracing
+
+* json encode/decode
+** add json lib
+** lib/jackson
+
+http://www.cowtowncoder.com/blog/archives/2009/01/entry_132.html
 
 * method composition
 
