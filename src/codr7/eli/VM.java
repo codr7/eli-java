@@ -275,8 +275,15 @@ public final class VM {
                 case MapSet: {
                     final var op = (MapSet) opData[pc];
                     final var m = registers.get(op.rMap()).cast(CoreLib.Map);
-                    final var p = registers.get(op.rItem()).cast(CoreLib.Pair);
-                    m.put(p.left(), p.right());
+                    final var it = registers.get(op.rItem());
+                    final var vs = new ArrayList<IValue>();
+                    Value.expand(this, it, vs, op.loc());
+
+                    for (final var v: vs) {
+                        final var p = v.cast(CoreLib.Pair);
+                        m.put(p.left(), p.right());
+                    }
+
                     pc++;
                     break;
                 }

@@ -5,6 +5,7 @@ import codr7.eli.libs.CoreLib;
 import codr7.eli.ops.ListAdd;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ListForm extends BaseForm {
     public final IForm[] items;
@@ -76,32 +77,14 @@ public class ListForm extends BaseForm {
     }
 
     @Override
-    public IValue rawValue(VM vm) {
-        final var vs = new ArrayList<IValue>();
-
-        for (final var it : items) {
-            final var v = it.rawValue(vm);
-            if (v == null) {
-                return null;
-            }
-            Value.expand(vm, v, vs, loc());
-        }
-
-        return new Value<>(CoreLib.List, vs);
+    public IValue rawValue(final VM vm) {
+        final var out = Form.rawValues(vm, items);
+        return (out == null) ? null : new Value<>(CoreLib.List, new ArrayList<>(out.toList()));
     }
 
     @Override
     public IValue value(VM vm) {
-        final var vs = new ArrayList<IValue>();
-
-        for (final var it : items) {
-            final var v = it.value(vm);
-            if (v == null) {
-                return null;
-            }
-            Value.expand(vm, v, vs, loc());
-        }
-
-        return new Value<>(CoreLib.List, vs);
+        final var out = Form.values(vm, items);
+        return (out == null) ? null : new Value<>(CoreLib.List, new ArrayList<>(out.toList()));
     }
 }

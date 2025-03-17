@@ -157,10 +157,8 @@ public class MapType
 
     @Override
     public String toString(final VM vm, final IValue value) {
-        return '{' +
-                value.cast(this).entrySet().stream()
-                        .map(e -> e.getKey().toString(vm) + ':' + e.getValue().toString(vm))
-                        .collect(Collectors.joining(" ")) +
-                '}';
+        return value.cast(this).entrySet().stream()
+                        .map(e -> e.getKey().toString(vm) + ": " + e.getValue().toString(vm))
+                        .collect(Collectors.joining(", "));
     }
 }

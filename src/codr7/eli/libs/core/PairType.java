@@ -65,4 +65,9 @@ public class PairType extends BaseType<Pair>
     public IValue tail(final IValue target) {
         return target.cast(this).right();
     }
+
+    @Override
+    public String toString(final VM vm, final IValue value) {
+        return value.cast(this).toString(vm);
+    }
 }

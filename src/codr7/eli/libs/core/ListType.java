@@ -140,7 +140,7 @@ public class ListType
 
         for (var i = 0; i < v.size(); i++) {
             if (i > 0) {
-                result.append(' ');
+                result.append(", ");
             }
 
             result.append(v.get(i).toString(vm));

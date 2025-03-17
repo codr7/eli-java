@@ -11,6 +11,8 @@ unitlist = ([cross(rows, c) for c in cols] +
             [cross(r, cols) for r in rows] +
             [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')])
 
+print(unitlist)
+
 units = dict((s, [u for u in unitlist if s in u])
              for s in squares)
 

@@ -15,4 +15,4 @@
 (check 81 #squares)
 (check 27 #unit-list)
 
-(say (dump unit-list))
+(say (dump {(iter/map (^[s] s:[(iter/where (^[u] (list/find u s)) unit-list)*] squares)*})))

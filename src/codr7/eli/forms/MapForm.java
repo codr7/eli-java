@@ -5,6 +5,7 @@ import codr7.eli.errors.EvalError;
 import codr7.eli.libs.CoreLib;
 import codr7.eli.ops.*;
 
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class MapForm extends BaseForm {
@@ -138,37 +139,37 @@ public class MapForm extends BaseForm {
 
     @Override
     public IValue rawValue(VM vm) {
-        final var vs = new TreeMap<IValue, IValue>();
+        final var vs = Form.rawValues(vm, items);
 
-        for (final var it : items) {
-            final var v = it.rawValue(vm);
-
-            if (v == null) {
-                return null;
-            }
-
-            final var p = v.cast(CoreLib.Pair);
-            vs.put(p.left(), p.right());
+        if (vs == null) {
+            return null;
         }
 
-        return new Value<>(CoreLib.Map, vs);
+        final var out = new TreeMap<IValue, IValue>();
+
+        vs.forEach(v -> {
+            final var p = v.cast(CoreLib.Pair);
+            out.put(p.left(), p.right());
+        });
+
+        return new Value<>(CoreLib.Map, out);
     }
 
     @Override
     public IValue value(VM vm) {
-        final var vs = new TreeMap<IValue, IValue>();
+        final var vs = Form.values(vm, items);
 
-        for (final var it : items) {
-            final var v = it.value(vm);
-
-            if (v == null) {
-                return null;
-            }
-
-            final var p = v.cast(CoreLib.Pair);
-            vs.put(p.left(), p.right());
+        if (vs == null) {
+            return null;
         }
 
-        return new Value<>(CoreLib.Map, vs);
+        final var out = new TreeMap<IValue, IValue>();
+
+        vs.forEach(v -> {
+            final var p = v.cast(CoreLib.Pair);
+            out.put(p.left(), p.right());
+        });
+
+        return new Value<>(CoreLib.Map, out);
     }
 }
