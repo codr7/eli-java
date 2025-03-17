@@ -1,18 +1,18 @@
-(^csym [x y]
+(^mks [x y]
   (iter/cross sym/make x y))
 
 (var
   rows     "abcdefghi"
   cols     "123456789"
-  squares   [(csym rows cols)*]
-  unit-list (let [col-rows      (iter/map (^[c] [(csym rows [c])*]) cols)
-                  row-cols      (iter/map (^[r] [(csym [r] cols)*]) rows)
+  squares   [(mks rows cols)*]
+  unit-list (let [col-rows      (iter/map (^[c] [(mks rows [c])*]) cols)
+                  row-cols      (iter/map (^[r] [(mks [r] cols)*]) rows)
                   row-groups    (string/split rows 3)
                   col-groups    (string/split cols 3)
-                  square-groups (iter/cross (^[r c] [(csym r c)*]) row-groups col-groups)]
+                  square-groups (iter/cross (^[r c] [(mks r c)*]) row-groups col-groups)]
               [(iter/concat col-rows row-cols square-groups)*]))
 
 (check 81 #squares)
 (check 27 #unit-list)
 
-(say unit-list)
+(say (dump unit-list))

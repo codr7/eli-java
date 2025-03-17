@@ -4,7 +4,6 @@ fib PT1.568288647S
 https://norvig.com/sudoku.html
 
 * sudoku
-** cache ys in CrossResult
 ** units
 ** peers
 
