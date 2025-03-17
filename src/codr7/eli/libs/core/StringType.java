@@ -69,12 +69,7 @@ public class StringType extends BaseType<String>
                 ? CoreLib.NIL
                 : new Value<>(CoreLib.String, t.substring(1));
     }
-
-    @Override
-    public boolean toBit(final VM vm, final IValue value) {
-        return !value.cast(this).isEmpty();
-    }
-
+    
     @Override
     public String toString(final VM vm, final IValue value) {
         return value.cast(this);

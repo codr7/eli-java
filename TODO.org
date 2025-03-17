@@ -11,13 +11,16 @@ https://norvig.com/sudoku.html
 
 ADD
 
-* list bind destructuring
-** splat for tail
-
-* tracing
+* add nil check
+** foo?
+** nil-reader
+*** like count-reader/suffix
+** return F if _ otherwise T
 
 * term lib
 ** sharpl
+
+* tracing
 
 * json encode/decode
 ** add json lib
@@ -40,7 +43,9 @@ http://www.cowtowncoder.com/blog/archives/2009/01/entry_132.html
 * method composition
 
 * macros
-** fix expression splat/head/tail etc
+
+* list bind destructuring
+** splat for tail
 
 FIX
 
