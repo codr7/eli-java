@@ -40,7 +40,7 @@ public final class WhereResult implements Iter {
 
         predType.call(vm, pred, argValues, rPred, true, loc);
 
-        if (vm.registers.get(rPred).cast(CoreLib.Bit)) {
+        if (vm.registers.get(rPred).toBit(vm)) {
             if (rResult != -1) {
                 vm.registers.set(rResult, Value.zip(Arrays.stream(argValues).iterator()));
             }

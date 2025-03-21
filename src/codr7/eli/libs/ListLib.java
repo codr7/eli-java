@@ -20,6 +20,18 @@ public final class ListLib extends Lib {
                     vm.registers.set(rResult, new Value<>(CoreLib.List, new ArrayList<>(Arrays.asList(vs))));
                 });
 
+        bindMethod("find",
+                new Arg[]{new Arg("in", CoreLib.Int), new Arg("it", CoreLib.Int)},
+                (vm, args, rResult, loc) -> {
+                    final var in = args[0].cast(CoreLib.List);
+                    final var it = args[1];
+                    final var i = in.indexOf(it);
+
+                    vm.registers.set(rResult,
+                            (i == -1) ? CoreLib.NIL :
+                                    new Value<>(CoreLib.Int, Integer.valueOf(i).longValue()));
+                });
+
         bindMethod("into", new Arg[]{new Arg("in", CoreLib.Iterable)},
                 (vm, args, rResult, loc) -> {
                     final var in = args[0];

@@ -5,8 +5,7 @@ https://norvig.com/sudoku.html
 
 * sudoku
 ** units
-*** add list/
-**** return index
+*** add iter/all
 ** peers
 
 ADD
