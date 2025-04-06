@@ -19,7 +19,7 @@ public final class VM {
     public final Lib homeLib = new Lib("home", null);
     public final List<Reader> prefixReaders = new ArrayList<>();
     public final List<Reader> suffixReaders = new ArrayList<>();
-    public final ArrayList<Op> ops = new ArrayList<>();
+    private final ArrayList<Op> ops = new ArrayList<>();
     public final ArrayList<IValue> registers = new ArrayList<>();
     public final int rNull;
     private final List<Call> calls = new ArrayList<>();
@@ -27,8 +27,6 @@ public final class VM {
     public Lib currentLib = homeLib;
     public Path path = Paths.get("");
     public int pc = 0;
-    private Op.Code[] opCode = new Op.Code[0];
-    private Object[] opData = new Object[0];
 
     public VM() {
         prefixReaders.add(WhitespaceReader.instance);
@@ -135,7 +133,6 @@ public final class VM {
         } else {
             prevOp = ops.get(toPc);
             ops.set(toPc, new Stop());
-            opCode[toPc] = Op.Code.Stop;
         }
 
         final var prevPc = pc;
@@ -145,7 +142,6 @@ public final class VM {
             eval();
         } finally {
             ops.set(toPc, prevOp);
-            opCode[toPc] = prevOp.code();
             pc = prevPc;
         }
     }
@@ -164,203 +160,9 @@ public final class VM {
     }
 
     private void eval() {
-        freezeOps();
-
-        for (; ; ) {
+        while (pc < ops.size()) {
             //System.out.println(pc + " " + ops.get(pc).dump(this));
-
-            switch (opCode[pc]) {
-                case Bench: {
-                    final var op = (Bench) opData[pc];
-                    final var started = System.nanoTime();
-                    final var startPc = pc + 1;
-
-                    for (var i = 0; i < op.reps(); i++) {
-                        eval(startPc, op.bodyEnd().pc);
-                    }
-
-                    final var elapsed = Duration.ofNanos(System.nanoTime() - started);
-                    registers.set(op.rResult(), new Value<>(CoreLib.Time, elapsed));
-                    pc = op.bodyEnd().pc;
-                    break;
-                }
-                case Branch: {
-                    final var op = (Branch) opData[pc];
-                    pc = registers.get(op.rCondition()).toBit(this) ? pc + 1 : op.elseStart().pc;
-                    break;
-                }
-                case CallRegister: {
-                    final var op = (CallRegister) opData[pc];
-                    var t = registers.get(op.rTarget());
-
-                    if (t.type() == CoreLib.Binding) {
-                        t = registers.get(t.cast(CoreLib.Binding).rValue());
-                    }
-
-                    pc++;
-                    t.type().cast(CoreLib.Callable, op.loc()).call(this, t, op.rArguments(), op.arity(), op.rResult(), false, op.loc());
-                    break;
-                }
-                case CallValue: {
-                    final var op = (CallValue) opData[pc];
-                    var t = op.target();
-
-                    if (t.type() == CoreLib.Binding) {
-                        t = registers.get(t.cast(CoreLib.Binding).rValue());
-                    }
-
-                    pc++;
-                    t.type().cast(CoreLib.Callable, op.loc()).call(this, t, op.rArgs(), op.arity(), op.rResult(), false, op.loc());
-                    break;
-                }
-                case Check: {
-                    final var op = (Check) opData[pc];
-                    final var expected = registers.get(op.rValues());
-                    final var actual = registers.get(op.rValues() + 1);
-
-                    if (!expected.eq(actual)) {
-                        throw new EvalError("Check failed; expected " +
-                                expected.dump(this) + ", actual: " + actual.dump(this),
-                                op.loc());
-                    }
-
-                    pc++;
-                    break;
-                }
-                case Copy: {
-                    final var op = (Copy) opData[pc];
-                    registers.set(op.rTo(), registers.get(op.rFrom()));
-                    pc++;
-                    break;
-                }
-                case Goto:
-                    pc = ((Label) opData[pc]).pc;
-                    break;
-                case Inc: {
-                    final var op = (Inc) opData[pc];
-                    final var v = registers.get(op.rTarget()).cast(CoreLib.Int);
-                    registers.set(op.rTarget(), new Value<>(CoreLib.Int, v + op.delta()));
-                    pc++;
-                    break;
-                }
-                case Iter: {
-                    final var rt = (Integer) opData[pc];
-                    final var t = registers.get(rt);
-                    final var it = ((IterableTrait) t.type()).iter(this, t);
-                    registers.set(rt, new Value<>(CoreLib.Iter, it));
-                    pc++;
-                    break;
-                }
-                case Left: {
-                    final var op = (Left) opData[pc];
-                    registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.Pair).left());
-                    pc++;
-                    break;
-                }
-                case ListAdd: {
-                    final var op = (ListAdd) opData[pc];
-                    final var t = registers.get(op.rTarget()).cast(CoreLib.List);
-                    final var v = registers.get(op.rItem());
-                    Value.expand(this, v, t, op.loc());
-                    pc++;
-                    break;
-                }
-                case MapGet: {
-                    final var op = (MapGet) opData[pc];
-                    final var m = registers.get(op.rMap()).cast(CoreLib.Map);
-                    registers.set(op.rItem(), m.get(op.key()));
-                    pc++;
-                    break;
-                }
-                case MapSet: {
-                    final var op = (MapSet) opData[pc];
-                    final var m = registers.get(op.rMap()).cast(CoreLib.Map);
-                    final var it = registers.get(op.rItem());
-                    final var vs = new ArrayList<IValue>();
-                    Value.expand(this, it, vs, op.loc());
-
-                    for (final var v: vs) {
-                        final var p = v.cast(CoreLib.Pair);
-                        m.put(p.left(), p.right());
-                    }
-
-                    pc++;
-                    break;
-                }
-                case Next: {
-                    final var op = (Next) opData[pc];
-                    final var iter = registers.get(op.rIter()).cast(CoreLib.Iter);
-                    pc = (iter.next(this, op.rItem(), op.loc())) ? pc + 1 : op.bodyEnd().pc;
-                    break;
-                }
-                case Nop:
-                    pc++;
-                    break;
-                case Put: {
-                    final var op = (Put) opData[pc];
-                    registers.set(op.rTarget(), op.value().dup(this));
-                    pc++;
-                    break;
-                }
-                case Return: {
-                    final var c = endCall();
-
-                    if (c.rResult() != c.target().rResult) {
-                        registers.set(c.rResult(), registers.get(c.target().rResult));
-                    }
-
-                    pc = c.returnPc();
-                    break;
-                }
-                case Right: {
-                    final var op = (Right) opData[pc];
-                    registers.set(op.rResult(), registers.get(op.rPair()).cast(CoreLib.Pair).right());
-                    pc++;
-                    break;
-                }
-                case SetPath:
-                    path = (Path) opData[pc];
-                    pc++;
-                    break;
-                case Splat: {
-                    final var rt = (Integer) opData[pc];
-                    final var t = registers.get(rt);
-                    final var it = ((IterableTrait) t.type()).iter(this, t);
-                    registers.set(rt, new Value<>(CoreLib.Splat, it));
-                    pc++;
-                    break;
-                }
-                case Stop:
-                    pc++;
-                    return;
-                case Trace:
-                    System.out.println((String) opData[pc]);
-                    pc++;
-                    break;
-                case TypeCheck: {
-                    final var op = (TypeCheck) opData[pc];
-                    final var v = registers.get(op.rTarget());
-                    v.typeCheck(this, op.type(), op.loc());
-                    pc++;
-                    break;
-                }
-                case Unzip: {
-                    final var op = (Unzip) opData[pc];
-                    final var p = registers.get(op.rPair()).cast(CoreLib.Pair);
-                    registers.set(op.rLeft(), p.left());
-                    registers.set(op.rRight(), p.right());
-                    pc++;
-                    break;
-                }
-                case Zip: {
-                    final var op = (Zip) opData[pc];
-                    final var l = registers.get(op.rLeft());
-                    final var r = registers.get(op.rRight());
-                    registers.set(op.rResult(), new Value<>(CoreLib.Pair, new Pair(l, r)));
-                    pc++;
-                    break;
-                }
-            }
+            ops.get(pc).eval(this);
         }
     }
 
@@ -398,22 +200,6 @@ public final class VM {
         final var _in = new Input(in);
         while (read(_in, out, loc)) ;
         return out;
-    }
-
-    private void freezeOps() {
-        final var n = opCode.length;
-        final var m = ops.size();
-
-        if (n != m) {
-            opCode = Arrays.copyOf(opCode, m);
-            opData = Arrays.copyOf(opData, m);
-
-            for (var i = 0; i < m; i++) {
-                final var o = ops.get(i);
-                opCode[i] = o.code();
-                opData[i] = o.data();
-            }
-        }
     }
 
     private void initLibs() {

@@ -1,7 +1,13 @@
 fact PT1.682860949S
 fib PT1.568288647S
+--
+fact PT1.737003948S
+fib PT1.709028707S
 
 https://norvig.com/sudoku.html
+
+* recursive eval
+** cache op in label on first use
 
 * sudoku
 ** units
@@ -17,6 +23,8 @@ ADD
 * term lib
 ** sharpl
 ** fire
+
+https://docs.oracle.com/javase/8/docs/api/java/io/Console.html
 
 * add read method
 ** use reader

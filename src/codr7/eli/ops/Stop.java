@@ -5,12 +5,12 @@ import codr7.eli.VM;
 
 public record Stop() implements Op {
     @Override
-    public Code code() {
-        return Code.Stop;
+    public String dump(VM vm) {
+        return "Stop";
     }
 
     @Override
-    public String dump(VM vm) {
-        return "Stop";
+    public void eval(final VM vm) {
+        vm.pc = vm.emitPc();
     }
 }

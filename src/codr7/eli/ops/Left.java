@@ -3,16 +3,18 @@ package codr7.eli.ops;
 import codr7.eli.Loc;
 import codr7.eli.Op;
 import codr7.eli.VM;
+import codr7.eli.libs.CoreLib;
 
 public record Left(int rPair, int rResult, Loc loc) implements Op {
-    @Override
-    public Code code() {
-        return Code.Left;
-    }
-
     @Override
     public String dump(final VM vm) {
         return "Left rPair: " + rPair + " (" + vm.registers.get(rPair).dump(vm) + ") " +
                 "rResult: " + rResult + " (" + vm.registers.get(rResult).dump(vm) + ")";
+    }
+
+    @Override
+    public void eval(final VM vm) {
+        vm.registers.set(rResult, vm.registers.get(rPair).cast(CoreLib.Pair).left());
+        vm.pc++;
     }
 }

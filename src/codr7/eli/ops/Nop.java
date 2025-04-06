@@ -5,12 +5,12 @@ import codr7.eli.VM;
 
 public record Nop() implements Op {
     @Override
-    public Code code() {
-        return Code.Nop;
+    public String dump(VM vm) {
+        return "Nop";
     }
 
     @Override
-    public String dump(VM vm) {
-        return "Nop";
+    public void eval(final VM vm) {
+        vm.pc++;
     }
 }

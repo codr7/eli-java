@@ -7,17 +7,13 @@ import java.nio.file.Path;
 
 public record SetPath(Path path) implements Op {
     @Override
-    public Code code() {
-        return Code.SetPath;
-    }
-
-    @Override
-    public Object data() {
-        return path;
-    }
-
-    @Override
     public String dump(final VM vm) {
         return "SetPath path: " + path;
+    }
+
+    @Override
+    public void eval(final VM vm) {
+        vm.path = path;
+        vm.pc++;
     }
 }

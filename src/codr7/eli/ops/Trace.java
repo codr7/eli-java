@@ -5,17 +5,13 @@ import codr7.eli.VM;
 
 public record Trace(String text) implements Op {
     @Override
-    public Code code() {
-        return Code.Trace;
-    }
-
-    @Override
-    public Object data() {
-        return text;
-    }
-
-    @Override
     public String dump(final VM vm) {
         return text;
+    }
+
+    @Override
+    public void eval(final VM vm) {
+        System.out.println(text);
+        vm.pc++;
     }
 }

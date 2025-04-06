@@ -7,13 +7,15 @@ import codr7.eli.VM;
 
 public record TypeCheck(int rTarget, IType type, Loc loc) implements Op {
     @Override
-    public Code code() {
-        return Code.TypeCheck;
-    }
-
-    @Override
     public String dump(final VM vm) {
         return "TypeCheck rTarget: " + rTarget + " (" + vm.registers.get(rTarget).dump(vm) + ") " +
                 "type: " + type.id();
+    }
+
+    @Override
+    public void eval(final VM vm) {
+        final var v = vm.registers.get(rTarget);
+        v.typeCheck(vm, type, loc);
+        vm.pc++;
     }
 }

@@ -6,17 +6,12 @@ import codr7.eli.VM;
 
 public record Goto(Label target) implements Op {
     @Override
-    public Code code() {
-        return Code.Goto;
-    }
-
-    @Override
-    public Object data() {
-        return target;
-    }
-
-    @Override
     public String dump(final VM vm) {
         return "Goto target: " + target;
+    }
+
+    @Override
+    public void eval(final VM vm) {
+        vm.pc = target.pc;
     }
 }
