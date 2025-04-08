@@ -9,6 +9,14 @@ https://norvig.com/sudoku.html
 * sudoku
 ** peers
 
+* switch fold arg order
+** vararg in like any/all
+** tests/readme
+
+* rename while to loop
+** remove condition
+** tests/readme
+
 ADD
 
 * range syntax
