@@ -24,6 +24,92 @@ public final class IterLib extends Lib {
     public IterLib(final Lib parentLib) {
         super("iter", parentLib);
 
+        bindMethod("all",
+                new Arg[]{new Arg("predicate", CoreLib.Callable),
+                        new Arg("in*", CoreLib.Iterable)},
+                (vm, args, rResult, loc) -> {
+                    final var p = args[0];
+                    final var pt = p.type().cast(CoreLib.Callable, loc);
+
+                    final var in = new Iter[args.length-1];
+
+                    for (var i = 1; i < args.length; i++) {
+                        final var a = args[i];
+                        in[i-1] = a.type().cast(CoreLib.Iterable, loc).iter(vm, a);
+                    }
+
+                    final var rArgs = vm.alloc(in.length);
+                    var result = true;
+
+                    for (;;) {
+                        var rArg = rArgs;
+
+                        for (final var it : in) {
+                            if (!it.next(vm, rArg, loc)) {
+                                break;
+                            }
+
+                            rArg++;
+                        }
+
+                        if (rArg < rArgs+in.length) {
+                            break;
+                        }
+
+                        pt.call(vm, p, rArgs, in.length, rResult, true, loc);
+
+                        if (!vm.registers.get(rResult).toBit(vm)) {
+                            result = false;
+                            break;
+                        }
+                    }
+
+                    vm.registers.set(rResult, new Value<>(CoreLib.Bit, result));
+                });
+
+        bindMethod("any",
+                new Arg[]{new Arg("predicate", CoreLib.Callable),
+                        new Arg("in*", CoreLib.Iterable)},
+                (vm, args, rResult, loc) -> {
+                    final var p = args[0];
+                    final var pt = p.type().cast(CoreLib.Callable, loc);
+
+                    final var in = new Iter[args.length-1];
+
+                    for (var i = 1; i < args.length; i++) {
+                        final var a = args[i];
+                        in[i-1] = a.type().cast(CoreLib.Iterable, loc).iter(vm, a);
+                    }
+
+                    final var rArgs = vm.alloc(in.length);
+                    var result = false;
+
+                    for (;;) {
+                        var rArg = rArgs;
+
+                        for (final var it : in) {
+                            if (!it.next(vm, rArg, loc)) {
+                                break;
+                            }
+
+                            rArg++;
+                        }
+
+                        if (rArg < rArgs+in.length) {
+                            break;
+                        }
+
+                        pt.call(vm, p, rArgs, in.length, rResult, true, loc);
+
+                        if (vm.registers.get(rResult).toBit(vm)) {
+                            result = true;
+                            break;
+                        }
+                    }
+
+                    vm.registers.set(rResult, new Value<>(CoreLib.Bit, result));
+                });
+
         bindMethod("comb",
                 new Arg[]{new Arg("in", CoreLib.Iterable)},
                 (vm, args, rResult, loc) -> {

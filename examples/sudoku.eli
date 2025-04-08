@@ -15,4 +15,4 @@
 
 (check 81 #squares)
 (check 27 #unit-list)
-(check (iter/all (^[s] (= 3 #(units s))) squares))
+(check T (iter/all (^[s] (= 3 #(units s))) squares))

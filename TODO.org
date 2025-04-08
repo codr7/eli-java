@@ -6,12 +6,7 @@ fib PT1.709028707S
 
 https://norvig.com/sudoku.html
 
-* recursive eval
-** cache op in label on first use
-
 * sudoku
-** units
-*** add iter/all
 ** peers
 
 ADD
