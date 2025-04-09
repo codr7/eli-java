@@ -10,7 +10,6 @@ import codr7.eli.libs.iter.ConcatResult;
 import codr7.eli.libs.iter.CrossResult;
 import codr7.eli.libs.iter.MapResult;
 import codr7.eli.libs.iter.WhereResult;
-import codr7.eli.ops.Branch;
 import codr7.eli.ops.Goto;
 import codr7.eli.ops.Next;
 
@@ -158,18 +157,35 @@ public final class IterLib extends Lib {
 
         bindMethod("fold",
                 new Arg[]{new Arg("callback", CoreLib.Callable),
-                        new Arg("in", CoreLib.Iterable),
-                        new Arg("seed", CoreLib.Any)},
+                        new Arg("seed", CoreLib.Any),
+                        new Arg("in*", CoreLib.Iterable)},
                 (vm, args, rResult, loc) -> {
                     final var c = args[0];
                     final var ct = c.type().cast(CoreLib.Callable, loc);
-                    final var in = args[1];
-                    final var it = in.type().cast(CoreLib.Iterable, loc);
-                    final var rArgs = vm.alloc(2);
-                    vm.registers.set(rArgs, args[2]);
+                    final var in = new Iter[args.length-2];
 
-                    for (final var i = it.iter(vm, in); i.next(vm, rArgs + 1, loc); ) {
-                        ct.call(vm, c, rArgs, 2, rArgs, true, loc);
+                    for (var i = 2; i < args.length; i++) {
+                        final var a = args[i];
+                        in[i-2] = a.type().cast(CoreLib.Iterable, loc).iter(vm, a);
+                    }
+
+                    final var rArgs = vm.alloc(in.length+1);
+                    vm.registers.set(rArgs, args[1]);
+                    var done = false;
+
+                    for (;;) {
+                        for (var i = 0; i < in.length; i++) {
+                            if (!in[i].next(vm, rArgs + i + 1, loc)) {
+                                done = true;
+                                break;
+                            }
+                        }
+
+                        if (done) {
+                            break;
+                        }
+
+                        ct.call(vm, c, rArgs, in.length+1, rArgs, true, loc);
                     }
 
                     vm.registers.set(rResult, vm.registers.get(rArgs));
@@ -307,8 +323,8 @@ public final class IterLib extends Lib {
     @Override
     public void init(final VM vm, final Loc loc) {
         vm.eval("""
-                (^sum [in]
-                  (fold + in 0))
+                (^sum [in*]
+                  (fold + 0 in*))
                   
                 (^zip [in*]
                   (map core/zip in*))

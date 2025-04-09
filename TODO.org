@@ -9,10 +9,6 @@ https://norvig.com/sudoku.html
 * sudoku
 ** peers
 
-* switch fold arg order
-** vararg in like any/all
-** tests/readme
-
 ADD
 
 * range syntax
