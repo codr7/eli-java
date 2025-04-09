@@ -302,37 +302,6 @@ public final class IterLib extends Lib {
 
                     vm.registers.set(rResult, new Value<>(CoreLib.Iter, new WhereResult(vm, its, p, loc)));
                 });
-
-        bindMacro("while",
-                new Arg[]{new Arg("cond"), new Arg("body*")},
-                (vm, _args, rResult, loc) -> {
-                    final var args = new ArrayDeque<>(Arrays.asList(_args));
-                    final var start = new Label(vm.emitPc());
-                    final var end = new Label();
-                    final var rCond = vm.alloc(1);
-                    args.removeFirst().emit(vm, rCond);
-                    vm.emit(new Branch(rCond, end, loc));
-
-                    vm.doLib(null, () -> {
-                        vm.currentLib.bindMacro("break", new Arg[]{new Arg("args*")},
-                                (_vm, _breakArgs, _rResult, _loc) -> {
-                                    _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
-                                    _vm.emit(new Goto(end));
-                                });
-
-                        vm.currentLib.bindMacro("next", new Arg[]{new Arg("args*")},
-                                (_vm, _breakArgs, _rResult, _loc) -> {
-                                    _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
-                                    _vm.emit(new Goto(start));
-                                });
-
-                        Form.emit(vm, args, rResult);
-                    });
-
-
-                    vm.emit(new Goto(start));
-                    end.pc = vm.emitPc();
-                });
     }
 
     @Override

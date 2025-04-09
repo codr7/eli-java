@@ -553,6 +553,33 @@ public class CoreLib extends Lib {
                     }
                 });
 
+        bindMacro("loop",
+                new Arg[]{new Arg("body*")},
+                (vm, args, rResult, loc) -> {
+                    final var start = new Label(vm.emitPc());
+                    final var end = new Label();
+
+                    vm.doLib(null, () -> {
+                        vm.currentLib.bindMacro("break", new Arg[]{new Arg("args*")},
+                                (_vm, _breakArgs, _rResult, _loc) -> {
+                                    _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
+                                    _vm.emit(new Goto(end));
+                                });
+
+                        vm.currentLib.bindMacro("next", new Arg[]{new Arg("args*")},
+                                (_vm, _breakArgs, _rResult, _loc) -> {
+                                    _vm.doLib(null, () -> Form.emit(_vm, _breakArgs, _rResult));
+                                    _vm.emit(new Goto(start));
+                                });
+
+                        Form.emit(vm, args, rResult);
+                    });
+
+
+                    vm.emit(new Goto(start));
+                    end.pc = vm.emitPc();
+                });
+
         bindMethod("now", new Arg[]{},
                 (vm, args, rResult, loc) -> {
                     vm.registers.set(rResult, new Value<>(Timestamp, LocalDateTime.now()));
