@@ -13,10 +13,6 @@ https://norvig.com/sudoku.html
 ** vararg in like any/all
 ** tests/readme
 
-* rename while to loop
-** remove condition
-** tests/readme
-
 ADD
 
 * range syntax

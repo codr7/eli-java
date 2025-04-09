@@ -125,23 +125,11 @@ public final class VM {
     }
 
     public void eval(final int fromPc, final int toPc) {
-        Op prevOp;
-
-        if (toPc == emitPc()) {
-            emit(new Stop());
-            prevOp = new Nop();
-        } else {
-            prevOp = ops.get(toPc);
-            ops.set(toPc, new Stop());
-        }
-
         final var prevPc = pc;
-        pc = fromPc;
 
         try {
-            eval();
+            for (pc = fromPc; pc != toPc; ops.get(pc).eval(this)) {}
         } finally {
-            ops.set(toPc, prevOp);
             pc = prevPc;
         }
     }
@@ -157,13 +145,6 @@ public final class VM {
 
     public void eval(final String in, final Loc loc) {
         eval(in, rNull, loc);
-    }
-
-    private void eval() {
-        while (pc < ops.size()) {
-            //System.out.println(pc + " " + ops.get(pc).dump(this));
-            ops.get(pc).eval(this);
-        }
     }
 
     public void load(final Path path, final int rResult) {
